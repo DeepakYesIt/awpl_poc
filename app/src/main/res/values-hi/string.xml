@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AWPL ऐप</string>
+    <string name="hello_blank_fragment">नमस्ते ब्लैंक फ्रैगमेंट</string>
+    <string name="lorem_ipsum_dolor_sit_amet_consectetur">लोरम इप्सम डोलर सिट अमेट, कंसैक्टेटुर</string>
+    <string name="image">इमेज</string>
+    <string name="begin_your_health_journey_with_a_free_consultation">
+    अपनी स्वास्थ्य यात्रा को एक मुफ्त परामर्श के साथ शुरू करें!
+    </string>
+    <string name="next">अगला</string>
+    <string name="english">अंग्रेज़ी</string>
+    <string name="choose_your_language">अपनी भाषा चुनें</string>
+    <string name="hindi">हिंदी</string>
+    <string name="uk_flag">यूके ध्वज</string>
+    <string name="enter_your_ds_code">अपना DS कोड दर्ज करें</string>
+    <string name="access_your_health_profile_and_connect_n_with_doctors_log_in_now">
+    अपने स्वास्थ्य प्रोफाइल का उपयोग करें और डॉक्टरों से कनेक्ट करें – अब लॉग इन करें।
+    </string>
+    <string name="enter_your_ds_number_ds_code">अपना DS नंबर/DS कोड दर्ज करें</string>
+    <string name="password">पासवर्ड</string>
+    <string name="pass">********</string>
+    <string name="login">लॉग इन करें</string>
+    <string name="login_as_ds_user">DS उपयोगकर्ता के रूप में लॉग इन करें</string>
+    <string name="chat_with_us">हमसे चैट करें!</string>
+    <string name="welcome_to_your_ai_health_companion">
+    आपके AI स्वास्थ्य साथी में स्वागत है!
+    </string>
+    <string name="onboarding_1">अपनी स्वास्थ्य यात्रा की शुरुआत करें\nमुफ्त परामर्श के साथ!</string>
+    <string name="onboarding_2">आपके दरवाजे तक डॉक्टर लाना\nवर्चुअली।</string>
+    <string name="onboarding_3">छोटे मुद्दों के लिए लक्षण अपलोड करें,\nबड़ा स्वास्थ्य समस्या होने पर वीडियो कॉल करें -\nआज ही ऐप की खोज शुरू करें!</string>
+    <string name="health_insights">
+    आप व्यक्तिगत स्वास्थ्य जानकारी को अनलॉक करने जा रहे हैं – बिल्कुल मुफ्त!
+    </string>
+    <string name="text3">
+    बस कुछ बुनियादी विवरण दर्ज करें और अपनी स्वास्थ्य समस्याओं का वर्णन करें। हमारा बुद्धिमान AI चैटबॉट आपकी स्थिति का विश्लेषण करेगा और तत्काल व्यक्तिगत सिफारिशें प्रदान करेगा।
+    </string>
+    <string name="smart_fast_reliable">स्मार्ट। तेज़। विश्वसनीय।</string>
+    <string name="get_started_text">
+    शुरू करने के लिए <b><font color='#356598'>"शुरू करें"</font></b> पर टैप करें। जारी रखने से आप हमारी <b><font color='#356598'>[गोपनीयता नीति]</font></b> से सहमत होते हैं।
+    </string>
+    <string name="okay_got_it">ठीक है, समझ गया।</string>
+    <string name="basic_information">बुनियादी जानकारी</string>
+    <string name="please_enter_the_below_data_to_help_us_n_know_more_about_you">
+    कृपया नीचे दी गई जानकारी दर्ज करें ताकि हम आपके बारे में अधिक जान सकें।
+    </string>
+    <string name="full_name">पूरा नाम</string>
+    <string name="name">नाम</string>
+    <string name="enter_your_height">अपनी ऊँचाई दर्ज करें</string>
+    <string name="enter_your_weight">अपना वजन दर्ज करें</string>
+    <string name="gender">लिंग</string>
+    <string name="female">महिला</string>
+    <string name="male">पुरुष</string>
+    <string name="others">अन्य</string>
+    <string name="enter_age">उम्र दर्ज करें</string>
+    <string name="_20">26</string>
+    <string name="identify_your_health_concerns">अपनी स्वास्थ्य समस्याओं की पहचान करें</string>
+    <string name="simply_provide_details">
+    बस नीचे विवरण प्रदान करें, और हमारा चैटबॉट आपकी स्वास्थ्य स्थिति का विश्लेषण करेगा।
+    </string>
+    <string name="_1_what_symptoms_are_you_facing_please_describe_your_symptoms_in_brief">
+    1. आप कौन सी लक्षणों का सामना कर रहे हैं? कृपया अपने लक्षणों का संक्षेप में वर्णन करें।
+    </string>
+    <string name="describe_your_symptoms">अपने लक्षणों का वर्णन करें</string>
+    <string name="que2">2.आप इन लक्षणों का अनुभव कितने समय से कर रहे हैं?</string>
+    <string name="_3_days">3 दिन</string>
+    <string name="que3">3.क्या आपको कोई ज्ञात रोग/स्वास्थ्य समस्याएँ हैं?</string>
+    <string name="que4">4.क्या आपको कोई पिछले मेडिकल कंडीशन्स हैं?</string>
+    <string name="medical_conditions">चिकित्सा समस्याएँ</string>
+    <string name="parasitic_dis">परजीवी रोग</string>
+    <string name="medications">दवाइयाँ</string>
+    <string name="que6">6.क्या आपको कोई पिछली ज्ञात एलर्जी है?</string>
+    <string name="que5">5.क्या आपने कोई पिछली दवाइयाँ ली हैं?</string>
+    <string name="allergies">एलर्जी</string>
+    <string name="skip_and_proceed_to_homepage">स्किप करें और होमपेज पर जाएं</string>
+    <string name="thank_you_for_your_input">आपके इनपुट के लिए धन्यवाद</string>
+    <string name="you_re_all_set">आप पूरी तरह तैयार हैं!</string>
+    <string name="there_s_no_major_health_concern_at_the_moment">वर्तमान में कोई प्रमुख स्वास्थ्य समस्या नहीं है।</string>
+    <string name="you_can_now_proceed_to_the_home_page_and_continue_exploring_our_features_for_a_healthier_you">
+    अब आप होम पेज पर जा सकते हैं और हमारे स्वास्थ्य लाभकारी सुविधाओं का पता लगा सकते हैं!
+    </string>
+    <string name="for_any_future_concerns_we_re_always_here_to_help_stay_well">
+    भविष्य में किसी भी समस्या के लिए, हम हमेशा आपकी मदद के लिए यहाँ हैं। स्वस्थ रहें!
+    </string>
+    <string name="go_to_home_page">होम पेज पर जाएं</string>
+    <string name="based_on_our_analysis_it_seems_you_may_be_going_through_a_slight_health_concern_related_to_a_minor_disease">
+    हमारे विश्लेषण के आधार पर, ऐसा लगता है कि आप एक हल्की स्वास्थ्य समस्या से गुजर रहे हैं जो एक मामूली बीमारी से संबंधित है।
+    </string>
+    <string name="our_doctors_will_review_your_information_and_provide_a_prescription_you_ll_be_notified_when_it_s_ready_to_download">
+    हमारे डॉक्टर आपकी जानकारी की समीक्षा करेंगे और एक प्रिस्क्रिप्शन प्रदान करेंगे। आपको इसकी डाउनलोड के लिए तैयार होने पर सूचित किया जाएगा।
+    </string>
+    <string name="lorem_1">1.लोरम इप्सम डोलर सिट अमेट, कंसैक्टेटुर</string>
+    <string name="answer">उत्तर</string>
+    <string name="symptom_upload_consultations">लक्षण अपलोड परामर्श</string>
+    <string name="_2_lorem_ipsum_dolor_sit_amet_consectetur">2.लोरम इप्सम डोलर सिट अमेट, कंसैक्टेटुर</string>
+    <string name="_3_lorem_ipsum_dolor_sit_amet_consectetur">3.लोरम इप्सम डोलर सिट अमेट, कंसैक्टेटुर</string>
+    <string name="_4_lorem_ipsum_dolor_sit_amet_consectetur">4.लोरम इप्सम डोलर सिट अमेट, कंसैक्टेटुर</string>
+    <string name="images">चित्र</string>
+    <string name="videos">वीडियो</string>
+    <string name="pdf">पीडीएफ</string>
+    <string name="media_upload">मीडिया अपलोड</string>
+    <string name="add_your_documents_here">अपने दस्तावेज़ यहाँ जोड़ें</string>
+    <string name="save">सहेजें</string>
+    <string name="your_response_has_been_submitted">आपकी प्रतिक्रिया सबमिट कर दी गई है।</string>
+    <string name="our_doctors_will_review_your_information_and_provide_a_prescription">
+    हमारे डॉक्टर आपकी जानकारी की समीक्षा करेंगे और एक प्रिस्क्रिप्शन प्रदान करेंगे।
+    </string>
+    <string name="our_doctors_will_review_your_information_and_n_provide_a_prescription">
+    हमारे डॉक्टर आपकी जानकारी की समीक्षा करेंगे और\n एक प्रिस्क्रिप्शन प्रदान करेंगे।
+    </string>
+    <string name="you_ll_be_notified_when_it_s_ready_to_download">आपको इसकी डाउनलोड के लिए तैयार होने पर सूचित किया जाएगा।</string>
+    <string name="okay">ठीक है</string>
+    <string name="scheduled_call_consultations">नियोजित कॉल परामर्श</string>
+    <string name="book_now">अब बुक करें</string>
+    <string name="_09_00_am">09.00 AM</string>
+    <string name="summary">सारांश</string>
+    <string name="we_will_assign_you_a_top_doctor_from_below">
+    हम आपको नीचे से एक शीर्ष डॉक्टर नियुक्त करेंगे
+    </string>
+    <string name="free">मुफ्त</string>
+    <string name="video_consultation_instant_nprescription">
+    <![CDATA[वीडियो परामर्श और तत्काल\nप्रिस्क्रिप्शन]]>
+    </string>
+    <string name="data_and_privacy">डेटा और गोपनीयता</string>
+    <string name="content1">
+    आपके परामर्श के लिए सामग्री निजी और गोपनीय है। हमारी टीम सेवा गुणवत्ता सुधारने के लिए नियमित रूप से अज्ञात ऑडिट कर सकती है।
+    </string>
+    <string name="by_proceeding_to_avail_a_consultation_you_agree_to">
+    एक परामर्श प्राप्त करने के लिए आगे बढ़ते हुए, आप सहमत होते हैं
+    </string>
+    <string name="experience_2yrs">अनुभव: 2 साल</string>
+    <string name="doctor_s_name">डॉक्टर का नाम</string>
+    <string name="apply_promo_code">प्रोमो कोड लागू करें</string>
+    <string name="enter_promo_code">प्रोमो कोड दर्ज करें</string>
+    <string name="coupon_applied">कूपन लागू हो गया</string>
+    <string name="congratulations">बधाई हो</string>
+    <string name="first_consultation_free">पहला परामर्श मुफ्त!</string>
+    <string name="no_payment_required_for_this_session">इस सत्र के लिए कोई भुगतान आवश्यक नहीं है।</string>
+    <string name="_449_free">₹449|मुफ्त</string>
+    <string name="enjoy_your_first_consultation">आपका पहला परामर्श का आनंद लें।</string>
+    <string name="thank_you">धन्यवाद!</string>
+    <string name="payment_method">भुगतान विधि</string>
+    <string name="choose_your_payment_method">अपनी भुगतान विधि चुनें</string>
+    <string name="pay">भुगतान करें</string>
+    <string name="your_appointment_is_confirmed_for_may_n_14_2024_at_10_00_am">
+    आपका अपॉइंटमेंट 14 मई 2024 को सुबह 10:00 बजे के लिए पुष्ट हो गया है।
+    </string>
+    <string name="home">होम</string>
+    <string name="schedule">समय सारणी</string>
+    <string name="your_doctors">आपके डॉक्टर</string>
+    <string name="resources">संसाधन</string>
+    <string name="notifications">सूचनाएँ</string>
+    <string name="schedule_your_call">अपना कॉल शेड्यूल करें</string>
+    <string name="upload_symptoms">लक्षण अपलोड करें</string>
+    <string name="upcoming_appointment">आगामी अपॉइंटमेंट</string>
+    <string name="see_all">सभी देखें</string>
+    <string name="doctor_name">डॉक्टर का नाम</string>
+    <string name="thu_may_14">गुरूवार, 14 मई</string>
+    <string name="_10_00_10_15_am">10:00 – 10:15 AM</string>
+    <string name="cancel">रद्द करें</string>
+    <string name="reschedule">फिर से निर्धारित करें</string>
+    <string name="connect_with_the_right_doctor_n_for_your_health_needs">
+    अपने स्वास्थ्य संबंधी आवश्यकताओं के लिए सही डॉक्टर से जुड़ें।
+    </string>
+    <string name="heart">दिल</string>
+    <string name="fast_free_reliable_medical_support">
+    <![CDATA[तेज़, मुफ्त और विश्वसनीय चिकित्सा सहायता]]>
+    </string>
+    <string name="browse_videos">वीडियो ब्राउज़ करें</string>
+    <string name="begin_your_health_journey">
+    अपनी स्वास्थ्य यात्रा शुरू करें\n<b>मुफ्त परामर्श!</b> के साथ।
+    </string>
+    <string name="schedule_a_call">कॉल शेड्यूल करें</string>
+    <string name="thumnail">थंबनेल</string>
+    <string name="lorem_ipsum_dolor_sit_namet_consectetur_n_adipiscing_elit">
+    लोरम इप्सम डोलर सिट\nअमेट, कंसैक्टेटुर\nएडिपिसिंग एलीट
+    </string>
+    <string name="profile">प्रोफ़ाइल</string>
+    <string name="schedule_appointment">अपॉइंटमेंट शेड्यूल करें</string>
+    <string name="no_upcoming_appointments">कोई आगामी अपॉइंटमेंट नहीं?</string>
+    <string name="let_s_get_you_connected_with_a_doctor_today">
+    चलिए आपको आज ही डॉक्टर से जोड़ते हैं!
+    </string>
+    <string name="start_appointment">अपॉइंटमेंट शुरू करें</string>
+    <string name="start_appointment_in_10_00_min">10:00 मिनट में अपॉइंटमेंट शुरू करें</string>
+    <string name="john_doe">जॉन डो</string>
+    <string name="view_my_profile"><u>मेरी प्रोफ़ाइल देखें</u></string>
+    <string name="notification">सूचना</string>
+    <string name="privacy_policy">गोपनीयता नीति</string>
+    <string name="terms_of_services">सेवा की शर्तें</string>
+    <string name="logout">लॉग आउट</string>
+    <string name="select_language">भाषा चुनें</string>
+    <string name="logout_">लॉग आउट</string>
+    <string name="are_you_sure_you_want_to_logout">क्या आप सुनिश्चित हैं कि आप लॉग आउट करना चाहते हैं?</string>
+    <string name="no">नहीं</string>
+    <string name="yes">हाँ</string>
+    <string name="video_gallery">वीडियो गैलरी</string>
+    <string name="upcoming">आगामी</string>
+    <string name="completed">पूरा हुआ</string>
+    <string name="cancelled">रद्द किया गया</string>
+    <string name="you_haven_t_booked_any_n_appointments_yet">आपने अभी तक कोई अपॉइंटमेंट बुक नहीं की है।</string>
+    <string name="stay_by_looking_for_consulation_with_doctors_n_and_book_appointments">
+    डॉक्टरों से परामर्श के लिए देखिए और अपॉइंटमेंट बुक कीजिए।
+    </string>
+    <string name="how_can_we_help_you">हम आपकी कैसे मदद कर सकते हैं?</string>
+    <string name="enter_your_keyword">अपना कीवर्ड दर्ज करें</string>
+    <string name="lorem_ipsum_dolor_sit_amet">लोरम इप्सम डोलर सिट अमेट?</string>
+    <string name="lorem_ipsum_dolor_sit_amet_adipiscing_elit_dolor_sit_amet">
+    लोरम इप्सम डोलर सिट अमेट, एडिपिसिंग एलीट, डोलर सिट अमेट
+    </string>
+    <string name="questions">प्रश्न</string>
+    <string name="thu_may_14_10_00_10_15_am">गुरूवार, 14 मई • 10:00 – 10:15 AM</string>
+    <string name="dateAndTime">गुरूवार, 14 मई\n• 10:00 – 10:15 AM</string>
+    <string name="info_icon">सूचना आइकन</string>
+    <string name="clock_icon">घड़ी आइकन</string>
+    <string name="appointment_date">अपॉइंटमेंट तिथि</string>
+    <string name="cancellation_policy">रद्दीकरण नीति:</string>
+    <string name="apointment">
+    अपॉइंटमेंट को निर्धारित समय से 2 घंटे पहले रद्द नहीं किया जा सकता है, और भुगतान गैर-रिफंडेबल है।
+    </string>
+    <string name="filters">फ़िल्टर</string>
+    <string name="check_details">विवरण जांचें</string>
+    <string name="download_prescription">प्रिस्क्रिप्शन डाउनलोड करें</string>
+    <string name="symptom_upload_consulations">लक्षण अपलोड परामर्श</string>
+    <string name="all">सभी</string>
+    <string name="reason_for_cancellation">रद्दीकरण का कारण।</string>
+    <string name="give_the_reason">कारण बताएं।</string>
+    <string name="submit">जमा करें</string>
+    <string name="ds_code_xxxx">DS कोड: xxxx</string>
+    <string name="user_name">उपयोगकर्ता नाम</string>
+    <string name="email">ईमेल</string>
+    <string name="username_gmail_com">Username@gmail.com</string>
+    <string name="_91_9655415616">+91–9655415616</string>
+    <string name="privacy_policy_content">
+    "लोरम इप्सम ऑडोर एमे, कंसैक्टेटुएर एडिपिसिंग एलीट। फासेलस नाम सैपियन विवामस फॉसिबस पेनेटिबस वेलिट ईयू। टेलस टॉर्टर फारेट्रा डोलर हेंडरिट उलामकोर्पर विटाए सगिटिस क्यूरेबिटुर एक्स। बिबेंडम एटियम क़ुइस डिक्टम मोलेस्टिए ऑक्टर क्रास; ग्राविडा एंटे। लॉरेट ए हैंडरिट एगेस्टास ग्राविडा लेक्टस? पॉटेन्शी टैकिटि लसीनिया लिगुला निषी एक ए। कंसैक्टेटुर नास्केटर फर्मेंटम पोर्टटिओर क़ुइस निषी मोलिस। मूस पेलेन्टेस्क नॉस्ट्रा; प्लेसरट कंसैक्टेटुर डिस ऑक्टर। एलीट डायम टेम्पस पॉटेन्शी क्यूरेबिटुर इंटेगेर नास्केटर क्यूआम।"
+    </string>
+    <string name="notification_icon">सूचना आइकन</string>
+    <string name="appointment_success">अपॉइंटमेंट सफलता</string>
+    <string name="_1h">1घं</string>
+    <string name="you_have_successfully_booked_your_appointment_with_dr_emily_walker">
+    आपने सफलतापूर्वक डॉ. एमिली वॉकर के साथ अपना अपॉइंटमेंट बुक किया है।
+    </string>
+    <string name="mark_all_as_read">सभी को पढ़ा हुआ चिह्नित करें</string>
+    <string name="today">आज</string>
+    <string name="find_a_doctor_for_your_health_problem">अपनी स्वास्थ्य समस्या के लिए डॉक्टर ढूंढें</string>
+    <string name="search_anything_here">यहां कुछ भी खोजें</string>
+    <string name="dr_tifanny_rizka">डॉ. टिफ़नी रिज़का</string>
+    <string name="free_chat">मुफ्त चैट</string>
+    <string name="hindi_content">अपनी भाषा चुनें</string>
+    <string name="hindi_c">हिंदी</string>
+    <string name="doctor_image">डॉक्टर की छवि\n</string>
+    <string name="Health_condition_analysis">स्वास्थ्य स्थिति विश्लेषण</string>
+    <string name="analysis_condition">बस अपनी जानकारी प्रदान करें, और हमारा \nचैटबॉट आपकी स्वास्थ्य स्थिति का विश्लेषण करेगा।</string>
+    <string name="logo">लोगो</string>
+    <string name="_14_may_2024">14 मई 2024</string>
+    <string name="ohh_here_s_my_latest_doctor_prescription_report">ओह, यह है मेरी नवीनतम डॉक्टर की प्रिस्क्रिप्शन रिपोर्ट।</string>
+    <string name="_10_15">10:15</string>
+    <string name="_5_3_mb">5.3 MB</string>
+    <string name="for_me">मेरे लिए</string>
+    <string name="for_others">दूसरों के लिए</string>
+    <string name="faq_s">सामान्य प्रश्न</string>
+    <!-- Organ List -->
+    <string name="lungs">फेफड़े</string>
+    <string name="kidney">गुर्दा</string>
+    <string name="brain">मस्तिष्क</string>
+
+    <!-- Health Journey List -->
+    <string name="health_journey_1">अपनी स्वास्थ्य यात्रा शुरू करें\nएक मुफ्त परामर्श के साथ!</string>
+    <string name="health_journey_2">डॉक्टरों को आपके दरवाजे तक लाएं\n- आभासी रूप से।</string>
+    <string name="health_journey_3">लघु समस्याओं के लिए लक्षण अपलोड करें\nऔर प्रमुख समस्याओं के लिए</string>
+
+    <!-- Browse Video List -->
+    <string name="video_1">लोरेम इप्सम डोलर सिट\nएट, कांसक्टेटुर\nएडिपिसिंग एलिट,</string>
+    <string name="lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit">लोरम इप्सम डोलर सिट अमेट, कॉनसेक्टेचर अडिपिसिंग एलिट…</string>
+    <string name="razorpay">रेज़रपे</string>
+    <string name="paytm">पेटीएम</string>
+    <string name="awpl_connect">AWPL कनेक्ट</string>
+    <string name="by_booking_an_appointment_you_agree_to_our_">अपॉइंटमेंट बुक करके, आप हमारी शर्तों से सहमत होते हैं</string>
+    <string name="appointment_policy"><u>अपॉइंटमेंट नीति।</u></string>
+    <string name="terms_conditions"><![CDATA[नियम और शर्तें।]]></string>
+    <string name="and">और</string>
+    <string name="by_making_a_payment_you_agree_to_our_refund_policy">भुगतान करके, आप हमारी</string>
+    <string name="refund_policy"><u>रिफंड नीति</u></string>
+    <string name="upload_date">अपलोड तिथि:</string>
+    <string name="cancel_appointment">अपॉइंटमेंट रद्द करें</string>
+    <string name="are_you_sure_you_want_to_cancel_this_appointment">क्या आप वाकई इस अपॉइंटमेंट को रद्द करना चाहते हैं?</string>
+    <string name="to_manage_patient_availability_and_doctor_scheduling_we_require_you_to_reschedule_your_appointment_instead_of_canceling_directly">रोगी की उपलब्धता और डॉक्टर की शेड्यूलिंग को बनाए रखने के लिए, हम आपसे अनुरोध करते हैं कि सीधे रद्द करने के बजाय अपॉइंटमेंट को पुनर्निर्धारित करें</string>
+    <string name="if_you_absolutely_cannot_attend_and_don_t_want_to_reschedule_please_contact_our_admin_team_directly_for_assistance_awplconnect_asclepiuswellness_co_in">यदि आप बिल्कुल भी उपस्थित नहीं हो सकते और पुनर्निर्धारण नहीं करना चाहते हैं, तो कृपया सहायता के लिए हमारी एडमिन टीम से सीधे संपर्क करें: awplconnect@asclepiuswellness.co.in</string>
+    <string name="delete_account">खाता हटाएं</string>
+    <string name="fast_easy_online_consultation"><![CDATA[तेज़ और आसान ऑनलाइन परामर्श]]></string>
+    <string name="the_disease_you_selected_seems_to_fall_under_the_minor_category">आपकी चुनी गई बीमारी मामूली श्रेणी में आती प्रतीत होती है।</string>
+    <string name="you_can_proceed_with_a_symptom_upload_consultation_for_a_quick_review_by_a_doctor">आप डॉक्टर द्वारा त्वरित समीक्षा के लिए लक्षण अपलोड परामर्श के साथ आगे बढ़ सकते हैं।</string>
+    <string name="please_answer_a_few_additional_questions_and_you_may_also_upload_relevant_files_images_videos_pdfs">कृपया कुछ अतिरिक्त प्रश्नों के उत्तर दें और\n आप संबंधित फ़ाइलें (छवियां,\n वीडियो, पीडीएफ) भी अपलोड कर सकते हैं।</string>
+    <string name="our_doctor_review">हमारे डॉक्टर आपकी जानकारी की समीक्षा करेंगे और\n एक प्रिस्क्रिप्शन प्रदान करेंगे। आपको सूचना दी जाएगी जब यह\n डाउनलोड के लिए तैयार होगा।</string>
+    <string name="proceed">आगे बढ़ें</string>
+    <string name="doctor_consultation_recommended">डॉक्टर से परामर्श की सिफारिश की जाती है</string>
+    <string name="the_disease_you_selected_seems_to_fall_under_the_major_category">आपकी चुनी गई बीमारी प्रमुख श्रेणी में आती प्रतीत होती है।</string>
+    <string name="this_condition_requires_a_more_detailed_consultation_we_recommend_scheduling_a_call_with_a_doctor_for_a_thorough_assessment">इस स्थिति के लिए अधिक विस्तृत\n परामर्श की आवश्यकता है। हम डॉक्टर से कॉल\n शेड्यूल करने की सिफारिश करते हैं ताकि पूरी तरह से मूल्यांकन हो सके।</string>
+    <string name="to_help_the_doctor_better_understand_your_n_condition_before_the_call_please_answer_a_few_n_more_questions_and_upload_any_relevant_images">डॉक्टर को आपकी\n स्थिति को कॉल से पहले बेहतर समझने में मदद करने के लिए,\n कृपया कुछ और प्रश्नों के उत्तर दें और कोई भी संबंधित छवियां अपलोड करें।</string>
+    <string name="hindi_C">अपनी भाषा चुनें</string>
+    <string name="our_doctors_will_review_your_information_and_n_provide_a_prescription_you_ll_be_notified_when_it_s_n_ready_to_download">हमारे डॉक्टर आपकी जानकारी की समीक्षा करेंगे और एक प्रिस्क्रिप्शन प्रदान करेंगे। जब यह डाउनलोड के लिए तैयार होगा, तो आपको सूचित किया जाएगा।</string>
+    <string name="type_a_message">एक संदेश टाइप करें</string>
+    <string name="this_chat_will_be_available_for_7_days_from_the_appointment_date">
+    यह चैट अपॉइंटमेंट की तारीख से <font color="#199FD9">7 दिन</font> तक उपलब्ध रहेगी।
+    </string>
+    <string name="privacy_policy_txt">गोपनीयता नीति</string>
+
+
+</resources>
+

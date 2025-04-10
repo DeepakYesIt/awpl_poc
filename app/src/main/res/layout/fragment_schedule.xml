@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/parent_bg"
+    android:layout_marginVertical="@dimen/_10sdp"
+    tools:context=".fragment.schedule.ScheduleFragment">
+
+    <!-- Upcoming -->
+    <TextView
+        android:id="@+id/txtUpcoming"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato_regular"
+        android:text="@string/upcoming"
+        android:textColor="@color/darkGreyColor"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/txtCompleted"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread" />
+
+    <View
+        android:id="@+id/viewUpcoming"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:background="#356598"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@id/txtUpcoming"
+        app:layout_constraintEnd_toEndOf="@id/txtUpcoming"
+        app:layout_constraintTop_toBottomOf="@id/txtUpcoming" />
+
+    <!-- Completed -->
+    <TextView
+        android:id="@+id/txtCompleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato_regular"
+        android:text="@string/completed"
+        android:textColor="@color/darkGreyColor"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/txtUpcoming"
+        app:layout_constraintEnd_toStartOf="@+id/txtCanceled"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/viewCompleted"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:background="#356598"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@id/txtCompleted"
+        app:layout_constraintEnd_toEndOf="@id/txtCompleted"
+        app:layout_constraintTop_toBottomOf="@id/txtCompleted" />
+
+    <!-- Canceled -->
+    <TextView
+        android:id="@+id/txtCanceled"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato_regular"
+        android:text="@string/cancelled"
+        android:textColor="@color/darkGreyColor"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/txtCompleted"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/viewCanceled"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:background="#356598"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@id/txtCanceled"
+        app:layout_constraintEnd_toEndOf="@id/txtCanceled"
+        app:layout_constraintTop_toBottomOf="@id/txtCanceled" />
+
+    <LinearLayout
+        android:id="@+id/noDataView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/_50sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewCompleted">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_50sdp"
+                android:src="@drawable/calendar_error_ic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView48"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:fontFamily="@font/lato_regular"
+                android:text="@string/you_haven_t_booked_any_n_appointments_yet"
+                android:textAlignment="center"
+                android:textColor="@color/darkGreyColor"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView10" />
+
+            <TextView
+                android:id="@+id/textView49"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/lato_regular"
+                android:text="@string/stay_by_looking_for_consulation_with_doctors_n_and_book_appointments"
+                android:textAlignment="center"
+                android:textColor="@color/greyColor"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView48" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnNext"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:background="@drawable/button_bg"
+                android:fontFamily="@font/lato_regular"
+                android:text="@string/book_now"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView49" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/innerFragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewCompleted" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

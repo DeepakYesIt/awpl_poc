@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:background="@android:color/white">
+
+    <!-- Icon -->
+    <ImageView
+        android:id="@+id/ivNotificationIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/calendar_tick"
+        android:contentDescription="@string/notification_icon"
+        android:background="@drawable/circle_background"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
+
+    <!-- Time -->
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_1h"
+        android:textSize="14sp"
+        android:textColor="@color/greyColor"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@id/tvNotificationTitle"
+        android:layout_marginEnd="10dp" />
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tvNotificationTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/appointment_success"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/lato_regular"
+        android:textColor="@color/darkGreyColor"
+        android:layout_toEndOf="@id/ivNotificationIcon"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="40dp"
+        android:layout_alignTop="@id/ivNotificationIcon"
+        android:layout_toStartOf="@id/tvTime" />
+
+    <!-- Description -->
+    <TextView
+        android:id="@+id/tvNotificationDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/you_have_successfully_booked_your_appointment_with_dr_emily_walker"
+        android:textSize="16sp"
+        android:fontFamily="@font/lato_regular"
+        android:textColor="#6B7280"
+        android:layout_toEndOf="@id/ivNotificationIcon"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@id/tvNotificationTitle"
+        android:layout_toStartOf="@id/tvTime"
+        android:ellipsize="end"
+        android:layout_marginTop="4dp" />
+
+</RelativeLayout>

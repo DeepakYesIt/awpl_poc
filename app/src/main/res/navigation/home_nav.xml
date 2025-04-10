@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_nav"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.bussiness.awpl.fragment.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/scheduleFragment"
+        android:name="com.bussiness.awpl.fragment.schedule.ScheduleFragment"
+        android:label="fragment_schedule"
+        tools:layout="@layout/fragment_schedule" />
+    <fragment
+        android:id="@+id/yourDoctorFragment"
+        android:name="com.bussiness.awpl.fragment.yourdoctor.YourDoctorFragment"
+        android:label="fragment_your_doctor"
+        tools:layout="@layout/fragment_your_doctor" />
+    <fragment
+        android:id="@+id/resourceFragment"
+        android:name="com.bussiness.awpl.fragment.resource.ResourceFragment"
+        android:label="fragment_resource"
+        tools:layout="@layout/fragment_resource" />
+    <fragment
+        android:id="@+id/FAQFragment3"
+        android:name="com.bussiness.awpl.fragment.resource.FAQFragment"
+        android:label="fragment_f_a_q"
+        tools:layout="@layout/fragment_f_a_q" />
+    <fragment
+        android:id="@+id/videoGalleryFragment"
+        android:name="com.bussiness.awpl.fragment.resource.VideoGalleryFragment"
+        android:label="fragment_video_gallery"
+        tools:layout="@layout/fragment_video_gallery" />
+    <fragment
+        android:id="@+id/upcomingFragment"
+        android:name="com.bussiness.awpl.fragment.schedule.UpcomingFragment"
+        android:label="fragment_upcoming"
+        tools:layout="@layout/fragment_upcoming" />
+    <fragment
+        android:id="@+id/cancelAppointment"
+        android:name="com.bussiness.awpl.fragment.schedule.CancelAppointment"
+        android:label="fragment_cancel_appointment"
+        tools:layout="@layout/fragment_cancel_appointment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.bussiness.awpl.fragment.sidedrawer.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.bussiness.awpl.fragment.sidedrawer.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/privacyPolicyFragment"
+        android:name="com.bussiness.awpl.fragment.sidedrawer.PrivacyPolicyFragment"
+        android:label="fragment_privacy_policy"
+        tools:layout="@layout/fragment_privacy_policy" />
+    <fragment
+        android:id="@+id/termsAndConditionFragment"
+        android:name="com.bussiness.awpl.fragment.sidedrawer.TermsAndConditionFragment"
+        android:label="fragment_terms_and_condition"
+        tools:layout="@layout/fragment_terms_and_condition" />
+    <dialog
+        android:id="@+id/diseasesBottomFragment"
+        android:name="com.bussiness.awpl.fragment.home.DiseasesBottomFragment"
+        android:label="fragment_diseases_bottom"
+        tools:layout="@layout/fragment_diseases_bottom" />
+    <fragment
+        android:id="@+id/summaryScreen"
+        android:name="com.bussiness.awpl.fragment.bookappointment.SummaryScreen"
+        android:label="fragment_summary_screen"
+        tools:layout="@layout/fragment_summary_screen" />
+    <fragment
+        android:id="@+id/paymentScreen"
+        android:name="com.bussiness.awpl.fragment.bookappointment.PaymentScreen"
+        android:label="fragment_payment_screen"
+        tools:layout="@layout/fragment_payment_screen" />
+    <fragment
+        android:id="@+id/appointmentBooking"
+        android:name="com.bussiness.awpl.fragment.bookappointment.AppointmentBooking"
+        android:label="fragment_apointment_booking"
+        tools:layout="@layout/fragment_apointment_booking" />
+    <fragment
+        android:id="@+id/homeScheduleCallFragment"
+        android:name="com.bussiness.awpl.fragment.home.HomeScheduleCallFragment"
+        android:label="HomeScheduleCallFragment" />
+    <fragment
+        android:id="@+id/basicInfoScreen2"
+        android:name="com.bussiness.awpl.fragment.basicdetailscreen.BasicInfoScreen"
+        android:label="fragment_basic_info_screen"
+        tools:layout="@layout/fragment_basic_info_screen" />
+    <fragment
+        android:id="@+id/scheduledCallConsultation2"
+        android:name="com.bussiness.awpl.fragment.scheduledcallconsultation.ScheduledCallConsultation"
+        android:label="ScheduledCallConsultation" />
+    <fragment
+        android:id="@+id/doctorChatFragment"
+        android:name="com.bussiness.awpl.fragment.schedule.DoctorChatFragment"
+        android:label="fragment_doctor_chat"
+        tools:layout="@layout/fragment_doctor_chat" />
+    <fragment
+        android:id="@+id/refundPolicyFragment"
+        android:name="com.bussiness.awpl.fragment.sidedrawer.RefundPolicyFragment"
+        android:label="fragment_refund_policy"
+        tools:layout="@layout/fragment_refund_policy" />
+    <fragment
+        android:id="@+id/appointmentPolicyFragment"
+        android:name="com.bussiness.awpl.fragment.sidedrawer.AppointmentPolicyFragment"
+        android:label="fragment_appointment_policy"
+        tools:layout="@layout/fragment_appointment_policy" />
+    <fragment
+        android:id="@+id/doctorConsultationFragment"
+        android:name="com.bussiness.awpl.fragment.home.DoctorConsultationFragment"
+        android:label="fragment_doctor_consultation"
+        tools:layout="@layout/fragment_doctor_consultation" />
+    <fragment
+        android:id="@+id/onlineConsultationFragment"
+        android:name="com.bussiness.awpl.fragment.home.OnlineConsultationFragment"
+        android:label="fragment_online_consultation"
+        tools:layout="@layout/fragment_online_consultation" />
+    <fragment
+        android:id="@+id/symptomUpload"
+        android:name="com.bussiness.awpl.fragment.symptomuploadScreen.SymptomUpload"
+        android:label="SymptomUpload" />
+
+</navigation>

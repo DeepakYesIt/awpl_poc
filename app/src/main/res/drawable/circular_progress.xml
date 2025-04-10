@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background Circle (base with shadow simulation) -->
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:centerX="50%"
+                android:centerY="50%"
+                android:gradientRadius="90dp"
+                android:startColor="#199FD9"
+                android:endColor="#356598"
+                android:useLevel="false"/>
+            <size android:width="120dp" android:height="120dp" />
+        </shape>
+    </item>
+
+    <!-- Foreground Ring with simulated gradient -->
+    <item>
+        <rotate
+            android:fromDegrees="270"
+            android:toDegrees="270">
+            <shape android:shape="ring"
+                android:innerRadiusRatio="3"
+                android:thicknessRatio="0.15"
+                android:useLevel="true">
+                <gradient
+                    android:type="sweep"
+                    android:useLevel="true"
+                    android:startColor="#356598"
+                    android:centerColor="#56A0D3"
+                    android:endColor="#90CAF9"/>
+                <solid android:color="@android:color/transparent"/>
+            </shape>
+        </rotate>
+    </item>
+
+</layer-list>

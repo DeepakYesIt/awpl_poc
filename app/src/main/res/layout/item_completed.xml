@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="17dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="@android:color/white">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Main content layout -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginHorizontal="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:padding="12dp"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:id="@+id/consultationTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/scheduled_call_consultations"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_14ssp"
+                    android:fontFamily="@font/lato_regular"
+                    android:textColor="@color/greyColor" />
+
+                <LinearLayout
+                    android:id="@+id/llAppointmentDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:orientation="horizontal">
+
+                    <!-- Appointment Date Title -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/appointment_date"
+                        android:textStyle="bold"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/lato_regular"
+                        android:textColor="#356598" />
+
+                    <!-- Date and Time -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="4dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/time_stamp"
+                                android:layout_gravity="top"
+                                android:contentDescription="@string/clock_icon" />
+
+                            <TextView
+                                android:id="@+id/dateTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/dateAndTime"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:ellipsize="end"
+                                android:maxLines="3"
+                                android:layout_marginStart="8dp"
+                                android:fontFamily="@font/lato_regular"
+                                android:textColor="@color/darkGreyColor" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:src="@drawable/baseline_circle_24"
+                                android:layout_gravity="center_vertical"
+                                android:contentDescription="@string/clock_icon" />
+
+                            <TextView
+                                android:id="@+id/timeTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/_10_00_10_15_am"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:ellipsize="end"
+                                android:maxLines="3"
+                                android:layout_marginStart="8dp"
+                                android:fontFamily="@font/lato_regular"
+                                android:textColor="@color/darkGreyColor" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="8dp"
+                    android:background="@color/greyColor" />
+
+                <!-- Doctor's Profile -->
+                <LinearLayout
+                    android:id="@+id/llDoctorsProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="10dp">
+
+                    <!-- Doctor Image -->
+                    <ImageView
+                        android:id="@+id/doctorImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/doctor_bg_icon"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="Doctor Image"
+                        android:background="@drawable/circle_background"
+                        android:layout_marginEnd="8dp" />
+
+                    <!-- Doctor Name -->
+                    <TextView
+                        android:id="@+id/doctorName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/doctor_s_name"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/lato_regular"
+                        android:textColor="@color/darkGreyColor"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:layout_marginEnd="8dp" />
+
+                    <!-- Check Details Button -->
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/checkDetailBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_30sdp"
+                        android:text="@string/check_details"
+                        android:textSize="12sp"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="4dp"
+                        android:textAllCaps="false"
+                        android:textColor="#199FD9"
+                        android:background="@drawable/browse_btn_bg"
+                        android:minWidth="90dp"
+                        android:maxWidth="120dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llUploadDateDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/upload_date"
+                        android:textColor="#356598"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/lato_regular"/>
+                    <TextView
+                        android:id="@+id/uploadDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/thu_may_14"
+                        android:textColor="@color/darkGreyColor"
+                        android:textSize="14sp"
+                        android:layout_marginStart="@dimen/_7sdp"
+                        android:fontFamily="@font/lato_regular"/>
+                </LinearLayout>
+
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/downloadPrescriptionBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:text="@string/download_prescription"
+                    android:background="@drawable/sharp_btn_bg"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/lato_regular"
+                    android:textColor="@android:color/white"
+                    android:elevation="2dp" />
+            </LinearLayout>
+
+            <!-- Blue Color Strip at Bottom -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_18sdp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/gradient_bg" />
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
+
+</FrameLayout>

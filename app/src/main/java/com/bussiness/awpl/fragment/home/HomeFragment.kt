@@ -1,0 +1,114 @@
+package com.bussiness.awpl.fragment.home
+
+import android.content.Intent
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bussiness.awpl.R
+import com.bussiness.awpl.activities.HomeActivity
+import com.bussiness.awpl.activities.OnBoardActivity
+import com.bussiness.awpl.adapter.BrowseVideoAdapter
+import com.bussiness.awpl.adapter.HealthJourneyAdapter
+import com.bussiness.awpl.adapter.OrganListAdapter
+import com.bussiness.awpl.databinding.FragmentHomeBinding
+import com.bussiness.awpl.model.HealthJourneyItem
+
+
+class HomeFragment : Fragment() {
+
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var organListAdapter: OrganListAdapter
+    private lateinit var healthJourneyAdapter: HealthJourneyAdapter
+    private lateinit var browseVideoAdapter: BrowseVideoAdapter
+    private lateinit var mainActivity: HomeActivity
+    private val viewModel: HomeViewModel by viewModels()
+    private val healthJourneyList = listOf(
+        HealthJourneyItem("Begin Your Health\n Journey with a \nFree Consultation!", R.drawable.women_doctor),
+        HealthJourneyItem("Bringing Doctors\n to Your Door – \nVirtually.", R.drawable.women_doctor),
+        HealthJourneyItem("Upload Symptoms \nfor Minor Issues \nand Major Concerns", R.drawable.women_doctor)
+    )
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        mainActivity = requireActivity() as HomeActivity
+//        mainActivity.setUpToolBarIconText("Home")
+
+
+        setupRecyclerViews()
+        clickListener()
+    }
+
+    private fun setupRecyclerViews() {
+        // Organ List RecyclerView
+        binding.deptRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            organListAdapter = OrganListAdapter(viewModel.organList)
+            adapter = organListAdapter
+        }
+
+        // Health Journey RecyclerView
+        binding.bannerRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            healthJourneyAdapter = HealthJourneyAdapter(healthJourneyList) { item ->
+                findNavController().navigate(R.id.homeScheduleCallFragment)
+            }
+            adapter = healthJourneyAdapter
+        }
+
+        // Browse Video RecyclerView
+        binding.videoRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            browseVideoAdapter = BrowseVideoAdapter(viewModel.browseVideoList) { item ->
+                Toast.makeText(requireContext(), "Playing Video: ${item.title}", Toast.LENGTH_SHORT).show()
+            }
+            adapter = browseVideoAdapter
+        }
+    }
+
+    private fun clickListener() {
+        binding.apply {
+            txtSeeAllDisease.setOnClickListener {
+                findNavController().navigate(R.id.diseasesBottomFragment)
+            }
+            symptomUploadBtn.setOnClickListener {
+//                val intent = Intent(requireContext(), OnBoardActivity::class.java).apply {
+//                    putExtra("LOAD_FRAGMENT", "SymptomUploadFragment")
+//                }
+//                startActivity(intent)
+                findNavController().navigate(R.id.symptomUpload)
+            }
+            seeAllVideos.setOnClickListener {
+                findNavController().navigate(R.id.videoGalleryFragment)
+            }
+            scheduleCallBtn.setOnClickListener {
+                findNavController().navigate(R.id.homeScheduleCallFragment)
+            }
+            upcomingSeeAll.setOnClickListener {
+                findNavController().navigate(R.id.scheduleFragment)
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}

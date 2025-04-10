@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BottomNavTextStyle" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/bottom_nav_color</item>
+        <item name="android:fontFamily">@font/lato_regular</item>
+    </style>
+    <style name="Theme.MyApp" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+    <!-- res/values/styles.xml -->
+    <!-- Calendar Header: Large, centered, bold, black -->
+    <style name="CalendarHeader" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">#363636</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+        <item name="fontFamily">@font/lato_regular</item>
+    </style>
+
+    <!-- Calendar Week Day (S M T W T F S): small, gray, all caps -->
+    <style name="CalendarWeekDay" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">#363636</item> <!-- Light Gray -->
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:gravity">center</item>
+        <item name="fontFamily">@font/inter</item>
+    </style>
+
+    <!-- Calendar Date Numbers: medium size, clean, dark -->
+    <style name="CalendarDate" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">#363636</item> <!-- Medium Dark Text -->
+        <item name="android:textSize">12sp</item>
+        <item name="android:gravity">center</item>
+        <item name="fontFamily">@font/inter</item>
+    </style>
+
+
+
+
+</resources>
