@@ -31,7 +31,6 @@ class SummaryScreen : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupRecyclerView()
         clickListener()
     }
@@ -52,15 +51,15 @@ class SummaryScreen : Fragment() {
 
     private fun clickListener() {
         binding.apply {
-            btnNext.setOnClickListener {
-                congratsDialog()
-            }
+            btnNext.setOnClickListener { congratsDialog() }
             arrowIcon.setOnClickListener {
                 if(edtPromoCode.text.toString().isNotEmpty()){
                     applyPromoConstraintLayout.visibility = View.GONE
                     promoValidate.visibility = View.VISIBLE
                 }
             }
+            txtPrivacyPolicy.setOnClickListener { findNavController().navigate(R.id.privacyPolicyFragment) }
+            txtTermsConditions.setOnClickListener { findNavController().navigate(R.id.termsAndConditionFragment) }
         }
     }
 

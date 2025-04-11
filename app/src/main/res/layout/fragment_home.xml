@@ -61,12 +61,13 @@
                         android:gravity="start">
 
                         <!-- Doctor Image -->
-                        <ImageView
-                            android:id="@+id/portraitDoctor"
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/stDoctorImage"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/portraite_doctor"
-                            android:scaleType="centerCrop" />
+                            android:scaleType="centerCrop"
+                            app:shapeAppearanceOverlay="@style/doctorImgBg"/>
 
                         <!-- Doctor Info -->
                         <LinearLayout
@@ -203,7 +204,7 @@
                             android:gravity="center"
                             android:text="@string/schedule_your_call"
                             android:textColor="#356598"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             android:textStyle="bold" />
 
                         <ImageView
@@ -267,7 +268,7 @@
                             android:gravity="center"
                             android:text="@string/upload_symptoms"
                             android:textColor="#356598"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             android:textStyle="bold" />
 
                         <ImageView
@@ -358,13 +359,13 @@
                         android:gravity="start">
 
                         <!-- Doctor Image -->
-                        <ImageView
-                            android:id="@+id/imageView7"
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/upDoctorImage"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/doctor_icon2"
-                            android:contentDescription="@string/doctor_image"
-                            android:scaleType="centerCrop" />
+                            android:scaleType="centerCrop"
+                            app:shapeAppearanceOverlay="@style/doctorImgBg"/>
 
                         <!-- Doctor Info -->
                         <LinearLayout
@@ -443,6 +444,7 @@
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="@color/black"
+                            android:layout_marginBottom="@dimen/_2sdp"
                             android:layout_marginEnd="@dimen/_5sdp" />
 
                         <!-- Reschedule Button -->
@@ -458,6 +460,7 @@
                             android:textSize="14sp"
                             android:textColor="@color/white"
                             android:textStyle="bold"
+                            android:layout_marginBottom="@dimen/_2sdp"
                             android:layout_marginStart="@dimen/_5sdp" />
                     </LinearLayout>
                 </LinearLayout>

@@ -21,7 +21,6 @@ class FAQFragment : Fragment() {
     private var _binding: FragmentFAQBinding? = null
     private val binding get() = _binding!!
     private lateinit var faqAdapter: FAQAdapter
-    private lateinit var mainActivity: HomeActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,10 +32,6 @@ class FAQFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mainActivity = requireActivity() as HomeActivity
-//        mainActivity.setUpToolBarIconText("faq")
-
         // Setup FAQ RecyclerView
         val faqList = listOf(
             FAQItem("Lorem ipsum dolor sit amet?", "Lorem ipsum dolor sit amet, consectetur adipiscing elit."),

@@ -44,7 +44,6 @@ class CompletedFragment : Fragment() {
             AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM","Symptom Upload Consultations","Thu May 14", R.drawable.doctor_bg_icon),
             AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM","Scheduled Call Consultations","", R.drawable.doctor_bg_icon),
             AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM","Symptom Upload Consultations","Thu May 14", R.drawable.doctor_bg_icon),
-
         )
 
         completedAdapter = CompletedAdapter(appointmentList,
@@ -89,11 +88,9 @@ class CompletedFragment : Fragment() {
         val popupView = LayoutInflater.from(requireContext()).inflate(R.layout.item_filter, null)
 
         val popupWindow = PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true )
-
         // Show popup below the clicked view (info icon)
         popupWindow.showAsDropDown(anchorView, 0, 10)
 
-        // Optional: Dismiss popup when clicking on it
         popupView.setOnClickListener {
             popupWindow.dismiss()
         }

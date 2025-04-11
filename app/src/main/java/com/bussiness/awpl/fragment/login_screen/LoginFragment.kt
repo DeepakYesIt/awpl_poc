@@ -24,8 +24,12 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentWelcome3Binding.inflate(inflater, container, false)
-        clickListener()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        clickListener()
     }
 
     private fun clickListener() {

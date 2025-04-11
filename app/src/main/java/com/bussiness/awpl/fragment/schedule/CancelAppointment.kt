@@ -35,10 +35,6 @@ class CancelAppointment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mainActivity = requireActivity() as HomeActivity
-//        mainActivity.setUpToolBarIconText("cancel_appointment")
-
         clickListener()
     }
 

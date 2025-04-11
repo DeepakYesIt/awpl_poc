@@ -29,7 +29,6 @@ class HomeScheduleCallFragment : Fragment() {
 
     private var _binding: FragmentHomeScheduleCallBinding? = null
     private val binding get() = _binding!!
-    private var mainActivity: HomeActivity? = null
     private var mediaUploadDialog: MediaUtils? = null
     private var currentType: String = ""
     private val mediaList = mutableListOf<MediaItem>()
@@ -55,8 +54,6 @@ class HomeScheduleCallFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainActivity = activity as HomeActivity
-//        mainActivity?.setUpToolBarIconText("schedule_call_home")
         clickListener()
         setUpRecyclerView()
     }
@@ -168,10 +165,8 @@ class HomeScheduleCallFragment : Fragment() {
         }
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
-        (requireActivity() as? HomeActivity)?.findViewById<View>(R.id.homeBottomNav)?.visibility = View.VISIBLE
         _binding = null
     }
 }

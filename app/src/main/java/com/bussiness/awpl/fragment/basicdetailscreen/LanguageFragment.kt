@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bussiness.awpl.R
@@ -25,24 +26,26 @@ class LanguageFragment : Fragment() {
         // Initialize SessionManager
         sessionManager = SessionManager(requireContext())
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            requireActivity().finishAffinity()
+        }
+
         clickListener()
         return binding.root
     }
 
     private fun clickListener() {
         binding.apply {
-            // English button click - Set language to English and navigate to the next screen
             englishLangBtn.setOnClickListener {
-                sessionManager.setLanguage("en")  // Set language to English
-                sessionManager.changeLanguage(requireContext(), "en")  // Apply the language change
-                findNavController().navigate(R.id.onBoardingFragment)  // Navigate to next screen
+                sessionManager.setLanguage("en")
+                sessionManager.changeLanguage(requireContext(), "en")
+                findNavController().navigate(R.id.onBoardingFragment)
             }
 
-            // Hindi button click - Set language to Hindi and navigate to the next screen
             hindiLangBtn.setOnClickListener {
-                sessionManager.setLanguage("hi")  // Set language to Hindi
-                sessionManager.changeLanguage(requireContext(), "hi")  // Apply the language change
-                findNavController().navigate(R.id.onBoardingFragment)  // Navigate to next screen
+                sessionManager.setLanguage("hi")
+                sessionManager.changeLanguage(requireContext(), "hi")
+                findNavController().navigate(R.id.onBoardingFragment)
             }
         }
     }

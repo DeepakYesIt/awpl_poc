@@ -16,7 +16,6 @@ class OnlineConsultationFragment : Fragment() {
 
     private var _binding: FragmentOnlineConsultationBinding? = null
     private val binding get() = _binding!!
-    private var mainActivity: HomeActivity? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,10 +27,6 @@ class OnlineConsultationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mainActivity = activity as? HomeActivity
-//        mainActivity?.setUpToolBarIconText("online_consultation")
-
         clickListeners()
     }
 
@@ -44,7 +39,6 @@ class OnlineConsultationFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-//        (requireActivity() as? HomeActivity)?.findViewById<View>(R.id.homeBottomNav)?.visibility = View.VISIBLE
         _binding = null
     }
 }

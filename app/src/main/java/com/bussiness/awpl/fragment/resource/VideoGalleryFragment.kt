@@ -18,9 +18,6 @@ class VideoGalleryFragment : Fragment() {
     private var _binding: FragmentVideoGalleryBinding? = null
     private val binding get() = _binding!!
     private lateinit var videoGalleryAdapter: VideoGalleryAdapter
-    private lateinit var mainActivity: HomeActivity
-
-
     private val videoList = listOf(
         HealthJourneyItem("Lorem ipsum dolor sit amet, adipiscing elit, dolor sit amet", R.drawable.lady_dc),
         HealthJourneyItem("Lorem ipsum dolor sit amet, adipiscing elit, dolor sit amet", R.drawable.lady_dc),
@@ -44,10 +41,6 @@ class VideoGalleryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mainActivity = requireActivity() as HomeActivity
-//        mainActivity.setUpToolBarIconText("video_gallery")
-
         setupRecyclerView()
     }
 
@@ -64,8 +57,6 @@ class VideoGalleryFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // Show Bottom Navigation again when leaving FAQFragment
-        (requireActivity() as? HomeActivity)?.findViewById<View>(R.id.homeBottomNav)?.visibility = View.VISIBLE
         _binding = null
     }
 }

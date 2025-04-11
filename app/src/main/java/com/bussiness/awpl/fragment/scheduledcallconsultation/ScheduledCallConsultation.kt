@@ -31,7 +31,6 @@ class ScheduledCallConsultation : Fragment() {
     private var currentType: String = ""
     private val mediaList = mutableListOf<MediaItem>()
     private lateinit var mediaAdapter: MediaAdapter
-    private var mainActivity: HomeActivity? = null
 
     private val imagePickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -50,8 +49,6 @@ class ScheduledCallConsultation : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainActivity = activity as? HomeActivity
-//        mainActivity?.setUpToolBarIconText("schedule_call")
         setUpRecyclerView()
         clickListeners()
     }
@@ -142,7 +139,6 @@ class ScheduledCallConsultation : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        (requireActivity() as? HomeActivity)?.findViewById<View>(R.id.homeBottomNav)?.visibility = View.VISIBLE
         _binding = null
     }
 }

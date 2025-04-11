@@ -21,7 +21,6 @@ class BasicInfoScreen : Fragment() {
     private var _binding: FragmentBasicInfoScreenBinding? = null
     private val binding get() = _binding!!
     private var type: String? = null
-    private var mainActivity: HomeActivity? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,9 +36,6 @@ class BasicInfoScreen : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Set up mainActivity reference
-        mainActivity = activity as? HomeActivity
-//        mainActivity?.setUpToolBarIconText("basic_info")
 
         val textViews = listOf(binding.txtMale, binding.txtFemale, binding.txtOthers)
 
@@ -114,7 +110,6 @@ class BasicInfoScreen : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        (requireActivity() as? HomeActivity)?.findViewById<View>(R.id.homeBottomNav)?.visibility = View.VISIBLE
         _binding = null
     }
 }

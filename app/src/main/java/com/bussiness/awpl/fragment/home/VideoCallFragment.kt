@@ -6,17 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bussiness.awpl.R
+import com.bussiness.awpl.databinding.FragmentVideoCallBinding
 
 class VideoCallFragment : Fragment() {
 
-
+    private var _binding: FragmentVideoCallBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_video_call, container, false)
+    ): View {
+        _binding = FragmentVideoCallBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
 

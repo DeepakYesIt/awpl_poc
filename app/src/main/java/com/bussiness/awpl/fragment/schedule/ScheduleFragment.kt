@@ -38,9 +38,6 @@ class ScheduleFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mainActivity = requireActivity() as HomeActivity
-//        mainActivity.setUpToolBarIconText("my_appointments")
         showTemporaryData()
         clickListener()
         selectTab(selectedTab)
@@ -85,8 +82,6 @@ class ScheduleFragment : Fragment() {
             txtUpcoming.setOnClickListener { selectTab(0) }
             txtCompleted.setOnClickListener { selectTab(1) }
             txtCanceled.setOnClickListener { selectTab(2) }
-//            btnNext.setOnClickListener { val intent = Intent(requireContext(), OnBoardActivity::class.java).apply { putExtra("LOAD_FRAGMENT", "schedule") }
-//                startActivity(intent)}
             btnNext.setOnClickListener {
                 findNavController().navigate(R.id.appointmentBooking)
             }

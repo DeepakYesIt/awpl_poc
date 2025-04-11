@@ -6,30 +6,30 @@
     android:background="@color/white">
 
     <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_margin="@dimen/_5sdp"
         android:background="@color/white"
         android:elevation="@dimen/_10sdp">
+
+        <!-- Main Image -->
         <ImageView
             android:id="@+id/main_image"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:paddingTop="5dp"
-            android:paddingEnd="8dp"
-            android:paddingStart="0dp"
-            android:background="@drawable/media_img_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:background="@drawable/image_bg"
             android:src="@drawable/sample_image" />
 
+        <!-- Close icon overlaid on top-end -->
         <ImageView
             android:id="@+id/close_button"
             android:layout_width="@dimen/_15sdp"
             android:layout_height="@dimen/_15sdp"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="1dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="2dp"
             android:background="@drawable/rounded_corner"
             android:src="@drawable/close_media_ic" />
     </FrameLayout>
 
-    </RelativeLayout>
-
-
+</RelativeLayout>

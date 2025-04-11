@@ -49,7 +49,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:padding="@dimen/_13sdp">
+            android:padding="@dimen/_10sdp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -57,6 +57,7 @@
                 android:textColor="#356598"
                 android:layout_marginTop="@dimen/_30sdp"
                 android:textSize="20sp"
+                android:fontFamily="@font/inter"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:text="@string/welcome_to_your_ai_health_companion"/>
@@ -65,6 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
+                android:fontFamily="@font/inter"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:gravity="center"
                 android:text="@string/health_insights"/>
@@ -75,6 +77,7 @@
                 android:textSize="14sp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:gravity="center"
+                android:fontFamily="@font/inter"
                 android:textAlignment="center"
                 android:text="@string/text3"/>
 
@@ -88,13 +91,47 @@
                 android:gravity="center"
                 android:text="@string/smart_fast_reliable"/>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:layout_marginTop="@dimen/_15sdp"
-                android:gravity="center"
-                android:text="@string/get_started_text"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:gravity="center"
+                    android:fontFamily="@font/inter"
+                    android:text="@string/get_started_text"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/you_agree_to_our"
+                        android:textSize="14sp"
+                        android:gravity="center"
+                        android:fontFamily="@font/inter"/>
+                    <TextView
+                        android:id="@+id/privacyPolicy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/get_started_text_privacy_policy"
+                        android:textSize="14sp"
+                        android:layout_marginStart="@dimen/_2sdp"
+                        android:gravity="center"
+                        android:fontFamily="@font/inter"/>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/nextButton"
@@ -102,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/_15sdp"
                 android:background="@drawable/button_bg"
-                android:text="@string/okay_got_it"
+                android:text="@string/get_started"
                 android:textSize="20sp"
                 android:fontFamily="@font/lato_regular"
                 android:textColor="@color/white"

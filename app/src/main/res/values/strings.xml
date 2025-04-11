@@ -27,10 +27,12 @@
     <string name="health_insights">
     You\'re about to unlock <b><font color='#356598'>personalized health insights—completely FREE!</font></b>
 </string>
-    <string name="text3">Simply enter a few basic details and describe your health concerns. Our intelligent AI \nchatbot will analyze your condition and\n provide tailored recommendations instantly.</string>
+    <string name="text3">Simply enter a few basic details and describe your health concerns. Our intelligent AI chatbot will analyze your condition and provide tailored recommendations instantly.</string>
     <string name="smart_fast_reliable">Smart. Fast. Reliable.</string>
     <string name="get_started_text">
-    Tap <b><font color='#356598'>"Get Started"</font></b> to begin. By continuing,you agree to our <b><font color='#356598'>[Privacy Policy]</font></b>.
+    Tap <b><font color='#356598'>"Get Started"</font></b> to begin. By continuing,</string>
+    <string name="get_started_text_privacy_policy">
+     <font color='#356598'>[Privacy Policy]</font>.
 </string>
     <string name="okay_got_it">Okay,got it.</string>
     <string name="basic_information">Basic Information</string>
@@ -251,6 +253,8 @@
     This chat will be available for <font color="#199FD9">7 days</font> from\n the appointment date.
 </string>
     <string name="privacy_policy_txt">Privacy Policy</string>
+    <string name="get_started">Get Started</string>
+    <string name="you_agree_to_our">you agree to our</string>
 
 
 </resources>

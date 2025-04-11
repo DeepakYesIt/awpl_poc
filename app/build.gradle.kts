@@ -69,6 +69,9 @@ dependencies {
     implementation (libs.glide)
     implementation (libs.annotations)
 //    ksp (libs.ksp)
+    //shapeAble image
+    implementation (libs.material.v1120)
+
 
 
 

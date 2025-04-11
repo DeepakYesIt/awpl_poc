@@ -14,7 +14,6 @@ class TermsAndConditionFragment : Fragment() {
 
     private var _binding: FragmentTermsAndConditionBinding? = null
     private val binding get() = _binding!!
-    private lateinit var mainActivity: HomeActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,14 +27,10 @@ class TermsAndConditionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mainActivity = requireActivity() as HomeActivity
-//        mainActivity.setUpToolBarIconText("terms_of_services")
-
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        (requireActivity() as? HomeActivity)?.findViewById<View>(R.id.homeBottomNav)?.visibility = View.VISIBLE
     }
 }

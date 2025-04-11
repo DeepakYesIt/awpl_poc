@@ -39,7 +39,6 @@ class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-    private lateinit var mainActivity: HomeActivity
     private val PREFS_NAME = "ProfilePrefs"
     private val IMAGE_URI_KEY = "profile_image_uri"
 
@@ -75,10 +74,6 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mainActivity = requireActivity() as HomeActivity
-//        mainActivity.setUpToolBarIconText("my_profile")
-
         loadSavedImage()
         clickListener()
     }

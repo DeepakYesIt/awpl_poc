@@ -14,7 +14,6 @@ class DoctorConsultationFragment : Fragment() {
 
     private var _binding: FragmentDoctorConsultationBinding? = null
     private val binding get() = _binding!!
-    private var mainActivity: HomeActivity? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,10 +25,6 @@ class DoctorConsultationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mainActivity = activity as? HomeActivity
-//        mainActivity?.setUpToolBarIconText("doctor_consultation")
-
         clickListeners()
     }
 
@@ -42,7 +37,6 @@ class DoctorConsultationFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-//        (requireActivity() as? HomeActivity)?.findViewById<View>(R.id.homeBottomNav)?.visibility = View.VISIBLE
         _binding = null
     }
 }

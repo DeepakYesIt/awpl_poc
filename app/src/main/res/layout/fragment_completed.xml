@@ -40,27 +40,6 @@
 
     </LinearLayout>
 
-<!--    <androidx.appcompat.widget.AppCompatButton-->
-<!--        android:id="@+id/filterBtn"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_margin="@dimen/_15sdp"-->
-<!--        android:background="@drawable/filter_bg"-->
-<!--        android:drawableEnd="@drawable/short_arrow"-->
-<!--        android:drawablePadding="@dimen/_10sdp"-->
-<!--        android:drawableTint="@color/darkGreyColor"-->
-<!--        android:fontFamily="@font/lato_regular"-->
-<!--        android:padding="@dimen/_10sdp"-->
-<!--        android:text="@string/filters"-->
-<!--        android:textAllCaps="false"-->
-<!--        android:textColor="@color/darkGreyColor"-->
-<!--        android:textSize="16sp"-->
-<!--        android:textStyle="bold"-->
-<!--        android:gravity="center_vertical|start"-->
-<!--    app:layout_constraintEnd_toEndOf="parent"-->
-<!--    app:layout_constraintTop_toTopOf="parent" />-->
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/completeRecyclerview"
         android:layout_width="match_parent"

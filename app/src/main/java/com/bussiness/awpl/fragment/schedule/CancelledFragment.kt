@@ -16,7 +16,6 @@ class CancelledFragment : Fragment() {
 
     private var _binding: FragmentCancelledBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var cancelledAdapter: CancelledAdapter
 
     override fun onCreateView(

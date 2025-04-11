@@ -21,7 +21,6 @@ class UpcomingFragment : Fragment() {
 
     private var _binding: FragmentUpcomingBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var appointmentAdapter: AppointmentAdapter
 
     override fun onCreateView(
@@ -54,7 +53,6 @@ class UpcomingFragment : Fragment() {
             onInfoClick = { _, infoIcon -> showInfoPopup(infoIcon) }
         )
 
-
         binding.appointmentRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = appointmentAdapter
@@ -69,10 +67,7 @@ class UpcomingFragment : Fragment() {
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT,
             true // Dismiss when clicking outside
-        ).apply {
-            showAsDropDown(anchorView, 0, 10)
-        }
-
+        ).apply { showAsDropDown(anchorView, 0, 10) }
         popupView.setOnClickListener { popupWindow.dismiss() }
     }
 
@@ -88,7 +83,6 @@ class UpcomingFragment : Fragment() {
             btnYes.setOnClickListener {
                 appointmentAdapter.removeAppointment(appointment)
                 dialog.dismiss()
-//                findNavController().navigate(R.id.cancelAppointment)
             }
         }
 

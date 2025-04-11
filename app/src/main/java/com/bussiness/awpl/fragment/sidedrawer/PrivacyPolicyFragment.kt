@@ -14,7 +14,6 @@ class PrivacyPolicyFragment : Fragment() {
 
     private var _binding: FragmentPrivacyPolicyBinding? = null
     private val binding get() = _binding!!
-    private lateinit var mainActivity: HomeActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,14 +26,10 @@ class PrivacyPolicyFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mainActivity = requireActivity() as HomeActivity
-//        mainActivity.setUpToolBarIconText("privacy_policy")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        (requireActivity() as? HomeActivity)?.findViewById<View>(R.id.homeBottomNav)?.visibility = View.VISIBLE
     }
 }

@@ -21,7 +21,6 @@ class YourDoctorFragment : Fragment() {
 
     private var _binding: FragmentYourDoctorBinding? = null
     private val binding get() = _binding!!
-    private lateinit var mainActivity: HomeActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,14 +32,8 @@ class YourDoctorFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mainActivity = requireActivity() as HomeActivity
-//        mainActivity.setUpToolBarIconText("your_doctors")
-
         setupRecyclerView()
     }
-
-
 
     private fun setupRecyclerView() {
         val doctorList = listOf(

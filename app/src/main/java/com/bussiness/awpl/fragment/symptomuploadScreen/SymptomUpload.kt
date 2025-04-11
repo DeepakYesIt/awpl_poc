@@ -37,16 +37,6 @@ class SymptomUpload : Fragment() {
     private lateinit var imageAdapter: MediaAdapter
     private lateinit var videoAdapter: MediaAdapter
     private lateinit var pdfAdapter: MediaAdapter
-    private var mainActivity: HomeActivity? = null
-//    private val imagePickerLauncher =
-//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-//            if (result.resultCode == Activity.RESULT_OK) {
-//                val uri: Uri? = result.data?.data
-//                uri?.let {
-//                    addMediaItem(it, currentType) // Pass the selected file URI
-//                }
-//            }
-//        }
     private val imagePickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -70,10 +60,6 @@ class SymptomUpload : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mainActivity = requireActivity() as HomeActivity
-//        mainActivity?.setUpToolBarIconText("symptom_upload")
-
         setupRecyclerView()
         setupClickListeners()
     }
@@ -125,15 +111,9 @@ class SymptomUpload : Fragment() {
 
     private fun openMediaDialog(type: String) {
         currentType = type
-        mediaUploadDialog = MediaUtils(
-            requireContext(),
-            type,
-            onFileSelected = { selectedFiles ->
-                selectedFiles.forEach { addMediaItem(it, type) }
-            },
-            onBrowseClicked = {
-                openImagePicker(type)
-            }
+        mediaUploadDialog = MediaUtils(requireContext(), type,
+            onFileSelected = { selectedFiles -> selectedFiles.forEach { addMediaItem(it, type) } },
+            onBrowseClicked = { openImagePicker(type) }
         )
         mediaUploadDialog?.show()
     }
@@ -233,7 +213,6 @@ class SymptomUpload : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        (requireActivity() as? HomeActivity)?.findViewById<View>(R.id.homeBottomNav)?.visibility = View.VISIBLE
         _binding = null
         mediaUploadDialog = null
     }

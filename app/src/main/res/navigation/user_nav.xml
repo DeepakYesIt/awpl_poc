@@ -5,6 +5,11 @@
     app:startDestination="@id/welcomeScreen1">
 
     <fragment
+        android:id="@+id/welcomeScreen2"
+        android:name="com.bussiness.awpl.fragment.basicdetailscreen.LanguageFragment"
+        android:label="fragment_welcome2"
+        tools:layout="@layout/fragment_welcome2" />
+    <fragment
         android:id="@+id/onBoardingFragment"
         android:name="com.bussiness.awpl.fragment.onboarding.OnBoardingFragment"
         android:label="fragment_on_boarding"
@@ -14,11 +19,6 @@
         android:name="com.bussiness.awpl.fragment.login_screen.IntroScreen"
         android:label="fragment_welcome_1"
         tools:layout="@layout/fragment_welcome_1" />
-    <fragment
-        android:id="@+id/welcomeScreen2"
-        android:name="com.bussiness.awpl.fragment.basicdetailscreen.LanguageFragment"
-        android:label="fragment_welcome2"
-        tools:layout="@layout/fragment_welcome2" />
     <fragment
         android:id="@+id/welcomeScreen3"
         android:name="com.bussiness.awpl.fragment.login_screen.LoginFragment"
@@ -43,6 +43,11 @@
         android:name="com.bussiness.awpl.fragment.resource.FAQFragment"
         android:label="fragment_f_a_q"
         tools:layout="@layout/fragment_f_a_q" />
+    <fragment
+        android:id="@+id/privacyPolicyFragment2"
+        android:name="com.bussiness.awpl.fragment.sidedrawer.PrivacyPolicyFragment"
+        android:label="fragment_privacy_policy"
+        tools:layout="@layout/fragment_privacy_policy" />
 
 
 </navigation>

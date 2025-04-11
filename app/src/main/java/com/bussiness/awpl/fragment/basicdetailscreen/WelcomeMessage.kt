@@ -19,8 +19,12 @@ class WelcomeMessage : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentWelcomeMessageBinding.inflate(inflater, container, false)
-        clickListener()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        clickListener()
     }
 
     private fun clickListener() {
@@ -28,10 +32,14 @@ class WelcomeMessage : Fragment() {
             nextButton.setOnClickListener {
                 findNavController().navigate(R.id.basicInfoScreen)
             }
+            privacyPolicy.setOnClickListener {
+                findNavController().navigate(R.id.privacyPolicyFragment2)
+            }
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null  // Prevent memory leaks
+        _binding = null
     }
 }
