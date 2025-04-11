@@ -38,15 +38,26 @@ class SymptomUpload : Fragment() {
     private lateinit var videoAdapter: MediaAdapter
     private lateinit var pdfAdapter: MediaAdapter
     private var mainActivity: HomeActivity? = null
+//    private val imagePickerLauncher =
+//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+//            if (result.resultCode == Activity.RESULT_OK) {
+//                val uri: Uri? = result.data?.data
+//                uri?.let {
+//                    addMediaItem(it, currentType) // Pass the selected file URI
+//                }
+//            }
+//        }
     private val imagePickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val uri: Uri? = result.data?.data
                 uri?.let {
-                    addMediaItem(it, currentType) // Pass the selected file URI
+                    // Show in dialog first
+                    mediaUploadDialog?.handleSelectedFile(it)
                 }
             }
         }
+
 
     private var currentType: String = "" // Store type of media selected
 
@@ -114,15 +125,19 @@ class SymptomUpload : Fragment() {
 
     private fun openMediaDialog(type: String) {
         currentType = type
-        mediaUploadDialog = MediaUtils(requireContext(), type) { selectedFiles ->
-            if (selectedFiles.isEmpty()) {
-                openImagePicker(type)
-            } else {
+        mediaUploadDialog = MediaUtils(
+            requireContext(),
+            type,
+            onFileSelected = { selectedFiles ->
                 selectedFiles.forEach { addMediaItem(it, type) }
+            },
+            onBrowseClicked = {
+                openImagePicker(type)
             }
-        }
+        )
         mediaUploadDialog?.show()
     }
+
 
     private fun openImagePicker(type: String) {
         val intent = when (type) {

@@ -7,17 +7,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.Window
 import android.util.TypedValue
-import com.bussiness.awpl.adapter.SymptomAdapter
+import android.view.View
+import com.bussiness.awpl.adapter.DialogMediaAdapter
 import com.bussiness.awpl.databinding.DialogMediaUploadBinding
 
-class MediaUtils(
-    context: Context,
-    private val type: String,
-    private val onFileSelected: (List<Uri>) -> Unit
-) : Dialog(context) {
+class MediaUtils(context: Context, type: String,
+    private val onFileSelected: (List<Uri>) -> Unit,
+    private val onBrowseClicked: (() -> Unit)? = null) : Dialog(context) {
 
     private val selectedFiles = mutableListOf<Uri>()
-    private var dialogAdapter: SymptomAdapter
+    private var dialogAdapter: DialogMediaAdapter
     private var binding: DialogMediaUploadBinding = DialogMediaUploadBinding.inflate(LayoutInflater.from(context))
 
     init {
@@ -36,7 +35,7 @@ class MediaUtils(
         binding.tvDescription.text = if (type == "video") "Add your videos here" else "Add your documents here"
 
         // Initialize adapter
-        dialogAdapter = SymptomAdapter(selectedFiles) { fileUri -> removeFile(fileUri) }
+        dialogAdapter = DialogMediaAdapter(selectedFiles,type) { fileUri -> removeFile(fileUri) }
         binding.mediaRecyclerView.apply {
             layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
             adapter = dialogAdapter
@@ -44,10 +43,8 @@ class MediaUtils(
 
         binding.btnClose.setOnClickListener { dismiss() }
         binding.btnBrowseFile.setOnClickListener {
-            dismiss()
-            onFileSelected.invoke(selectedFiles)
+            onBrowseClicked?.invoke()
         }
-
         binding.btnSave.setOnClickListener {
             if (selectedFiles.isNotEmpty()) {
                 onFileSelected.invoke(selectedFiles)
@@ -57,9 +54,23 @@ class MediaUtils(
 
     }
 
+    fun handleSelectedFile(uri: Uri) {
+        if (!selectedFiles.contains(uri)) {
+            selectedFiles.add(uri)
+            dialogAdapter.notifyItemInserted(selectedFiles.size - 1)
+            updateVisibility()
+        }
+    }
+
     fun addFile(uri: Uri) {
         selectedFiles.add(uri)
         dialogAdapter.notifyItemInserted(selectedFiles.size - 1)
+        updateVisibility()
+    }
+
+    private fun updateVisibility() {
+        binding.mediaRecyclerView.visibility = if (selectedFiles.isNotEmpty()) View.VISIBLE else View.GONE
+        binding.btnSave.visibility = if (selectedFiles.isNotEmpty()) View.VISIBLE else View.GONE
     }
 
     private fun removeFile(fileUri: Uri) {

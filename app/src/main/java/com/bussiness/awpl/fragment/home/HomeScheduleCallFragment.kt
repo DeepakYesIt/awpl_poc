@@ -106,13 +106,16 @@ class HomeScheduleCallFragment : Fragment() {
 
     private fun openMediaDialog(type: String) {
         currentType = type
-        mediaUploadDialog = MediaUtils(requireContext(), type) { selectedFiles ->
-            if (selectedFiles.isEmpty()) {
-                openImagePicker(type)
-            } else {
+        mediaUploadDialog = MediaUtils(
+            requireContext(),
+            type,
+            onFileSelected = { selectedFiles ->
                 selectedFiles.forEach { addMediaItem(it, type) }
+            },
+            onBrowseClicked = {
+                openImagePicker(type)
             }
-        }
+        )
         mediaUploadDialog?.show()
     }
 
