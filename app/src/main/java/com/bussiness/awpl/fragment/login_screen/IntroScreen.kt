@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bussiness.awpl.R
@@ -19,6 +20,10 @@ class IntroScreen : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentWelcome1Binding.inflate(inflater, container, false)
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            requireActivity().finishAffinity()
+        }
+
         return binding.root
     }
 

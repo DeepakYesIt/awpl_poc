@@ -1,6 +1,8 @@
 package com.bussiness.awpl.fragment.home
 
+import android.app.Dialog
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import com.bussiness.awpl.R
 import com.bussiness.awpl.adapter.BrowseVideoAdapter
 import com.bussiness.awpl.adapter.HealthJourneyAdapter
 import com.bussiness.awpl.adapter.OrganListAdapter
+import com.bussiness.awpl.databinding.DialogCancelAppointmentBinding
 import com.bussiness.awpl.databinding.FragmentHomeBinding
 import com.bussiness.awpl.model.HealthJourneyItem
 
@@ -78,6 +81,33 @@ class HomeFragment : Fragment() {
             seeAllVideos.setOnClickListener     { findNavController().navigate(R.id.videoGalleryFragment) }
             scheduleCallBtn.setOnClickListener  { findNavController().navigate(R.id.homeScheduleCallFragment) }
             upcomingSeeAll.setOnClickListener   { findNavController().navigate(R.id.scheduleFragment) }
+            rescheduleButton.setOnClickListener { findNavController().navigate(R.id.appointmentBooking) }
+            cancelBtn?.setOnClickListener       { cancelDialog() }
+        }
+    }
+
+    private fun cancelDialog() {
+        val dialog = Dialog(requireContext())
+        val binding = DialogCancelAppointmentBinding.inflate(layoutInflater)
+        dialog.setContentView(binding.root)
+
+        binding.apply {
+            btnClose.setOnClickListener { dialog.dismiss() }
+            btnNo.setOnClickListener { dialog.dismiss() }
+            btnYes.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+
+        dialog.apply {
+            setCancelable(false)
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+            val displayMetrics = context.resources.displayMetrics
+            val screenWidth = displayMetrics.widthPixels
+            val marginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, displayMetrics).toInt()
+            window?.setLayout(screenWidth - (2 * marginPx), ViewGroup.LayoutParams.WRAP_CONTENT)
+            show()
         }
     }
 
