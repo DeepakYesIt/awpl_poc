@@ -15,6 +15,15 @@
         android:paddingHorizontal="@dimen/_8sdp"
         android:paddingVertical="@dimen/_5sdp">
 
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/greyColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/textView45"
             android:layout_width="wrap_content"
@@ -22,12 +31,12 @@
             android:fontFamily="@font/lato_regular"
             android:text="@string/start_appointment"
             android:textColor="@color/darkGreyColor"
-            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginStart="@dimen/_10sdp"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/view"/>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/startAppointmentCard"
@@ -337,7 +346,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="@dimen/_15sdp">
+                    android:padding="@dimen/_10sdp">
 
                     <!-- Row: Image & Doctor Details -->
                     <LinearLayout
