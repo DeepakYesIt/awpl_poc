@@ -26,10 +26,6 @@ class LanguageFragment : Fragment() {
         // Initialize SessionManager
         sessionManager = SessionManager(requireContext())
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            requireActivity().finishAffinity()
-        }
-
         clickListener()
         return binding.root
     }

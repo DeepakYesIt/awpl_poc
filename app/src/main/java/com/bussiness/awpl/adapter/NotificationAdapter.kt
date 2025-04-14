@@ -1,4 +1,4 @@
-package com.bussiness.awpl.adapters
+package com.bussiness.awpl.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -76,11 +76,6 @@ class NotificationAdapter(private val notifications: List<NotificationModel>) :
 
         fun bind(date: String) {
             binding.dayTxt.text = date
-
-            // Handle "Mark all as read" click
-            binding.markAsRead.setOnClickListener {
-                markNotificationsAsRead(date)
-            }
         }
     }
 
