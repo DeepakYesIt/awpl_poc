@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/parent_bg"
-    android:layout_marginHorizontal="@dimen/_20sdp"
-    android:layout_marginVertical="@dimen/_20sdp"
+    android:paddingHorizontal="@dimen/_20sdp"
     tools:context=".fragment.login_screen.IntroScreen">
 
     <ImageView
@@ -68,6 +67,7 @@
         android:fontFamily="@font/lato_regular"
         android:text="Lorem ipsum dolor sit amet,\n consectetur adipiscing elit, sed do\n eiusmod tempor incididunt ut labore\n et dolore magna aliqua. "
         android:textColor="@color/greyColor"
+        android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

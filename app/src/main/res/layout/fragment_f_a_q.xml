@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="@dimen/_15sdp"
+    android:paddingHorizontal="@dimen/_15sdp"
     tools:context=".fragment.resource.FAQFragment">
 
     <TextView
@@ -28,7 +28,6 @@
         android:background="#EDEBEB"
         android:layout_marginTop="@dimen/_15sdp"
         android:hint="@string/enter_your_keyword"
-        app:iconifiedByDefault="false"
         app:searchIcon="@drawable/search_ic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

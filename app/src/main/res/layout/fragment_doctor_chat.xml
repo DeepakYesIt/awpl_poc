@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="@dimen/_15sdp"
-    android:layout_marginTop="@dimen/_15sdp"
+    android:paddingHorizontal="@dimen/_15sdp"
+    android:background="@drawable/parent_bg"
     tools:context=".fragment.schedule.DoctorChatFragment">
 
     <TextView
@@ -35,15 +35,14 @@
         app:layout_constraintTop_toBottomOf="@id/headline">
 
         <!-- Doctor Image -->
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/doctorImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/circle_background"
-            android:contentDescription="Doctor Image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/doctor_bg_icon"
             android:scaleType="centerCrop"
-            android:src="@drawable/doctor_bg_icon" />
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:shapeAppearanceOverlay="@style/CircularImageView"/>
 
         <!-- Doctor Name -->
         <TextView
@@ -189,11 +188,10 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal"
-        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:padding="8dp">
+        app:layout_constraintStart_toStartOf="parent">
 
         <!-- Chat Box with EditText + Attachment -->
         <LinearLayout

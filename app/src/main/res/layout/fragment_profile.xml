@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="@dimen/_18sdp"
+    android:paddingHorizontal="@dimen/_18sdp"
     tools:context=".fragment.sidedrawer.ProfileFragment">
 
     <!-- Guideline for positioning -->
@@ -16,7 +16,7 @@
         android:orientation="horizontal"/>
 
     <!-- Circular Profile Image -->
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profileImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -24,6 +24,7 @@
         android:layout_marginTop="@dimen/_50sdp"
         android:src="@drawable/profileback"
         android:background="@drawable/circle_background"
+        style="@style/CircularImageView"
         android:clipToOutline="true"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintTop_toTopOf="parent"
