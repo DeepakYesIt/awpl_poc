@@ -155,6 +155,9 @@
                 app:cardForegroundColor="@android:color/transparent"
                 app:strokeColor="@android:color/transparent">
 
+
+
+                
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
