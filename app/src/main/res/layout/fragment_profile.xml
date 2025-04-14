@@ -18,8 +18,8 @@
     <!-- Circular Profile Image -->
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profileImage"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="@dimen/_120sdp"
         android:scaleType="centerCrop"
         android:layout_marginTop="@dimen/_50sdp"
         android:src="@drawable/profileback"
