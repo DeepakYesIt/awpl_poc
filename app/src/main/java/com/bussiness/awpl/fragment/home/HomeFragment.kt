@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
             organListAdapter = OrganListAdapter(viewModel.organList)
             adapter = organListAdapter
         }
-
+        
         // Health Journey RecyclerView
         binding.bannerRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
