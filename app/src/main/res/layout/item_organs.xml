@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp">
+    android:layout_margin="@dimen/_2sdp">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="80dp"
+        android:layout_width="@dimen/_68sdp"
         android:layout_height="wrap_content"
         android:elevation="@dimen/_10sdp"
-        app:cardCornerRadius="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:cardCornerRadius="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,13 +18,13 @@
             android:background="@drawable/small_card_bg"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="@dimen/_10sdp">
+            android:padding="@dimen/_8sdp">
 
             <!-- Image -->
             <ImageView
                 android:id="@+id/organDeptImg"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:src="@drawable/cadiologist"
                 android:scaleType="centerInside" />
 
@@ -42,11 +38,12 @@
                 android:textSize="13sp"
                 android:breakStrategy="simple"
                 android:gravity="center"
-                android:layout_marginTop="8dp"
-                android:maxWidth="150dp"/>
+                android:singleLine="true"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:maxWidth="@dimen/_150sdp"/>
 
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

@@ -64,7 +64,6 @@ class HomeFragment : Fragment() {
 
         // Browse Video RecyclerView
         binding.videoRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             browseVideoAdapter = BrowseVideoAdapter(viewModel.browseVideoList) { item ->
                 Toast.makeText(requireContext(), "Playing Video: ${item.title}", Toast.LENGTH_SHORT).show()
             }
