@@ -51,7 +51,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="@dimen/_10sdp">
+                        android:padding="@dimen/_15sdp">
                         <!-- Row: Image & Doctor Details -->
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -212,7 +212,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="@dimen/_10sdp">
+                    android:padding="@dimen/_15sdp">
 
                     <!-- Row: Image & Doctor Details -->
                     <LinearLayout
@@ -296,7 +296,7 @@
                             android:fontFamily="@font/lato_regular"
                             android:text="@string/cancel"
                             android:textAllCaps="false"
-                            android:textSize="@dimen/_14sdp"
+                            android:textSize="@dimen/_12sdp"
                             android:textStyle="bold"
                             android:textColor="@color/black"
                             android:layout_marginBottom="@dimen/_2sdp"
@@ -312,7 +312,7 @@
                             android:fontFamily="@font/lato_regular"
                             android:text="@string/reschedule"
                             android:textAllCaps="false"
-                            android:textSize="@dimen/_14sdp"
+                            android:textSize="@dimen/_12sdp"
                             android:textColor="@color/white"
                             android:textStyle="bold"
                             android:layout_marginTop="@dimen/_5sdp"
@@ -470,7 +470,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/banner_bg"
-                android:padding="@dimen/_6sdp"
+                android:padding="@dimen/_10sdp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/deptRecyclerView">
@@ -520,7 +520,8 @@
                         android:layout_marginTop="@dimen/_10sdp"
                         android:background="@drawable/gradient_btn_bg"
                         android:fontFamily="@font/lato_regular"
-                        android:text="@string/free_chat"
+                        android:text="@string/analyze_now"
+                        android:padding="@dimen/_8sdp"
                         android:textAllCaps="false"
                         android:layout_marginBottom="@dimen/_5sdp"
                         android:textColor="@color/white"

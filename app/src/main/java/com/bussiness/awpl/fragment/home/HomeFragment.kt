@@ -82,7 +82,7 @@ class HomeFragment : Fragment() {
             scheduleCallBtn.setOnClickListener  { findNavController().navigate(R.id.homeScheduleCallFragment) }
             upcomingSeeAll.setOnClickListener   { findNavController().navigate(R.id.scheduleFragment) }
             rescheduleButton.setOnClickListener { findNavController().navigate(R.id.appointmentBooking) }
-
+            cancelBtn.setOnClickListener        { cancelDialog() }
         }
     }
 
@@ -96,6 +96,7 @@ class HomeFragment : Fragment() {
             btnNo.setOnClickListener { dialog.dismiss() }
             btnYes.setOnClickListener {
                 dialog.dismiss()
+                findNavController().navigate(R.id.appointmentBooking)
             }
         }
 

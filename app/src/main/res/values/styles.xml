@@ -39,10 +39,16 @@
 
     <style name="doctorImgBg"><item name="cornerSize">12dp</item></style>
 
-    <style name="CircularImageView" parent="">
+    <!-- res/values/styles.xml -->
+    <style name="CircularImageView">
+        <item name="shapeAppearanceOverlay">@style/CircleShape</item>
+    </style>
+
+    <style name="CircleShape" parent="ShapeAppearance.Material3.Corner.Small">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
 
 
 

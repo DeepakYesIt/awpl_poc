@@ -23,7 +23,6 @@
         android:scaleType="centerCrop"
         android:layout_marginTop="@dimen/_50sdp"
         android:src="@drawable/profileback"
-        android:background="@drawable/circle_background"
         style="@style/CircularImageView"
         android:clipToOutline="true"
         app:layout_constraintDimensionRatio="1:1"
