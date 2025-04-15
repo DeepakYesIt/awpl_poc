@@ -84,6 +84,7 @@ class HomeActivity : AppCompatActivity() {
                         imgBackProfile.setOnClickListener {
                             drawerLayout.openDrawer(GravityCompat.START)
                         }
+                        chatFab.visibility = View.VISIBLE
                     }
                 }
 
@@ -95,9 +96,9 @@ class HomeActivity : AppCompatActivity() {
                 R.id.profileFragment -> setToolbar("My Profile")
                 R.id.videoGalleryFragment -> setToolbar("Video Gallery", showBottomNav = false)
                 R.id.FAQFragment3 -> setToolbar("FAQ", showBottomNav = false)
-                R.id.scheduleFragment -> setToolbar("My Appointments")
-                R.id.resourceFragment -> setToolbar("Resources")
-                R.id.yourDoctorFragment -> setToolbar("Your Doctors")
+                R.id.scheduleFragment -> setToolbar("My Appointments",fab = true)
+                R.id.resourceFragment -> setToolbar("Resources",fab = true)
+                R.id.yourDoctorFragment -> setToolbar("Your Doctors",fab = true)
                 R.id.appointmentBooking -> setToolbar("Book Appointment", showBottomNav = false)
                 R.id.summaryScreen -> setToolbar("Summary", showBottomNav = false)
                 R.id.paymentScreen -> setToolbar("Payment Method", showBottomNav = false)
@@ -121,7 +122,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun setToolbar(title: String, showBottomNav: Boolean = true, showBell: Boolean = true) {
+    private fun setToolbar(title: String, showBottomNav: Boolean = true, showBell: Boolean = true,fab : Boolean = false) {
         binding.apply {
             toolbar.visibility = View.VISIBLE
             homeBottomNav.visibility = if (showBottomNav) View.VISIBLE else View.GONE
@@ -131,6 +132,7 @@ class HomeActivity : AppCompatActivity() {
             imgBackProfile.setOnClickListener {
                 findNavController(R.id.nav_host_fragment_home).navigateUp()
             }
+            chatFab.visibility = if (fab) View.VISIBLE else View.GONE
         }
     }
 

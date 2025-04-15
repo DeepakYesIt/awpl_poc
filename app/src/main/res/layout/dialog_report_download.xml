@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginHorizontal="@dimen/_10sdp"
+    android:background="@drawable/dialog_background"
+    android:padding="30dp">
+
+    <!-- Close Button -->
+    <ImageView
+        android:id="@+id/btnClose"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="end"
+        android:src="@drawable/cross_icon" />
+
+    <!-- Media Upload Title -->
+    <ImageView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/sucess_icon"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_10sdp" />
+
+    <!-- Upload Description -->
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/all_set"
+        android:textColor="@color/blueColor"
+        android:textSize="22sp"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:id="@+id/tvDescrip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/your_report_is_available_for_download"
+        android:textColor="@color/darkGreyColor"
+        android:textSize="22sp"
+        android:textAlignment="center"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:id="@+id/description3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/for_symptom_upload_consultations"
+        android:textAlignment="center"
+        android:textColor="#6B7280"
+        android:layout_gravity="center"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/description4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/uploaded_thu_10_may"
+        android:textAlignment="center"
+        android:textColor="#6B7280"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_gravity="center"
+        android:textSize="16sp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnOkay"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/button_bg"
+        android:fontFamily="@font/lato_regular"
+        android:text="@string/download_prescription"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+
+</LinearLayout>

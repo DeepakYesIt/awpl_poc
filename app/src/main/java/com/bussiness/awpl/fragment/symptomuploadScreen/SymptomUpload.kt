@@ -20,6 +20,7 @@ import com.bussiness.awpl.R
 import com.bussiness.awpl.activities.HomeActivity
 import com.bussiness.awpl.utils.MediaUtils
 import com.bussiness.awpl.adapter.MediaAdapter
+import com.bussiness.awpl.databinding.DialogReportDownloadBinding
 import com.bussiness.awpl.databinding.FragmentSymptomUploadBinding
 import com.bussiness.awpl.databinding.UploadSucessDialogBinding
 import com.bussiness.awpl.model.MediaItem
@@ -192,6 +193,30 @@ class SymptomUpload : Fragment() {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         val binding = UploadSucessDialogBinding.inflate(layoutInflater)
+        dialog.setContentView(binding.root)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
+        // Set width with margin
+        val displayMetrics = requireContext().resources.displayMetrics
+        val screenWidth = displayMetrics.widthPixels
+        val marginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, displayMetrics).toInt()
+        val dialogWidth = screenWidth - (2 * marginPx)
+
+        // Apply width to the dialog window
+        dialog.window?.setLayout(dialogWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        binding.btnOkay.setOnClickListener {
+            dialog.dismiss()
+            downloadReportDialog()
+        }
+        dialog.show()
+    }
+
+    private fun downloadReportDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        val binding = DialogReportDownloadBinding.inflate(layoutInflater)
         dialog.setContentView(binding.root)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setCancelable(false)
