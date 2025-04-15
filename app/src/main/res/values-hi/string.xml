@@ -284,7 +284,7 @@
     <string name="cancel_appointment">अपॉइंटमेंट रद्द करें</string>
     <string name="are_you_sure_you_want_to_cancel_this_appointment">क्या आप वाकई इस अपॉइंटमेंट को रद्द करना चाहते हैं?</string>
     <string name="to_manage_patient_availability_and_doctor_scheduling_we_require_you_to_reschedule_your_appointment_instead_of_canceling_directly">रोगी की उपलब्धता और डॉक्टर की शेड्यूलिंग को बनाए रखने के लिए, हम आपसे अनुरोध करते हैं कि सीधे रद्द करने के बजाय अपॉइंटमेंट को पुनर्निर्धारित करें</string>
-    <string name="if_you_absolutely_cannot_attend_and_don_t_want_to_reschedule_please_contact_our_admin_team_directly_for_assistance_awplconnect_asclepiuswellness_co_in">यदि आप बिल्कुल भी उपस्थित नहीं हो सकते और पुनर्निर्धारण नहीं करना चाहते हैं, तो कृपया सहायता के लिए हमारी एडमिन टीम से सीधे संपर्क करें: awplconnect@asclepiuswellness.co.in</string>
+    <string name="if_you_absolutely_cannot_attend_and_don_t_want_to_reschedule_please_contact_our_admin_team_directly_for_assistance_awplconnect_asclepiuswellness_co_in">यदि आप बिल्कुल भी उपस्थित नहीं हो सकते और पुनर्निर्धारण नहीं करना चाहते हैं, तो कृपया सहायता के लिए हमारी एडमिन टीम से सीधे संपर्क करें: <font color="#199FD9">awplconnect@asclepiuswellness.co.in</font></string>
     <string name="delete_account">खाता हटाएं</string>
     <string name="fast_easy_online_consultation"><![CDATA[तेज़ और आसान ऑनलाइन परामर्श]]></string>
     <string name="the_disease_you_selected_seems_to_fall_under_the_minor_category">आपकी चुनी गई बीमारी मामूली श्रेणी में आती प्रतीत होती है।</string>

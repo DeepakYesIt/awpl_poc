@@ -235,7 +235,7 @@
     <string name="cancel_appointment">Cancel Appointment</string>
     <string name="are_you_sure_you_want_to_cancel_this_appointment">Are you sure you want to cancel this appointment?</string>
     <string name="to_manage_patient_availability_and_doctor_scheduling_we_require_you_to_reschedule_your_appointment_instead_of_canceling_directly">To manage patient availability and doctor scheduling, we require you to reschedule your appointment instead of canceling directly</string>
-    <string name="if_you_absolutely_cannot_attend_and_don_t_want_to_reschedule_please_contact_our_admin_team_directly_for_assistance_awplconnect_asclepiuswellness_co_in">If you absolutely cannot attend and don\'t want to reschedule, please contact our admin team directly for assistance: awplconnect@asclepiuswellness.co.in</string>
+    <string name="if_you_absolutely_cannot_attend_and_don_t_want_to_reschedule_please_contact_our_admin_team_directly_for_assistance_awplconnect_asclepiuswellness_co_in">If you absolutely cannot attend and don\'t want to reschedule, please contact our admin team directly for assistance: <font color="#199FD9">awplconnect@asclepiuswellness.co.in</font> </string>
     <string name="delete_account">Delete Account</string>
     <string name="fast_easy_online_consultation"><![CDATA[Fast & Easy Online Consultation]]></string>
     <string name="the_disease_you_selected_seems_to_fall_under_the_minor_category">The disease you selected seems to fall under the Minor category.</string>
@@ -256,6 +256,7 @@
     <string name="get_started">Get Started</string>
     <string name="you_agree_to_our">you agree to our</string>
     <string name="analyze_now">Analyze Now</string>
+    <string name="phone_number">Phone Number</string>
 
 
 </resources>
