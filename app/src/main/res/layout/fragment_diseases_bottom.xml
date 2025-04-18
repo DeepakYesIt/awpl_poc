@@ -34,14 +34,18 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
-    <androidx.appcompat.widget.SearchView
+    <EditText
         android:id="@+id/searchView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_15sdp"
         android:background="#EDEFF1"
-        android:queryHint="@string/search_anything_here"
-        android:padding="@dimen/_2sdp" />
+        android:hint="@string/search_anything_here"
+        android:padding="@dimen/_10sdp"
+        android:drawableStart="@drawable/search_icon_"
+        android:drawablePadding="@dimen/_8sdp"
+        app:iconifiedByDefault="false" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

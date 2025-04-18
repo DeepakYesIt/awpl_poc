@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_2sdp"
     android:background="@drawable/browse_btn_bg"
     android:padding="@dimen/_5sdp">
 
@@ -56,6 +57,7 @@
             android:id="@+id/crossBtn"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_gravity="center"
             android:src="@drawable/cross_icon_item"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Remove File"/>

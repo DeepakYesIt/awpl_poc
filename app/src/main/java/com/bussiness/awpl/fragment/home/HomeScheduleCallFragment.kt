@@ -39,10 +39,12 @@ class HomeScheduleCallFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val uri: Uri? = result.data?.data
                 uri?.let {
-                    addMediaItem(it, currentType) // Pass the selected file URI
+                    // Show in dialog first
+                    mediaUploadDialog?.handleSelectedFile(it)
                 }
             }
         }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

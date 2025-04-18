@@ -37,7 +37,8 @@ class ScheduledCallConsultation : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val uri: Uri? = result.data?.data
                 uri?.let {
-                    addMediaItem(it, currentType) // Pass the selected file URI
+                    // Show in dialog and fragment
+                    mediaUploadDialog?.handleSelectedFile(it)
                 }
             }
         }

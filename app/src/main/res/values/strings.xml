@@ -146,7 +146,7 @@
     <string name="notification">Notification</string>
     <string name="privacy_policy"><u>Privacy Policy</u></string>
     <string name="terms_of_services">Terms of Services</string>
-    <string name="terms_services"><u>Terms of Services></u></string>
+    <string name="terms_services"><u>Terms of Services</u></string>
     <string name="logout">Logout</string>
     <string name="select_language">Select Language</string>
     <string name="logout_">Logout</string>
@@ -262,6 +262,7 @@
     <string name="your_report_is_available_for_download">Your report is available for download.</string>
     <string name="for_symptom_upload_consultations">For: Symptom Upload Consultations</string>
     <string name="uploaded_thu_10_may">Uploaded: Thu 10 May</string>
+    <string name="striked_price"><![CDATA[<s>₹ 99.00</s>]]></string>
 
 
 </resources>

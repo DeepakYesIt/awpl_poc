@@ -125,14 +125,15 @@
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/cancelButton"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/_30sdp"
                         android:layout_weight="1"
                         android:text="@string/cancel"
+                        android:layout_margin="@dimen/_5sdp"
                         android:textColor="@color/darkGreyColor"
                         android:background="@drawable/btn_border"
                         android:textAllCaps="false"
                         android:textSize="14sp"
-                        android:elevation="2dp"/>
+                        android:elevation="@dimen/_15sdp"/>
 
                     <ImageView
                         android:id="@+id/infoIcon"
@@ -147,9 +148,10 @@
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/rescheduleButton"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/_30sdp"
                         android:layout_weight="1"
                         android:text="@string/reschedule"
+                        android:layout_margin="@dimen/_5sdp"
                         android:background="@drawable/gradient_btn_bg"
                         android:textAllCaps="false"
                         android:textSize="14sp"

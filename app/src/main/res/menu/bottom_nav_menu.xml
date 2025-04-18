@@ -3,27 +3,23 @@
         android:id="@+id/homeFragment"
         android:icon="@drawable/home_icon"
         android:title="@string/home"
-        android:checkable="true"
         android:background="@drawable/nav_item_background" />
 
     <item
         android:id="@+id/scheduleFragment"
         android:icon="@drawable/calendar"
         android:title="@string/schedule"
-        android:checkable="true"
         android:background="@drawable/nav_item_background" />
 
     <item
         android:id="@+id/yourDoctorFragment"
         android:icon="@drawable/yourdoctor"
         android:title="@string/your_doctors"
-        android:checkable="true"
         android:background="@drawable/nav_item_background" />
 
     <item
         android:id="@+id/resourceFragment"
         android:icon="@drawable/resource"
         android:title="@string/resources"
-        android:checkable="true"
         android:background="@drawable/nav_item_background" />
 </menu>

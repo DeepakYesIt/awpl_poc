@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/customBottomNav"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/white"
+    android:padding="@dimen/_15sdp"
+    android:elevation="8dp"
+    android:gravity="center"
+    android:layout_gravity="bottom">
+
+        <LinearLayout
+            android:id="@+id/homeFragment"
+            style="@style/CustomNavItem"
+            android:tag="homeFragment">
+
+            <ImageView
+                android:id="@+id/icon_home"
+                android:src="@drawable/home_icon"
+                style="@style/CustomNavIcon" />
+
+            <TextView
+                android:id="@+id/text_home"
+                android:text="@string/home"
+                style="@style/CustomNavText" />
+
+            <View
+                android:id="@+id/indicator_home"
+                style="@style/CustomNavIndicator" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/scheduleFragment"
+            style="@style/CustomNavItem"
+            android:tag="scheduleFragment">
+
+            <ImageView
+                android:id="@+id/icon_schedule"
+                android:src="@drawable/calendar"
+                style="@style/CustomNavIcon" />
+
+            <TextView
+                android:id="@+id/text_schedule"
+                android:text="@string/schedule"
+                style="@style/CustomNavText" />
+
+            <View
+                android:id="@+id/indicator_schedule"
+                style="@style/CustomNavIndicator" />
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/yourDoctorFragment"
+        style="@style/CustomNavItem"
+        android:tag="yourDoctorFragment">
+
+        <ImageView
+            android:id="@+id/icon_doctor"
+            android:src="@drawable/yourdoctor"
+            style="@style/CustomNavIcon" />
+
+        <TextView
+            android:id="@+id/text_doctor"
+            android:text="@string/your_doctors"
+            style="@style/CustomNavText" />
+
+        <View
+            android:id="@+id/indicator_doctor"
+            style="@style/CustomNavIndicator" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/resourceFragment"
+        style="@style/CustomNavItem"
+        android:tag="resourceFragment">
+
+        <ImageView
+            android:id="@+id/icon_resource"
+            android:src="@drawable/resource"
+            style="@style/CustomNavIcon" />
+
+        <TextView
+            android:id="@+id/text_resource"
+            android:text="@string/resources"
+            style="@style/CustomNavText" />
+
+        <View
+            android:id="@+id/indicator_resource"
+            style="@style/CustomNavIndicator" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -115,17 +115,19 @@
                         app:layout_constraintTop_toBottomOf="@+id/textDescription" />
 
                     <TextView
+                        android:id="@+id/textStrikedPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lato_regular"
-                        android:text="₹ 99.00"
+                        android:text="@string/striked_price"
                         android:textColor="@color/darkGreyColor"
                         android:textSize="14sp"
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_10sdp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/textFree"
-                        app:layout_constraintTop_toBottomOf="@+id/textFree" />
+                        app:layout_constraintStart_toStartOf="@id/textFree"
+                        app:layout_constraintTop_toBottomOf="@id/textFree" />
+
 
                     <View
                         android:id="@+id/view2"
@@ -137,91 +139,96 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView28" />
 
-                    <ImageView
-                        android:id="@+id/imageView5"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/ll1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:background="@android:color/transparent"
-                        android:src="@drawable/data_privacy"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/view2" />
-
-                    <TextView
-                        android:id="@+id/Description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/lato_regular"
-                        android:text="@string/data_and_privacy"
-                        android:textColor="@color/darkGreyColor"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        app:layout_constraintStart_toEndOf="@+id/imageView5"
-                        app:layout_constraintTop_toBottomOf="@+id/view2" />
-
-                    <TextView
-                        android:id="@+id/textView29"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:fontFamily="@font/lato_regular"
-                        android:text="@string/content1"
-                        android:textColor="@color/greyColor"
-                        android:textSize="14sp"
+                        android:background="@drawable/parent_bg"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toTopOf="@+id/textView32"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/imageView5"
-                        app:layout_constraintTop_toBottomOf="@+id/Description" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/view2">
 
-                    <TextView
-                        android:id="@+id/textView30"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:fontFamily="@font/lato_regular"
-                        android:text="@string/by_proceeding_to_avail_a_consultation_you_agree_to"
-                        android:textColor="@color/greyColor"
-                        android:textSize="14sp"
-                        app:layout_constraintStart_toStartOf="@+id/textView29"
-                        app:layout_constraintTop_toBottomOf="@+id/textView29" />
+                        <TextView
+                            android:id="@+id/Description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_20sdp"
+                            android:drawablePadding="@dimen/_5sdp"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="@string/data_and_privacy"
+                            android:textColor="@color/darkGreyColor"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:drawableStartCompat="@drawable/data_privacy"/>
 
-                    <TextView
-                        android:id="@+id/txtPrivacyPolicy"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:fontFamily="@font/lato_regular"
-                        android:text="@string/privacy_policy"
-                        android:textColor="#199FD9"
-                        android:textSize="14sp"
-                        app:layout_constraintStart_toStartOf="@+id/textView30"
-                        app:layout_constraintTop_toBottomOf="@+id/textView30" />
+                        <TextView
+                            android:id="@+id/textView29"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:fontFamily="@font/lato_regular"
+                            android:paddingStart="@dimen/_25sdp"
+                            android:paddingEnd="@dimen/_15sdp"
+                            android:text="@string/content1"
+                            android:textColor="@color/greyColor"
+                            android:textSize="@dimen/_10ssp"/>
 
-                    <TextView
-                        android:id="@+id/textView15"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:fontFamily="@font/lato_regular"
-                        android:text="@string/and"
-                        android:textColor="#6B7280"
-                        android:textSize="14sp"
-                        app:layout_constraintStart_toEndOf="@+id/txtPrivacyPolicy"
-                        app:layout_constraintTop_toBottomOf="@+id/textView30" />
+                        <TextView
+                            android:id="@+id/textView30"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="@string/by_proceeding_to_avail_a_consultation_you_agree_to"
+                            android:textColor="@color/greyColor"
+                            android:layout_marginHorizontal="@dimen/_28sdp"
+                            android:textSize="@dimen/_10ssp" />
 
-                    <TextView
-                        android:id="@+id/txtTermsConditions"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/lato_regular"
-                        android:text="@string/terms_services"
-                        android:textColor="#199FD9"
-                        android:textSize="14sp"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        app:layout_constraintStart_toEndOf="@+id/textView15"
-                        app:layout_constraintTop_toBottomOf="@+id/textView30" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@android:color/transparent">
+                            <TextView
+                                android:id="@+id/txtPrivacyPolicy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="@string/privacy_policy"
+                                android:textColor="#199FD9"
+                                android:layout_marginStart="@dimen/_28sdp"
+                                android:textSize="@dimen/_10ssp" />
+
+                            <TextView
+                                android:id="@+id/textView15"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="@string/and"
+                                android:textSize="@dimen/_10ssp"
+                                android:layout_marginTop="2dp"
+                                android:textColor="#6B7280"/>
+
+                            <TextView
+                                android:id="@+id/txtTermsConditions"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="@string/terms_services"
+                                android:textColor="#199FD9"
+                                android:textSize="@dimen/_10ssp"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginStart="@dimen/_5sdp" />
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
 
 
 
@@ -230,13 +237,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_30sdp"
+                        android:layout_marginTop="@dimen/_20sdp"
                         android:fontFamily="@font/lato_regular"
                         android:textStyle="bold"
                         android:textColor="@color/darkGreyColor"
                         android:text="@string/apply_promo_code"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/txtPrivacyPolicy" />
+                        app:layout_constraintTop_toBottomOf="@+id/ll1" />
 
                     <LinearLayout
                         android:id="@+id/linearLayout9"

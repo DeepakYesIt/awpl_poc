@@ -131,31 +131,143 @@
                 </FrameLayout>
             </androidx.cardview.widget.CardView>
         </LinearLayout>
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
+            android:background="@android:color/white"
             android:orientation="horizontal"
             android:weightSum="2"
             android:layout_marginTop="@dimen/_10sdp">
 
-            <ImageView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/scheduleCallBtn"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_150sdp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/schedule_icon"/>
+                android:background="@drawable/card_bg_eff"
+                android:elevation="@dimen/_15sdp"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="@dimen/_20sdp"
+                app:strokeColor="@android:color/transparent"
+                app:cardForegroundColor="@android:color/transparent">
 
-            <ImageView
+                <!-- Directly placed content inside CardView -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/card_bg_eff"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/schedulecall_icon" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="center"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:text="@string/schedule_your_call"
+                            android:textColor="#356598"
+                            android:textSize="@dimen/_12ssp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="3dp"
+                            android:paddingEnd="1dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/blue_arrow_up" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/symptomUploadBtn"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_150sdp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/upload_symptoms_icon"/>
+                android:background="@drawable/card_bg_eff"
+                android:elevation="@dimen/_15sdp"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="@dimen/_20sdp"
+                app:strokeColor="@android:color/transparent"
+                app:cardForegroundColor="@android:color/transparent">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/card_bg_eff"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/upload_symptom_icon" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:gravity="center"
+                        android:background="@android:color/transparent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="center"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:text="@string/upload_symptoms"
+                            android:textColor="#356598"
+                            android:textSize="@dimen/_12ssp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="3dp"
+                            android:paddingEnd="1dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/blue_arrow_up" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
 
 
         </LinearLayout>
+
+
         <RelativeLayout
              android:layout_width="match_parent"
              android:layout_height="wrap_content">

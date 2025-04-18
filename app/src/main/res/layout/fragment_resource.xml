@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="@dimen/_18sdp"
+    android:background="@drawable/parent_bg"
+    android:paddingHorizontal="@dimen/_18sdp"
     tools:context=".fragment.resource.ResourceFragment">
 
     <ImageView

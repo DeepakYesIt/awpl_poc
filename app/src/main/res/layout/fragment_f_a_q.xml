@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingHorizontal="@dimen/_15sdp"
+    android:background="@drawable/parent_bg"
     tools:context=".fragment.resource.FAQFragment">
 
     <TextView

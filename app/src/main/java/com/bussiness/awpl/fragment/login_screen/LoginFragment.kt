@@ -36,7 +36,7 @@ class LoginFragment : Fragment() {
         binding.apply {
             btnLogin.setOnClickListener {
                 if(validations()){
-                    findNavController().navigate(R.id.welcomeMessage)
+                    findNavController().navigate(R.id.basicInfoScreen)
                     sessionManager.saveLoginState(true)
                 }
             }

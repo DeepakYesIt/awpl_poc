@@ -19,7 +19,6 @@ class ResourceFragment : Fragment() {
 
     private var _binding: FragmentResourceBinding? = null
     private val binding get() = _binding!!
-    private lateinit var mainActivity: HomeActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

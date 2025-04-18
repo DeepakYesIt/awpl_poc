@@ -36,16 +36,6 @@
         android:label="fragment_video_gallery"
         tools:layout="@layout/fragment_video_gallery" />
     <fragment
-        android:id="@+id/upcomingFragment"
-        android:name="com.bussiness.awpl.fragment.schedule.UpcomingFragment"
-        android:label="fragment_upcoming"
-        tools:layout="@layout/fragment_upcoming" />
-    <fragment
-        android:id="@+id/cancelAppointment"
-        android:name="com.bussiness.awpl.fragment.schedule.CancelAppointment"
-        android:label="fragment_cancel_appointment"
-        tools:layout="@layout/fragment_cancel_appointment" />
-    <fragment
         android:id="@+id/profileFragment"
         android:name="com.bussiness.awpl.fragment.sidedrawer.ProfileFragment"
         android:label="fragment_profile"
@@ -127,5 +117,10 @@
         android:id="@+id/symptomUpload"
         android:name="com.bussiness.awpl.fragment.symptomuploadScreen.SymptomUpload"
         android:label="SymptomUpload" />
+    <fragment
+        android:id="@+id/videoCallFragment"
+        android:name="com.bussiness.awpl.fragment.home.VideoCallFragment"
+        android:label="fragment_video_call"
+        tools:layout="@layout/fragment_video_call" />
 
 </navigation>

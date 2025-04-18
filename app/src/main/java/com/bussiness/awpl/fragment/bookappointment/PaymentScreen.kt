@@ -20,38 +20,66 @@ import com.bussiness.awpl.databinding.FragmentSummaryScreenBinding
 class PaymentScreen : Fragment() {
     private var _binding: FragmentPaymentScreenBinding? = null
     private val binding get() = _binding!!
+    private var isPaytmSelected = false
+    private var isRazorpaySelected = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPaymentScreenBinding.inflate(inflater,container,false)
+        _binding = FragmentPaymentScreenBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Restore the state after the fragment is created or recreated
+        restoreSelection()
+
         clickListener()
     }
+
+    private fun restoreSelection() {
+        binding.apply {
+            if (isPaytmSelected) {
+                radioPaytm.isChecked = true
+                radioRazorpay.isChecked = false
+            } else if (isRazorpaySelected) {
+                radioPaytm.isChecked = false
+                radioRazorpay.isChecked = true
+            }
+
+            updatePayButton() // Update the Pay button state based on the selected option
+        }
+    }
+
     private fun clickListener() {
         binding.apply {
-            btnPay.isEnabled = false
-            btnPay.setBackgroundColor(ContextCompat.getColor(root.context, R.color.greyColor)) // Default color
-
-            llPaytm.setOnClickListener {
+            fun selectPaytm() {
+                isPaytmSelected = true
+                isRazorpaySelected = false
                 radioPaytm.isChecked = true
                 radioRazorpay.isChecked = false
                 updatePayButton()
             }
 
-            llRazorpay.setOnClickListener {
+            fun selectRazorpay() {
+                isRazorpaySelected = true
+                isPaytmSelected = false
                 radioRazorpay.isChecked = true
                 radioPaytm.isChecked = false
                 updatePayButton()
             }
 
+            llPaytm.setOnClickListener { selectPaytm() }
+            llRazorpay.setOnClickListener { selectRazorpay() }
+
+            radioPaytm.setOnClickListener { selectPaytm() }
+            radioRazorpay.setOnClickListener { selectRazorpay() }
+
             btnPay.setOnClickListener {
-                if (radioPaytm.isChecked || radioRazorpay.isChecked) {
+                if (isPaytmSelected || isRazorpaySelected) {
                     congratsDialog()
                 }
             }
@@ -66,19 +94,23 @@ class PaymentScreen : Fragment() {
         binding.apply {
             val isOptionSelected = radioPaytm.isChecked || radioRazorpay.isChecked
             btnPay.isEnabled = isOptionSelected
-            btnPay.setBackgroundResource(if (isOptionSelected) R.drawable.update_pay_bg else R.drawable.pay_btn_bg)
+            btnPay.setBackgroundResource(
+                if (isOptionSelected) R.drawable.update_pay_bg else R.drawable.pay_btn_bg
+            )
         }
     }
 
-    private fun congratsDialog(){
+    private fun congratsDialog() {
         val dialog = Dialog(requireContext())
         val binding = DialogConfirmAppointmentBinding.inflate(layoutInflater)
         dialog.setContentView(binding.root)
 
         binding.apply {
             btnClose.setOnClickListener { dialog.dismiss() }
-            btnOkay.setOnClickListener { findNavController().navigate(R.id.homeFragment)
-                dialog.dismiss()}
+            btnOkay.setOnClickListener {
+                findNavController().navigate(R.id.homeFragment)
+                dialog.dismiss()
+            }
         }
 
         dialog.apply {
@@ -97,5 +129,4 @@ class PaymentScreen : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

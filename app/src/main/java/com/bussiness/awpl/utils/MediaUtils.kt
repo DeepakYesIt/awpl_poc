@@ -29,6 +29,8 @@ class MediaUtils(context: Context, type: String,
         val screenWidth = displayMetrics.widthPixels
         val marginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, displayMetrics).toInt()
         val dialogWidth = screenWidth - (2 * marginPx)
+        val maxWidthPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, displayMetrics).toInt()
+
         window?.setLayout(dialogWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
 
         // Set description based on type

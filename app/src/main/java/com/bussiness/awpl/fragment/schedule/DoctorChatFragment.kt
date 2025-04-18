@@ -8,13 +8,10 @@ import android.os.Bundle
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import com.bussiness.awpl.R
-import com.bussiness.awpl.activities.HomeActivity
 import com.bussiness.awpl.adapter.MediaAdapter
 import com.bussiness.awpl.databinding.FragmentDoctorChatBinding
 import com.bussiness.awpl.model.MediaItem
@@ -25,7 +22,6 @@ class DoctorChatFragment : Fragment() {
 
     private var _binding: FragmentDoctorChatBinding? = null
     private val binding get() = _binding!!
-    private lateinit var mainActivity: HomeActivity
     private var mediaUploadDialog: MediaUtils? = null
     private var currentType: String = ""
     private val mediaList = mutableListOf<MediaItem>()
@@ -36,7 +32,8 @@ class DoctorChatFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val uri: Uri? = result.data?.data
                 uri?.let {
-                    addMediaItem(it, currentType) // Pass the selected file URI
+                    // Show in dialog first
+                    mediaUploadDialog?.handleSelectedFile(it)
                 }
             }
         }
@@ -52,8 +49,6 @@ class DoctorChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mainActivity = requireActivity() as HomeActivity
-//        mainActivity.setUpToolBarIconText("doctor_chat")
         clickListeners()
 
     }
@@ -88,7 +83,7 @@ class DoctorChatFragment : Fragment() {
                 return
             }
         }
-        //imagePickerLauncher.launch(intent)
+        imagePickerLauncher.launch(intent)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -107,7 +102,6 @@ class DoctorChatFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        (requireActivity() as? HomeActivity)?.findViewById<View>(R.id.homeBottomNav)?.visibility = View.VISIBLE
         _binding = null
     }
 }

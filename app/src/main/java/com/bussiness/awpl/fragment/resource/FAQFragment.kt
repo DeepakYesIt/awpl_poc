@@ -55,9 +55,6 @@ class FAQFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // Show Bottom Navigation again when leaving FAQFragment
-        (requireActivity() as? HomeActivity)?.findViewById<View>(R.id.homeBottomNav)?.visibility = View.VISIBLE
-
         _binding = null
     }
 

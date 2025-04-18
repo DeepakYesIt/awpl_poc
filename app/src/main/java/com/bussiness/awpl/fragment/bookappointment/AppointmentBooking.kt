@@ -158,16 +158,23 @@ class AppointmentBooking : Fragment() {
                     }
 
                     when (date) {
-                        //LocalDate.now() -> dateView.setBackgroundResource(R.drawable.current_bg_date)
-                        selectedDate -> dateView.setBackgroundResource(R.drawable.selected_day_bg)
-                        else -> dateView.setBackgroundResource(R.drawable.date_bg)
+                        selectedDate -> {
+                            dateView.setBackgroundResource(R.drawable.selected_day_bg)
+                            dateView.setTextColor(resources.getColor(R.color.white))
+                        }
+                        else -> {
+                            dateView.setBackgroundResource(R.drawable.date_bg)
+                            dateView.setTextColor(
+                                if (date.month == yearMonth.month) Color.BLACK else Color.GRAY
+                            )
+                        }
                     }
-                    dateView.setTextColor(
-                        if (
-                            date.month == yearMonth.month
-                        ) Color.BLACK
-                        else Color.GRAY
-                    )
+
+
+//                    dateView.setTextColor(
+//                        if (date.month == yearMonth.month) Color.BLACK
+//                        else Color.GRAY
+//                    )
                 }
                 weekLayout.addView(dateView)
             }

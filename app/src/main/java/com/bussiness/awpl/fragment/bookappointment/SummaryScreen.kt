@@ -2,6 +2,7 @@ package com.bussiness.awpl.fragment.bookappointment
 
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Html
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +34,8 @@ class SummaryScreen : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         clickListener()
+        binding.textStrikedPrice.text = Html.fromHtml(getString(R.string.striked_price), Html.FROM_HTML_MODE_LEGACY)
+
     }
 
     private fun setupRecyclerView() {

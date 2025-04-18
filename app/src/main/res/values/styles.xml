@@ -39,7 +39,6 @@
 
     <style name="doctorImgBg"><item name="cornerSize">12dp</item></style>
 
-    <!-- res/values/styles.xml -->
     <style name="CircularImageView">
         <item name="shapeAppearanceOverlay">@style/CircleShape</item>
     </style>
@@ -49,7 +48,30 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="CustomNavItem">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+    </style>
 
+    <style name="CustomNavIcon">
+        <item name="android:tint">@color/greyColor</item>
+    </style>
+
+    <style name="CustomNavText">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/greyColor</item>
+        <item name="fontFamily">@font/lato_regular</item>
+    </style>
+
+    <style name="CustomNavIndicator">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:background">@drawable/bottom_nav_view_bg</item>
+        <item name="android:visibility">gone</item>
+    </style>
 
 
 </resources>

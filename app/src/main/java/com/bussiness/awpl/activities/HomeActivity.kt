@@ -24,6 +24,7 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -39,6 +40,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var navHostFragment: NavHostFragment
     private var sessionManager: SessionManager? = null
+    private lateinit var navController: NavController
     private var isArrowUp = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,9 +56,9 @@ class HomeActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_home) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
 
-        binding.homeBottomNav.setupWithNavController(navController)
+//        binding.customBottomNav.setupWithNavController(navController)
 
         binding.ivBell.setOnClickListener { navigate(R.id.notificationFragment) }
 
@@ -70,14 +72,18 @@ class HomeActivity : AppCompatActivity() {
             navController.navigate(R.id.notificationFragment)
         }
 
+        setupBottomNav()
         setUpDrawer()
+
+        updateBottomNavSelection("home")
+
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.homeFragment -> {
                     binding.apply {
                         toolbar.visibility = View.VISIBLE
-                        homeBottomNav.visibility = View.VISIBLE
+                        customBottomNav.visibility = View.VISIBLE
                         toolbarTitle.text = ""
                         ivBell.visibility = View.VISIBLE
                         imgBackProfile.setImageResource(R.drawable.profile_icons)
@@ -86,6 +92,7 @@ class HomeActivity : AppCompatActivity() {
                         }
                         chatFab.visibility = View.VISIBLE
                     }
+                    updateBottomNavSelection("home")
                 }
 
                 R.id.notificationFragment -> setToolbar("Notifications", showBottomNav = false, showBell = false)
@@ -110,22 +117,83 @@ class HomeActivity : AppCompatActivity() {
                 R.id.basicInfoScreen2,
                 R.id.scheduledCallConsultation2 -> {
                     binding.toolbar.visibility = View.GONE
-                    binding.homeBottomNav.visibility = View.GONE
+                    binding.customBottomNav.visibility = View.GONE
+                }
+                R.id.videoCallFragment -> {
+                    binding.toolbar.visibility = View.GONE
+                    binding.customBottomNav.visibility = View.GONE
+                    binding.chatFab.visibility = View.GONE
                 }
 
                 else -> {
                     binding.toolbar.visibility = View.VISIBLE
-                    binding.homeBottomNav.visibility = View.VISIBLE
+                    binding.customBottomNav.visibility = View.VISIBLE
                     binding.ivBell.visibility = View.VISIBLE
                 }
             }
         }
     }
 
+    private fun setupBottomNav() {
+        binding.homeFragment.setOnClickListener {
+            navController.navigate(R.id.homeFragment)
+            updateBottomNavSelection("home")
+        }
+
+        binding.scheduleFragment.setOnClickListener {
+            navController.navigate(R.id.scheduleFragment)
+            updateBottomNavSelection("schedule")
+        }
+
+        binding.yourDoctorFragment.setOnClickListener {
+            navController.navigate(R.id.yourDoctorFragment)
+            updateBottomNavSelection("doctor")
+        }
+
+        binding.resourceFragment.setOnClickListener {
+            navController.navigate(R.id.resourceFragment)
+            updateBottomNavSelection("resource")
+        }
+    }
+
+
+    private fun updateBottomNavSelection(selected: String) {
+        // Home
+        binding.iconHome.setColorFilter(ContextCompat.getColor(this,
+            if (selected == "home") R.color.blueColor else R.color.greyColor))
+        binding.textHome.setTextColor(ContextCompat.getColor(this,
+            if (selected == "home") R.color.blueColor else R.color.greyColor))
+        binding.indicatorHome.visibility = if (selected == "home") View.VISIBLE else View.GONE
+
+        // Schedule
+        binding.iconSchedule.setColorFilter(ContextCompat.getColor(this,
+            if (selected == "schedule") R.color.blueColor else R.color.greyColor))
+        binding.textSchedule.setTextColor(ContextCompat.getColor(this,
+            if (selected == "schedule") R.color.blueColor else R.color.greyColor))
+        binding.indicatorSchedule.visibility = if (selected == "schedule") View.VISIBLE else View.GONE
+
+        // Doctor
+        binding.iconDoctor.setColorFilter(ContextCompat.getColor(this,
+            if (selected == "doctor") R.color.blueColor else R.color.greyColor))
+        binding.textDoctor.setTextColor(ContextCompat.getColor(this,
+            if (selected == "doctor") R.color.blueColor else R.color.greyColor))
+        binding.indicatorDoctor.visibility = if (selected == "doctor") View.VISIBLE else View.GONE
+
+        // Resource
+        binding.iconResource.setColorFilter(ContextCompat.getColor(this,
+            if (selected == "resource") R.color.blueColor else R.color.greyColor))
+        binding.textResource.setTextColor(ContextCompat.getColor(this,
+            if (selected == "resource") R.color.blueColor else R.color.greyColor))
+        binding.indicatorResource.visibility = if (selected == "resource") View.VISIBLE else View.GONE
+    }
+
+
+
+
     private fun setToolbar(title: String, showBottomNav: Boolean = true, showBell: Boolean = true,fab : Boolean = false) {
         binding.apply {
             toolbar.visibility = View.VISIBLE
-            homeBottomNav.visibility = if (showBottomNav) View.VISIBLE else View.GONE
+            customBottomNav.visibility = if (showBottomNav) View.VISIBLE else View.GONE
             toolbarTitle.text = title
             ivBell.visibility = if (showBell) View.VISIBLE else View.GONE
             imgBackProfile.setImageResource(R.drawable.back_icon)

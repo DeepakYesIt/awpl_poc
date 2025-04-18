@@ -82,6 +82,7 @@ class HomeFragment : Fragment() {
             scheduleCallBtn.setOnClickListener  { findNavController().navigate(R.id.homeScheduleCallFragment) }
             upcomingSeeAll.setOnClickListener   { findNavController().navigate(R.id.scheduleFragment) }
             rescheduleButton.setOnClickListener { findNavController().navigate(R.id.appointmentBooking) }
+            startAppointmentBtn.setOnClickListener { findNavController().navigate(R.id.videoCallFragment) }
             cancelBtn.setOnClickListener        { cancelDialog() }
         }
     }
