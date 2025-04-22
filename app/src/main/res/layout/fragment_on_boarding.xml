@@ -14,7 +14,7 @@
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="80dp"
+            android:paddingBottom="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,8 +31,10 @@
             android:background="@android:color/transparent"
             app:tabIndicatorHeight="0dp"
             app:tabIndicatorFullWidth="false"
-            app:tabMinWidth="5dp"
-            android:layout_marginBottom="@dimen/_100sdp"
+
+            app:tabMinWidth="0dp"
+
+            android:layout_marginBottom="@dimen/_75sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

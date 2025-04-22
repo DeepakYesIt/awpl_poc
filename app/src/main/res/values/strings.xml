@@ -36,11 +36,11 @@
 </string>
     <string name="okay_got_it">Okay,got it.</string>
     <string name="basic_information">Basic Information</string>
-    <string name="please_enter_the_below_data_to_help_us_n_know_more_about_you">Please enter the below data to help us\n know more about you</string>
+    <string name="please_enter_the_below_data_to_help_us_n_know_more_about_you">Please enter the below data to help us know more about you</string>
     <string name="full_name">Full Name</string>
     <string name="name">Name</string>
-    <string name="enter_your_height">Enter Your Height</string>
-    <string name="enter_your_weight">Enter Your Weight</string>
+    <string name="enter_your_height">Enter Height</string>
+    <string name="enter_your_weight">Enter Weight (Kg)</string>
     <string name="gender">Gender</string>
     <string name="female">Female</string>
     <string name="male">Male</string>
@@ -72,12 +72,12 @@
     <string name="go_to_home_page">Go to Home Page</string>
     <string name="based_on_our_analysis_it_seems_you_may_be_going_through_a_slight_health_concern_related_to_a_minor_disease">Based on our analysis, it seems you may be going through a slight health concern related to a minor disease.</string>
     <string name="our_doctors_will_review_your_information_and_provide_a_prescription_you_ll_be_notified_when_it_s_ready_to_download">Our doctors will review your information and provide a prescription. You’ll be notified when it\'s ready to download.</string>
-    <string name="lorem_1">1.Lorem ipsum dolor sit amet, consectetur</string>
+    <string name="lorem_1">1. Lorem ipsum dolor sit amet, consectetur</string>
     <string name="answer">Answer</string>
     <string name="symptom_upload_consultations">Symptom Upload Consultations</string>
-    <string name="_2_lorem_ipsum_dolor_sit_amet_consectetur">2.Lorem ipsum dolor sit amet, consectetur</string>
-    <string name="_3_lorem_ipsum_dolor_sit_amet_consectetur">3.Lorem ipsum dolor sit amet, consectetur</string>
-    <string name="_4_lorem_ipsum_dolor_sit_amet_consectetur">4.Lorem ipsum dolor sit amet, consectetur</string>
+    <string name="_2_lorem_ipsum_dolor_sit_amet_consectetur">2. Lorem ipsum dolor sit amet, consectetur</string>
+    <string name="_3_lorem_ipsum_dolor_sit_amet_consectetur">3. Lorem ipsum dolor sit amet, consectetur</string>
+    <string name="_4_lorem_ipsum_dolor_sit_amet_consectetur">4. Lorem ipsum dolor sit amet, consectetur</string>
     <string name="images">Images</string>
     <string name="videos">Videos</string>
     <string name="pdf">PDF</string>
@@ -129,7 +129,7 @@
     <string name="reschedule">Reschedule</string>
     <string name="connect_with_the_right_doctor_n_for_your_health_needs">Connect with the right doctor\n for your health needs.</string>
     <string name="heart">Heart</string>
-    <string name="fast_free_reliable_medical_support"><![CDATA[Fast, Free & Reliable Medical Support]]></string>
+    <string name="fast_free_reliable_medical_support"><![CDATA[Fast & Reliable Medical Support]]></string>
     <string name="browse_videos">Browse Videos</string>
     <string name="begin_your_health_journey">Begin Your Health\nJourney with a\n &lt;b&gt;Free Consultation!&lt;/b&gt;</string>
     <string name="schedule_a_call">Schedule a Call</string>
@@ -201,7 +201,7 @@
     <string name="free_chat">Free Chat</string>
     <string name="doctor_image">doctors image\n</string>
     <string name="Health_condition_analysis">Health Condition Analysis</string>
-    <string name="analysis_condition">Simply provide your details, and our \nChatBot will analyze your health\n condition.</string>
+    <string name="analysis_condition">Simply provide your details, and our \nChatBot will analyze your health\ncondition.</string>
     <string name="logo">logo</string>
     <string name="_14_may_2024">14 May 2024</string>
     <string name="ohh_here_s_my_latest_doctor_prescription_report">Ohh, here’s my latest doctor prescription report.</string>
@@ -241,13 +241,13 @@
     <string name="fast_easy_online_consultation"><![CDATA[Fast & Easy Online Consultation]]></string>
     <string name="the_disease_you_selected_seems_to_fall_under_the_minor_category">The disease you selected seems to fall under the Minor category.</string>
     <string name="you_can_proceed_with_a_symptom_upload_consultation_for_a_quick_review_by_a_doctor">You can proceed with a symptom upload consultation for a quick review by a doctor.</string>
-    <string name="please_answer_a_few_additional_questions_and_you_may_also_upload_relevant_files_images_videos_pdfs">Please answer a few additional questions and\\n you may also upload relevant files (images,\\n videos, PDFs).</string>
+    <string name="please_answer_a_few_additional_questions_and_you_may_also_upload_relevant_files_images_videos_pdfs">Please answer a few additional questions and you may also upload relevant files (images, videos, PDFs).</string>
     <string name="proceed">Proceed</string>
     <string name="doctor_consultation_recommended">Doctor Consultation Recommended</string>
     <string name="the_disease_you_selected_seems_to_fall_under_the_major_category">The disease you selected seems to fall under the Major category.</string>
-    <string name="this_condition_requires_a_more_detailed_consultation_we_recommend_scheduling_a_call_with_a_doctor_for_a_thorough_assessment">This condition requires a more detailed\\n consultation. We recommend scheduling a call\\n with a doctor for a thorough assessment</string>
-    <string name="to_help_the_doctor_better_understand_your_n_condition_before_the_call_please_answer_a_few_n_more_questions_and_upload_any_relevant_images">To help the doctor better understand your\\n condition before the call, please answer a few\\n more questions and upload any relevant images</string>
-    <string name="our_doctors_will_review_your_information_and_n_provide_a_prescription_you_ll_be_notified_when_it_s_n_ready_to_download">Our doctors will review your information and\n provide a prescription. You’ll be notified when it\'s\n ready to download</string>
+    <string name="this_condition_requires_a_more_detailed_consultation_we_recommend_scheduling_a_call_with_a_doctor_for_a_thorough_assessment">This condition requires a more detailed consultation. We recommend scheduling a call with a doctor for a thorough assessment</string>
+    <string name="to_help_the_doctor_better_understand_your_n_condition_before_the_call_please_answer_a_few_n_more_questions_and_upload_any_relevant_images">To help the doctor better understand your condition before the call, please answer a few more questions and upload any relevant images</string>
+    <string name="our_doctors_will_review_your_information_and_n_provide_a_prescription_you_ll_be_notified_when_it_s_n_ready_to_download">Our doctors will review your information and provide a prescription. You’ll be notified when it\'s\n ready to download</string>
     <string name="hindi_C">अपनी भाषा चुनें</string>
     <string name="type_a_message">Type a message</string>
     <string name="this_chat_will_be_available_for_7_days_from_the_appointment_date">

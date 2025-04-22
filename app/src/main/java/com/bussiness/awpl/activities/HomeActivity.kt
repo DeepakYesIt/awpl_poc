@@ -3,6 +3,7 @@ package com.bussiness.awpl.activities
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +20,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
+import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
@@ -109,7 +111,7 @@ class HomeActivity : AppCompatActivity() {
                 R.id.appointmentBooking -> setToolbar("Book Appointment", showBottomNav = false)
                 R.id.summaryScreen -> setToolbar("Summary", showBottomNav = false)
                 R.id.paymentScreen -> setToolbar("Payment Method", showBottomNav = false)
-                R.id.homeScheduleCallFragment -> setToolbar("Scheduled Call\nConsultations", showBottomNav = false)
+                R.id.homeScheduleCallFragment -> setToolbar("Scheduled Call\nConsultations", showBottomNav = false,showBell=false)
                 R.id.doctorChatFragment -> setToolbar("My Appointments", showBottomNav = false)
                 R.id.symptomUpload,
                 R.id.onlineConsultationFragment,
@@ -209,6 +211,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setUpDrawer() {
+
         val navigationView: NavigationView = binding.root.findViewById(R.id.navigation_side_nav_bar)
         val notification = navigationView.findViewById<SwitchCompat>(R.id.switchNotification)
         val privacyPolicy = navigationView.findViewById<LinearLayout>(R.id.llPrivacyPolicy)
@@ -220,6 +223,12 @@ class HomeActivity : AppCompatActivity() {
         val hindiLang = navigationView.findViewById<CardView>(R.id.hindiLang)
         val imageView = navigationView.findViewById<ImageView>(R.id.iconLanguage)
         val viewProfile = navigationView.findViewById<TextView>(R.id.viewMyProfile)
+
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+
+        notification.thumbTintList = ColorStateList.valueOf(android.graphics.Color.WHITE)
+
+        notification.trackTintList = ContextCompat.getColorStateList(this, R.color.switch_track_color)
 
         notification.setOnCheckedChangeListener { _, isChecked ->
             // Notification logic
@@ -280,5 +289,6 @@ class HomeActivity : AppCompatActivity() {
 
     private fun closeDrawer() {
         binding.drawerLayout.closeDrawer(GravityCompat.START)
+
     }
 }

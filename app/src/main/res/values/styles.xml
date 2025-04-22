@@ -73,5 +73,10 @@
         <item name="android:visibility">gone</item>
     </style>
 
+    <style name="AppTheme.NoStatusBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
 
 </resources>

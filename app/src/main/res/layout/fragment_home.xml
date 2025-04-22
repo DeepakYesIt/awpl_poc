@@ -18,6 +18,7 @@
             android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="@dimen/_4sdp"
             android:background="@color/greyColor" />
         <LinearLayout
             android:layout_width="match_parent"
@@ -72,7 +73,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:layout_marginTop="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_2sdp"
                                 android:orientation="vertical"
                                 android:padding="@dimen/_6sdp">
 
@@ -96,8 +97,9 @@
                                     android:text="@string/thu_may_14"
                                     android:drawablePadding="@dimen/_10sdp"
                                     android:textColor="@color/white"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:textSize="@dimen/_10sdp"
+                                    android:layout_marginTop="@dimen/_8sdp"
+                                    android:textSize="@dimen/_11sdp"
+
                                     app:drawableStartCompat="@drawable/clock" />
 
                                 <TextView
@@ -110,7 +112,7 @@
                                     android:paddingStart="@dimen/_5sdp"
                                     android:paddingEnd="@dimen/_10sdp"
                                     android:drawablePadding="@dimen/_10sdp"
-                                    android:layout_marginTop="@dimen/_5sdp"
+                                    android:layout_marginTop="@dimen/_8sdp"
                                     app:drawableStartCompat="@drawable/circle_dot"/>
                             </LinearLayout>
                         </LinearLayout>
@@ -129,7 +131,9 @@
                             android:textColor="@color/white" />
                     </LinearLayout>
                 </FrameLayout>
+
             </androidx.cardview.widget.CardView>
+
         </LinearLayout>
 
 
@@ -146,18 +150,19 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/card_bg_eff"
-                android:elevation="@dimen/_15sdp"
+                android:background="@drawable/ic_bg_book_appoint"
+                android:elevation="@dimen/_5sdp"
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="@dimen/_20sdp"
+
                 app:strokeColor="@android:color/transparent"
                 app:cardForegroundColor="@android:color/transparent">
 
                 <!-- Directly placed content inside CardView -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/card_bg_eff"
+                    android:layout_height="@dimen/_150sdp"
+                    android:background="@drawable/ic_bg_book_appoint"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="10dp">
@@ -194,32 +199,41 @@
                             android:layout_height="wrap_content"
                             android:paddingStart="3dp"
                             android:paddingEnd="1dp"
+                            android:layout_marginStart="2dp"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/blue_arrow_up" />
+                            android:src="@drawable/blue_arrow_up"
+                            android:layout_marginBottom="@dimen/_3sdp"/>
                     </LinearLayout>
 
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.05"
+                />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/symptomUploadBtn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/card_bg_eff"
+                android:layout_weight="0.97"
+
+                android:background="@drawable/ic_bg_book_appoint"
                 android:elevation="@dimen/_15sdp"
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="@dimen/_20sdp"
+
                 app:strokeColor="@android:color/transparent"
                 app:cardForegroundColor="@android:color/transparent">
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/card_bg_eff"
+                    android:layout_height="@dimen/_150sdp"
+                    android:background="@drawable/ic_bg_book_appoint"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="10dp">
@@ -256,6 +270,8 @@
                             android:layout_height="wrap_content"
                             android:paddingStart="3dp"
                             android:paddingEnd="1dp"
+                            android:layout_marginStart="@dimen/_2sdp"
+                            android:layout_marginBottom="@dimen/_3sdp"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/blue_arrow_up" />
 
@@ -270,7 +286,8 @@
 
         <RelativeLayout
              android:layout_width="match_parent"
-             android:layout_height="wrap_content">
+             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_13sdp">
              <TextView
                  android:id="@+id/textView40"
                  android:layout_width="match_parent"
@@ -575,7 +592,7 @@
             android:id="@+id/cardView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_14sdp"
             android:background="@drawable/side_bg_banner">
 
             <FrameLayout
@@ -633,12 +650,13 @@
                         android:background="@drawable/gradient_btn_bg"
                         android:fontFamily="@font/lato_regular"
                         android:text="@string/analyze_now"
-                        android:padding="@dimen/_8sdp"
+                        android:paddingHorizontal="@dimen/_16sdp"
                         android:textAllCaps="false"
                         android:layout_marginBottom="@dimen/_5sdp"
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         android:textStyle="bold" />
+
                 </LinearLayout>
             </FrameLayout>
 
@@ -649,11 +667,13 @@
             android:id="@+id/textView42"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_17sdp"
             android:fontFamily="@font/lato_regular"
             android:text="@string/fast_free_reliable_medical_support"
             android:textColor="@color/darkGreyColor"
-            android:textSize="@dimen/_15sdp" />
+            android:textSize="@dimen/_15sdp"
+            android:textStyle="bold"
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/bannerRecyclerView"

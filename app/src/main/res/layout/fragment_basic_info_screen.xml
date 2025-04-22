@@ -13,19 +13,39 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/_20sdp">
 
-    <TextView
+        <RelativeLayout
+            android:id="@+id/rl_basic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/_15sdp"
+            >
+            <ImageView
+                android:id="@+id/back_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/back_icon"
+                android:layout_centerVertical="true"
+                android:visibility="gone"
+                android:layout_marginStart="@dimen/_13sdp"
+                />
+             <TextView
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_centerInParent="true"
         android:fontFamily="@font/lato_regular"
         android:text="@string/basic_information"
+
         android:textAlignment="center"
         android:textColor="@color/darkGreyColor"
-        android:textSize="30sp"
+        android:textSize="@dimen/_17sdp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+        </RelativeLayout>
 
     <TextView
         android:id="@+id/textView9"
@@ -35,10 +55,10 @@
         android:text="@string/please_enter_the_below_data_to_help_us_n_know_more_about_you"
         android:textAlignment="center"
         android:textColor="#858484"
-        android:textSize="20sp"
+        android:textSize="@dimen/_14sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/rl_basic" />
 
     <!-- Single Line for Progress -->
 
@@ -106,7 +126,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etName" />
 
-    <EditText
+    <TextView
         android:id="@+id/etHeight"
         android:layout_width="match_parent"
         android:layout_height="60dp"

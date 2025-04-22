@@ -15,7 +15,21 @@
         android:paddingHorizontal="@dimen/_20sdp"
         tools:context=".fragment.scheduledcallconsultation.ScheduledCallConsultation">
 
-        <TextView
+        <RelativeLayout
+            android:id="@+id/ll_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <ImageView
+                android:id="@+id/back_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/back_icon"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_10sdp"
+                />
+
+          <TextView
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,10 +38,12 @@
             android:textAlignment="center"
             android:textColor="@color/darkGreyColor"
             android:textSize="30sp"
+            android:layout_marginTop="@dimen/_14sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/textView10"
@@ -39,7 +55,7 @@
             android:textColor="@color/darkGreyColor"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+            app:layout_constraintTop_toBottomOf="@+id/ll_top" />
 
         <EditText
             android:id="@+id/ansNO1"
@@ -203,7 +219,7 @@
             android:padding="@dimen/_12sdp"
             android:background="@drawable/button_bg"
             android:fontFamily="@font/lato_regular"
-            android:text="@string/next"
+            android:text="Schedule a call"
             android:layout_marginTop="@dimen/_15sdp"
             android:textAllCaps="false"
             android:textColor="@color/white"

@@ -29,9 +29,9 @@ class HomeFragment : Fragment() {
     private lateinit var browseVideoAdapter: BrowseVideoAdapter
     private val viewModel: HomeViewModel by viewModels()
     private val healthJourneyList = listOf(
-        HealthJourneyItem("Begin Your Health\n Journey with a \nFree Consultation!", R.drawable.women_doctor),
-        HealthJourneyItem("Bringing Doctors\n to Your Door – \nVirtually.", R.drawable.women_doctor),
-        HealthJourneyItem("Upload Symptoms \nfor Minor Issues \nand Major Concerns", R.drawable.women_doctor)
+        HealthJourneyItem("Begin Your Health\nJourney with a \nFree Consultation!", R.drawable.women_doctor),
+        HealthJourneyItem("Bringing Doctors\n to Your Door – \nVirtually.", R.drawable.ic_rename_doctor),
+        HealthJourneyItem("Upload Symptoms \nfor Minor Issues \nand Major Concerns", R.drawable.ic_little_girl)
     )
 
     override fun onCreateView(
@@ -104,13 +104,13 @@ class HomeFragment : Fragment() {
         dialog.apply {
             setCancelable(false)
             window?.setBackgroundDrawableResource(android.R.color.transparent)
-
             val displayMetrics = context.resources.displayMetrics
             val screenWidth = displayMetrics.widthPixels
             val marginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, displayMetrics).toInt()
             window?.setLayout(screenWidth - (2 * marginPx), ViewGroup.LayoutParams.WRAP_CONTENT)
             show()
         }
+
     }
 
     override fun onDestroyView() {

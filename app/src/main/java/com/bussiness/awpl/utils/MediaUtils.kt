@@ -35,7 +35,7 @@ class MediaUtils(context: Context, type: String,
 
         // Set description based on type
         binding.tvDescription.text = if (type == "video") "Add your videos here" else "Add your documents here"
-
+        binding.tvTitle.text = if(type == "PDF")"Upload PDF" else "Upload Media"
         // Initialize adapter
         dialogAdapter = DialogMediaAdapter(selectedFiles,type) { fileUri -> removeFile(fileUri) }
         binding.mediaRecyclerView.apply {
@@ -53,6 +53,7 @@ class MediaUtils(context: Context, type: String,
                 dismiss()
             }
         }
+
 
     }
 
@@ -79,6 +80,9 @@ class MediaUtils(context: Context, type: String,
         val position = selectedFiles.indexOf(fileUri)
         if (position != -1) {
             selectedFiles.removeAt(position)
+            if(selectedFiles.size ==0){
+                binding.btnSave.visibility = View.GONE
+            }
             dialogAdapter.notifyItemRemoved(position)
             dialogAdapter.notifyItemRangeChanged(position, selectedFiles.size)
         }

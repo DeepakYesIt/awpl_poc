@@ -1,11 +1,13 @@
 package com.bussiness.awpl.fragment.basicdetailscreen
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.NumberPicker
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -22,14 +24,20 @@ class BasicInfoScreen : Fragment() {
     private val binding get() = _binding!!
     private var type: String? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentBasicInfoScreenBinding.inflate(inflater, container, false)
 
         // Get arguments from bundle
         type = arguments?.getString("TYPE")
+        if(type != null && type == "forHome"){
+            binding.backIcon.visibility = View.VISIBLE
+            binding.backIcon.setOnClickListener {
+                findNavController().navigateUp()
+            }
+        }
+        else{
+            binding.backIcon.visibility = View.GONE
+        }
         clickListener()
         return binding.root
     }
@@ -43,6 +51,9 @@ class BasicInfoScreen : Fragment() {
             textView.setOnClickListener {
                 updateSelection(textView, textViews)
             }
+        }
+        binding.etHeight.setOnClickListener {
+            showHeightPickerDialog()
         }
     }
 
@@ -60,6 +71,8 @@ class BasicInfoScreen : Fragment() {
             }
         }
     }
+
+
 
     private fun updateSelection(selected: TextView, allTextViews: List<TextView>) {
         allTextViews.forEach { textView ->
@@ -81,19 +94,23 @@ class BasicInfoScreen : Fragment() {
 
             if (etName.text.toString().isEmpty()) {
                 etName.error = ErrorMessages.ERROR_NAME
-                isValid = false
+                etName.requestFocus()
+                return  false
             }
             if (etHeight.text.toString().isEmpty()) {
                 etHeight.error = ErrorMessages.ERROR_HEIGHT
-                isValid = false
+                etHeight.requestFocus()
+                return false
             }
             if (etweight.text.toString().isEmpty()) {
                 etweight.error = ErrorMessages.ERROR_WEIGHT
-                isValid = false
+                etweight.requestFocus()
+              return false
             }
             if (etAge.text.toString().isEmpty()) {
                 etAge.error = ErrorMessages.ERROR_AGE
-                isValid = false
+                etAge.requestFocus()
+               return false
             }
 
             val selectedGender = listOf(txtMale, txtFemale, txtOthers).any {
@@ -101,15 +118,57 @@ class BasicInfoScreen : Fragment() {
             }
             if (!selectedGender) {
                 txtOthers.error = ErrorMessages.ERROR_GENDER
-                isValid = false
+                txtOthers.requestFocus()
+              return false
             }
 
             return isValid
         }
     }
 
+
+    private fun showHeightPickerDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_height_picker, null)
+
+        val feetPicker = dialogView.findViewById<NumberPicker>(R.id.feetPicker)
+        val inchPicker = dialogView.findViewById<NumberPicker>(R.id.inchPicker)
+
+        // Configure pickers
+        feetPicker.minValue = 3
+        feetPicker.maxValue = 8
+
+        inchPicker.minValue = 0
+        inchPicker.maxValue = 11
+
+        // Optionally: Try to pre-fill based on existing text
+        val currentText = binding.etHeight.text.toString()
+        val feetMatch = Regex("(\\d+)\\s*ft").find(currentText)?.groupValues?.get(1)?.toIntOrNull()
+        val inchMatch = Regex("(\\d+)\\s*in").find(currentText)?.groupValues?.get(1)?.toIntOrNull()
+
+        feetPicker.value = feetMatch ?: 5
+        inchPicker.value = inchMatch ?: 6
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Select Height")
+            .setView(dialogView)
+            .setPositiveButton("OK") { _, _ ->
+                val selectedFeet = feetPicker.value
+                val selectedInches = inchPicker.value
+                binding.etHeight.setText("$selectedFeet ft $selectedInches in")
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
+            .show()
+    }
+
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+
+
+
 }

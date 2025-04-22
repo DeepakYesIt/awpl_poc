@@ -11,7 +11,8 @@ class HomeViewModel : ViewModel() {
         OrganDeptModel(R.drawable.cadiologist, "Heart"),
         OrganDeptModel(R.drawable.dental, "Dental"),
         OrganDeptModel(R.drawable.kidney, "Kidney"),
-        OrganDeptModel(R.drawable.gastroenterologists, "Stomach")
+        OrganDeptModel(R.drawable.gastroenterologists, "Stomach"),
+        OrganDeptModel(R.drawable.dental, "Dental")
     )
 
     val healthJourneyList = listOf(

@@ -62,11 +62,15 @@ class LoginFragment : Fragment() {
 
             if (passwordEditText.text.toString().trim().isEmpty()) {
                 passwordEditText.error = ErrorMessages.ERROR_PASSWORD
+                passwordEditText.requestFocus()
                 isValidate = false
+                return false
             }
             if (DSCOdeEditTxt.text.toString().trim().isEmpty()) {
                 DSCOdeEditTxt.error = ErrorMessages.ERROR_DSCODE
+                DSCOdeEditTxt.requestFocus()
                 isValidate = false
+                return false
             }
             return isValidate
         }

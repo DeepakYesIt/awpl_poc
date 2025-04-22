@@ -27,9 +27,9 @@
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="@dimen/_80sdp"
+            android:layout_marginTop="13dp"
             android:src="@drawable/app_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,9 +37,10 @@
 
         <ImageView
             android:id="@+id/onboardImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/onboard_1_ic"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_250sdp"
+            android:src="@drawable/ic_icon_new_1"
+            android:layout_marginHorizontal="@dimen/_15sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/logo" />
@@ -52,14 +53,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/begin_your_health_journey_with_a_free_consultation"
-        android:textSize="20sp"
+        android:textSize="@dimen/_16sdp"
         android:textColor="#356598"
         android:fontFamily="@font/lato_regular"
         android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@id/guideline70"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="15dp"
+        />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/nextButton"

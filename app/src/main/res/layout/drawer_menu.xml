@@ -14,8 +14,8 @@
         android:orientation="vertical"
         android:background="@drawable/drawer_bg"
         android:gravity="center_vertical"
-        android:paddingTop="@dimen/_30sdp"
-        android:paddingEnd="@dimen/_15sdp"
+       android:paddingTop="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
         android:paddingStart="@dimen/_15sdp"
         android:paddingBottom="@dimen/_15sdp">
 
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/profilr_cross"
-            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:background="@android:color/transparent"
             android:layout_gravity="end"/>
 
@@ -32,8 +32,9 @@
             android:id="@+id/profileIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/profile_icons"
-            android:background="@drawable/profile_icons"
+            android:src="@drawable/ic_profile_new_opt"
+            android:layout_marginTop="@dimen/_10sdp"
+
             android:scaleType="centerCrop"
             android:layout_marginEnd="12dp"/>
 
@@ -96,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/notification"
-                android:textSize="16sp"
+                android:textSize="@dimen/_14sdp"
                 android:fontFamily="@font/lato_regular"
                 android:textColor="@color/black"/>
 
@@ -105,7 +106,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_10sdp"
-                app:trackTint="@color/greyColor"/>
+                android:thumbTint="@android:color/white"
+                android:trackTint="@color/switch_track_color"
+               />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -140,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/privacy_policy_txt"
-                android:textSize="16sp"
+                android:textSize="@dimen/_14sdp"
                 android:textColor="@color/black"/>
 
             <ImageView
@@ -181,7 +184,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/terms_of_services"
-                android:textSize="16sp"
+                android:textSize="@dimen/_14sdp"
                 android:textColor="@color/black"/>
 
             <ImageView
@@ -222,7 +225,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/logout_"
-                android:textSize="16sp"
+                android:textSize="@dimen/_14sdp"
                 android:textColor="@color/black"/>
 
             <ImageView
@@ -262,7 +265,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/select_language"
-                android:textSize="16sp"
+                android:textSize="@dimen/_14sdp"
                 android:textColor="@color/black"/>
 
             <ImageView

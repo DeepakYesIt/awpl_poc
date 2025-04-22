@@ -43,7 +43,6 @@ class SymptomUpload : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val uri: Uri? = result.data?.data
                 uri?.let {
-                    // Show in dialog first
                     mediaUploadDialog?.handleSelectedFile(it)
                 }
             }
@@ -116,6 +115,7 @@ class SymptomUpload : Fragment() {
             onFileSelected = { selectedFiles -> selectedFiles.forEach { addMediaItem(it, type) } },
             onBrowseClicked = { openImagePicker(type) }
         )
+
         mediaUploadDialog?.show()
     }
 
@@ -142,7 +142,6 @@ class SymptomUpload : Fragment() {
             "pdf" -> MediaType.PDF
             else -> throw IllegalArgumentException("Unknown media type: $type")
         }
-
         val mediaItem = MediaItem(mediaType, uri.toString())
 
         when (mediaType) {
@@ -172,18 +171,22 @@ class SymptomUpload : Fragment() {
                 ansNO1.error = ErrorMessages.ERROR_MANDATORY
                 isValid = false
             }
+
             if(ansNo2.text.toString().isEmpty()){
                 ansNo2.error = ErrorMessages.ERROR_MANDATORY
                 isValid = false
             }
+
             if(ansNo3.text.toString().isEmpty()){
                 ansNo3.error = ErrorMessages.ERROR_MANDATORY
                 isValid = false
             }
+
             if(ans4.text.toString().isEmpty()){
                 ans4.error = ErrorMessages.ERROR_MANDATORY
                 isValid = false
             }
+
             return isValid
         }
     }
@@ -233,6 +236,9 @@ class SymptomUpload : Fragment() {
             dialog.dismiss()
             findNavController().navigate(R.id.homeFragment)
         }
+        binding.btnClose.setOnClickListener {
+            dialog.dismiss()
+        }
         dialog.show()
     }
 
@@ -241,4 +247,5 @@ class SymptomUpload : Fragment() {
         _binding = null
         mediaUploadDialog = null
     }
+
 }

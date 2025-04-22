@@ -25,9 +25,7 @@ class OnBoardingFragment : Fragment() {
     private lateinit var btnGetStarted: Button
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentOnBoardingBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -36,15 +34,14 @@ class OnBoardingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val onboardingItems = listOf(
-            OnboardingItem(R.drawable.onboard_1_ic, getString(R.string.onboarding_1)),
-            OnboardingItem(R.drawable.onboard_2_ic, getString(R.string.onboarding_2)),
-            OnboardingItem(R.drawable.onboard_3_ic, getString(R.string.onboarding_3))
+            OnboardingItem(R.drawable.ic_icon_new_1, getString(R.string.onboarding_1)),
+            OnboardingItem(R.drawable.ic_icon_new_2, getString(R.string.onboarding_2)),
+            OnboardingItem(R.drawable.ic_icon_new_3, getString(R.string.onboarding_3))
         )
 
         viewPager = binding.viewPager
         tabIndicator = binding.tabIndicator
         btnGetStarted = binding.btnGetStarted
-
         viewPager.adapter = OnboardingAdapter(onboardingItems)
 
         TabLayoutMediator(tabIndicator, viewPager) { tab, _ ->
