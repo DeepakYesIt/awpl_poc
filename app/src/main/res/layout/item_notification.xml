@@ -26,6 +26,7 @@
         android:textSize="14sp"
         android:textColor="@color/greyColor"
         android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/_2sdp"
         android:layout_alignTop="@id/tvNotificationTitle"
         android:layout_marginEnd="10dp" />
 

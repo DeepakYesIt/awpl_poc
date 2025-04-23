@@ -2,6 +2,7 @@ package com.bussiness.awpl.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bussiness.awpl.R
@@ -26,7 +27,9 @@ class HealthJourneyAdapter(private val items: List<HealthJourneyItem>, private v
         }
         else if(position ==1){
             Log.d("TESTING_ANDROID"," I AM INSIDE POSITION 2")
-            holder.binding.imgSh.setImageResource(R.drawable.ic_event_card_2)
+            holder.binding.imgSh.visibility= View.GONE
+            holder.binding.rl1.visibility = View.VISIBLE
+            holder.binding.imgSh1.setImageResource(R.drawable.ic_event_card_2)
         }
         else if(position ==2){
             Log.d("TESTING_ANDROID"," I AM INSIDE POSITION 3")

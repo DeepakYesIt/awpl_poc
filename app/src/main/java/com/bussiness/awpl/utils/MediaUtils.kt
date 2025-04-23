@@ -49,7 +49,7 @@ class MediaUtils(context: Context, type: String,
         }
         binding.btnSave.setOnClickListener {
             if (selectedFiles.isNotEmpty()) {
-                onFileSelected.invoke(selectedFiles)
+                onFileSelected?.invoke(selectedFiles)
                 dismiss()
             }
         }

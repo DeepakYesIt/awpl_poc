@@ -16,6 +16,24 @@
         android:scaleType="fitXY"
         />
 
+    <RelativeLayout
+        android:id="@+id/rl_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_schedule_call"
+        android:visibility="gone"
+        android:padding="@dimen/_1ssp"
+        >
+        <ImageView
+            android:id="@+id/img_sh1"
+            android:layout_width="@dimen/_220sdp"
+            android:layout_height="@dimen/_120sdp"
+            android:src="@drawable/ic_event_card_1"
+            android:scaleType="fitXY"
+            />
+    </RelativeLayout>
+
+
 <!--    &lt;!&ndash; Left Side (Text + Button) &ndash;&gt;-->
 <!--    <LinearLayout-->
 <!--        android:layout_width="0dp"-->

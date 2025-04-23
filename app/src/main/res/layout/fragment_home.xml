@@ -120,13 +120,13 @@
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/startAppointmentBtn"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/_30sdp"
+                            android:layout_height="@dimen/_33sdp"
                             android:layout_marginTop="@dimen/_10sdp"
                             android:background="@drawable/gradient_btn_bg"
                             android:fontFamily="@font/lato_regular"
                             android:text="@string/start_appointment_in_10_00_min"
                             android:textAllCaps="false"
-                            android:textSize="@dimen/_10sdp"
+                            android:textSize="@dimen/_13sdp"
                             android:textStyle="bold"
                             android:textColor="@color/white" />
                     </LinearLayout>
