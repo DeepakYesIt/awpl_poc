@@ -26,6 +26,7 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -47,7 +48,6 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -78,7 +78,6 @@ class HomeActivity : AppCompatActivity() {
         setUpDrawer()
 
         updateBottomNavSelection("home")
-
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
@@ -134,6 +133,7 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
 
     private fun setupBottomNav() {
@@ -157,7 +157,6 @@ class HomeActivity : AppCompatActivity() {
             updateBottomNavSelection("resource")
         }
     }
-
 
     private fun updateBottomNavSelection(selected: String) {
         // Home
@@ -189,9 +188,6 @@ class HomeActivity : AppCompatActivity() {
         binding.indicatorResource.visibility = if (selected == "resource") View.VISIBLE else View.GONE
     }
 
-
-
-
     private fun setToolbar(title: String, showBottomNav: Boolean = true, showBell: Boolean = true,fab : Boolean = false) {
         binding.apply {
             toolbar.visibility = View.VISIBLE
@@ -211,7 +207,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setUpDrawer() {
-
         val navigationView: NavigationView = binding.root.findViewById(R.id.navigation_side_nav_bar)
         val notification = navigationView.findViewById<SwitchCompat>(R.id.switchNotification)
         val privacyPolicy = navigationView.findViewById<LinearLayout>(R.id.llPrivacyPolicy)
@@ -223,6 +218,52 @@ class HomeActivity : AppCompatActivity() {
         val hindiLang = navigationView.findViewById<CardView>(R.id.hindiLang)
         val imageView = navigationView.findViewById<ImageView>(R.id.iconLanguage)
         val viewProfile = navigationView.findViewById<TextView>(R.id.viewMyProfile)
+        var perception = navigationView.findViewById<LinearLayout>(R.id.llpreceptions)
+        var  doctor = navigationView.findViewById<LinearLayout>(R.id.lldoctor)
+        var resources = navigationView.findViewById<LinearLayout>(R.id.llresources)
+        var forMe = navigationView.findViewById<LinearLayout>(R.id.for_me_ll)
+        var forOther = navigationView.findViewById<LinearLayout>(R.id.ll_for_other)
+        var scheduleLayout = navigationView.findViewById<LinearLayout>(R.id.llschedule)
+
+        var imgIcon = navigationView.findViewById<ImageView>(R.id.arr_sch)
+        var scheduleMain = navigationView.findViewById<LinearLayout>(R.id.ll_schedule_main)
+
+        scheduleLayout.setOnClickListener {
+            if(scheduleMain.isVisible ){
+                scheduleMain.visibility = View.GONE
+                imgIcon.setImageResource( R.drawable.down_ic)
+            }
+            else{
+                scheduleMain.visibility = View.VISIBLE
+                imgIcon.setImageResource( R.drawable.up_ic)
+            }
+        }
+
+        forOther.setOnClickListener {
+            navController.navigate(R.id.diseasesBottomFragment)
+            closeDrawer()
+        }
+
+        forMe.setOnClickListener {
+            navController.navigate(R.id.diseasesBottomFragment)
+            closeDrawer()
+        }
+
+        doctor.setOnClickListener {
+            navController.navigate(R.id.yourDoctorFragment)
+            updateBottomNavSelection("doctor")
+            closeDrawer()
+        }
+        resources.setOnClickListener {
+            navController.navigate(R.id.resourceFragment)
+            updateBottomNavSelection("resource")
+            closeDrawer()
+        }
+
+        perception.setOnClickListener {
+
+
+        }
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
@@ -291,4 +332,5 @@ class HomeActivity : AppCompatActivity() {
         binding.drawerLayout.closeDrawer(GravityCompat.START)
 
     }
+
 }

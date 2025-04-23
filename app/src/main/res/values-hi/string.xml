@@ -262,7 +262,8 @@
     <string name="lungs">फेफड़े</string>
     <string name="kidney">गुर्दा</string>
     <string name="brain">मस्तिष्क</string>
-
+    <string name="schedule_appoint">अपॉइंटमेंट निर्धारित करें</string>
+    <string name="my_perception">मेरी प्रिस्क्रिप्शन</string>
     <!-- Health Journey List -->
     <string name="health_journey_1">अपनी स्वास्थ्य यात्रा शुरू करें\nएक मुफ्त परामर्श के साथ!</string>
     <string name="health_journey_2">डॉक्टरों को आपके दरवाजे तक लाएं\n- आभासी रूप से।</string>
@@ -302,8 +303,22 @@
     <string name="this_chat_will_be_available_for_7_days_from_the_appointment_date">
     यह चैट अपॉइंटमेंट की तारीख से <font color="#199FD9">7 दिन</font> तक उपलब्ध रहेगी।
     </string>
+
+    <string name="terms_services"><u>सेवा की शर्तें</u></string>
+
+    <string name="get_started_text_privacy_policy">
+    <font color='#356598'>[गोपनीयता नीति]</font>.
+</string>
+
     <string name="privacy_policy_txt">गोपनीयता नीति</string>
-
-
+    <string name="striked_price"><![CDATA[<s>₹ 99.00</s>]]></string>
+    <string name="get_started">शुरू करें</string>
+    <string name="you_agree_to_our">आप हमारी सहमति देते हैं</string>
+    <string name="analyze_now">अब विश्लेषण करें</string>
+    <string name="phone_number">फ़ोन नंबर</string>
+    <string name="all_set">सब तैयार है!</string>
+    <string name="your_report_is_available_for_download">आपकी रिपोर्ट डाउनलोड के लिए उपलब्ध है।</string>
+    <string name="for_symptom_upload_consultations">के लिए: लक्षण अपलोड परामर्श</string>
+    <string name="uploaded_thu_10_may">अपलोड किया गया: गुरुवार 10 मई</string>
 </resources>
 

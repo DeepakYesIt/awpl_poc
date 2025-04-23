@@ -1,6 +1,7 @@
 package com.bussiness.awpl.fragment.bookappointment
 
 import android.app.Dialog
+import android.graphics.Paint
 import android.os.Bundle
 import android.text.Html
 import android.util.TypedValue
@@ -11,9 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bussiness.awpl.R
-import com.bussiness.awpl.activities.HomeActivity
 import com.bussiness.awpl.adapter.SummaryAdapter
-import com.bussiness.awpl.databinding.DialogConfirmAppointmentBinding
 import com.bussiness.awpl.databinding.DialogCongratulationsBinding
 import com.bussiness.awpl.databinding.FragmentSummaryScreenBinding
 import com.bussiness.awpl.model.SummaryModel
@@ -74,19 +73,24 @@ class SummaryScreen : Fragment() {
         binding.apply {
             btnClose.setOnClickListener { dialog.dismiss() }
             btnNext.setOnClickListener { findNavController().navigate(R.id.paymentScreen)
-                dialog.dismiss() }
+                dialog.dismiss()
+            }
+
+            textView36.setPaintFlags(textView36.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
         }
+
+    //    binding.textView36.paintFlags = binding.textView36.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
 
         dialog.apply {
             setCancelable(false)
             window?.setBackgroundDrawableResource(android.R.color.transparent)
-
             val displayMetrics = context.resources.displayMetrics
             val screenWidth = displayMetrics.widthPixels
             val marginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, displayMetrics).toInt()
             window?.setLayout(screenWidth - (2 * marginPx), ViewGroup.LayoutParams.WRAP_CONTENT)
             show()
         }
+
     }
 
     override fun onDestroyView() {

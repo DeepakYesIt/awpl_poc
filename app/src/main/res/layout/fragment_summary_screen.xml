@@ -85,6 +85,7 @@
                         android:textColor="#356598"
                         android:textSize="20sp"
                         android:textStyle="bold"
+                        android:layout_marginTop="@dimen/_2sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -250,7 +251,7 @@
                         android:id="@+id/linearLayout9"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_10sdp"
+                        android:layout_margin="@dimen/_8sdp"
                         android:orientation="vertical"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -320,7 +321,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_marginHorizontal="@dimen/_15sdp"
+                        android:layout_marginHorizontal="@dimen/_10sdp"
                         android:background="@drawable/button_bg"
                         android:text="@string/free"
                         android:textAllCaps="false"

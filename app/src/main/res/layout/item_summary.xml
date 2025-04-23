@@ -5,7 +5,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:paddingVertical="8dp"
+    android:paddingStart="8dp"
+    >
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
@@ -14,7 +16,7 @@
         app:cardCornerRadius="12dp"
         android:elevation="8dp"
         android:layout_marginBottom="@dimen/_7sdp"
-        android:layout_marginStart="@dimen/_3sdp"
+        android:layout_marginStart="@dimen/_1sdp"
         android:layout_marginTop="@dimen/_5sdp"
         android:padding="4dp">
 

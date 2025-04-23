@@ -4,9 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="lorem_ipsum_dolor_sit_amet_consectetur">Lorem ipsum dolor sit amet, consectetur</string>
     <string name="image">image</string>
-    <string name="begin_your_health_journey_with_a_free_consultation">
-    Begin Your Health Journey with a\n <b> Free Consultation!</b>
-</string>
+    <string name="begin_your_health_journey_with_a_free_consultation">Begin Your Health Journey with a\n <b> Free Consultation!</b></string>
     <string name="next">Next</string>
     <string name="english">English</string>
     <string name="choose_your_language">Choose your language</string>
@@ -16,6 +14,7 @@
     <string name="access_your_health_profile_and_connect_n_with_doctors_log_in_now">Access your health profile and connect\n with doctors – log in now.</string>
     <string name="enter_your_ds_number_ds_code">Enter your DS Number/DS Code</string>
     <string name="password">Password</string>
+
     <string name="pass">********</string>
     <string name="login">Login</string>
     <string name="onboarding_1">Begin Your Health Journey with a\nFree Consultation!</string>
@@ -82,6 +81,11 @@
     <string name="videos">Videos</string>
     <string name="pdf">PDF</string>
     <string name="media_upload">Media Upload</string>
+    <string name="our_doctors_will_review_your_information_and_provide_a_prescription">
+    Our doctors will review your information and provide a prescription.
+</string>
+    <string name="hindi_content">Choose your language</string>
+    <string name="hindi_c">Hindi</string>
     <string name="add_your_documents_here">Add your documents here</string>
     <string name="save">Save</string>
     <string name="your_response_has_been_submitted">Your response has been submitted.</string>
@@ -152,6 +156,8 @@
     <string name="logout_">Logout</string>
     <string name="are_you_sure_you_want_to_logout">Are you sure you want to logout?</string>
     <string name="no">No</string>
+    <string name="our_doctor_review">Our doctor will review your information and\n provide a prescription. You will be notified when it is\n ready for download.</string>
+
     <string name="yes">Yes</string>
     <string name="video_gallery">Video Gallery</string>
     <string name="upcoming">Upcoming</string>
@@ -235,8 +241,8 @@
     <string name="upload_date">Upload Date:</string>
     <string name="cancel_appointment">Cancel Appointment</string>
     <string name="are_you_sure_you_want_to_cancel_this_appointment">Are you sure you want to cancel this appointment?</string>
-    <string name="to_manage_patient_availability_and_doctor_scheduling_we_require_you_to_reschedule_your_appointment_instead_of_canceling_directly">To manage patient availability and doctor scheduling, we require you to reschedule your appointment instead of canceling directly</string>
-    <string name="if_you_absolutely_cannot_attend_and_don_t_want_to_reschedule_please_contact_our_admin_team_directly_for_assistance_awplconnect_asclepiuswellness_co_in">If you absolutely cannot attend and don\'t want to reschedule, please contact our admin team directly for assistance: <font color="#199FD9">awplconnect@asclepiuswellness.co.in</font> </string>
+    <string name="to_manage_patient_availability_and_doctor_scheduling_we_require_you_to_reschedule_your_appointment_instead_of_canceling_directly">To manage patient availability and doctor scheduling, we require you to reschedule your appointment instead of canceling directly.</string>
+    <string name="if_you_absolutely_cannot_attend_and_don_t_want_to_reschedule_please_contact_our_admin_team_directly_for_assistance_awplconnect_asclepiuswellness_co_in">If you absolutely cannot attend and don\'t want to reschedule, please contact our admin team directly for assistance: <font color="#199FD9"><u>awplconnect@asclepiuswellness.co.in</u></font> </string>
     <string name="delete_account">Delete Account</string>
     <string name="fast_easy_online_consultation"><![CDATA[Fast & Easy Online Consultation]]></string>
     <string name="the_disease_you_selected_seems_to_fall_under_the_minor_category">The disease you selected seems to fall under the Minor category.</string>
@@ -263,6 +269,8 @@
     <string name="for_symptom_upload_consultations">For: Symptom Upload Consultations</string>
     <string name="uploaded_thu_10_may">Uploaded: Thu 10 May</string>
     <string name="striked_price"><![CDATA[<s>₹ 99.00</s>]]></string>
+    <string name= "schedule_appoint">Schedule Appointment</string>
+    <string name ="my_perception">My Prescriptions</string>
 
 
 </resources>

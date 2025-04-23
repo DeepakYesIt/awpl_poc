@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:layout_marginHorizontal="@dimen/_20sdp"
     android:layout_marginVertical="@dimen/_10sdp"
+    android:background="@drawable/parent_bg"
     tools:context=".fragment.bookappointment.PaymentScreen">
 
 
@@ -58,14 +59,15 @@
                 android:paddingEnd="8dp"
                 android:text="@string/paytm"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="@dimen/_17sdp" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:background="@color/white"
                 android:layout_marginEnd="@dimen/_20sdp"
-                android:src="@drawable/paytm" />
+                android:src="@drawable/paytm"
+                android:scaleType="fitXY"/>
         </LinearLayout>
 
         <LinearLayout
@@ -94,11 +96,11 @@
                 android:paddingEnd="8dp"
                 android:text="@string/razorpay"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="@dimen/_17sdp" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_marginEnd="@dimen/_18sdp"
                 android:src="@drawable/razorpay" />
         </LinearLayout>
@@ -114,6 +116,8 @@
         android:text="@string/by_making_a_payment_you_agree_to_our_refund_policy"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
 
@@ -125,10 +129,12 @@
         android:text="@string/refund_policy"
         android:textSize="14sp"
         android:textColor="#199FD9"
+        android:textAlignment="center"
         android:textStyle="bold"
         android:layout_marginStart="@dimen/_5sdp"
-        app:layout_constraintStart_toEndOf="@+id/textView16"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+      app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
 
     <androidx.appcompat.widget.AppCompatButton
@@ -145,7 +151,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+        app:layout_constraintTop_toBottomOf="@+id/refundPolicyTxt" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

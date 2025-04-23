@@ -45,6 +45,8 @@ class FAQFragment : Fragment() {
         faqAdapter = FAQAdapter(faqList)
         binding.faqRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.faqRecyclerview.adapter = faqAdapter
+        binding.searchView.queryHint = "Enter your keyword"
+
     }
 
     private fun clickListeners(){
