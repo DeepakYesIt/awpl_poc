@@ -72,6 +72,39 @@ class BasicInfoScreen : Fragment() {
         }
     }
 
+    private fun showHeightPickerDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_height_picker, null)
+
+        val feetPicker = dialogView.findViewById<NumberPicker>(R.id.feetPicker)
+        val inchPicker = dialogView.findViewById<NumberPicker>(R.id.inchPicker)
+
+        // Configure pickers
+        feetPicker.minValue = 3
+        feetPicker.maxValue = 8
+
+        inchPicker.minValue = 0
+        inchPicker.maxValue = 11
+
+        // Optionally: Try to pre-fill based on existing text
+        val currentText = binding.etHeight.text.toString()
+        val feetMatch = Regex("(\\d+)\\s*ft").find(currentText)?.groupValues?.get(1)?.toIntOrNull()
+        val inchMatch = Regex("(\\d+)\\s*in").find(currentText)?.groupValues?.get(1)?.toIntOrNull()
+
+        feetPicker.value = feetMatch ?: 5
+        inchPicker.value = inchMatch ?: 6
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Select Height")
+            .setView(dialogView)
+            .setPositiveButton("OK") { _, _ ->
+                val selectedFeet = feetPicker.value
+                val selectedInches = inchPicker.value
+                binding.etHeight.setText("$selectedFeet ft $selectedInches in")
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
+            .show()
+    }
 
 
     private fun updateSelection(selected: TextView, allTextViews: List<TextView>) {
@@ -127,39 +160,6 @@ class BasicInfoScreen : Fragment() {
     }
 
 
-    private fun showHeightPickerDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_height_picker, null)
-
-        val feetPicker = dialogView.findViewById<NumberPicker>(R.id.feetPicker)
-        val inchPicker = dialogView.findViewById<NumberPicker>(R.id.inchPicker)
-
-        // Configure pickers
-        feetPicker.minValue = 3
-        feetPicker.maxValue = 8
-
-        inchPicker.minValue = 0
-        inchPicker.maxValue = 11
-
-        // Optionally: Try to pre-fill based on existing text
-        val currentText = binding.etHeight.text.toString()
-        val feetMatch = Regex("(\\d+)\\s*ft").find(currentText)?.groupValues?.get(1)?.toIntOrNull()
-        val inchMatch = Regex("(\\d+)\\s*in").find(currentText)?.groupValues?.get(1)?.toIntOrNull()
-
-        feetPicker.value = feetMatch ?: 5
-        inchPicker.value = inchMatch ?: 6
-
-        AlertDialog.Builder(requireContext())
-            .setTitle("Select Height")
-            .setView(dialogView)
-            .setPositiveButton("OK") { _, _ ->
-                val selectedFeet = feetPicker.value
-                val selectedInches = inchPicker.value
-                binding.etHeight.setText("$selectedFeet ft $selectedInches in")
-            }
-            .setNegativeButton("Cancel", null)
-            .create()
-            .show()
-    }
 
 
 

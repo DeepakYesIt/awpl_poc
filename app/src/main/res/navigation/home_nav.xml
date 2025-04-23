@@ -35,6 +35,13 @@
         android:name="com.bussiness.awpl.fragment.resource.VideoGalleryFragment"
         android:label="fragment_video_gallery"
         tools:layout="@layout/fragment_video_gallery" />
+
+    <fragment
+        android:id="@+id/prescription_frgament"
+        android:name="com.bussiness.awpl.MyPrescriptionFragment"
+        android:label="fragment_prescription"
+        tools:layout="@layout/fragment_my_prescription" />
+
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.bussiness.awpl.fragment.sidedrawer.ProfileFragment"

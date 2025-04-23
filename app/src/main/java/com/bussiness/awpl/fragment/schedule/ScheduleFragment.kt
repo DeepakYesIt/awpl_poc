@@ -161,6 +161,7 @@ class ScheduleFragment : Fragment() {
                     filterTxt.setTextColor(ContextCompat.getColor(requireContext(), R.color.darkGreyColor))
                     arrowIcon.setImageResource(R.drawable.short_arrow)
                 }
+
             }
         }
     }
@@ -170,10 +171,7 @@ class ScheduleFragment : Fragment() {
         val popupView = LayoutInflater.from(requireContext()).inflate(R.layout.item_filter, null)
 
         val popupWindow = PopupWindow(
-            popupView,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            true
+            popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true
         )
 
         // Handle dismiss listener to reset UI
@@ -190,6 +188,8 @@ class ScheduleFragment : Fragment() {
         popupView.setOnClickListener {
             popupWindow.dismiss()
         }
+
+
     }
 
 

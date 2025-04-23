@@ -17,7 +17,7 @@
 
     <string name="pass">********</string>
     <string name="login">Login</string>
-    <string name="onboarding_1">Begin Your Health Journey with a\nFree Consultation!</string>
+    <string name="onboarding_1">Begin Your Health Journey with a\nFirst Free Consultation!</string>
     <string name="onboarding_2">Bringing Doctors to Your\nDoor – Virtually.</string>
     <string name="onboarding_3">Upload Symptoms for Minor Issues,\nVideo Call for Major Concerns -\nStart Exploring the App Today!</string>
     <string name="login_as_ds_user">Login as DS User</string>
@@ -269,8 +269,9 @@
     <string name="for_symptom_upload_consultations">For: Symptom Upload Consultations</string>
     <string name="uploaded_thu_10_may">Uploaded: Thu 10 May</string>
     <string name="striked_price"><![CDATA[<s>₹ 99.00</s>]]></string>
-    <string name= "schedule_appoint">Schedule Appointment</string>
-    <string name ="my_perception">My Prescriptions</string>
+    <string name="schedule_appoint">Schedule Appointment</string>
+    <string name="my_perception">My Prescriptions</string>
+    <string name="others_prescriptions">Others Prescriptions</string>
 
 
 </resources>

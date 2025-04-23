@@ -10,13 +10,14 @@
 
     <ImageView
         android:id="@+id/imageView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_70sdp"
-        android:src="@drawable/resource_ic"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_230sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:src="@drawable/ic_resource_new_img"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="centerCrop"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnFAQ"
@@ -26,7 +27,7 @@
         android:fontFamily="@font/lato_regular"
         android:text="@string/faq_s"
         android:padding="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_45sdp"
+        android:layout_marginTop="@dimen/_25sdp"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="17sp"

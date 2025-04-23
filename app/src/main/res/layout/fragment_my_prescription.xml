@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".MyPrescriptionFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:visibility="gone"
+        android:layout_marginHorizontal="@dimen/_12sdp"
+        >
+
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back_icon"
+            android:layout_centerVertical="true"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Prescriptions"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/_15sdp"
+            android:textStyle="bold"
+            android:fontFamily="@font/lato_regular"
+            android:layout_centerVertical="true"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/bell_icon"
+            android:layout_alignParentEnd="true"
+            />
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_filters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_bg"
+        android:paddingHorizontal="@dimen/_13sdp"
+        android:paddingVertical="@dimen/_10sdp"
+        android:layout_margin="@dimen/_12sdp"
+        >
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Filters"
+            android:textColor="@color/white"
+            android:fontFamily="@font/lato_regular"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold"
+
+            />
+
+        <ImageView
+            android:id="@+id/img_icon_up_down"
+            android:layout_width="@dimen/_9sdp"
+            android:layout_height="@dimen/_7sdp"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:src="@drawable/ic_down_white"
+
+            android:layout_gravity="center"
+            />
+        
+    </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_presecption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_11sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        />
+
+    
+</LinearLayout>

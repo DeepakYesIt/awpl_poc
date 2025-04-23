@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/_2sdp">
+    android:layout_marginHorizontal="@dimen/_2sdp"
+    android:layout_marginBottom="@dimen/_10sdp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_toStartOf="@id/imgBack"
@@ -10,7 +11,7 @@
         android:weightSum="1"
         android:gravity="center"
         android:orientation="horizontal"
-        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
         android:background="@drawable/bg_upcoming">
         <LinearLayout
             android:layout_width="match_parent"
@@ -18,44 +19,74 @@
             android:layout_weight="0.2"
             android:weightSum="1"
             android:gravity="center"
-            android:layout_margin="@dimen/_5sdp"
+            android:layout_marginHorizontal="@dimen/_3sdp"
             android:background="@drawable/bg_upcoming_center">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_6sdp"
-                android:layout_weight="0.3"
+                android:layout_margin="@dimen/_9sdp"
+                android:layout_weight="0.2"
+
                 android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Diagnosis:"/>
-                    <TextView
+                        android:id="@+id/tv_refer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="#199FD9"
+                        android:textSize="@dimen/_11sdp"
+
+                        android:text="Referred Name: Lorem Ipsum"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/_2sdp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_10sdp"
+                        android:text="Diagnosis:"/>
+                    <TextView
+                        android:id="@+id/tv_diagonosis"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#199FD9"
+                        android:textSize="@dimen/_10sdp"
                         android:text=" Influenza"/>
                 </LinearLayout>
                 <TextView
+                    android:id="@+id/tv_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_4sdp"
+                    android:textSize="@dimen/_10sdp"
                     android:drawableStart="@drawable/clock_icon"
-                    android:text="Thu May 14"/>
+                    android:text="Thu May 14"
+                    android:layout_marginTop="@dimen/_2sdp"/>
                 <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_marginTop="@dimen/_4sdp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="10:00 - 10:15 AM"/>
+                    android:text="10:00 - 10:15 AM"
+                    android:textSize="@dimen/_10sdp"
+                    android:drawableLeft="@drawable/ic_black_dot"
+                     android:drawablePadding="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_2sdp"
+                    />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_weight="0.7">
+                android:layout_weight="0.8">
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -79,7 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_7sdp"
         android:layout_centerInParent="true"
         android:background="@drawable/upcoming_back"/>
 </RelativeLayout>

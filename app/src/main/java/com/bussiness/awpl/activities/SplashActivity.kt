@@ -21,6 +21,7 @@ class SplashActivity : AppCompatActivity() {
         enableEdgeToEdge()
 
         binding = ActivitySplashBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
 
         // Apply language preferences

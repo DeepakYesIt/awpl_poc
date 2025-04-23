@@ -112,6 +112,7 @@ class HomeActivity : AppCompatActivity() {
                 R.id.paymentScreen -> setToolbar("Payment Method", showBottomNav = false)
                 R.id.homeScheduleCallFragment -> setToolbar("Scheduled Call\nConsultations", showBottomNav = false,showBell=false)
                 R.id.doctorChatFragment -> setToolbar("My Appointments", showBottomNav = false)
+                R.id.prescription_frgament-> setToolbar("My Prescriptions",fab= false)
                 R.id.symptomUpload,
                 R.id.onlineConsultationFragment,
                 R.id.doctorConsultationFragment,
@@ -261,7 +262,8 @@ class HomeActivity : AppCompatActivity() {
         }
 
         perception.setOnClickListener {
-
+            closeDrawer()
+   navController.navigate(R.id.prescription_frgament)
 
         }
 

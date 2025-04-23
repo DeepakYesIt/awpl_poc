@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/_5sdp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:elevation="@dimen/_10sdp"
+        app:cardCornerRadius="8dp"
+
+        android:layout_margin="@dimen/_2sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingVertical="@dimen/_6sdp"
+            android:paddingEnd="@dimen/_10sdp"
+            >
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/appCompatCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_regular"
+                android:layout_marginStart="@dimen/_7sdp"
+                android:text="@string/my_perception"
+                android:textAllCaps="false"
+                android:textColor="@color/darkGreyColor"
+                android:textSize="16sp"
+                app:buttonTint="#00BD90"
+                 android:padding="10dp"
+                android:backgroundTint="#00BD90"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/appCompatCheckBox2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_regular"
+                android:padding="10dp"
+                app:buttonTint="#00BD90"
+                android:checked="true"
+                android:text="@string/others_prescriptions"
+                android:textAllCaps="false"
+                android:textColor="@color/darkGreyColor"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/appCompatCheckBox"
+                app:layout_constraintTop_toBottomOf="@+id/appCompatCheckBox" />
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_regular"
+                android:padding="10dp"
+                android:text="@string/all"
+                android:visibility="gone"
+                android:textAllCaps="false"
+                android:textColor="@color/darkGreyColor"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/appCompatCheckBox2"
+                app:layout_constraintTop_toBottomOf="@+id/appCompatCheckBox2" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
