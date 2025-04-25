@@ -38,8 +38,8 @@
     <string name="please_enter_the_below_data_to_help_us_n_know_more_about_you">Please enter the below data to help us know more about you</string>
     <string name="full_name">Full Name</string>
     <string name="name">Name</string>
-    <string name="enter_your_height">Enter Height</string>
-    <string name="enter_your_weight">Enter Weight (Kg)</string>
+    <string name="enter_your_height">Enter Your Height</string>
+    <string name="enter_your_weight">Enter Your Weight (Kg)</string>
     <string name="gender">Gender</string>
     <string name="female">Female</string>
     <string name="male">Male</string>
@@ -71,12 +71,12 @@
     <string name="go_to_home_page">Go to Home Page</string>
     <string name="based_on_our_analysis_it_seems_you_may_be_going_through_a_slight_health_concern_related_to_a_minor_disease">Based on our analysis, it seems you may be going through a slight health concern related to a minor disease.</string>
     <string name="our_doctors_will_review_your_information_and_provide_a_prescription_you_ll_be_notified_when_it_s_ready_to_download">Our doctors will review your information and provide a prescription. You’ll be notified when it\'s ready to download.</string>
-    <string name="lorem_1">1. Lorem ipsum dolor sit amet, consectetur</string>
+    <string name="lorem_1">1. How long are you suffering from this disease?</string>
     <string name="answer">Answer</string>
     <string name="symptom_upload_consultations">Symptom Upload Consultations</string>
-    <string name="_2_lorem_ipsum_dolor_sit_amet_consectetur">2. Lorem ipsum dolor sit amet, consectetur</string>
-    <string name="_3_lorem_ipsum_dolor_sit_amet_consectetur">3. Lorem ipsum dolor sit amet, consectetur</string>
-    <string name="_4_lorem_ipsum_dolor_sit_amet_consectetur">4. Lorem ipsum dolor sit amet, consectetur</string>
+    <string name="_2_lorem_ipsum_dolor_sit_amet_consectetur">2. Any other problem which you would like to share related to your problem?</string>
+    <string name="_3_lorem_ipsum_dolor_sit_amet_consectetur">3. Do you have any history of this disease?</string>
+    <string name="_4_lorem_ipsum_dolor_sit_amet_consectetur">4. Are you taking any medicines? If yes, please share the name of medicine and since how long you are taking this medicine?</string>
     <string name="images">Images</string>
     <string name="videos">Videos</string>
     <string name="pdf">PDF</string>
@@ -191,10 +191,132 @@
     <string name="username_gmail_com">Username@gmail.com</string>
     <string name="_91_9655415616">+91–9655415616</string>
     <string name="privacy_policy_content">"Lorem ipsum odor amet, consectetuer adipiscing elit. Phasellus nam sapien vivamus faucibus penatibus velit eu. Tellus tortor pharetra dolor hendrerit ullamcorper vitae sagittis curabitur ex. Bibendum etiam quis dictum molestie auctor cras; gravida ante. Laoreet a hendrerit egestas gravida lectus? Potenti taciti lacinia ligula nisi ac a. Consectetur nascetur fermentum porttitor quis nisi mollis. Mus pellentesque nostra; placerat consectetur dis auctor. Elit diam tempus potenti curabitur integer nascetur quam."
+        \n\n\n\n
+        "Donec rutrum magnis nibh nibh efficitur tempor purus leo. Morbi nullam nisi tempus consectetur fames ridiculus, montes iaculis cras? Hendrerit maximus in cubilia consequat eros; diam viverra. Tellus ornare ad aenean quis, consectetur pharetra dapibus. Vel nunc porta condimentum eget ipsum mus. Lacus blandit molestie pretium ullamcorper quis senectus varius orci duis. Hendrerit hac metus fermentum himenaeos sollicitudin nulla semper vel. Turpis proin cursus habitant"
+    </string>
 
-\n\n\n\n
+    <string name="term_condition_1">
+    Effective Date: [Insert Date]
 
-"Donec rutrum magnis nibh nibh efficitur tempor purus leo. Morbi nullam nisi tempus consectetur fames ridiculus, montes iaculis cras? Hendrerit maximus in cubilia consequat eros; diam viverra. Tellus ornare ad aenean quis, consectetur pharetra dapibus. Vel nunc porta condimentum eget ipsum mus. Lacus blandit molestie pretium ullamcorper quis senectus varius orci duis. Hendrerit hac metus fermentum himenaeos sollicitudin nulla semper vel. Turpis proin cursus habitant"</string>
+    1. Introduction
+    Welcome to AWPL CONNECT, a mobile application owned and operated by Asclepius Wellness Private Limited ("Company," "we," "our," or "us"). By accessing or using AWPL CONNECT, you agree to comply with these Terms and Conditions. If you do not agree, please do not use the application.
+
+    2. Services Offered
+    AWPL CONNECT provides an online platform for users to consult with registered medical professionals. The services include:
+    • Online doctor consultations
+    • Digital prescriptions (where applicable)
+    • Health-related content and recommendations
+
+    3. User Responsibilities
+    By using AWPL CONNECT, you agree to:
+    • Provide accurate and complete registration details
+    • Use the services for personal, non-commercial purposes
+    • Follow all applicable laws and ethical guidelines while using the platform
+
+    4. Medical Disclaimer
+    • AWPL CONNECT is not a substitute for emergency medical care
+    • The advice given by doctors on the platform is based on the information provided by users; accuracy of consultation outcomes depends on the details shared
+    • Users should seek immediate medical attention in case of serious health issues
+
+    5. Payment &amp; Refunds
+    • Users may be required to pay for consultations as per the pricing set within the app
+    • Refunds are subject to our Refund Policy
+
+    6. Privacy &amp; Data Security
+    • We collect and store user data as outlined in our Privacy Policy
+    • Users must maintain the confidentiality of their account credentials
+
+    7. Prohibited Activities
+    Users must not:
+    • Provide false or misleading health information
+    • Misuse, alter, or attempt to hack the platform
+    • Use the platform for any illegal or unauthorized purposes
+
+    8. Termination of Use
+    We reserve the right to suspend or terminate access to AWPL CONNECT if a user violates these terms or engages in fraudulent or inappropriate behavior
+
+    9. Limitation of Liability
+    • We are not liable for any direct, indirect, or incidental damages arising from the use of the app
+    • The Company is not responsible for the medical advice provided by doctors on the platform
+
+    10. Changes to Terms
+    We may modify these Terms and Conditions at any time. Users will be notified of significant changes via the app
+
+    11. Contact Us
+    For any queries regarding these Terms and Conditions, please contact us at:
+    Asclepius Wellness Private Limited
+    Email: awplconnect@asclepiuswellness.co.in
+
+    Registered Office:
+    Third Floor, Plot No. B-1/7,
+    Main Gandhipath, Jaipur,
+    Rajasthan, India, 302021
+    CIN No.: U51909RJ2014PTC084662
+    GST No.: 08AAMCA9419N2ZX
+</string>
+
+    <string name="privacy_policy_1">
+    1. Introduction
+    Welcome to AWPL CONNECT, a mobile application owned and operated by Asclepius Wellness Private Limited ("Company," "we," "our," or "us"). This Privacy Policy outlines how we collect, use, and safeguard your information when you use our online doctor consultancy services.
+    By accessing or using AWPL CONNECT, you consent to the practices described in this Privacy Policy. If you do not agree with this policy, please do not use our services.
+
+    2. Information We Collect
+    We collect the following types of information:
+    (a) Personal Information:
+    • Name, age, gender, contact details (email, phone number, address)
+    • Medical history, prescriptions, and consultation details
+    • Payment and billing information (if applicable)
+    (b) Non-Personal Information:
+    • Device information (IP address, device type, operating system, app usage data)
+    • Cookies and tracking technologies for analytics and service improvement
+
+    3. How We Use Your Information
+    We use the collected information for:
+    • Facilitating online doctor consultations
+    • Providing customer support and service updates
+    • Processing payments (if applicable)
+    • Ensuring compliance with legal and regulatory requirements
+    • Enhancing user experience through analytics and improvements
+
+    4. Sharing of Information
+    We do not sell, rent, or trade your personal data. However, we may share your information with:
+    • Registered Healthcare Professionals: For medical consultation purposes
+    • Third-Party Service Providers: For payment processing, hosting, and analytics
+    • Legal Authorities: If required by law or to protect our rights and users
+
+    5. Data Security
+    We implement robust security measures to protect your data from unauthorized access, alteration, or disclosure. However, no online transmission or storage is completely secure, and we cannot guarantee absolute security.
+
+    6. User Rights &amp; Choices
+    You have the right to:
+    • Access, update, or delete your personal data
+    • Withdraw consent for data processing
+    • Opt out of non-essential communications
+    To exercise these rights, contact us at awplconnect@asclepiuswellness.co.in
+
+    7. Data Retention
+    We retain user data for as long as necessary to fulfill the purposes outlined in this Privacy Policy or as required by law.
+
+    8. Third-Party Links
+    AWPL CONNECT may contain links to external websites. We are not responsible for their privacy policies, and we encourage users to review them separately.
+
+    9. Changes to This Privacy Policy
+    We may update this Privacy Policy periodically. Changes will be communicated via the app or our website.
+
+    10. Contact Us
+    For any questions or concerns regarding this Privacy Policy, contact us at:
+    awplconnect@asclepiuswellness.co.in
+
+    Registered Office:
+    Third Floor, Plot No. B-1/7,
+    Main Gandhipath, Jaipur,
+    Rajasthan, India, 302021
+    CIN No.: U51909RJ2014PTC084662
+    GST No.: 08AAMCA9419N2ZX
+</string>
+
+
+
     <string name="notification_icon">Notification Icon</string>
     <string name="appointment_success">Appointment Success</string>
     <string name="_1h">1h</string>

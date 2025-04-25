@@ -1,8 +1,24 @@
 package com.bussiness.awpl.model
 
+import com.bussiness.awpl.R
+
 object  PrepareData {
 
 
+    val organList = listOf(
+        OrganDeptModel(R.drawable.cadiologist, "Heart"),
+        OrganDeptModel(R.drawable.dental, "Dental"),
+        OrganDeptModel(R.drawable.kidney, "Kidney"),
+        OrganDeptModel(R.drawable.gastroenterologists, "Stomach"),
+        OrganDeptModel(R.drawable.dental, "Dental") ,
+        OrganDeptModel(R.drawable.ic_tb, "Tuberclosis(TB)"),
+        OrganDeptModel(R.drawable.ic_allergy, "Allergy"),
+        OrganDeptModel(R.drawable.ic_blood_pressure, "Blood\nPressure"),
+        OrganDeptModel(R.drawable.ic_typhoid, "Typhoid"),
+        OrganDeptModel(R.drawable.ic_liver, "Liver"),
+        OrganDeptModel(R.drawable.ic_thyroid, "Thyroid"),
+        OrganDeptModel(R.drawable.ic_gyno, "Gynic\nDisease"),
+    )
         fun getDummyPrescriptions(): MutableList<Prescription> {
             return mutableListOf(
                 Prescription(

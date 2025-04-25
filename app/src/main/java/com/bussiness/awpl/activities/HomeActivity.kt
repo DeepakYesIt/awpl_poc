@@ -32,6 +32,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.bussiness.awpl.BuildConfig
 import com.bussiness.awpl.R
 import com.bussiness.awpl.base.CommonUtils
 import com.bussiness.awpl.databinding.ActivityHomeBinding
@@ -50,6 +51,7 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        BuildConfig.BASE_URL
 
         sessionManager = SessionManager(this)
         sessionManager?.applySavedLanguage()

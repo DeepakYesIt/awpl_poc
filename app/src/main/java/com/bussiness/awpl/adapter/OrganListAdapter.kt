@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bussiness.awpl.databinding.ItemOrgansBinding
 import com.bussiness.awpl.model.OrganDeptModel
 
-class OrganListAdapter(private val items: List<OrganDeptModel>) :
+class OrganListAdapter(private val items: List<OrganDeptModel>,  private val onItemClick: (OrganDeptModel) -> Unit) :
     RecyclerView.Adapter<OrganListAdapter.CardViewHolder>() {
 
     inner class CardViewHolder(private val binding: ItemOrgansBinding) :
@@ -15,6 +15,9 @@ class OrganListAdapter(private val items: List<OrganDeptModel>) :
         fun bind(item: OrganDeptModel) {
             binding.organDeptImg.setImageResource(item.imageResId)
             binding.deptName.text = item.title
+            binding.root1.setOnClickListener {
+                onItemClick(item)
+            }
         }
     }
 

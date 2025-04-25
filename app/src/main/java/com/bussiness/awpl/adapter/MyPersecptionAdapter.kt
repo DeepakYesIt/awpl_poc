@@ -8,14 +8,19 @@ import com.bussiness.awpl.R
 import com.bussiness.awpl.databinding.ItemFaqBinding
 import com.bussiness.awpl.databinding.ItemUpcomingLayoutBinding
 import com.bussiness.awpl.model.FAQItem
+import com.bussiness.awpl.model.HealthJourneyItem
 import com.bussiness.awpl.model.Prescription
 
-class MyPersecptionAdapter(private var perceptionList: MutableList<Prescription>) : RecyclerView.Adapter<MyPersecptionAdapter.FAQViewHolder>() {
+class MyPersecptionAdapter(private var perceptionList: MutableList<Prescription>,private val onScheduleCallClick: (Prescription) -> Unit) : RecyclerView.Adapter<MyPersecptionAdapter.FAQViewHolder>() {
 
     inner class FAQViewHolder(private val binding: ItemUpcomingLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(presItem: Prescription, position: Int) {
-
-
+           binding.root5.setOnClickListener {
+            onScheduleCallClick(presItem)
+           }
+//            binding.imgBack.setOnClickListener {
+//                onScheduleCallClick(presItem)
+//            }
             if(presItem.referred != null){
              binding.tvRefer.setText(presItem.referred)
             }else{
@@ -35,6 +40,7 @@ class MyPersecptionAdapter(private var perceptionList: MutableList<Prescription>
 
     override fun onBindViewHolder(holder: FAQViewHolder, position: Int) {
         holder.bind(perceptionList[position], position)
+
     }
 
     override fun getItemCount(): Int = perceptionList.size

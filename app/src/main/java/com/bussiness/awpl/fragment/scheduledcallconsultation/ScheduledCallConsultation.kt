@@ -25,15 +25,14 @@ import com.bussiness.awpl.utils.ErrorMessages
 
 class ScheduledCallConsultation : Fragment() {
 
-    private var _binding: FragmentScheduledCallConsulationBinding? = null
+    private var _binding : FragmentScheduledCallConsulationBinding? = null
     private val binding get() = _binding!!
     private var mediaUploadDialog: MediaUtils? = null
     private var currentType: String = ""
     private val mediaList = mutableListOf<MediaItem>()
     private lateinit var mediaAdapter: MediaAdapter
 
-    private val imagePickerLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val uri: Uri? = result.data?.data
                 uri?.let {

@@ -37,7 +37,7 @@ class OnboardingAdapter(private val list: List<OnboardingItem>) :
 
     private fun getStyledText(text: String): SpannableString {
         val spannable = SpannableString(text)
-        val wordsToHighlight = listOf("Free Consultation!", "Virtually", "Start Exploring the App Today!")
+        val wordsToHighlight = listOf("First Free Consultation!", "Virtually", "Start Exploring the App Today!")
 
         wordsToHighlight.forEach { word ->
             val startIndex = text.indexOf(word)

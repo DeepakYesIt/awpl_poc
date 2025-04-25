@@ -65,4 +65,16 @@ class SessionManager(private val context: Context) {
             clear()
         }
     }
+
+    fun setAuthToken(token:String){
+        preferences.edit {
+            putString(AppConstant.AuthToken, token)
+        }
+
+
+    }
+
+    fun getAuthToken():String?{
+        return preferences?.getString(AppConstant.AuthToken,"")
+    }
 }

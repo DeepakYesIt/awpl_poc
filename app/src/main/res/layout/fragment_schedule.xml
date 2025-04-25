@@ -192,39 +192,18 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:visibility="visible"
-        android:background="@drawable/filter_bg"
+        android:background="@drawable/ic_main_filter"
         android:layout_margin="@dimen/_10sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view">
-
-        <TextView
-            android:id="@+id/filterTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/_10sdp"
-            android:text="@string/filters"
-            android:textColor="@color/darkGreyColor"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:textStyle="bold"/>
-
-        <ImageView
-            android:id="@+id/arrowIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/short_arrow"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:padding="@dimen/_5sdp"
-            android:layout_gravity="center"/>
-
-
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/upper_lay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
+        android:orientation="horizontal"
+        android:visibility="visible"
 
         android:background="@drawable/bg_message_sender"
         android:layout_margin="@dimen/_10sdp"
@@ -243,6 +222,7 @@
             android:background="@drawable/bg_four_side_corner_inner_white"
             >
             <TextView
+                android:id="@+id/tV1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#356598"
@@ -261,16 +241,16 @@
             android:paddingHorizontal="@dimen/_15sdp"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginVertical="@dimen/_7sdp"
-            android:background="@drawable/bg_four_side_corner_inner_white"
+
+            android:layout_marginEnd="@dimen/_8sdp"
             >
             <TextView
+                android:id="@+id/tv2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#356598"
-                android:text="Scheduled Call"
-
+                android:textColor="#858484"
+                android:text="Symptom Upload"
                 />
-
 
         </RelativeLayout>
     </LinearLayout>
@@ -284,7 +264,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filterBtn"/>
+        app:layout_constraintTop_toBottomOf="@+id/upper_lay"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

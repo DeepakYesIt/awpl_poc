@@ -7,6 +7,20 @@
     android:orientation="vertical"
     android:background="@color/white">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+
+
+
     <!-- Profile Section -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -88,6 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
+                android:tint="@color/black"
                 android:src="@drawable/profile_notification"
                 android:layout_marginEnd="12dp"/>
 
@@ -132,6 +147,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/calendar"
+                android:tint="@color/black"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="12dp"/>
 
@@ -272,6 +288,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_perception"
                 android:layout_marginStart="@dimen/_10sdp"
+                android:tint="@color/black"
                 android:layout_marginEnd="12dp"/>
 
             <TextView
@@ -314,6 +331,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/yourdoctor"
                 android:layout_marginStart="@dimen/_10sdp"
+                android:tint="@color/black"
                 android:layout_marginEnd="12dp"/>
 
             <TextView
@@ -356,6 +374,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/resource"
                 android:layout_marginStart="@dimen/_10sdp"
+                android:tint="@color/black"
                 android:layout_marginEnd="12dp"/>
 
             <TextView
@@ -397,8 +416,9 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/privacy_icon"
+                android:src="@drawable/ic_privacy_policy_new"
                 android:layout_marginStart="@dimen/_10sdp"
+                android:tint="@color/black"
                 android:layout_marginEnd="12dp"/>
 
             <TextView
@@ -440,7 +460,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/privacy_icon"
+                android:src="@drawable/ic_term_use_new"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="12dp"/>
 
@@ -484,6 +504,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/loggout_ic"
                 android:layout_marginStart="@dimen/_10sdp"
+                android:tint="@color/black"
                 android:layout_marginEnd="12dp"/>
 
             <TextView
@@ -618,6 +639,8 @@
 
     </LinearLayout>
 
+        </LinearLayout>
 
+    </ScrollView>
 
 </LinearLayout>

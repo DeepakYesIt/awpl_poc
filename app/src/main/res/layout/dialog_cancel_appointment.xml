@@ -90,7 +90,7 @@
         android:background="@drawable/dialog_no_btn_bg"
         android:text="@string/no"
         android:textAllCaps="false"
-        android:textColor="@color/black"
+        android:textColor="#199FD9"
         android:textSize="20sp"
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"

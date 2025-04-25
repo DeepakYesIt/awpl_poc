@@ -2,6 +2,10 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
 //    id ("com.google.devtools.ksp")
+
+    id ("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
+
 }
 
 android {
@@ -19,13 +23,23 @@ android {
     }
 
     buildTypes {
+        debug {
+            val BASE_URL = project.property("BASE_URL")
+            buildConfigField("String", "BASE_URL", "${BASE_URL}")
+
+        }
+
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro")
+
+            val BASE_URL = project.property("BASE_URL")
+            buildConfigField("String", "BASE_URL", "${BASE_URL}")
+
         }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -37,7 +51,9 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
+
 }
 
 dependencies {
@@ -72,9 +88,17 @@ dependencies {
     //shapeAble image
     implementation (libs.material.v1120)
 
-
-
-
-
-
+    // hilt
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-compiler:2.48")
+    implementation("com.google.dagger:hilt-android:2.52")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    kapt("com.google.dagger:hilt-android-compiler:2.52")
+    implementation("com.hbb20:ccp:2.6.0")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.squareup.okhttp3:okhttp:5.0.0-alpha.10")
+    implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation("implementation 'com.facebook.shimmer:shimmer:0.5.0")
 }

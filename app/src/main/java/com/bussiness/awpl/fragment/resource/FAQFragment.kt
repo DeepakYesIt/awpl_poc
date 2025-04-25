@@ -1,10 +1,12 @@
 package com.bussiness.awpl.fragment.resource
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
@@ -46,6 +48,14 @@ class FAQFragment : Fragment() {
         binding.faqRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.faqRecyclerview.adapter = faqAdapter
         binding.searchView.queryHint = "Enter your keyword"
+
+        binding.searchView.setIconifiedByDefault(false)
+        binding.searchView.isIconified = false
+
+// Step 2: Access the EditText inside SearchView and fix hint color (if needed)
+        val searchEditText = binding.searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+        searchEditText.setHintTextColor(Color.GRAY) // You can use ContextCompat.getColor(...) too
+        searchEditText.setTextColor(Color.BLACK) // Just in case text also invisible
 
     }
 

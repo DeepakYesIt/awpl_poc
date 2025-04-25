@@ -52,7 +52,9 @@ class HomeFragment : Fragment() {
         // Organ List RecyclerView
         binding.deptRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            organListAdapter = OrganListAdapter(viewModel.organList)
+            organListAdapter = OrganListAdapter(viewModel.organList){ selectedDisease ->
+
+            }
             adapter = organListAdapter
         }
         
@@ -76,11 +78,38 @@ class HomeFragment : Fragment() {
 
     private fun clickListener() {
         binding.apply {
-            txtSeeAllDisease.setOnClickListener { findNavController().navigate(R.id.diseasesBottomFragment) }
-            symptomUploadBtn.setOnClickListener { findNavController().navigate(R.id.symptomUpload) }
-            seeAllVideos.setOnClickListener     { findNavController().navigate(R.id.videoGalleryFragment) }
-            scheduleCallBtn.setOnClickListener  { findNavController().navigate(R.id.homeScheduleCallFragment) }
-            upcomingSeeAll.setOnClickListener   { findNavController().navigate(R.id.scheduleFragment) }
+
+            txtSeeAllDisease.setOnClickListener {
+
+                findNavController().navigate(R.id.diseasesBottomFragment)
+
+            }
+
+            symptomUploadBtn.setOnClickListener {
+
+               var bundle = Bundle().apply {
+                   putString("type","symptom")
+               }
+
+                findNavController().navigate(R.id.diseasesBottomFragment,bundle)
+
+            }
+
+            seeAllVideos.setOnClickListener{
+                findNavController().navigate(R.id.videoGalleryFragment)
+            }
+
+            scheduleCallBtn.setOnClickListener  {
+                var bundle = Bundle().apply {
+                    putString("type","schedule")
+                }
+                findNavController().navigate(R.id.diseasesBottomFragment,bundle)
+            }
+
+            upcomingSeeAll.setOnClickListener   {
+                findNavController().navigate(R.id.scheduleFragment)
+            }
+
             rescheduleButton.setOnClickListener { findNavController().navigate(R.id.appointmentBooking) }
             startAppointmentBtn.setOnClickListener { findNavController().navigate(R.id.videoCallFragment) }
             cancelBtn.setOnClickListener        { cancelDialog() }

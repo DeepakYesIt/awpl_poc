@@ -34,6 +34,10 @@ class BasicInfoScreen : Fragment() {
             binding.backIcon.setOnClickListener {
                 findNavController().navigateUp()
             }
+            binding.textView11.text ="Enter Height"
+            binding.textView12.text ="Enter Weight (Kg)"
+            binding.textView9.text ="Please enter their basic information below"
+
         }
         else{
             binding.backIcon.visibility = View.GONE
@@ -93,7 +97,7 @@ class BasicInfoScreen : Fragment() {
         feetPicker.value = feetMatch ?: 5
         inchPicker.value = inchMatch ?: 6
 
-        AlertDialog.Builder(requireContext())
+       val dialog= AlertDialog.Builder(requireContext())
             .setTitle("Select Height")
             .setView(dialogView)
             .setPositiveButton("OK") { _, _ ->
@@ -104,6 +108,7 @@ class BasicInfoScreen : Fragment() {
             .setNegativeButton("Cancel", null)
             .create()
             .show()
+
     }
 
 
@@ -149,6 +154,7 @@ class BasicInfoScreen : Fragment() {
             val selectedGender = listOf(txtMale, txtFemale, txtOthers).any {
                 it.currentTextColor == "#FFFFFF".toColorInt()
             }
+
             if (!selectedGender) {
                 txtOthers.error = ErrorMessages.ERROR_GENDER
                 txtOthers.requestFocus()
@@ -156,6 +162,7 @@ class BasicInfoScreen : Fragment() {
             }
 
             return isValid
+
         }
     }
 

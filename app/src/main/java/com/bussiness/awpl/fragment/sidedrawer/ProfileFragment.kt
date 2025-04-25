@@ -145,11 +145,15 @@ class ProfileFragment : Fragment() {
     private fun clickListener() {
         binding.apply {
             editIcon.setOnClickListener { openImageChooser() }
-           // btnDeleteAccount.setOnClickListener { dialogDeleteAccount() }
+            btnDeleteAccount.setOnClickListener { dialogDeleteAccount() }
             binding.rlEditProfile.setOnClickListener {
                 binding.llEditDelete.visibility = View.GONE
                 binding.llSaveCancel.visibility =View.VISIBLE
             }
+            binding.rlSave.setOnClickListener {
+                dialogACCOUNTSuccess()
+            }
+
         }
     }
 
@@ -169,6 +173,30 @@ class ProfileFragment : Fragment() {
                 dialog.dismiss()
                 dialogDeleteSuccess()
             }
+        }
+
+        dialog.apply {
+            setCancelable(false)
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+            val displayMetrics = context.resources.displayMetrics
+            val screenWidth = displayMetrics.widthPixels
+            val marginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, displayMetrics).toInt()
+            window?.setLayout(screenWidth - (2 * marginPx), ViewGroup.LayoutParams.WRAP_CONTENT)
+            show()
+        }
+    }
+
+    private fun dialogACCOUNTSuccess() {
+        val dialog = Dialog(requireContext())
+        val binding = DialogConfirmAppointmentBinding.inflate(layoutInflater)
+        dialog.setContentView(binding.root)
+
+        binding.apply {
+            tvDescription.text = "Successful"
+            description2.text = " Your profile is updated successfully."
+            btnClose.setOnClickListener { dialog.dismiss() }
+            btnOkay.setOnClickListener { dialog.dismiss() }
         }
 
         dialog.apply {

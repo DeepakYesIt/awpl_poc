@@ -46,14 +46,17 @@ class HealthJourneyAdapter(private val items: List<HealthJourneyItem>, private v
         }
 
     }
-        override fun getItemCount(): Int = items.size
+
+    override fun getItemCount(): Int = items.size
 
     inner class HealthJourneyViewHolder(val binding: ItemScheduleCallBinding) : RecyclerView.ViewHolder(binding.root) {
-
         fun bind(item: HealthJourneyItem, onScheduleCallClick: (HealthJourneyItem) -> Unit) {
            // binding.headingTxt.text = item.title
            // binding.doctorImage.setImageResource(item.imageRes)
            // binding.scheduleCallBtn.setOnClickListener { onScheduleCallClick(item) }
         }
     }
+
+
+
 }

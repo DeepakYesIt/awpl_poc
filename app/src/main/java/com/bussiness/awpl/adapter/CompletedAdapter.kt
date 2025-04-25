@@ -1,39 +1,54 @@
 package com.bussiness.awpl.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bussiness.awpl.databinding.ItemCompletedBinding
 import com.bussiness.awpl.model.AppointmentModel
 
 class CompletedAdapter(
-    private val appointments: List<AppointmentModel>,
-    private val onCheckDetailsClick: (AppointmentModel) -> Unit,
-    private val onDownloadPrescriptionClick: (AppointmentModel) -> Unit
+    private var appointments: List<AppointmentModel>,
+    private val onCheckDetailsClick: (AppointmentModel) -> Unit, private val onDownloadPrescriptionClick: (AppointmentModel) -> Unit
 ) : RecyclerView.Adapter<CompletedAdapter.CompleteViewHolder>() {
+
+    var type :Boolean = true
 
     inner class CompleteViewHolder(private val binding: ItemCompletedBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(appointment: AppointmentModel) {
             binding.apply {
-                consultationTxt.text = appointment.consultationType
-                doctorName.text = appointment.doctorName
-                dateTxt.text = appointment.appointmentDate
-                timeTxt.text = appointment.appointmentTime
-                uploadDate.text = appointment.uploadDate
-                doctorImage.setImageResource(appointment.doctorImage)
-                checkDetailBtn.setOnClickListener { onCheckDetailsClick(appointment) }
-                downloadPrescriptionBtn.setOnClickListener { onDownloadPrescriptionClick(appointment) }
+                if(type) {
+                    llAppointment.visibility = View.VISIBLE
+                    llSymptom.visibility =View.GONE
 
-                if(appointment.consultationType == "Scheduled Call Consultations"){
-                    llAppointmentDetail.visibility = ViewGroup.VISIBLE
-                    llDoctorsProfile.visibility = ViewGroup.VISIBLE
-                    llUploadDateDetails.visibility = ViewGroup.GONE
-                }else{
-                    llAppointmentDetail.visibility = ViewGroup.GONE
-                    llDoctorsProfile.visibility = ViewGroup.GONE
-                    llUploadDateDetails.visibility = ViewGroup.VISIBLE
+                //                    consultationTxt.text = appointment.consultationType
+                //                    doctorName.text = appointment.doctorName
+//                                    dateTxt.text = appointment.appointmentDate
+//                                    timeTxt.text = appointment.appointmentTime
+//                                    uploadDate.text = appointment.uploadDate
+//                                    doctorImage.setImageResource(appointment.doctorImage)
+//                                    checkDetail11.setOnClickListener { onCheckDetailsClick(appointment) }
+//                                    downloadPrescriptionBtn1.setOnClickListener {
+//                                     onDownloadPrescriptionClick(
+//                            appointment
+//                        )
+//                    }
+
+
+              //      if (appointment.consultationType == "Scheduled Call Consultations") {
+//
+//                    } else {
+//                        llAppointmentDetail.visibility = ViewGroup.GONE
+//                        llDoctorsProfile.visibility = ViewGroup.GONE
+//                        llUploadDateDetails.visibility = ViewGroup.VISIBLE
+//                    }
+
+                }
+                else{
+                    llAppointment.visibility = View.GONE
+                    llSymptom.visibility =View.VISIBLE
                 }
             }
         }
@@ -50,4 +65,11 @@ class CompletedAdapter(
     }
 
     override fun getItemCount(): Int = appointments.size
+
+    fun update(value:Boolean, appointments: List<AppointmentModel>){
+        this.type = value
+        this.appointments = appointments
+        notifyDataSetChanged()
+    }
+
 }

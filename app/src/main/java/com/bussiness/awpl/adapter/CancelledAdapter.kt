@@ -12,29 +12,36 @@ class CancelledAdapter(
 ) : RecyclerView.Adapter<CancelledAdapter.CancelledViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CancelledViewHolder {
+
         val binding = ItemCancelledBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CancelledViewHolder(binding)
+
     }
 
     override fun onBindViewHolder(holder: CancelledViewHolder, position: Int) {
+
         val appointment = appointmentList[position]
         holder.bind(appointment)
+
     }
 
     override fun getItemCount(): Int = appointmentList.size
 
-    inner class CancelledViewHolder(private val binding: ItemCancelledBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class CancelledViewHolder(private val binding: ItemCancelledBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(appointment: AppointmentModel) {
             with(binding) {
                 doctorImage.setImageResource(appointment.doctorImage)
                 doctorName.text = appointment.doctorName
                 dateAndTime.text = appointment.appointmentDate
-
                 rescheduleButton.setOnClickListener {
                     onRescheduleClick(appointment)
                 }
             }
+
         }
+
     }
+
 }

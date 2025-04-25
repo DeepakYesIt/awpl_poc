@@ -31,7 +31,7 @@ class DoctorConsultationFragment : Fragment() {
     private fun clickListeners() {
         binding.apply {
             cancelBtn.setOnClickListener { findNavController().navigate(R.id.homeFragment) }
-            proceedBtn.setOnClickListener { findNavController().navigate(R.id.appointmentBooking) }
+            proceedBtn.setOnClickListener { findNavController().navigate(R.id.homeScheduleCallFragment) }
         }
     }
 

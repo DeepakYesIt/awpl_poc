@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import android.widget.Toast
+import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -90,6 +91,7 @@ class ScheduleFragment : Fragment() {
                     txtUpcoming.setTextColor(ContextCompat.getColor(requireContext(), R.color.darkGreyColor))
                     viewUpcoming.visibility = View.VISIBLE
                     filterBtn.visibility = View.GONE
+                    upperLay.visibility = View.GONE
                     view.visibility = View.VISIBLE
                     binding.recyclerView.adapter = appointmentAdapter
                 }
@@ -98,12 +100,14 @@ class ScheduleFragment : Fragment() {
                     viewCompleted.visibility = View.VISIBLE
                     filterBtn.visibility = View.VISIBLE
                     view.visibility = View.VISIBLE
+                    upperLay.visibility = View.VISIBLE
                     binding.recyclerView.adapter = completedAdapter
                 }
                 2 -> {
                     txtCanceled.setTextColor(ContextCompat.getColor(requireContext(), R.color.darkGreyColor))
                     viewCanceled.visibility = View.VISIBLE
                     filterBtn.visibility = View.GONE
+                    upperLay.visibility = View.GONE
                     view.visibility = View.VISIBLE
                     binding.recyclerView.adapter = cancelledAdapter
                 }
@@ -143,6 +147,24 @@ class ScheduleFragment : Fragment() {
     }
 
     private fun clickListener() {
+
+        binding.scheduleCall1.setOnClickListener {
+            binding.scheduleCall1.setBackgroundResource(R.drawable.bg_four_side_corner_inner_white)
+            binding.tv2.setTextColor(android.graphics.Color.parseColor("#858484"))
+            binding.scheduleCall2.background = null
+            binding.tV1.setTextColor(android.graphics.Color.parseColor("#356598"))
+           completedAdapter.update(true,appointmentList)
+        }
+
+        binding.scheduleCall2.setOnClickListener {
+            binding.scheduleCall2.setBackgroundResource(R.drawable.bg_four_side_corner_inner_white)
+            binding.tV1.setTextColor(android.graphics.Color.parseColor("#858484"))
+            binding.scheduleCall1.background = null
+
+            binding.tv2.setTextColor(android.graphics.Color.parseColor("#356598"))
+            completedAdapter.update(false,appointmentList)
+        }
+
         binding.apply {
             txtUpcoming.setOnClickListener { selectTab(0) }
             txtCompleted.setOnClickListener { selectTab(1) }
@@ -150,18 +172,9 @@ class ScheduleFragment : Fragment() {
             btnNext.setOnClickListener { findNavController().navigate(R.id.appointmentBooking) }
             filterBtn.setOnClickListener {
                 isSelected = !isSelected // Toggle state
-
                 if (isSelected) {
-                    filterBtn.setBackgroundResource(R.drawable.button_bg)
-                    filterTxt.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-                    arrowIcon.setImageResource(R.drawable.up_arrow)
                     filterPopUp(it)
-                } else {
-                    filterBtn.setBackgroundResource(R.drawable.filter_bg)
-                    filterTxt.setTextColor(ContextCompat.getColor(requireContext(), R.color.darkGreyColor))
-                    arrowIcon.setImageResource(R.drawable.short_arrow)
                 }
-
             }
         }
     }
@@ -177,9 +190,7 @@ class ScheduleFragment : Fragment() {
         // Handle dismiss listener to reset UI
         popupWindow.setOnDismissListener {
             isSelected = false
-            binding.filterBtn.setBackgroundResource(R.drawable.filter_bg)
-            binding.filterTxt.setTextColor(ContextCompat.getColor(requireContext(), R.color.darkGreyColor))
-            binding.arrowIcon.setImageResource(R.drawable.short_arrow)
+
         }
 
         // Show popup below the clicked view

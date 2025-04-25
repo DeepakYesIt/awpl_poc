@@ -32,7 +32,10 @@ class MyPrescriptionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMyPrescriptionBinding.inflate(LayoutInflater.from(requireContext()))
-        adapter = MyPersecptionAdapter(PrepareData.filterPrescriptionsByReferred(PrepareData.getDummyPrescriptions()))
+        adapter = MyPersecptionAdapter(PrepareData.filterPrescriptionsByReferred(PrepareData.getDummyPrescriptions())){ pres->
+            findNavController().navigate(R.id.doctorChatFragment)
+
+        }
         binding.recyclerPresecption.adapter = adapter
         binding.imgBack.setOnClickListener {
             findNavController().navigateUp()

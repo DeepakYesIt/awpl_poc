@@ -5,18 +5,31 @@ import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
 import com.bussiness.awpl.databinding.FragmentWelcome3Binding
 import com.bussiness.awpl.utils.ErrorMessages
 import com.bussiness.awpl.utils.SessionManager
+import com.bussiness.awpl.viewmodel.LoginViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentWelcome3Binding? = null
     private val binding get() = _binding!!
     private var isPasswordVisible = false
+    private val loginViewModel: LoginViewModel by lazy {
+        ViewModelProvider(this)[LoginViewModel::class.java]
+    }
+
     private val sessionManager: SessionManager by lazy { SessionManager(requireContext()) }
 
     override fun onCreateView(
@@ -36,6 +49,8 @@ class LoginFragment : Fragment() {
         binding.apply {
             btnLogin.setOnClickListener {
                 if(validations()){
+
+                    loginApi()
                     findNavController().navigate(R.id.basicInfoScreen)
                     sessionManager.saveLoginState(true)
                 }
@@ -52,6 +67,24 @@ class LoginFragment : Fragment() {
 
                 // Move cursor to the end after changing input type
                 passwordEditText.setSelection(passwordEditText.text.length)
+            }
+        }
+    }
+
+    private fun loginApi(){
+        lifecycleScope.launch {
+            loginViewModel.login(binding.DSCOdeEditTxt.text.toString() , binding.passwordEditText.text.toString()).collect{
+                when(it){
+                    is NetworkResult.Success ->{
+
+                    }
+                    is NetworkResult.Error ->{
+                        
+                    }
+                    else ->{
+
+                    }
+                }
             }
         }
     }
