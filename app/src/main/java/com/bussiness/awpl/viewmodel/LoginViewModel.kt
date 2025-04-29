@@ -14,7 +14,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(private var repository: AwplRepository): ViewModel() {
 
    suspend fun login(dsCode :String, password:String) : Flow<NetworkResult<LoginModel>> {
-        repository.login(dsCode,password).onEach{
+       return repository.login(dsCode,password).onEach{
 
         }
     }

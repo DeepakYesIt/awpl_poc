@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.util.Log
 import com.business.zyvo.remote.ZyvoApi
 import com.bussiness.awpl.repository.AwplReposioryImpl
+import com.bussiness.awpl.repository.AwplRepository
 import com.bussiness.awpl.utils.AuthInterceptor
 import com.hbb20.BuildConfig
 import dagger.Module
@@ -37,7 +38,7 @@ object  NetworkModule {
 
     @Provides
     @Singleton
-    fun provideVoolayVooUserRepository(api:ZyvoApi): AwplReposioryImpl {
+    fun provideVoolayVooUserRepository(api:ZyvoApi): AwplRepository {
         return AwplReposioryImpl(api)
     }
 

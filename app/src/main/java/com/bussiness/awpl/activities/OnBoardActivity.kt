@@ -9,7 +9,9 @@ import androidx.navigation.fragment.NavHostFragment
 import com.bussiness.awpl.R
 import com.bussiness.awpl.databinding.ActivityOnBoardBinding
 import com.bussiness.awpl.utils.SessionManager
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OnBoardActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityOnBoardBinding

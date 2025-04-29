@@ -1,11 +1,15 @@
 package com.bussiness.awpl.activities
-
+import android.Manifest
+import android.provider.Settings
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
+import android.sax.RootElement
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
@@ -17,6 +21,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
@@ -36,9 +41,13 @@ import com.bussiness.awpl.BuildConfig
 import com.bussiness.awpl.R
 import com.bussiness.awpl.base.CommonUtils
 import com.bussiness.awpl.databinding.ActivityHomeBinding
+import com.bussiness.awpl.utils.LoadingUtils
 import com.bussiness.awpl.utils.SessionManager
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
@@ -138,6 +147,22 @@ class HomeActivity : AppCompatActivity() {
         }
 
     }
+
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                showSnackbar("Notification permission granted.")
+            } else {
+                if (!shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                    // User selected "Don't ask again" or denied twice
+                    showSettingsRedirectDialog()
+                } else {
+                    // Just denied once
+                    showSnackbar("Notification permission denied. You can enable it from settings.")
+                }
+            }
+        }
 
     private fun setupBottomNav() {
         binding.homeFragment.setOnClickListener {
@@ -265,7 +290,7 @@ class HomeActivity : AppCompatActivity() {
 
         perception.setOnClickListener {
             closeDrawer()
-   navController.navigate(R.id.prescription_frgament)
+           navController.navigate(R.id.prescription_frgament)
 
         }
 
@@ -335,6 +360,59 @@ class HomeActivity : AppCompatActivity() {
     private fun closeDrawer() {
         binding.drawerLayout.closeDrawer(GravityCompat.START)
 
+    }
+
+    private fun checkAndRequestNotificationPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+
+        val permission = Manifest.permission.POST_NOTIFICATIONS
+        val isGranted = ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+
+        if (isGranted) {
+            showSnackbar("Notifications already enabled.")
+            return
+        }
+
+        if (shouldShowRequestPermissionRationale(permission)) {
+            // Show rationale dialog before asking
+            showRationaleDialog {
+                requestPermissionLauncher.launch(permission)
+            }
+        } else {
+            // First time asking (or system still allows) — just request
+            requestPermissionLauncher.launch(permission)
+        }
+    }
+
+    private fun showRationaleDialog(onAccept: () -> Unit) {
+        AlertDialog.Builder(this)
+            .setTitle("Allow Notifications")
+            .setMessage("We use notifications to keep you informed with important updates. Please allow notification access.")
+            .setPositiveButton("Allow") { _, _ -> onAccept() }
+            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            .create()
+            .show()
+    }
+
+    private fun showSettingsRedirectDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Enable Notifications in Settings")
+            .setMessage("You've denied notification access. To enable it, go to app settings and allow notifications.")
+            .setPositiveButton("Open Settings") { _, _ -> openNotificationSettings() }
+            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            .create()
+            .show()
+    }
+
+    private fun openNotificationSettings() {
+        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+            putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+        }
+        startActivity(intent)
+    }
+
+    private fun showSnackbar(message: String) {
+       Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
     }
 
 }

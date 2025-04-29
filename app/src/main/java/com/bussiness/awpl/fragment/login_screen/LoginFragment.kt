@@ -1,7 +1,9 @@
 package com.bussiness.awpl.fragment.login_screen
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +15,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
+import com.bussiness.awpl.activities.HomeActivity
 import com.bussiness.awpl.databinding.FragmentWelcome3Binding
 import com.bussiness.awpl.utils.ErrorMessages
+import com.bussiness.awpl.utils.LoadingUtils
 import com.bussiness.awpl.utils.SessionManager
 import com.bussiness.awpl.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,18 +28,18 @@ import kotlinx.coroutines.launch
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentWelcome3Binding? = null
+
     private val binding get() = _binding!!
+
     private var isPasswordVisible = false
+
     private val loginViewModel: LoginViewModel by lazy {
         ViewModelProvider(this)[LoginViewModel::class.java]
     }
 
     private val sessionManager: SessionManager by lazy { SessionManager(requireContext()) }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentWelcome3Binding.inflate(inflater, container, false)
         return binding.root
     }
@@ -49,18 +53,17 @@ class LoginFragment : Fragment() {
         binding.apply {
             btnLogin.setOnClickListener {
                 if(validations()){
-
                     loginApi()
-                    findNavController().navigate(R.id.basicInfoScreen)
-                    sessionManager.saveLoginState(true)
                 }
             }
+
             eyeIcon.setOnClickListener {
                 isPasswordVisible = !isPasswordVisible
                 if (isPasswordVisible) {
                     passwordEditText.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                     eyeIcon.setImageResource(R.drawable.show_pass_ic)
-                } else {
+                }
+                else {
                     passwordEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                     eyeIcon.setImageResource(R.drawable.hide_pas_ic)
                 }
@@ -72,17 +75,39 @@ class LoginFragment : Fragment() {
     }
 
     private fun loginApi(){
+//        LoaderManager.showDialog(requireContext(), isCancelable = false)
+
+        LoadingUtils.showDialog(requireContext(),false)
+
         lifecycleScope.launch {
             loginViewModel.login(binding.DSCOdeEditTxt.text.toString() , binding.passwordEditText.text.toString()).collect{
+
                 when(it){
                     is NetworkResult.Success ->{
+                        val data = it.data
+                        val sessionManager = SessionManager(requireContext())
+                        data?.token?.let { it1 ->
+                            Log.d("TESTING_TOKEN","TOKEN ISNID  "+it1)
+                            sessionManager.setAuthToken(it1) }
+                        data?.userId?.let { it1-> sessionManager.setUserId(it1)}
+                        data?.name?.let { it1-> sessionManager.setUserName(it1) }
+                        LoadingUtils.hideDialog()
+                        if(data?.basic_information ==0) {
+                            findNavController().navigate(R.id.basicInfoScreen)
+                            sessionManager.saveLoginState(true)
+                        }
+                        else{
+                            val intent = Intent(requireContext(),HomeActivity::class.java)
+                            startActivity(intent)
+                        }
 
                     }
                     is NetworkResult.Error ->{
-                        
+                        LoadingUtils.hideDialog()
+                        LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
+
                     }
                     else ->{
-
                     }
                 }
             }
@@ -109,9 +134,10 @@ class LoginFragment : Fragment() {
         }
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+
 }

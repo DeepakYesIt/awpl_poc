@@ -3,18 +3,24 @@ package com.bussiness.awpl.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bussiness.awpl.R
 import com.bussiness.awpl.databinding.ItemYourDoctorBinding
+import com.bussiness.awpl.model.DoctorModel
 import com.bussiness.awpl.model.SummaryModel
+import com.bussiness.awpl.utils.AppConstant
 
-class YourDoctorAdapter(private val summaryList: List<SummaryModel>) :
+class YourDoctorAdapter(private var summaryList: MutableList<DoctorModel>) :
     RecyclerView.Adapter<YourDoctorAdapter.DoctorViewHolder>() {
 
     inner class DoctorViewHolder(private val binding: ItemYourDoctorBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(summaryModel: SummaryModel) {
-            binding.doctorName.text = summaryModel.name
-            binding.doctorExperience.text = summaryModel.experience
-            binding.doctorImage.setImageResource(summaryModel.imageResId)
+        fun bind(summaryModel: DoctorModel) {
+            binding.doctorName.text = summaryModel.doctorName
+            binding.doctorExperience.text = summaryModel.doctorImage
+            Glide.with(binding.root.context).load(AppConstant.Base_URL+summaryModel.doctorImage).placeholder(
+                R.drawable.lady_dc).into(binding.doctorImage)
+
         }
     }
 
@@ -28,4 +34,10 @@ class YourDoctorAdapter(private val summaryList: List<SummaryModel>) :
     }
 
     override fun getItemCount(): Int = summaryList.size
+
+
+    fun updateAdapter(summaryList: MutableList<DoctorModel>){
+        this.summaryList = summaryList
+        notifyDataSetChanged()
+    }
 }

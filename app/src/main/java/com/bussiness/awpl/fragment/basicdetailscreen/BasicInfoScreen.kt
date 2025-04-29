@@ -2,8 +2,10 @@ package com.bussiness.awpl.fragment.basicdetailscreen
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,14 +17,29 @@ import androidx.navigation.fragment.findNavController
 import com.bussiness.awpl.R
 import com.bussiness.awpl.databinding.FragmentBasicInfoScreenBinding
 import androidx.core.graphics.toColorInt
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.activities.HomeActivity
 import com.bussiness.awpl.utils.ErrorMessages
+import com.bussiness.awpl.utils.LoadingUtils
+import com.bussiness.awpl.viewmodel.BasicInfoViewModel
+import com.bussiness.awpl.viewmodel.LoginViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class BasicInfoScreen : Fragment() {
 
     private var _binding: FragmentBasicInfoScreenBinding? = null
     private val binding get() = _binding!!
     private var type: String? = null
+    private var selectedGender :String =""
+
+    private val basicInfoViewModel: BasicInfoViewModel by lazy {
+        ViewModelProvider(this)[BasicInfoViewModel::class.java]
+    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentBasicInfoScreenBinding.inflate(inflater, container, false)
@@ -43,6 +60,7 @@ class BasicInfoScreen : Fragment() {
             binding.backIcon.visibility = View.GONE
         }
         clickListener()
+
         return binding.root
     }
 
@@ -64,15 +82,49 @@ class BasicInfoScreen : Fragment() {
     private fun clickListener() {
         binding.btnNext.setOnClickListener {
             if (validateFields()) {
-                if (type == "forHome") {
-                    // Navigate to the second screen if TYPE was passed
-                    findNavController().navigate(R.id.scheduledCallConsultation2)
-                } else {
-                    // Default
-                    val intent = Intent(requireContext(), HomeActivity::class.java)
-                    startActivity(intent)
-                }
+                callingBasicInfoApi()
+
             }
+        }
+    }
+
+    private fun callingBasicInfoApi(){
+        lifecycleScope.launch {
+             selectedGender = when {
+                binding.txtMale.currentTextColor == Color.parseColor("#FFFFFF") -> "male"
+                binding.txtFemale.currentTextColor == Color.parseColor("#FFFFFF") -> "female"
+                binding.txtOthers.currentTextColor == Color.parseColor("#FFFFFF") -> "others"
+                else -> "" // or "None"
+            }
+            Log.d("TESTING","Selected Gender "+selectedGender)
+               LoadingUtils.showDialog(requireContext(),false)
+          //  name: String, height: String, weight: String, age: String, gender: String
+            basicInfoViewModel.basicInfo(binding.etName.text.toString(),binding.etHeight.text.toString(),
+                binding.etweight.text.toString(),binding.etAge.text.toString(),selectedGender
+                ).collect{
+                    when(it){
+                        is NetworkResult.Success ->{
+                            LoadingUtils.hideDialog()
+                              LoadingUtils.showSuccessDialog(requireContext(),it.data.toString()){
+                                  if (type == "forHome") {
+                                      findNavController().navigate(R.id.scheduledCallConsultation2)
+                                  } else {
+                                      // Default
+                                      val intent = Intent(requireContext(), HomeActivity::class.java)
+                                      startActivity(intent)
+                                  }
+                              }
+
+                        }
+                        is NetworkResult.Error ->{
+                                LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
+                        }
+                        else ->{
+
+                        }
+                    }
+            }
+
         }
     }
 
@@ -97,7 +149,7 @@ class BasicInfoScreen : Fragment() {
         feetPicker.value = feetMatch ?: 5
         inchPicker.value = inchMatch ?: 6
 
-       val dialog= AlertDialog.Builder(requireContext())
+       val dialog = AlertDialog.Builder(requireContext())
             .setTitle("Select Height")
             .setView(dialogView)
             .setPositiveButton("OK") { _, _ ->
@@ -136,8 +188,7 @@ class BasicInfoScreen : Fragment() {
                 return  false
             }
             if (etHeight.text.toString().isEmpty()) {
-                etHeight.error = ErrorMessages.ERROR_HEIGHT
-                etHeight.requestFocus()
+               LoadingUtils.showErrorDialog(requireContext(),"Height selection is required")
                 return false
             }
             if (etweight.text.toString().isEmpty()) {

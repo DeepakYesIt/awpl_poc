@@ -13,6 +13,7 @@
         android:background="@drawable/rounded_corner"
         android:scaleType="centerCrop"
         android:src="@drawable/lady_dc"
+
         app:layout_constraintBottom_toTopOf="@+id/tvTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -33,5 +34,16 @@
         app:layout_constraintStart_toStartOf="@+id/imgThumbnail"
         app:layout_constraintEnd_toEndOf="@+id/imgThumbnail"
         app:layout_constraintTop_toBottomOf="@+id/imgThumbnail" />
+
+
+    <ImageView
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:src="@drawable/ic_play_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

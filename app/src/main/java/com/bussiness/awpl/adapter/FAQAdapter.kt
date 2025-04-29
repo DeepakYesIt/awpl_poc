@@ -8,7 +8,7 @@ import com.bussiness.awpl.R
 import com.bussiness.awpl.databinding.ItemFaqBinding
 import com.bussiness.awpl.model.FAQItem
 
-class FAQAdapter(private val faqList: List<FAQItem>) : RecyclerView.Adapter<FAQAdapter.FAQViewHolder>() {
+class FAQAdapter(private var faqList: List<FAQItem>) : RecyclerView.Adapter<FAQAdapter.FAQViewHolder>() {
 
     inner class FAQViewHolder(private val binding: ItemFaqBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(faqItem: FAQItem, position: Int) {
@@ -40,4 +40,9 @@ class FAQAdapter(private val faqList: List<FAQItem>) : RecyclerView.Adapter<FAQA
     }
 
     override fun getItemCount(): Int = faqList.size
+
+    fun updateAdapter(faqList: List<FAQItem>){
+        this.faqList = faqList
+        notifyDataSetChanged()
+    }
 }

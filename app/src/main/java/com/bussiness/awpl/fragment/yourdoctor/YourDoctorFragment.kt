@@ -9,18 +9,34 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
 import com.bussiness.awpl.activities.HomeActivity
 import com.bussiness.awpl.adapter.SummaryAdapter
 import com.bussiness.awpl.adapter.YourDoctorAdapter
 import com.bussiness.awpl.databinding.FragmentYourDoctorBinding
 import com.bussiness.awpl.model.SummaryModel
+import com.bussiness.awpl.utils.LoadingUtils
+import com.bussiness.awpl.viewmodel.DoctorViewModel
+import com.bussiness.awpl.viewmodel.LoginViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class YourDoctorFragment : Fragment() {
 
     private var _binding: FragmentYourDoctorBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var  adapter :YourDoctorAdapter
+    private val viewModel: DoctorViewModel by lazy {
+        ViewModelProvider(this)[DoctorViewModel::class.java]
+    }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,30 +49,39 @@ class YourDoctorFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
+        callingDoctorApi()
     }
 
     private fun setupRecyclerView() {
-        val doctorList = listOf(
-            SummaryModel(R.drawable.doctor_image, "Doctor’s name", "Experience: 2 Years"),
-            SummaryModel(R.drawable.women_doctor, "Doctor’s name", "Experience: 2 Years"),
-            SummaryModel(R.drawable.doctor_icon2, "Doctor’s name", "Experience: 2 Years"),
-            SummaryModel(R.drawable.portraite_doctor, "Doctor’s name", "Experience: 2 Years"),
-            SummaryModel(R.drawable.doctor_image, "Doctor’s name", "Experience: 2 Years"),
-            SummaryModel(R.drawable.women_doctor, "Doctor’s name", "Experience: 2 Years"),
-            SummaryModel(R.drawable.doctor_icon2, "Doctor’s name", "Experience: 2 Years"),
-            SummaryModel(R.drawable.portraite_doctor, "Doctor’s name", "Experience: 2 Years"),
-            SummaryModel(R.drawable.doctor_image, "Doctor’s name", "Experience: 2 Years"),
-            SummaryModel(R.drawable.women_doctor, "Doctor’s name", "Experience: 2 Years"),
-            SummaryModel(R.drawable.doctor_image, "Doctor’s name", "Experience: 2 Years")
-        )
 
-        val adapter = YourDoctorAdapter(doctorList)
+
+         adapter = YourDoctorAdapter(mutableListOf())
         binding.doctorRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             this.adapter = adapter
         }
     }
 
+    private fun callingDoctorApi(){
+        lifecycleScope.launch {
+            LoadingUtils.showDialog(requireContext(),false)
+            viewModel.doctorList().collect{
+                when(it){
+                    is NetworkResult.Success ->{
+                        LoadingUtils.hideDialog()
+                        it.data?.let { it1 -> adapter.updateAdapter(it1) }
+                    }
+                    is NetworkResult.Error ->{
+                        LoadingUtils.hideDialog()
+                        LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
+                    }
+                    else->{
+
+                    }
+                }
+            }
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

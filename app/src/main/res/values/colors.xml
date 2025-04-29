@@ -8,4 +8,5 @@
     <color name="darkGreyColor">#363636</color>
     <color name="blue">#356598</color>
     <color name="orange">#F47820</color>
+    <color name="wallet_dim_foreground_disabled_holo_dark">#ff555555</color>
 </resources>

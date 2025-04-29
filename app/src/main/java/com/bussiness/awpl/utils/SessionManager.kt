@@ -70,11 +70,28 @@ class SessionManager(private val context: Context) {
         preferences.edit {
             putString(AppConstant.AuthToken, token)
         }
-
-
     }
 
+    fun setUserId(userId:Int){
+        preferences.edit {
+            putInt(AppConstant.UserId, userId)
+        }
+    }
+
+    fun setUserName(name :String){
+        preferences.edit {
+            putString(AppConstant.NAME, name)
+        }
+    }
+
+    fun getUserName():String?{
+        return preferences.getString(AppConstant.AuthToken,"")
+    }
+
+    fun getUserId() :Int{
+        return preferences.getInt(AppConstant.UserId,-1)
+    }
     fun getAuthToken():String?{
-        return preferences?.getString(AppConstant.AuthToken,"")
+        return preferences.getString(AppConstant.AuthToken,"")
     }
 }

@@ -28,6 +28,31 @@ interface ZyvoApi {
     suspend fun login(@Field("ds_code")dsCode :String,@Field("password")password :String) :Response<JsonObject>
 
 
+    @POST("basicInfo")
+    @FormUrlEncoded
+    suspend fun basicInfo(@Field("name") name :String,
+                          @Field("height") height :String,
+                          @Field("weight")weight :String,
+                          @Field("age") age:String,
+                          @Field("gender") gender :String
+                          ) : Response<JsonObject>
 
+    @POST("termsCondition")
+    suspend fun termsCondition() : Response<JsonObject>
+
+    @POST("refundPolicy")
+    suspend fun refundPolicy() : Response<JsonObject>
+
+    @POST("privacyPolicy")
+    suspend fun privacyPolicy() : Response<JsonObject>
+
+    @POST("faq")
+    suspend fun faq() : Response<JsonObject>
+
+    @POST("videoGallery")
+    suspend fun videoGallery() : Response<JsonObject>
+
+    @POST("yourDoctor")
+    suspend fun doctor() : Response<JsonObject>
 
 }
