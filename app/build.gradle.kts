@@ -89,16 +89,20 @@ dependencies {
     implementation (libs.material.v1120)
 
     // hilt
-    implementation("com.google.dagger:hilt-android:2.48")
-    kapt("com.google.dagger:hilt-compiler:2.48")
+
     implementation("com.google.dagger:hilt-android:2.52")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     kapt("com.google.dagger:hilt-android-compiler:2.52")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
     implementation("com.hbb20:ccp:2.6.0")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("com.squareup.okhttp3:okhttp:5.0.0-alpha.10")
     implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10")
     implementation ("com.squareup.okhttp3:okhttp:4.9.1")
-    implementation("implementation 'com.facebook.shimmer:shimmer:0.5.0")
+    implementation ("com.airbnb.android:lottie:3.4.0")
+
+    implementation ("com.airbnb.android:lottie:3.4.0")
+
+
 }
