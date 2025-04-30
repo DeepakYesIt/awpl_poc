@@ -104,5 +104,7 @@ dependencies {
 
     implementation ("com.airbnb.android:lottie:3.4.0")
 
+    implementation("com.razorpay:checkout:1.6.40")
+
 
 }
