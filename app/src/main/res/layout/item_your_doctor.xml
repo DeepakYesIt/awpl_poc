@@ -27,7 +27,7 @@
                 android:id="@+id/doctorImage"
                 android:layout_width="@dimen/_100sdp"
                 android:layout_height="@dimen/_100sdp"
-                android:src="@drawable/doctor_icon2"
+                android:src="@drawable/ic_not_found_img"
                 app:shapeAppearanceOverlay="@style/doctorImgBg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

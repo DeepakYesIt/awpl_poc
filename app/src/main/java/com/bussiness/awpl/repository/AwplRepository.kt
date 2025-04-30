@@ -11,6 +11,9 @@ import retrofit2.Response
 import retrofit2.http.Field
 
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.http.Part
 
 interface AwplRepository {
 
@@ -37,5 +40,12 @@ interface AwplRepository {
     suspend fun doctor() : Flow<NetworkResult<MutableList<DoctorModel>>>
 
     suspend fun getMyProfile() : Flow<NetworkResult<MyprofileModel>>
-
+    suspend fun updateProfile(
+        name : RequestBody,
+        height : RequestBody,
+       weight : RequestBody,
+         age : RequestBody,
+       gender : RequestBody,
+       profileImage: MultipartBody.Part?
+    ) : Flow<NetworkResult<String>>
 }

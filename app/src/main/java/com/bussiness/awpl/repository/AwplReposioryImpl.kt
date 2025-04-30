@@ -14,10 +14,13 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.HttpException
 import retrofit2.Response
+import retrofit2.http.Part
 import java.io.IOException
 import javax.inject.Inject
 
@@ -266,7 +269,7 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
 
     override suspend fun doctor(): Flow<NetworkResult<MutableList<DoctorModel>>> = flow {
         try {
-            api.videoGallery().apply {
+            api.doctor().apply {
                 if (isSuccessful) {
                     body()?.let { resp ->
                         if (resp.has("status") && resp.get("status").asBoolean) {
@@ -314,6 +317,45 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
                             val obj = resp.get("data").asJsonObject
                             val model: MyprofileModel = Gson().fromJson(obj.toString(), MyprofileModel::class.java)
                             emit(NetworkResult.Success(model))
+                        }
+                        else {
+                            emit(NetworkResult.Error(resp.get("message").asString))
+                        }
+                    } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
+                } else {
+                    try {
+                        val jsonObj = this.errorBody()?.string()?.let { JSONObject(it) }
+                        emit(
+                            NetworkResult.Error(
+                                jsonObj?.getString("message") ?: AppConstant.unKnownError
+                            )
+                        )
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        emit(NetworkResult.Error(AppConstant.unKnownError))
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            emit(NetworkResult.Error(ErrorHandler.emitError(e)))
+        }
+    }
+
+    override suspend fun updateProfile(
+        name : RequestBody,
+        height : RequestBody,
+        weight : RequestBody,
+        age : RequestBody,
+        gender : RequestBody,
+        profileImage: MultipartBody.Part?
+    ): Flow<NetworkResult<String>> =flow{
+        try {
+            api.updateProfile(name, height, weight, age, gender, profileImage).apply {
+                if (isSuccessful) {
+                    body()?.let { resp ->
+                        if (resp.has("status") && resp.get("status").asBoolean) {
+                            val obj = resp.get("message").asString
+                            emit(NetworkResult.Success(obj))
                         }
                         else {
                             emit(NetworkResult.Error(resp.get("message").asString))

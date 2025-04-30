@@ -58,5 +58,16 @@ interface ZyvoApi {
     @POST("myProfile")
     suspend fun getMyProfile() : Response<JsonObject>
 
+    @POST("updateProfile")
+    @Multipart
+    suspend fun updateProfile(
+        @Part("name")name :RequestBody,
+        @Part("height")height :RequestBody,
+        @Part ("weight") weight : RequestBody,
+        @Part ("age") age : RequestBody,
+        @Part ("gender") gender : RequestBody,
+        @Part profileImage: MultipartBody.Part?
+        ) : Response<JsonObject>
+
 
 }

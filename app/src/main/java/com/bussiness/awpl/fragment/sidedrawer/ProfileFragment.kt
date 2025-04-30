@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
@@ -33,25 +34,49 @@ import java.io.IOException
 import androidx.core.net.toUri
 import androidx.core.content.edit
 import androidx.core.graphics.toColorInt
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
 import com.bussiness.awpl.base.CommonUtils
 import com.bussiness.awpl.databinding.DialogCancelAppointmentBinding
 import com.bussiness.awpl.databinding.DialogConfirmAppointmentBinding
 import com.bussiness.awpl.databinding.DialogLogoutBinding
+import com.bussiness.awpl.utils.AppConstant
+import com.bussiness.awpl.utils.ErrorMessages
+import com.bussiness.awpl.utils.LoadingUtils
+import com.bussiness.awpl.utils.MultipartUtil
+import com.bussiness.awpl.viewmodel.MyProfileViewModel
+import com.bussiness.awpl.viewmodel.MyprofileModel
+import com.bussiness.awpl.viewmodel.PrivacyViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.http.Multipart
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private val PREFS_NAME = "ProfilePrefs"
     private val IMAGE_URI_KEY = "profile_image_uri"
+    private var imageProfileMultiPart :MultipartBody.Part? = null
+    private val viewModel: MyProfileViewModel by lazy {
+        ViewModelProvider(this)[MyProfileViewModel::class.java]
+    }
 
     private val galleryLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let {
             binding.profileImage.setImageURI(it)
+            imageProfileMultiPart = MultipartUtil.uriToMultipart(requireContext(),it,"profileImage")
+
             saveImageUri(it.toString()) // Save URI to SharedPreferences
         }
     }
@@ -64,6 +89,7 @@ class ProfileFragment : Fragment() {
             bitmap?.let {
                 val imageUri = saveBitmapToInternalStorage(it) // Save bitmap & get URI
                 binding.profileImage.setImageURI(imageUri)
+                imageProfileMultiPart = MultipartUtil.uriToMultipart(requireContext(),imageUri,"profileImage")
                 saveImageUri(imageUri.toString())
             }
         }
@@ -74,8 +100,10 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        callingProfileApi()
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -84,7 +112,9 @@ class ProfileFragment : Fragment() {
 
         textViews.forEach { textView ->
             textView.setOnClickListener {
-                updateSelection(textView, textViews)
+                if(binding.llEditDelete.visibility == View.GONE) {
+                    updateSelection(textView, textViews)
+                }
             }
         }
         binding.etHeight.setOnClickListener {
@@ -94,9 +124,78 @@ class ProfileFragment : Fragment() {
         clickListener()
     }
 
-    private fun showHeightPickerDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_height_picker, null)
+    private fun callingProfileApi(){
+        lifecycleScope.launch {
+            LoadingUtils.showDialog(requireContext(),false)
+            viewModel.myProfile().collect{
+                when(it){
+                    is NetworkResult.Success ->{
+                        LoadingUtils.hideDialog()
+                        it.data?.let { it1 -> settingDataToUi(it1) }
+                    }
+                    is NetworkResult.Error ->{
+                        LoadingUtils.hideDialog()
+                        LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
+                    }
+                    else -> {
 
+                    }
+                }
+            }
+        }
+    }
+
+    private fun settingDataToUi(data: MyprofileModel) {
+             binding.apply {
+                 data.name?.let {
+                     etFullName.text =data.name.toString()
+                     etName.setText(data.name)
+                 }
+                 data.email?.let {
+                     etEmail.text = it
+                 }
+                 data.contact_no?.let {
+                     etPhoneNumber.text =it
+                 }
+                 data.height?.let {
+                     etHeight.text = it
+                 }
+                 data.weight?.let {
+                     etweight.setText(it)
+                 }
+                 data.age.let {
+                       etAge.setText(it.toString())
+                 }
+                 val textViews = listOf(binding.txtMale, binding.txtFemale, binding.txtOthers)
+                 data.gender?.let {
+                     when(it){
+                         "male" ->{
+                             updateSelection(binding.txtMale, textViews)
+                         }
+                         "female" ->{
+                             updateSelection(binding.txtFemale, textViews)
+                         }
+                         "others"->{
+                             updateSelection(binding.txtOthers, textViews)
+                         }
+                     }
+                 }
+                 Glide.with(requireContext()).load(AppConstant.Base_URL+ data.profile_path?.let {
+                     ensureStartsWithSlash(
+                         it
+                     )
+                 }).placeholder(R.drawable.ic_not_found_img).into(profileImage)
+
+             }
+
+    }
+
+    fun ensureStartsWithSlash(path: String): String {
+        return if (path.startsWith("/")) path else "/$path"
+    }
+    private fun showHeightPickerDialog() {
+
+        val dialogView = layoutInflater.inflate(R.layout.dialog_height_picker, null)
         val feetPicker = dialogView.findViewById<NumberPicker>(R.id.feetPicker)
         val inchPicker = dialogView.findViewById<NumberPicker>(R.id.inchPicker)
 
@@ -149,13 +248,116 @@ class ProfileFragment : Fragment() {
             binding.rlEditProfile.setOnClickListener {
                 binding.llEditDelete.visibility = View.GONE
                 binding.llSaveCancel.visibility =View.VISIBLE
+                enableAllEdlitText()
             }
             binding.rlSave.setOnClickListener {
-                dialogACCOUNTSuccess()
+                if(validateFields()) {
+                    callingProfileSaveApi()
+                }
             }
 
         }
     }
+
+    private fun validateFields(): Boolean {
+        binding.apply {
+            var isValid = true
+
+            if (etName.text.toString().isEmpty()) {
+                etName.error = ErrorMessages.ERROR_NAME
+                etName.requestFocus()
+                return  false
+            }
+            if (etHeight.text.toString().isEmpty()) {
+                LoadingUtils.showErrorDialog(requireContext(),"Height selection is required")
+                return false
+            }
+            if (etweight.text.toString().isEmpty()) {
+                etweight.error = ErrorMessages.ERROR_WEIGHT
+                etweight.requestFocus()
+                return false
+            }
+            if (etAge.text.toString().isEmpty()) {
+                etAge.error = ErrorMessages.ERROR_AGE
+                etAge.requestFocus()
+                return false
+            }
+
+            val selectedGender = listOf(txtMale, txtFemale, txtOthers).any {
+                it.currentTextColor == "#FFFFFF".toColorInt()
+            }
+
+            if (!selectedGender) {
+                txtOthers.error = ErrorMessages.ERROR_GENDER
+                txtOthers.requestFocus()
+                return false
+            }
+
+            return isValid
+
+        }
+    }
+
+
+
+    private fun callingProfileSaveApi(){
+        lifecycleScope.launch {
+            var fullName = MultipartUtil.stringToRequestBody(binding.etName.text.toString())
+            var height = MultipartUtil.stringToRequestBody(binding.etHeight.text.toString())
+            var weight = MultipartUtil.stringToRequestBody(binding.etweight.text.toString())
+            var age = MultipartUtil.stringToRequestBody(binding.etAge.text.toString())
+            var selectedGender = when {
+                binding.txtMale.currentTextColor == Color.parseColor("#FFFFFF") -> "male"
+                binding.txtFemale.currentTextColor == Color.parseColor("#FFFFFF") -> "female"
+                binding.txtOthers.currentTextColor == Color.parseColor("#FFFFFF") -> "others"
+                else -> "" // or "None"
+            }
+            var gender = MultipartUtil.stringToRequestBody(selectedGender)
+
+           LoadingUtils.showDialog(requireContext(),false)
+            viewModel.updateProfile(fullName,height,weight,age,gender,imageProfileMultiPart).collect{
+                when(it){
+                    is NetworkResult.Success ->{
+                        LoadingUtils.hideDialog()
+                        binding.llEditDelete.visibility =View.VISIBLE
+                        binding.llSaveCancel.visibility =View.VISIBLE
+                        disableAllEdlitText()
+                        dialogACCOUNTSuccess()
+                    }
+                    is NetworkResult.Error ->{
+                        LoadingUtils.hideDialog()
+                        LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
+                    }
+                    else ->{
+
+                    }
+                }
+            }
+        }
+
+    }
+
+
+
+
+
+    private fun enableAllEdlitText(){
+        binding.apply {
+            etName.isEnabled = true
+            etHeight.isEnabled = true
+            etweight.isEnabled = true
+            etAge.isEnabled = true
+        }
+    }
+    private fun disableAllEdlitText(){
+        binding.apply {
+            etName.isEnabled = false
+            etHeight.isEnabled = false
+            etweight.isEnabled = false
+            etAge.isEnabled = false
+        }
+    }
+
 
     @SuppressLint("SetTextI18n")
     private fun dialogDeleteAccount() {
@@ -314,6 +516,8 @@ class ProfileFragment : Fragment() {
                 val inputStream = requireContext().contentResolver.openInputStream(uri)
                 val bitmap = BitmapFactory.decodeStream(inputStream)
                 binding.profileImage.setImageBitmap(bitmap) // Use bitmap instead of URI
+                imageProfileMultiPart = MultipartUtil.uriToMultipart(requireContext(),uri,"profileImage")
+
                 inputStream?.close()
             } catch (e: Exception) {
                 e.printStackTrace()

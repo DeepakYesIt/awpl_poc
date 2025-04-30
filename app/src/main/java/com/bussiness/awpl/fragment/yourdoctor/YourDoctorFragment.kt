@@ -2,6 +2,7 @@ package com.bussiness.awpl.fragment.yourdoctor
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +32,7 @@ class YourDoctorFragment : Fragment() {
     private var _binding: FragmentYourDoctorBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var  adapter :YourDoctorAdapter
+    private lateinit var  adapterDoctor :YourDoctorAdapter
     private val viewModel: DoctorViewModel by lazy {
         ViewModelProvider(this)[DoctorViewModel::class.java]
     }
@@ -54,11 +55,11 @@ class YourDoctorFragment : Fragment() {
 
     private fun setupRecyclerView() {
 
+        adapterDoctor = YourDoctorAdapter(mutableListOf())
 
-         adapter = YourDoctorAdapter(mutableListOf())
         binding.doctorRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            this.adapter = adapter
+            adapter = adapterDoctor
         }
     }
 
@@ -69,7 +70,12 @@ class YourDoctorFragment : Fragment() {
                 when(it){
                     is NetworkResult.Success ->{
                         LoadingUtils.hideDialog()
-                        it.data?.let { it1 -> adapter.updateAdapter(it1) }
+                        Log.d("TESTING_DOCTOR",it.data?.size.toString())
+                        it.data?.let {
+                            Log.d("TESTING_DOCTOR",it.size.toString())
+                          adapterDoctor.updateAdapter(it)
+
+                        }
                     }
                     is NetworkResult.Error ->{
                         LoadingUtils.hideDialog()

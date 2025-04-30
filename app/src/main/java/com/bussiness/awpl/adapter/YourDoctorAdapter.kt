@@ -1,5 +1,6 @@
 package com.bussiness.awpl.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -17,9 +18,13 @@ class YourDoctorAdapter(private var summaryList: MutableList<DoctorModel>) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(summaryModel: DoctorModel) {
             binding.doctorName.text = summaryModel.doctorName
-            binding.doctorExperience.text = summaryModel.doctorImage
-            Glide.with(binding.root.context).load(AppConstant.Base_URL+summaryModel.doctorImage).placeholder(
-                R.drawable.lady_dc).into(binding.doctorImage)
+            binding.doctorExperience.text = summaryModel.experience_yrs
+            summaryModel.doctorImage?.let {
+                Glide.with(binding.root.context)
+                    .load(AppConstant.Base_URL + summaryModel.doctorImage).placeholder(
+                    R.drawable.lady_dc
+                ).into(binding.doctorImage)
+            }
 
         }
     }
@@ -38,6 +43,7 @@ class YourDoctorAdapter(private var summaryList: MutableList<DoctorModel>) :
 
     fun updateAdapter(summaryList: MutableList<DoctorModel>){
         this.summaryList = summaryList
+        Log.d("TESTING_DOCTOR","Inside the summary list "+summaryList.size.toString())
         notifyDataSetChanged()
     }
 }

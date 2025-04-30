@@ -6,4 +6,5 @@ object AppConstant {
     val AuthToken: String = "AUTH_TOKEN"
     val unKnownError = "There was an unknown error. Check your connection, and try again."
     val UserId ="user_id"
+    var IMAGE ="IMAGE"
 }

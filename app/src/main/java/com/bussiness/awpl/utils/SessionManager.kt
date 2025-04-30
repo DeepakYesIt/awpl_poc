@@ -1,7 +1,12 @@
 package com.bussiness.awpl.utils
 
+import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import java.util.Locale
 import androidx.core.content.edit
 
@@ -83,9 +88,18 @@ class SessionManager(private val context: Context) {
             putString(AppConstant.NAME, name)
         }
     }
+    fun setUserImage(url :String){
+        preferences.edit {
+            putString(AppConstant.IMAGE, url)
+        }
+    }
+
+    fun getUserImage():String{
+        return preferences.getString(AppConstant.IMAGE,"")?:""
+    }
 
     fun getUserName():String?{
-        return preferences.getString(AppConstant.AuthToken,"")
+        return preferences.getString(AppConstant.NAME,"")
     }
 
     fun getUserId() :Int{
@@ -93,5 +107,18 @@ class SessionManager(private val context: Context) {
     }
     fun getAuthToken():String?{
         return preferences.getString(AppConstant.AuthToken,"")
+    }
+
+    fun isNotificationPermissionGranted(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // On Android 13+ → check POST_NOTIFICATIONS permission
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            // On Android 12 and below → check if user manually disabled notifications
+            NotificationManagerCompat.from(context).areNotificationsEnabled()
+        }
     }
 }

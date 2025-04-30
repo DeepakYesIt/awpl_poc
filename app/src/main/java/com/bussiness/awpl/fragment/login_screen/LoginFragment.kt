@@ -17,8 +17,10 @@ import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
 import com.bussiness.awpl.activities.HomeActivity
 import com.bussiness.awpl.databinding.FragmentWelcome3Binding
+import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.ErrorMessages
 import com.bussiness.awpl.utils.LoadingUtils
+import com.bussiness.awpl.utils.MultipartUtil
 import com.bussiness.awpl.utils.SessionManager
 import com.bussiness.awpl.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,12 +29,10 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
 
+
     private var _binding: FragmentWelcome3Binding? = null
-
     private val binding get() = _binding!!
-
     private var isPasswordVisible = false
-
     private val loginViewModel: LoginViewModel by lazy {
         ViewModelProvider(this)[LoginViewModel::class.java]
     }
@@ -91,7 +91,12 @@ class LoginFragment : Fragment() {
                             sessionManager.setAuthToken(it1) }
                         data?.userId?.let { it1-> sessionManager.setUserId(it1)}
                         data?.name?.let { it1-> sessionManager.setUserName(it1) }
+                        data?.profile_path?.let {
+                            it1-> sessionManager.setUserImage(AppConstant.Base_URL+ MultipartUtil.ensureStartsWithSlash(it1))
+                        }
+                        Log.d("TESTING_NAME",sessionManager.getUserName().toString())
                         LoadingUtils.hideDialog()
+                        sessionManager.saveLoginState(true)
                         if(data?.basic_information ==0) {
                             findNavController().navigate(R.id.basicInfoScreen)
                             sessionManager.saveLoginState(true)

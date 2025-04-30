@@ -17,6 +17,7 @@ import org.json.JSONObject
 class PaytmActivity : AppCompatActivity(), PaymentResultWithDataListener {
 
     var amt :String =""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -26,11 +27,10 @@ class PaytmActivity : AppCompatActivity(), PaymentResultWithDataListener {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-       paymentWork()
+        paymentWork()
     }
 
-    fun paymentWork(){
+    private fun paymentWork(){
         Checkout.preload(applicationContext)
         val co = Checkout()
         // apart from setting it in AndroidManifest.xml, keyId can also be set
@@ -49,17 +49,14 @@ class PaytmActivity : AppCompatActivity(), PaymentResultWithDataListener {
        }catch (e:Exception){
            Log.d("TAG",e.message.toString())
        }
-
     }
 
     override fun onPaymentSuccess(p0: String?, p1: PaymentData?) {
-
     }
 
     
 
     override fun onPaymentError(p0: Int, p1: String?, p2: PaymentData?) {
-
     }
 
 
