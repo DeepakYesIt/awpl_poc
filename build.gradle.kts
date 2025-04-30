@@ -14,6 +14,7 @@ buildscript {
         google()
         mavenCentral()
         maven("https://sdk.withpersona.com/android/releases")
+        maven("https://storage.zego.im/maven")
     }
     dependencies {
         // Updated Gradle plugin

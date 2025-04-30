@@ -15,6 +15,7 @@ import com.bussiness.awpl.databinding.DialogConfirmAppointmentBinding
 import com.bussiness.awpl.databinding.DialogLogoutBinding
 import com.bussiness.awpl.databinding.FragmentPaymentScreenBinding
 import com.bussiness.awpl.databinding.FragmentSummaryScreenBinding
+import com.razorpay.Checkout
 
 
 class PaymentScreen : Fragment() {
@@ -28,6 +29,8 @@ class PaymentScreen : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPaymentScreenBinding.inflate(inflater, container, false)
+
+
         return binding.root
     }
 
@@ -35,6 +38,7 @@ class PaymentScreen : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Restore the state after the fragment is created or recreated
+
         restoreSelection()
 
         clickListener()
