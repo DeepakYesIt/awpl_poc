@@ -5,6 +5,7 @@ import com.bussiness.awpl.model.DoctorModel
 import com.bussiness.awpl.model.FAQItem
 import com.bussiness.awpl.model.LoginModel
 import com.bussiness.awpl.model.VideoModel
+import com.bussiness.awpl.viewmodel.MyprofileModel
 import com.google.gson.JsonObject
 import retrofit2.Response
 import retrofit2.http.Field
@@ -35,5 +36,6 @@ interface AwplRepository {
 
     suspend fun doctor() : Flow<NetworkResult<MutableList<DoctorModel>>>
 
+    suspend fun getMyProfile() : Flow<NetworkResult<MyprofileModel>>
 
 }

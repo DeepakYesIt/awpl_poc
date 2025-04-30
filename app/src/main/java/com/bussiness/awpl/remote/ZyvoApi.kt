@@ -55,4 +55,8 @@ interface ZyvoApi {
     @POST("yourDoctor")
     suspend fun doctor() : Response<JsonObject>
 
+    @POST("myProfile")
+    suspend fun getMyProfile() : Response<JsonObject>
+
+
 }

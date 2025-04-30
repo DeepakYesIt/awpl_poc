@@ -9,6 +9,7 @@ import com.bussiness.awpl.model.FAQItem
 import com.bussiness.awpl.model.LoginModel
 import com.bussiness.awpl.model.VideoModel
 import com.bussiness.awpl.utils.AppConstant
+import com.bussiness.awpl.viewmodel.MyprofileModel
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kotlinx.coroutines.flow.Flow
@@ -209,12 +210,10 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
                     } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
                 } else {
                     try {
-                        val jsonObj = this.errorBody()?.string()?.let { JSONObject(it) }
-                        emit(
-                            NetworkResult.Error(
-                                jsonObj?.getString("message") ?: AppConstant.unKnownError
-                            )
-                        )
+                        val jsonObj = this.errorBody()?.string()?.let {
+                            JSONObject(it)
+                        }
+                        emit(NetworkResult.Error(jsonObj?.getString("message") ?: AppConstant.unKnownError))
                     } catch (e: JSONException) {
                         e.printStackTrace()
                         emit(NetworkResult.Error(AppConstant.unKnownError))
@@ -283,6 +282,40 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
                             Log.d("TESTING_URL","Result List Size is :- "+resultList.size)
                             emit(NetworkResult.Success(resultList))
                         } else {
+                            emit(NetworkResult.Error(resp.get("message").asString))
+                        }
+                    } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
+                } else {
+                    try {
+                        val jsonObj = this.errorBody()?.string()?.let { JSONObject(it) }
+                        emit(
+                            NetworkResult.Error(
+                                jsonObj?.getString("message") ?: AppConstant.unKnownError
+                            )
+                        )
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        emit(NetworkResult.Error(AppConstant.unKnownError))
+                    }
+                }
+            }
+        }
+        catch (e: Exception) {
+            emit(NetworkResult.Error(ErrorHandler.emitError(e)))
+        }
+    }
+
+    override suspend fun getMyProfile() : Flow<NetworkResult<MyprofileModel>> = flow{
+        try {
+            api.getMyProfile().apply {
+                if (isSuccessful) {
+                    body()?.let { resp ->
+                        if (resp.has("status") && resp.get("status").asBoolean) {
+                            val obj = resp.get("data").asJsonObject
+                            val model: MyprofileModel = Gson().fromJson(obj.toString(), MyprofileModel::class.java)
+                            emit(NetworkResult.Success(model))
+                        }
+                        else {
                             emit(NetworkResult.Error(resp.get("message").asString))
                         }
                     } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
