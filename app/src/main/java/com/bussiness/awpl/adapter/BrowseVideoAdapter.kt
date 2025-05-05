@@ -3,11 +3,14 @@ package com.bussiness.awpl.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.bussiness.awpl.databinding.ItemBrowseVideoBinding
 import com.bussiness.awpl.model.HealthJourneyItem
+import com.bussiness.awpl.utils.AppConstant
+import com.bussiness.awpl.utils.MultipartUtil
 
 class BrowseVideoAdapter(
-    private val items: List<HealthJourneyItem>,
+    private var items: List<HealthJourneyItem>,
     private val onVideoClick: (HealthJourneyItem) -> Unit
 ) : RecyclerView.Adapter<BrowseVideoAdapter.VideoViewHolder>() {
 
@@ -26,12 +29,24 @@ class BrowseVideoAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: HealthJourneyItem, onVideoClick: (HealthJourneyItem) -> Unit) {
-            binding.videoThumbnail.setImageResource(item.imageRes)
+         //   binding.videoThumbnail.setImageResource(item.thumbnail_path)
+
+            Glide.with(binding.root.context).
+            load(AppConstant.Base_URL+MultipartUtil.ensureStartsWithSlash(item.thumbnail_path))
+                .into(binding.videoThumbnail)
+
             binding.videoTxt.text = item.title
 
             binding.root.setOnClickListener {
                 onVideoClick(item)
             }
         }
+
+}
+
+    fun updateAdapter(items: List<HealthJourneyItem>){
+        this.items = items
+        notifyDataSetChanged()
     }
+
 }

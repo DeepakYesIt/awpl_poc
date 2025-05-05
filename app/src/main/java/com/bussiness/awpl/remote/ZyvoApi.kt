@@ -70,4 +70,25 @@ interface ZyvoApi {
         ) : Response<JsonObject>
 
 
+    @POST("disease")
+    suspend fun diseaseList() :Response<JsonObject>
+
+    @POST("home")
+    suspend fun getHomeData() : Response<JsonObject>
+
+    @POST("symptomUpload")
+    @Multipart
+    suspend fun symptomsUpload(
+        @Part("answer1") answer1 : RequestBody,
+        @Part("answer2") answer2 : RequestBody,
+        @Part("answer3") answer3 : RequestBody,
+        @Part("answer4") answer4 : RequestBody,
+        @Part profileImageList : ArrayList<MultipartBody.Part>?,
+        @Part videoList : ArrayList<MultipartBody.Part>?,
+        @Part pdfList : ArrayList<MultipartBody.Part>?,
+        @Part("disease") disease : RequestBody
+    ) : Response<JsonObject>
+
+
+
 }

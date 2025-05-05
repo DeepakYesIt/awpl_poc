@@ -22,18 +22,26 @@ class HealthJourneyAdapter(private val items: List<HealthJourneyItem>, private v
         holder.bind(item, onScheduleCallClick)
 
         if(position ==0){
+
             Log.d("TESTING_ANDROID"," I AM INSIDE POSITION 1")
+
             holder.binding.imgSh.setImageResource(R.drawable.ic_event_card_1)
+
         }
         else if(position ==1){
+
             Log.d("TESTING_ANDROID"," I AM INSIDE POSITION 2")
+
             holder.binding.imgSh.visibility= View.GONE
             holder.binding.rl1.visibility = View.VISIBLE
             holder.binding.imgSh1.setImageResource(R.drawable.ic_event_card_2)
+
         }
         else if(position ==2){
+
             Log.d("TESTING_ANDROID"," I AM INSIDE POSITION 3")
             holder.binding.imgSh.setImageResource(R.drawable.ic_event_card_3)
+
         }
 
         // Alternate background colors

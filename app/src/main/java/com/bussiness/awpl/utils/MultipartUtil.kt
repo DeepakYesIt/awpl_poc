@@ -3,10 +3,14 @@ package com.bussiness.awpl.utils
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.provider.OpenableColumns
+import androidx.annotation.RequiresApi
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.time.LocalTime
+import java.time.temporal.ChronoUnit
 
 class MultipartUtil {
 
@@ -50,5 +54,20 @@ class MultipartUtil {
         fun ensureStartsWithSlash(path: String): String {
             return if (path.startsWith("/")) path else "/$path"
         }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun getMinutesUntilStart(startTimeStr: String): Long {
+            val formatter = java.time.format.DateTimeFormatter.ofPattern("h:mm a")
+            val now = LocalTime.now()
+            val startTime = LocalTime.parse(startTimeStr, formatter)
+
+            return if (now.isBefore(startTime)) {
+                ChronoUnit.MINUTES.between(now, startTime)
+            } else {
+                0L // start time has passed
+            }
+        }
+
+
     }
 }

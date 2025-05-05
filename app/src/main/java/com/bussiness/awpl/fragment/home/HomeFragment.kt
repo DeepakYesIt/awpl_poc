@@ -1,98 +1,186 @@
 package com.bussiness.awpl.fragment.home
 
 import android.app.Dialog
+import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
 import com.bussiness.awpl.adapter.BrowseVideoAdapter
 import com.bussiness.awpl.adapter.HealthJourneyAdapter
+import com.bussiness.awpl.adapter.HealthJourneyAdapter1
 import com.bussiness.awpl.adapter.OrganListAdapter
 import com.bussiness.awpl.databinding.DialogCancelAppointmentBinding
 import com.bussiness.awpl.databinding.FragmentHomeBinding
 import com.bussiness.awpl.model.HealthJourneyItem
+import com.bussiness.awpl.model.HealthListModel
+import com.bussiness.awpl.model.HomeModel
+import com.bussiness.awpl.utils.AppConstant
+import com.bussiness.awpl.utils.LoadingUtils
+import com.bussiness.awpl.utils.MultipartUtil
+import com.bussiness.awpl.viewmodel.DiseaseModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var organListAdapter: OrganListAdapter
-    private lateinit var healthJourneyAdapter: HealthJourneyAdapter
+    private lateinit var healthJourneyAdapter: HealthJourneyAdapter1
     private lateinit var browseVideoAdapter: BrowseVideoAdapter
-    private val viewModel: HomeViewModel by viewModels()
+    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var diseaseList : MutableList<DiseaseModel>
+
     private val healthJourneyList = listOf(
-        HealthJourneyItem("Begin Your Health\nJourney with a \nFree Consultation!", R.drawable.women_doctor),
-        HealthJourneyItem("Bringing Doctors\n to Your Door – \nVirtually.", R.drawable.ic_rename_doctor),
-        HealthJourneyItem("Upload Symptoms \nfor Minor Issues \nand Major Concerns", R.drawable.ic_little_girl)
+        HealthListModel("Begin Your Health\nJourney with a \nFree Consultation!", R.drawable.women_doctor),
+        HealthListModel("Bringing Doctors\n to Your Door – \nVirtually.", R.drawable.ic_rename_doctor),
+        HealthListModel("Upload Symptoms \nfor Minor Issues \nand Major Concerns", R.drawable.ic_little_girl)
     )
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
+
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerViews()
         clickListener()
+        callingHomeApi()
+       // callingDiseaseApi()
+
+
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun callingHomeApi(){
+        LoadingUtils.showDialog(requireContext(),false)
+        lifecycleScope.launch {
+              homeViewModel.getHomeData().collect{
+                  when(it){
+                      is NetworkResult.Success ->{
+                          LoadingUtils.hideDialog()
+                          settingDataToUi(it.data)
+                      }
+                      is NetworkResult.Error ->{
+                          LoadingUtils.hideDialog()
+                          LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
+                      }
+                      else ->{
+
+                      }
+                  }
+              }
+        }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun settingDataToUi(data: HomeModel?) {
+
+        data?.startAppointDetails?.let {
+           binding.llTop.visibility = View.VISIBLE
+           binding.stDoctorName.setText(it.doctorName.toString())
+           binding.tvDate.setText(it.date)
+           binding.tvTime.setText(it.time)
+           Glide.with(this).load(AppConstant.Base_URL+ MultipartUtil.ensureStartsWithSlash(it.doctorImage)).into(binding.stDoctorImage)
+         //  var time = MultipartUtil.getMinutesUntilStart(it.time.split("-")[0].trim())
+       }
+
+        data?.upcomingAppointDetails?.let {
+            binding.scheduleCardAppointment.visibility = View.GONE
+            binding.cardView4.visibility = View.VISIBLE
+            binding.doctorName.setText(it.doctorName)
+            binding.tvDateUpCom.setText(it.date)
+            binding.tvTimeUpCom.setText(it.time)
+            Glide.with(this).load(AppConstant.Base_URL+ MultipartUtil.ensureStartsWithSlash(it.doctorImage)).into(binding.upDoctorImage)
+        } ?: {
+            binding.scheduleCardAppointment.visibility = View.VISIBLE
+            binding.cardView4.visibility = View.GONE
+        }
+
+        data?.healthNeeds?.let {
+            diseaseList = it.toMutableList()
+            organListAdapter.updateAdapter(it)
+        }
+
+        data?.videos?.let {
+             browseVideoAdapter.updateAdapter(it)
+        }
+
+    }
+
+
     private fun setupRecyclerViews() {
+
         // Organ List RecyclerView
         binding.deptRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            organListAdapter = OrganListAdapter(viewModel.organList){ selectedDisease ->
+            organListAdapter = OrganListAdapter(mutableListOf()){ selectedDisease ->
 
             }
             adapter = organListAdapter
         }
-        
+
         // Health Journey RecyclerView
         binding.bannerRecyclerView.apply {
+
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            healthJourneyAdapter = HealthJourneyAdapter(healthJourneyList) { item ->
+
+            healthJourneyAdapter = HealthJourneyAdapter1(healthJourneyList) { item ->
                 findNavController().navigate(R.id.homeScheduleCallFragment)
             }
+
             adapter = healthJourneyAdapter
+
         }
 
         // Browse Video RecyclerView
         binding.videoRecyclerView.apply {
-            browseVideoAdapter = BrowseVideoAdapter(viewModel.browseVideoList) { item ->
+            browseVideoAdapter = BrowseVideoAdapter(mutableListOf()) { item ->
                 Toast.makeText(requireContext(), "Playing Video: ${item.title}", Toast.LENGTH_SHORT).show()
             }
             adapter = browseVideoAdapter
         }
+
     }
 
     private fun clickListener() {
         binding.apply {
 
             txtSeeAllDisease.setOnClickListener {
-
                 findNavController().navigate(R.id.diseasesBottomFragment)
-
             }
 
             symptomUploadBtn.setOnClickListener {
-
-               var bundle = Bundle().apply {
+                var bundle = Bundle().apply {
                    putString("type","symptom")
                }
-
                 findNavController().navigate(R.id.diseasesBottomFragment,bundle)
-
             }
 
             seeAllVideos.setOnClickListener{
@@ -110,9 +198,17 @@ class HomeFragment : Fragment() {
                 findNavController().navigate(R.id.scheduleFragment)
             }
 
-            rescheduleButton.setOnClickListener { findNavController().navigate(R.id.appointmentBooking) }
-            startAppointmentBtn.setOnClickListener { findNavController().navigate(R.id.videoCallFragment) }
-            cancelBtn.setOnClickListener        { cancelDialog() }
+            rescheduleButton.setOnClickListener {
+                findNavController().navigate(R.id.appointmentBooking)
+            }
+
+            startAppointmentBtn.setOnClickListener{
+                findNavController().navigate(R.id.videoCallFragment)
+            }
+
+            cancelBtn.setOnClickListener{
+                cancelDialog()
+            }
         }
     }
 
@@ -145,5 +241,31 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+      //  timeObserver?.let { viewModel.timeLeft.removeObserver(it) }
     }
+
+    private fun updateAdapter(){
+
+    }
+
 }
+
+
+//
+//private fun callingDiseaseApi(){
+//    lifecycleScope.launch(Dispatchers.IO) {
+//        viewModel.getDiseaseList().collect { result ->
+//            when (result) {
+//                is NetworkResult.Success -> {
+//                    result.data?.let { DiseaseStore.setDiseases(it) }
+//                }
+//                is NetworkResult.Error -> {
+//
+//                }
+//                else -> {
+//
+//                }
+//            }
+//        }
+//    }
+//}

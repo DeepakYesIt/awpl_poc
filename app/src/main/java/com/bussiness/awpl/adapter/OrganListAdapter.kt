@@ -3,18 +3,27 @@ package com.bussiness.awpl.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.bussiness.awpl.databinding.ItemOrgansBinding
 import com.bussiness.awpl.model.OrganDeptModel
+import com.bussiness.awpl.utils.AppConstant
+import com.bussiness.awpl.utils.MediaUtils
+import com.bussiness.awpl.utils.MultipartUtil
+import com.bussiness.awpl.utils.SessionManager
+import com.bussiness.awpl.viewmodel.DiseaseModel
 
-class OrganListAdapter(private val items: List<OrganDeptModel>,  private val onItemClick: (OrganDeptModel) -> Unit) :
+class OrganListAdapter(private var items: List<DiseaseModel>, private val onItemClick: (DiseaseModel) -> Unit) :
     RecyclerView.Adapter<OrganListAdapter.CardViewHolder>() {
 
     inner class CardViewHolder(private val binding: ItemOrgansBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: OrganDeptModel) {
-            binding.organDeptImg.setImageResource(item.imageResId)
-            binding.deptName.text = item.title
+        fun bind(item: DiseaseModel) {
+
+
+            Glide.with(binding.root.context).load(AppConstant.Base_URL+MultipartUtil.ensureStartsWithSlash(item.icon_path)).into(binding.organDeptImg)
+
+            binding.deptName.text = item.name
             binding.root1.setOnClickListener {
                 onItemClick(item)
             }
@@ -31,4 +40,10 @@ class OrganListAdapter(private val items: List<OrganDeptModel>,  private val onI
     }
 
     override fun getItemCount(): Int = items.size
+
+    fun updateAdapter(items: List<DiseaseModel>){
+        this.items = items
+        notifyDataSetChanged()
+    }
+
 }

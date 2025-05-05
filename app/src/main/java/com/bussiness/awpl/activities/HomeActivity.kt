@@ -34,6 +34,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -44,8 +45,10 @@ import com.bussiness.awpl.BuildConfig
 import com.bussiness.awpl.R
 import com.bussiness.awpl.base.CommonUtils
 import com.bussiness.awpl.databinding.ActivityHomeBinding
+import com.bussiness.awpl.fragment.home.HomeViewModel
 import com.bussiness.awpl.utils.LoadingUtils
 import com.bussiness.awpl.utils.SessionManager
+import com.bussiness.awpl.viewmodel.SharedViewModel
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -182,7 +185,9 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
+
     }
+
 
 
     private fun setupBottomNav() {
@@ -208,7 +213,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun updateBottomNavSelection(selected: String) {
-        // Home
         binding.iconHome.setColorFilter(
             ContextCompat.getColor(
                 this,
@@ -272,11 +276,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setToolbar(
-        title: String,
-        showBottomNav: Boolean = true,
-        showBell: Boolean = true,
-        fab: Boolean = false
-    ) {
+        title: String, showBottomNav: Boolean = true, showBell: Boolean = true, fab: Boolean = false) {
         binding.apply {
             toolbar.visibility = View.VISIBLE
             customBottomNav.visibility = if (showBottomNav) View.VISIBLE else View.GONE

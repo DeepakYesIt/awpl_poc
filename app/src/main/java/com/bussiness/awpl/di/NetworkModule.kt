@@ -25,6 +25,7 @@ import javax.inject.Singleton
 object  NetworkModule {
 
     var baseURL = "http://awplconnectadmin.tgastaging.com/api/"
+
     @Provides
     fun provideConnectivityManager(@ApplicationContext context: Context): ConnectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

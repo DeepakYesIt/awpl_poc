@@ -1,28 +1,37 @@
 package com.bussiness.awpl.fragment.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
 import com.bussiness.awpl.adapter.BottomCardDiseaseAdapter
 import com.bussiness.awpl.adapter.OrganListAdapter
 import com.bussiness.awpl.databinding.FragmentDiseasesBottomBinding
 import com.bussiness.awpl.model.OrganDeptModel
 import com.bussiness.awpl.model.PrepareData
+import com.bussiness.awpl.utils.DiseaseStore
+import com.bussiness.awpl.utils.LoadingUtils
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class DiseasesBottomFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentDiseasesBottomBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var bottomCardDiseaseAdapter: OrganListAdapter
     var type:String =""
+    private val viewModel: HomeViewModel by viewModels()
     private val diseasesList = listOf(
         OrganDeptModel(R.drawable.rectangle, "Kidney Disease"),
         OrganDeptModel(R.drawable.rectangle, "Liver Disease"),
@@ -47,17 +56,19 @@ class DiseasesBottomFragment : BottomSheetDialogFragment() {
         OrganDeptModel(R.drawable.rectangle, "Asthma"),
     )
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         arguments?.let {
             if(it.containsKey("type")){
                type = it.getString("type").toString()
-
             }
         }
         _binding = FragmentDiseasesBottomBinding.inflate(inflater, container, false)
+
+        Log.d("TESTING_DISEASE","SIZE OF DISEASE IS "+ DiseaseStore.getDiseases().size)
+        if(DiseaseStore.getDiseases().size ==0){
+            callingDiseaseApi()
+        }
+
         return binding.root
     }
 
@@ -66,17 +77,43 @@ class DiseasesBottomFragment : BottomSheetDialogFragment() {
         setupRecyclerView()
         clickListener()
     }
+
     private fun setupRecyclerView() {
-        bottomCardDiseaseAdapter = OrganListAdapter(PrepareData.organList) { selectedDisease ->
-            Toast.makeText(requireContext(), "Selected Disease: ${selectedDisease.title}", Toast.LENGTH_SHORT).show()
+
+        bottomCardDiseaseAdapter = OrganListAdapter(DiseaseStore.getDiseases()) { selectedDisease ->
             tempData()
         }
+
         val gridLayoutManager = GridLayoutManager(requireContext(), 3)
+
         binding.recyclerView.apply {
             layoutManager = gridLayoutManager
             adapter = bottomCardDiseaseAdapter
         }
+
     }
+
+    private fun callingDiseaseApi(){
+        lifecycleScope.launch {
+            LoadingUtils.showDialog(requireContext(),false)
+
+            viewModel.getDiseaseList().collect{
+
+                when(it){
+                    is NetworkResult.Success ->{
+                        LoadingUtils.hideDialog()
+                        it.data?.let { it1 -> bottomCardDiseaseAdapter.updateAdapter(it1) }
+                    }
+                    is NetworkResult.Error ->{
+                    }
+                    else ->{
+
+                    }
+                }
+            }
+        }
+    }
+
 
     private fun clickListener() {
         binding.apply {
@@ -101,4 +138,7 @@ class DiseasesBottomFragment : BottomSheetDialogFragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
+
 }
