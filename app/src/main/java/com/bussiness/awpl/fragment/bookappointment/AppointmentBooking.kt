@@ -22,6 +22,7 @@ import java.time.LocalDate
 import java.time.YearMonth
 
 class AppointmentBooking : Fragment() {
+
     private var _binding: FragmentApointmentBookingBinding? = null
     private val binding get() = _binding!!
     private lateinit var timeSlotAdapter: TimeSlotAdapter

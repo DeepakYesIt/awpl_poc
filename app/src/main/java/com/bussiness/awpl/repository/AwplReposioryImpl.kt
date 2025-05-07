@@ -269,6 +269,87 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
         }
     }
 
+    override suspend fun scheduleCallForMe(
+        answer1: RequestBody,
+        answer2: RequestBody,
+        answer3: RequestBody,
+        answer4: RequestBody,
+        disease: RequestBody,
+        profileImageList: ArrayList<MultipartBody.Part>?
+    ): Flow<NetworkResult<String>> =flow {
+        try {
+            api.scheduleCallForMe(answer1, answer2, answer3, answer4, disease, profileImageList).apply {
+                if (isSuccessful) {
+                    body()?.let { resp ->
+                        if (resp.has("status") && resp.get("status").asBoolean) {
+                            var obj = resp.get("message").asString
+                            emit(NetworkResult.Success(obj))
+                        }
+                        else {
+                            emit(NetworkResult.Error(resp.get("message").asString))
+                        }
+                    } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
+                } else {
+                    try {
+                        val jsonObj = this.errorBody()?.string()?.let { JSONObject(it) }
+                        emit(NetworkResult.Error(jsonObj?.getString("message") ?: AppConstant.unKnownError))
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        emit(NetworkResult.Error(AppConstant.unKnownError))
+                    }
+                }
+            }
+        }
+        catch (e: Exception) {
+            emit(NetworkResult.Error(ErrorHandler.emitError(e)))
+        }
+    }
+
+    override suspend fun scheduleCallForOther(
+        answer1: RequestBody,
+        answer2: RequestBody,
+        answer3: RequestBody,
+        answer4: RequestBody,
+        disease: RequestBody,
+        profileImageList: ArrayList<MultipartBody.Part>?,
+        name: RequestBody,
+        age: RequestBody,
+        height: RequestBody,
+        weight: RequestBody,
+        gender: RequestBody
+    ): Flow<NetworkResult<String>> =flow{
+        try {
+            api.doctor().apply {
+                if (isSuccessful) {
+                    body()?.let { resp ->
+                        if (resp.has("status") && resp.get("status").asBoolean) {
+                            var obj = resp.get("message").asString
+
+                            emit(NetworkResult.Success(obj))
+                        } else {
+                            emit(NetworkResult.Error(resp.get("message").asString))
+                        }
+                    } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
+                } else {
+                    try {
+                        val jsonObj = this.errorBody()?.string()?.let { JSONObject(it) }
+                        emit(
+                            NetworkResult.Error(
+                                jsonObj?.getString("message") ?: AppConstant.unKnownError
+                            )
+                        )
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        emit(NetworkResult.Error(AppConstant.unKnownError))
+                    }
+                }
+            }
+        }
+        catch (e: Exception) {
+            emit(NetworkResult.Error(ErrorHandler.emitError(e)))
+        }
+    }
+
     override suspend fun doctor(): Flow<NetworkResult<MutableList<DoctorModel>>> = flow {
         try {
             api.doctor().apply {

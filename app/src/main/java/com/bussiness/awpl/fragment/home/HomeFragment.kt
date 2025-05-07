@@ -173,13 +173,18 @@ class HomeFragment : Fragment() {
         binding.apply {
 
             txtSeeAllDisease.setOnClickListener {
-                findNavController().navigate(R.id.diseasesBottomFragment)
+                val bundle = Bundle().apply {
+                    putSerializable(AppConstant.DISEASE_LIST , ArrayList(diseaseList))
+                }
+                findNavController().navigate(R.id.diseasesBottomFragment,bundle)
             }
 
             symptomUploadBtn.setOnClickListener {
-                var bundle = Bundle().apply {
-                   putString("type","symptom")
-               }
+
+                val bundle = Bundle().apply {
+                    putSerializable(AppConstant.DISEASE_LIST , ArrayList(diseaseList))
+                    putString("type","symptom")
+                }
                 findNavController().navigate(R.id.diseasesBottomFragment,bundle)
             }
 
@@ -190,6 +195,7 @@ class HomeFragment : Fragment() {
             scheduleCallBtn.setOnClickListener  {
                 var bundle = Bundle().apply {
                     putString("type","schedule")
+                    putSerializable(AppConstant.DISEASE_LIST , ArrayList(diseaseList))
                 }
                 findNavController().navigate(R.id.diseasesBottomFragment,bundle)
             }

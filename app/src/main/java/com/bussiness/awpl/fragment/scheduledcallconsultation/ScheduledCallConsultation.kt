@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.Modifier
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bussiness.awpl.R
@@ -21,26 +22,41 @@ import com.bussiness.awpl.adapter.MediaAdapter
 import com.bussiness.awpl.databinding.FragmentScheduledCallConsulationBinding
 import com.bussiness.awpl.model.MediaItem
 import com.bussiness.awpl.model.MediaType
+import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.ErrorMessages
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ScheduledCallConsultation : Fragment() {
 
     private var _binding : FragmentScheduledCallConsulationBinding? = null
+
     private val binding get() = _binding!!
+
     private var mediaUploadDialog: MediaUtils? = null
+
     private var currentType: String = ""
+
     private val mediaList = mutableListOf<MediaItem>()
+
     private lateinit var mediaAdapter: MediaAdapter
 
-    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
+    private var age :String    =""
+    private var diseaseId :Int =0
+    private var gender :String =""
+    private var height :String = ""
+    private var weight :String =""
+    private var name :String =""
+
+    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        result -> if (result.resultCode == Activity.RESULT_OK) {
                 val uri: Uri? = result.data?.data
                 uri?.let {
                     // Show in dialog and fragment
                     mediaUploadDialog?.handleSelectedFile(it)
                 }
             }
-        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentScheduledCallConsulationBinding.inflate(inflater, container, false)
@@ -51,6 +67,18 @@ class ScheduledCallConsultation : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setUpRecyclerView()
+        arguments?.let {
+
+            it.let { bundle ->
+                age = bundle.getString(AppConstant.Age)?.takeIf { it.isNotBlank() } ?: ""
+                height = bundle.getString(AppConstant.Height, "")
+                weight = bundle.getString(AppConstant.Weight, "")
+                diseaseId = bundle.getInt(AppConstant.DISEASE_ID, 0)  // Use -1 or a safe default
+                name = bundle.getString(AppConstant.NAME, "")
+                gender = bundle.getString(AppConstant.Gender, "")
+            }
+
+        }
 
         clickListeners()
 
@@ -61,6 +89,7 @@ class ScheduledCallConsultation : Fragment() {
     }
 
     private fun setUpRecyclerView(){
+
         mediaAdapter = MediaAdapter(mediaList) { mediaItem ->
             mediaList.remove(mediaItem)
             if (mediaList.isEmpty()) {
@@ -79,6 +108,7 @@ class ScheduledCallConsultation : Fragment() {
             btnImage.setOnClickListener { openMediaDialog("image") }
             btnNext.setOnClickListener {
                 if (validations()){
+
                     findNavController().navigate(R.id.appointmentBooking)
                 }
             }
@@ -87,8 +117,11 @@ class ScheduledCallConsultation : Fragment() {
 
     private fun openMediaDialog(type: String) {
         currentType = type
-        mediaUploadDialog = MediaUtils(requireContext(), type, onFileSelected = { selectedFiles ->
-                selectedFiles.forEach { addMediaItem(it, type) }
+        mediaUploadDialog = MediaUtils(
+            requireContext(), type, onFileSelected = { selectedFiles ->
+                selectedFiles.forEach {
+                    addMediaItem(it, type)
+                }
             },
             onBrowseClicked = { openImagePicker(type) }
         )
@@ -113,7 +146,7 @@ class ScheduledCallConsultation : Fragment() {
             else -> throw IllegalArgumentException("Unknown media type: $type")
         }
 
-        val mediaItem = MediaItem(mediaType, uri.toString())  // Convert Uri to String
+        val mediaItem = MediaItem(mediaType, uri)  // Convert Uri to String
         mediaList.add(mediaItem)
         mediaAdapter.notifyItemInserted(mediaList.size - 1)
 

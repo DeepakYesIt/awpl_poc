@@ -68,5 +68,28 @@ interface AwplRepository {
 
     suspend fun videoGallery(): Flow<NetworkResult<MutableList<VideoModel>>>
 
+    suspend fun scheduleCallForMe(
+        answer1 : RequestBody,
+        answer2 : RequestBody,
+        answer3 : RequestBody,
+         answer4 : RequestBody,
+         disease : RequestBody,
+         profileImageList : ArrayList<MultipartBody.Part>?
+    ) : Flow<NetworkResult<String>>
+
+
+    suspend fun scheduleCallForOther(
+        @Part("answer1") answer1 : RequestBody,
+        @Part("answer2") answer2 : RequestBody,
+        @Part("answer3") answer3 : RequestBody,
+        @Part("answer4") answer4 : RequestBody,
+        @Part("disease") disease : RequestBody,
+        @Part profileImageList : ArrayList<MultipartBody.Part>?,
+        @Part("name") name : RequestBody,
+        @Part("age") age :RequestBody,
+        @Part("height") height : RequestBody,
+        @Part("weight") weight :RequestBody,
+        @Part("gender") gender :RequestBody
+    ) : Flow<NetworkResult<String>>
 
 }

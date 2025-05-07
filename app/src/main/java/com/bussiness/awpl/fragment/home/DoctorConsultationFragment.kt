@@ -9,17 +9,26 @@ import androidx.navigation.fragment.findNavController
 import com.bussiness.awpl.R
 import com.bussiness.awpl.activities.HomeActivity
 import com.bussiness.awpl.databinding.FragmentDoctorConsultationBinding
+import com.bussiness.awpl.utils.AppConstant
 
 class DoctorConsultationFragment : Fragment() {
 
     private var _binding: FragmentDoctorConsultationBinding? = null
     private val binding get() = _binding!!
+    private var diseaseId :Int =0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDoctorConsultationBinding.inflate(inflater, container, false)
+
+        arguments?.let {
+            if(it.containsKey(AppConstant.DISEASE_ID)){
+                diseaseId = it.getInt(AppConstant.DISEASE_ID)
+            }
+        }
+
         return binding.root
     }
 
@@ -31,7 +40,13 @@ class DoctorConsultationFragment : Fragment() {
     private fun clickListeners() {
         binding.apply {
             cancelBtn.setOnClickListener { findNavController().navigate(R.id.homeFragment) }
-            proceedBtn.setOnClickListener { findNavController().navigate(R.id.homeScheduleCallFragment) }
+
+            proceedBtn.setOnClickListener {
+                val bundle = Bundle().apply {
+                    putInt(AppConstant.DISEASE_ID,diseaseId)
+                }
+                findNavController().navigate(R.id.homeScheduleCallFragment,bundle)
+            }
         }
     }
 

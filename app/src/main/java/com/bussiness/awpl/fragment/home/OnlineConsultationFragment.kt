@@ -11,17 +11,24 @@ import com.bussiness.awpl.R
 import com.bussiness.awpl.activities.HomeActivity
 import com.bussiness.awpl.activities.OnBoardActivity
 import com.bussiness.awpl.databinding.FragmentOnlineConsultationBinding
+import com.bussiness.awpl.utils.AppConstant
 
 class OnlineConsultationFragment : Fragment() {
 
     private var _binding: FragmentOnlineConsultationBinding? = null
     private val binding get() = _binding!!
+    private var diseaseId :Int =0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentOnlineConsultationBinding.inflate(inflater, container, false)
+        arguments?.let {
+            if(it.containsKey(AppConstant.DISEASE_ID)){
+                diseaseId = it.getInt(AppConstant.DISEASE_ID)
+            }
+        }
         return binding.root
     }
 
@@ -33,7 +40,12 @@ class OnlineConsultationFragment : Fragment() {
     private fun clickListeners() {
         binding.apply {
             cancelBtn.setOnClickListener { findNavController().navigate(R.id.homeFragment) }
-            proceedBtn.setOnClickListener { findNavController().navigate(R.id.symptomUpload) }
+            proceedBtn.setOnClickListener {
+                val bundle = Bundle().apply {
+                    putInt(AppConstant.DISEASE_ID,diseaseId)
+                }
+                findNavController().navigate(R.id.symptomUpload,bundle)
+            }
         }
     }
 

@@ -90,5 +90,32 @@ interface ZyvoApi {
     ) : Response<JsonObject>
 
 
+    @POST("scheduledCallForMe")
+    @Multipart
+    suspend fun scheduleCallForMe(
+        @Part("answer1") answer1 : RequestBody,
+        @Part("answer2") answer2 : RequestBody,
+        @Part("answer3") answer3 : RequestBody,
+        @Part("answer4") answer4 : RequestBody,
+        @Part("disease") disease : RequestBody,
+        @Part profileImageList : ArrayList<MultipartBody.Part>?
+    ) : Response<JsonObject>
+
+    @POST("scheduledCallForOthers")
+    @Multipart
+    suspend fun scheduleCallForOther(
+        @Part("answer1") answer1 : RequestBody,
+        @Part("answer2") answer2 : RequestBody,
+        @Part("answer3") answer3 : RequestBody,
+        @Part("answer4") answer4 : RequestBody,
+        @Part("disease") disease : RequestBody,
+        @Part profileImageList : ArrayList<MultipartBody.Part>?,
+        @Part("name") name : RequestBody,
+        @Part("age") age :RequestBody,
+        @Part("height") height : RequestBody,
+        @Part("weight") weight :RequestBody,
+        @Part("gender") gender :RequestBody
+    ) : Response<JsonObject>
+
 
 }

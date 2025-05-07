@@ -68,6 +68,42 @@ class MultipartUtil {
             }
         }
 
+        fun isFileLargerThan2048KB(context: Context, uri: Uri): Boolean {
+            val cursor = context.contentResolver.query(uri, null, null, null, null)
+            cursor?.use {
+                val sizeIndex = it.getColumnIndex(android.provider.OpenableColumns.SIZE)
+                if (it.moveToFirst()) {
+                    val size = it.getLong(sizeIndex)
+                    return size > 2048 * 1024 // size in bytes
+                }
+            }
+            return false
+        }
+
+        fun isFileLargerThan10MB(context: Context, uri: Uri): Boolean {
+            val cursor = context.contentResolver.query(uri, null, null, null, null)
+            cursor?.use {
+                val sizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
+                if (sizeIndex != -1 && it.moveToFirst()) {
+                    val sizeInBytes = it.getLong(sizeIndex)
+                    return sizeInBytes > 10240 * 1024 // 10 MB in bytes
+                }
+            }
+            return false // Could not determine file size
+        }
+
+        fun isFileLargerThan5MB(context: Context, uri: Uri): Boolean {
+            val cursor = context.contentResolver.query(uri, null, null, null, null)
+            cursor?.use {
+                val sizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
+                if (sizeIndex != -1 && it.moveToFirst()) {
+                    val sizeInBytes = it.getLong(sizeIndex)
+                    return sizeInBytes > 5120 * 1024 // 5 MB in bytes
+                }
+            }
+            return false // File size couldn't be determined
+        }
+
 
     }
 }

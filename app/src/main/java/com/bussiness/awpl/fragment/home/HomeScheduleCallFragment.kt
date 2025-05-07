@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +14,11 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
 import com.bussiness.awpl.activities.HomeActivity
 import com.bussiness.awpl.activities.OnBoardActivity
@@ -22,9 +26,17 @@ import com.bussiness.awpl.adapter.MediaAdapter
 import com.bussiness.awpl.databinding.FragmentHomeScheduleCallBinding
 import com.bussiness.awpl.model.MediaItem
 import com.bussiness.awpl.model.MediaType
+import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.ErrorMessages
+import com.bussiness.awpl.utils.LoadingUtils
 import com.bussiness.awpl.utils.MediaUtils
+import com.bussiness.awpl.utils.MultipartUtil
+import com.bussiness.awpl.viewmodel.ScheduleCallViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 
+@AndroidEntryPoint
 class HomeScheduleCallFragment : Fragment() {
 
     private var _binding: FragmentHomeScheduleCallBinding? = null
@@ -33,6 +45,9 @@ class HomeScheduleCallFragment : Fragment() {
     private var currentType: String = ""
     private val mediaList = mutableListOf<MediaItem>()
     private lateinit var mediaAdapter: MediaAdapter
+    var currentScreen :String = "for_me"
+    private lateinit var viewModel :ScheduleCallViewModel
+    private var diseaseId :Int =0
 
     private val imagePickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -51,6 +66,14 @@ class HomeScheduleCallFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeScheduleCallBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this)[ScheduleCallViewModel::class.java]
+
+        arguments?.let {
+            if(it.containsKey(AppConstant.DISEASE_ID)) {
+               diseaseId = it.getInt(AppConstant.DISEASE_ID)
+            }
+        }
+
         return binding.root
     }
 
@@ -77,17 +100,21 @@ class HomeScheduleCallFragment : Fragment() {
         binding.apply {
             forOthers.setOnClickListener {
                 // Button UI Updates
+                currentScreen="for_others"
                 forOthers.setBackgroundResource(R.drawable.forother_btn)
                 forOthers.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                 forMe.setBackgroundResource(R.drawable.for_mr_bg)
                 forMe.setTextColor(ContextCompat.getColor(requireContext(), R.color.darkGreyColor))
                 val bundle = Bundle().apply {
                     putString("TYPE", "forHome")
+                    putInt(AppConstant.DISEASE_ID,diseaseId)
                 }
                 findNavController().navigate(R.id.basicInfoScreen2,bundle)
             }
             forMe.setOnClickListener {
                 // Button UI Updates
+                currentScreen="for_me"
+
                 forMe.setBackgroundResource(R.drawable.forother_btn)
                 forMe.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                 forOthers.setBackgroundResource(R.drawable.for_mr_bg)
@@ -95,13 +122,60 @@ class HomeScheduleCallFragment : Fragment() {
             }
             btnNext.setOnClickListener {
                 if (validations())
-                findNavController().navigate(R.id.appointmentBooking)
+                    if(currentScreen.equals("for_me")){
+                        callingScheduleCallForMe()
+                    }else{
+                        callingScheduleCallForOthers()
+                    }
             }
             btnImage.setOnClickListener {
                 openMediaDialog("image")
             }
         }
     }
+
+    private fun callingScheduleCallForMe(){
+        lifecycleScope.launch {
+            var answer1 = MultipartUtil.stringToRequestBody(binding.ansNO1.text.toString())
+            var answer2 = MultipartUtil.stringToRequestBody(binding.ansNo2.text.toString())
+            var answer3 = MultipartUtil.stringToRequestBody(binding.ansNo3.text.toString())
+            var answer4 = MultipartUtil.stringToRequestBody(binding.ans4.text.toString())
+            var disease = MultipartUtil.stringToRequestBody(diseaseId.toString())
+            var imgList = mutableListOf<MultipartBody.Part>()
+            mediaList.forEach {
+                MultipartUtil.uriToMultipart(requireContext(),it.uri)
+                    ?.let { it1 -> imgList.add(it1) }
+            }
+            Log.d("CHECKING_DISEASE_ID","Disease Id is working here is "+diseaseId.toString())
+
+            viewModel.scheduleCallForMe(answer1,answer2,answer3,answer4,disease,
+                ArrayList(imgList)).collect(){
+                LoadingUtils.showDialog(requireContext(),false)
+                when(it){
+                    is NetworkResult.Success ->{
+                        LoadingUtils.hideDialog()
+
+                        LoadingUtils.showSuccessDialog(requireContext(),it.data.toString()){
+                            findNavController().navigate(R.id.appointmentBooking)
+                        }
+
+                    }
+                    is NetworkResult.Error ->{
+                        LoadingUtils.hideDialog()
+                        LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
+                    }
+                    else ->{
+                    }
+                }
+            }
+
+        }
+    }
+
+    private fun callingScheduleCallForOthers(){
+
+    }
+
 
     private fun openMediaDialog(type: String) {
         currentType = type
@@ -136,7 +210,7 @@ class HomeScheduleCallFragment : Fragment() {
             else -> throw IllegalArgumentException("Unknown media type: $type")
         }
 
-        val mediaItem = MediaItem(mediaType, uri.toString())  // Convert Uri to String
+        val mediaItem = MediaItem(mediaType, uri)  // Convert Uri to String
         mediaList.add(mediaItem)
         mediaAdapter.notifyItemInserted(mediaList.size - 1)
 

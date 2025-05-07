@@ -11,13 +11,13 @@ import android.view.View
 import com.bussiness.awpl.adapter.DialogMediaAdapter
 import com.bussiness.awpl.databinding.DialogMediaUploadBinding
 
-class MediaUtils(context: Context, type: String,
+class   MediaUtils(context: Context, type: String,
     private val onFileSelected: (List<Uri>) -> Unit,
     private val onBrowseClicked: (() -> Unit)? = null) : Dialog(context) {
 
     private val selectedFiles = mutableListOf<Uri>()
     private var dialogAdapter: DialogMediaAdapter
-    private var binding: DialogMediaUploadBinding = DialogMediaUploadBinding.inflate(LayoutInflater.from(context))
+    private var binding : DialogMediaUploadBinding = DialogMediaUploadBinding.inflate(LayoutInflater.from(context))
 
     init {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -87,4 +87,5 @@ class MediaUtils(context: Context, type: String,
             dialogAdapter.notifyItemRangeChanged(position, selectedFiles.size)
         }
     }
+
 }

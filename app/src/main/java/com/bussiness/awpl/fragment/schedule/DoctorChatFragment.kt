@@ -97,7 +97,7 @@ class DoctorChatFragment : Fragment() {
             else -> throw IllegalArgumentException("Unknown media type: $type")
         }
 
-        val mediaItem = MediaItem(mediaType, uri.toString())  // Convert Uri to String
+        val mediaItem = MediaItem(mediaType, uri)  // Convert Uri to String
         mediaList.add(mediaItem)
       //  mediaAdapter.notifyItemInserted(mediaList.size - 1)
 

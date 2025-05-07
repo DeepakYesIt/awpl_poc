@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.NumberPicker
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.PathUtils
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bussiness.awpl.R
@@ -21,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.activities.HomeActivity
+import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.ErrorMessages
 import com.bussiness.awpl.utils.LoadingUtils
 import com.bussiness.awpl.viewmodel.BasicInfoViewModel
@@ -35,6 +37,7 @@ class BasicInfoScreen : Fragment() {
     private val binding get() = _binding!!
     private var type: String? = null
     private var selectedGender :String =""
+    private var diseaseId :Int =0
 
     private val basicInfoViewModel: BasicInfoViewModel by lazy {
         ViewModelProvider(this)[BasicInfoViewModel::class.java]
@@ -46,6 +49,12 @@ class BasicInfoScreen : Fragment() {
 
         // Get arguments from bundle
         type = arguments?.getString("TYPE")
+        arguments?.let {
+            if(it.containsKey(AppConstant.DISEASE_ID)){
+                diseaseId = it.getInt(AppConstant.DISEASE_ID)
+            }
+        }
+
         if(type != null && type == "forHome"){
             binding.backIcon.visibility = View.VISIBLE
             binding.backIcon.setOnClickListener {
@@ -82,8 +91,27 @@ class BasicInfoScreen : Fragment() {
     private fun clickListener() {
         binding.btnNext.setOnClickListener {
             if (validateFields()) {
-                callingBasicInfoApi()
+                if (type == "forHome") {
+                    var bundle = Bundle().apply {
+                        selectedGender = when {
+                            binding.txtMale.currentTextColor == Color.parseColor("#FFFFFF") -> "male"
+                            binding.txtFemale.currentTextColor == Color.parseColor("#FFFFFF") -> "female"
+                            binding.txtOthers.currentTextColor == Color.parseColor("#FFFFFF") -> "others"
+                            else -> "" // or "None"
+                        }
+                        putString(AppConstant.Age,binding.etAge.text.toString())
+                        putString(AppConstant.Height,binding.etHeight.text.toString())
+                        putString(AppConstant.Weight,binding.etweight.text.toString())
+                        putInt(AppConstant.DISEASE_ID,diseaseId)
+                        putString(AppConstant.NAME,binding.etName.text.toString())
 
+                        putString(AppConstant.Gender, selectedGender)
+                    }
+
+                    findNavController().navigate(R.id.scheduledCallConsultation2,bundle)
+                }else{
+                    callingBasicInfoApi()
+                }
             }
         }
     }
@@ -106,13 +134,11 @@ class BasicInfoScreen : Fragment() {
                         is NetworkResult.Success ->{
                             LoadingUtils.hideDialog()
                               LoadingUtils.showSuccessDialog(requireContext(),it.data.toString()){
-                                  if (type == "forHome") {
-                                      findNavController().navigate(R.id.scheduledCallConsultation2)
-                                  } else {
+
                                       // Default
                                       val intent = Intent(requireContext(), HomeActivity::class.java)
                                       startActivity(intent)
-                                  }
+
                               }
 
                         }
