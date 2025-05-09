@@ -13,8 +13,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
 import com.bussiness.awpl.activities.HomeActivity
 import com.bussiness.awpl.utils.MediaUtils
@@ -24,7 +27,13 @@ import com.bussiness.awpl.model.MediaItem
 import com.bussiness.awpl.model.MediaType
 import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.ErrorMessages
+import com.bussiness.awpl.utils.LoadingUtils
+import com.bussiness.awpl.utils.MultipartUtil
+import com.bussiness.awpl.viewmodel.ScheduleCallViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import java.util.ArrayList
 
 @AndroidEntryPoint
 class ScheduledCallConsultation : Fragment() {
@@ -57,6 +66,7 @@ class ScheduledCallConsultation : Fragment() {
                 }
             }
     }
+    private lateinit var viewModel :ScheduleCallViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentScheduledCallConsulationBinding.inflate(inflater, container, false)
@@ -65,7 +75,7 @@ class ScheduledCallConsultation : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel = ViewModelProvider(this)[ScheduleCallViewModel::class.java]
         setUpRecyclerView()
         arguments?.let {
 
@@ -108,8 +118,53 @@ class ScheduledCallConsultation : Fragment() {
             btnImage.setOnClickListener { openMediaDialog("image") }
             btnNext.setOnClickListener {
                 if (validations()){
+                    callingScheduleForOtherApi()
 
-                    findNavController().navigate(R.id.appointmentBooking)
+                }
+            }
+        }
+    }
+
+
+    private fun callingScheduleForOtherApi(){
+        lifecycleScope.launch {
+            var answer1 = MultipartUtil.stringToRequestBody(binding.ansNO1.text.toString())
+            var answer2 = MultipartUtil.stringToRequestBody(binding.ansNo2.text.toString())
+            var answer3 = MultipartUtil.stringToRequestBody(binding.ansNo3.text.toString())
+            var answer4 = MultipartUtil.stringToRequestBody(binding.ans4.text.toString())
+            var ageRequest = MultipartUtil.stringToRequestBody(age.toString())
+            var heightRequest = MultipartUtil.stringToRequestBody(height.toString())
+            var weightRequest = MultipartUtil.stringToRequestBody(weight.toString())
+            var gender = MultipartUtil.stringToRequestBody(gender.toString())
+            var fullName  = MultipartUtil.stringToRequestBody(name.toString())
+            var diseaseId = MultipartUtil.stringToRequestBody(diseaseId.toString())
+            var imgList = mutableListOf<MultipartBody.Part>()
+            mediaList.forEach {
+                MultipartUtil.uriToMultipart(requireContext(),it.uri)
+                    ?.let { it1 -> imgList.add(it1) }
+            }
+            LoadingUtils.showDialog(requireContext(),false)
+
+            viewModel.scheduleCallForOther(
+                answer1, answer2, answer3, answer4, diseaseId, ArrayList(imgList), fullName, ageRequest, heightRequest,
+                weightRequest,
+                gender
+            ).collect{
+                when(it){
+                    is NetworkResult.Success ->{
+                        LoadingUtils.hideDialog()
+                        LoadingUtils.showSuccessDialog(requireContext(),it.data.toString()){
+                            findNavController().navigate(R.id.appointmentBooking)
+                        }
+                    }
+                    is NetworkResult.Error ->{
+                        LoadingUtils.hideDialog()
+                        LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
+
+                    }
+                    else ->{
+
+                    }
                 }
             }
         }

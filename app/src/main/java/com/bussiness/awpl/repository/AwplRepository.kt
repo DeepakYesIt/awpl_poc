@@ -1,6 +1,7 @@
 package com.bussiness.awpl.repository
 
 import com.bussiness.awpl.NetworkResult
+import com.bussiness.awpl.model.BookingResponseModel
 import com.bussiness.awpl.model.DoctorModel
 import com.bussiness.awpl.model.FAQItem
 import com.bussiness.awpl.model.HomeModel
@@ -92,4 +93,10 @@ interface AwplRepository {
         @Part("gender") gender :RequestBody
     ) : Flow<NetworkResult<String>>
 
+
+    suspend fun bookingAppointment(
+        @Field("date") date: String,
+        @Field("time") time :String,
+        @Field("schedule_call_id") callId :Int
+    ) : Flow<NetworkResult<NetworkResult<BookingResponseModel>>>
 }

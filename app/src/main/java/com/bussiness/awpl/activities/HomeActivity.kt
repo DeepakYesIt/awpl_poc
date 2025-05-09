@@ -46,6 +46,7 @@ import com.bussiness.awpl.R
 import com.bussiness.awpl.base.CommonUtils
 import com.bussiness.awpl.databinding.ActivityHomeBinding
 import com.bussiness.awpl.fragment.home.HomeViewModel
+import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.LoadingUtils
 import com.bussiness.awpl.utils.SessionManager
 import com.bussiness.awpl.viewmodel.SharedViewModel
@@ -341,12 +342,19 @@ class HomeActivity : AppCompatActivity() {
         }
 
         forOther.setOnClickListener {
-            navController.navigate(R.id.diseasesBottomFragment)
+            var bundle = Bundle().apply {
+                putString(AppConstant.TYPE,AppConstant.OTHERS)
+            }
+
+            navController.navigate(R.id.diseasesBottomFragment,bundle)
             closeDrawer()
         }
 
         forMe.setOnClickListener {
-            navController.navigate(R.id.diseasesBottomFragment)
+            var bundle = Bundle().apply {
+                  putString(AppConstant.TYPE,AppConstant.FOR_ME)
+            }
+            navController.navigate(R.id.diseasesBottomFragment,bundle)
             closeDrawer()
         }
 
@@ -355,6 +363,7 @@ class HomeActivity : AppCompatActivity() {
             updateBottomNavSelection("doctor")
             closeDrawer()
         }
+
         resources.setOnClickListener {
             navController.navigate(R.id.resourceFragment)
             updateBottomNavSelection("resource")

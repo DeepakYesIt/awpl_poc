@@ -3,6 +3,7 @@ package com.bussiness.awpl.repository
 import android.util.Log
 import com.business.zyvo.remote.ZyvoApi
 import com.bussiness.awpl.NetworkResult
+import com.bussiness.awpl.model.BookingResponseModel
 import com.bussiness.awpl.model.DoctorModel
 import com.bussiness.awpl.model.ErrorHandler
 import com.bussiness.awpl.model.FAQItem
@@ -319,7 +320,7 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
         gender: RequestBody
     ): Flow<NetworkResult<String>> =flow{
         try {
-            api.doctor().apply {
+            api.scheduleCallForOther(answer1, answer2, answer3, answer4, disease, profileImageList, name, age, height, weight, gender).apply {
                 if (isSuccessful) {
                     body()?.let { resp ->
                         if (resp.has("status") && resp.get("status").asBoolean) {
@@ -348,6 +349,14 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
         catch (e: Exception) {
             emit(NetworkResult.Error(ErrorHandler.emitError(e)))
         }
+    }
+
+    override suspend fun bookingAppointment(
+        date: String,
+        time: String,
+        callId: Int
+    ): Flow<NetworkResult<NetworkResult<BookingResponseModel>>> {
+       
     }
 
     override suspend fun doctor(): Flow<NetworkResult<MutableList<DoctorModel>>> = flow {

@@ -24,6 +24,21 @@ class ScheduleCallViewModel @Inject constructor(private var repository: AwplRepo
         }
     }
 
-    
+    suspend fun scheduleCallForOther(
+        answer1: RequestBody,
+        answer2: RequestBody,
+        answer3: RequestBody,
+        answer4: RequestBody,
+        disease: RequestBody,
+        profileImageList: ArrayList<MultipartBody.Part>?,
+        name: RequestBody,
+        age: RequestBody,
+        height: RequestBody,
+        weight: RequestBody,
+        gender: RequestBody
+    ): Flow<NetworkResult<String>>{
+        return repository.scheduleCallForOther(answer1, answer2, answer3, answer4, disease, profileImageList, name, age, height, weight, gender).onEach {
 
+        }
+    }
 }
