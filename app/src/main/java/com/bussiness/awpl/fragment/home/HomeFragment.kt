@@ -32,6 +32,7 @@ import com.bussiness.awpl.model.HealthListModel
 import com.bussiness.awpl.model.HomeModel
 import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.LoadingUtils
+
 import com.bussiness.awpl.utils.MultipartUtil
 import com.bussiness.awpl.viewmodel.DiseaseModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,7 +79,7 @@ class HomeFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun callingHomeApi(){
-        LoadingUtils.showDialog(requireContext(),false)
+       LoadingUtils.showDialog(requireActivity(),false)
         lifecycleScope.launch {
               homeViewModel.getHomeData().collect{
                   when(it){
@@ -87,11 +88,9 @@ class HomeFragment : Fragment() {
                           settingDataToUi(it.data)
                       }
                       is NetworkResult.Error ->{
-                          LoadingUtils.hideDialog()
-                          LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
+                        LoadingUtils.hideDialog()
                       }
                       else ->{
-
                       }
                   }
               }
@@ -246,7 +245,7 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+
       //  timeObserver?.let { viewModel.timeLeft.removeObserver(it) }
     }
 

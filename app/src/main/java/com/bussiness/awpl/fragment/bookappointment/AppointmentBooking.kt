@@ -12,21 +12,31 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bussiness.awpl.R
 import com.bussiness.awpl.activities.HomeActivity
 import com.bussiness.awpl.adapter.TimeSlotAdapter
 import com.bussiness.awpl.databinding.FragmentApointmentBookingBinding
+import com.bussiness.awpl.viewmodel.BookingViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
+@AndroidEntryPoint
 class AppointmentBooking : Fragment() {
 
     private var _binding: FragmentApointmentBookingBinding? = null
     private val binding get() = _binding!!
     private lateinit var timeSlotAdapter: TimeSlotAdapter
     private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var bookingViewModel :BookingViewModel
     private var currentMonth: YearMonth = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         YearMonth.now()
     } else {
@@ -34,13 +44,17 @@ class AppointmentBooking : Fragment() {
     }
     @RequiresApi(Build.VERSION_CODES.O)
     private var selectedDate: LocalDate? = LocalDate.now()
-    private val timeSlots = listOf("09:00 AM", "09:15 AM", "09:30 AM", "09:45 AM", "10:00 AM","10:15 AM", "10:30 AM", "10:45 AM", "11:00 AM")
+
+    val timeSlots = mutableListOf<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentApointmentBookingBinding.inflate(inflater, container, false)
+        bookingViewModel= ViewModelProvider(this)[BookingViewModel::class.java]
+        callingMakeTimeSlot()
+
         return binding.root
     }
 
@@ -52,6 +66,25 @@ class AppointmentBooking : Fragment() {
         clickListener()
         updateCalendar()
     }
+
+
+
+    private fun callingMakeTimeSlot(){
+
+        for (hour in 0..23) {
+            for (minute in listOf(0, 15, 30, 45)) {
+                val amPm = if (hour < 12) "AM" else "PM"
+                val hourFormatted = when {
+                    hour == 0 -> 12
+                    hour > 12 -> hour - 12
+                    else -> hour
+                }
+                val time = String.format("%02d:%02d %s", hourFormatted, minute, amPm)
+                timeSlots.add(time)
+            }
+        }
+    }
+
 
     @SuppressLint("SetTextI18n")
     private fun setupRecyclerView() {
@@ -81,11 +114,21 @@ class AppointmentBooking : Fragment() {
                 }
             }
             btnNext.setOnClickListener {
+
+                callingBookingSlotApi()
                 findNavController().navigate(R.id.summaryScreen)
             }
             appointmentPolicyTxt.setOnClickListener {
                 findNavController().navigate(R.id.appointmentPolicyFragment)
             }
+        }
+    }
+
+    private fun callingBookingSlotApi(){
+        lifecycleScope.launch {
+
+//            bookingViewModel.booking()
+
         }
     }
 
@@ -101,8 +144,7 @@ class AppointmentBooking : Fragment() {
             currentMonth.plusMonths(it.toLong())
         } else {
             TODO("VERSION.SDK_INT < O")
-        }
-
+          }
         }
         allMonths.forEachIndexed { index, month ->
             if (index % 2 == 0) {

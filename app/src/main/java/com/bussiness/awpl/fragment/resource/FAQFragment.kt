@@ -21,6 +21,7 @@ import com.bussiness.awpl.adapter.FAQAdapter
 import com.bussiness.awpl.databinding.FragmentFAQBinding
 import com.bussiness.awpl.model.FAQItem
 import com.bussiness.awpl.utils.LoadingUtils
+
 import com.bussiness.awpl.viewmodel.FaqViewModel
 import com.bussiness.awpl.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint

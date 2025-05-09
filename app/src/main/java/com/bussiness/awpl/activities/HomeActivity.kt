@@ -47,7 +47,7 @@ import com.bussiness.awpl.base.CommonUtils
 import com.bussiness.awpl.databinding.ActivityHomeBinding
 import com.bussiness.awpl.fragment.home.HomeViewModel
 import com.bussiness.awpl.utils.AppConstant
-import com.bussiness.awpl.utils.LoadingUtils
+
 import com.bussiness.awpl.utils.SessionManager
 import com.bussiness.awpl.viewmodel.SharedViewModel
 import com.google.android.material.navigation.NavigationView
@@ -76,8 +76,7 @@ class HomeActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_home) as NavHostFragment
+        navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_home) as NavHostFragment
         navController = navHostFragment.navController
 
 //        binding.customBottomNav.setupWithNavController(navController)
@@ -185,7 +184,6 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         }
-
 
     }
 
@@ -341,22 +339,22 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        forOther.setOnClickListener {
-            var bundle = Bundle().apply {
-                putString(AppConstant.TYPE,AppConstant.OTHERS)
-            }
-
-            navController.navigate(R.id.diseasesBottomFragment,bundle)
-            closeDrawer()
-        }
-
-        forMe.setOnClickListener {
-            var bundle = Bundle().apply {
-                  putString(AppConstant.TYPE,AppConstant.FOR_ME)
-            }
-            navController.navigate(R.id.diseasesBottomFragment,bundle)
-            closeDrawer()
-        }
+//        forOther.setOnClickListener {
+//            var bundle = Bundle().apply {
+//                putString(AppConstant.TYPE,AppConstant.OTHERS)
+//            }
+//
+//            navController.navigate(R.id.diseasesBottomFragment,bundle)
+//            closeDrawer()
+//        }
+//
+//        forMe.setOnClickListener {
+//            var bundle = Bundle().apply {
+//                  putString(AppConstant.TYPE,AppConstant.FOR_ME)
+//            }
+//            navController.navigate(R.id.diseasesBottomFragment,bundle)
+//            closeDrawer()
+//        }
 
         doctor.setOnClickListener {
             navController.navigate(R.id.yourDoctorFragment)

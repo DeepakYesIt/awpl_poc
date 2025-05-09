@@ -98,5 +98,5 @@ interface AwplRepository {
         @Field("date") date: String,
         @Field("time") time :String,
         @Field("schedule_call_id") callId :Int
-    ) : Flow<NetworkResult<NetworkResult<BookingResponseModel>>>
+    ) : Flow<NetworkResult<BookingResponseModel>>
 }

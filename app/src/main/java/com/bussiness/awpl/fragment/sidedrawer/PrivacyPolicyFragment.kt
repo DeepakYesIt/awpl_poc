@@ -14,6 +14,7 @@ import com.bussiness.awpl.R
 import com.bussiness.awpl.activities.HomeActivity
 import com.bussiness.awpl.databinding.FragmentPrivacyPolicyBinding
 import com.bussiness.awpl.utils.LoadingUtils
+
 import com.bussiness.awpl.viewmodel.PrivacyViewModel
 import com.bussiness.awpl.viewmodel.RefundViewModel
 import dagger.hilt.android.AndroidEntryPoint

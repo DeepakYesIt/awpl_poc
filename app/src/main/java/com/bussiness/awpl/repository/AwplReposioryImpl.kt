@@ -304,6 +304,7 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
         catch (e: Exception) {
             emit(NetworkResult.Error(ErrorHandler.emitError(e)))
         }
+
     }
 
     override suspend fun scheduleCallForOther(
@@ -355,8 +356,40 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
         date: String,
         time: String,
         callId: Int
-    ): Flow<NetworkResult<NetworkResult<BookingResponseModel>>> {
-       
+    ): Flow<NetworkResult<BookingResponseModel>> =flow{
+        try {
+            api.bookingAppointment(date, time, callId).apply {
+                if (isSuccessful) {
+                    body()?.let { resp ->
+                        if (resp.has("status") && resp.get("status").asBoolean) {
+                            var obj = resp.get("data").asJsonObject
+
+                            val model: BookingResponseModel = Gson().fromJson(obj.toString(), BookingResponseModel::class.java)
+
+
+                            emit(NetworkResult.Success(model))
+                        } else {
+                            emit(NetworkResult.Error(resp.get("message").asString))
+                        }
+                    } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
+                } else {
+                    try {
+                        val jsonObj = this.errorBody()?.string()?.let { JSONObject(it) }
+                        emit(
+                            NetworkResult.Error(
+                                jsonObj?.getString("message") ?: AppConstant.unKnownError
+                            )
+                        )
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        emit(NetworkResult.Error(AppConstant.unKnownError))
+                    }
+                }
+            }
+        }
+        catch (e: Exception) {
+            emit(NetworkResult.Error(ErrorHandler.emitError(e)))
+        }
     }
 
     override suspend fun doctor(): Flow<NetworkResult<MutableList<DoctorModel>>> = flow {

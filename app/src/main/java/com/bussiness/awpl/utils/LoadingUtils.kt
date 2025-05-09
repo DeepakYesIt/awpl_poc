@@ -9,8 +9,9 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.bussiness.awpl.R
+import com.bussiness.awpl.utils.JarvisLoader
 
-open class LoadingUtils {
+ class LoadingUtils {
 
     companion object {
 
@@ -109,16 +110,16 @@ open class LoadingUtils {
 
 
             cancelBtn.setOnClickListener {
-                dialog.dismiss()
+                dialog?.dismiss()
             }
 
             // Set button click listener
             okButton.setOnClickListener {
-                dialog.dismiss()
+                dialog?.dismiss()
             }
 
             // Show the dialog
-            dialog.show()
+            dialog?.show()
         }
 
         fun ensurePeriod(input: String): String {
