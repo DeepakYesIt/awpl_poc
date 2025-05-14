@@ -126,5 +126,9 @@ interface ZyvoApi {
         @Field("schedule_call_id") callId :Int
     ) : Response<JsonObject>
 
+    @POST("upcomingAppointment")
+    suspend fun upcomingAppointment() : Response<JsonObject>
+
+
 
 }

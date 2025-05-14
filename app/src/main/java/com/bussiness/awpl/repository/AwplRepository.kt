@@ -6,6 +6,7 @@ import com.bussiness.awpl.model.DoctorModel
 import com.bussiness.awpl.model.FAQItem
 import com.bussiness.awpl.model.HomeModel
 import com.bussiness.awpl.model.LoginModel
+import com.bussiness.awpl.model.UpcomingModel
 import com.bussiness.awpl.model.VideoModel
 import com.bussiness.awpl.viewmodel.DiseaseModel
 import com.bussiness.awpl.viewmodel.MyprofileModel
@@ -99,4 +100,6 @@ interface AwplRepository {
         @Field("time") time :String,
         @Field("schedule_call_id") callId :Int
     ) : Flow<NetworkResult<BookingResponseModel>>
+
+    suspend fun upcomingAppointment() : Flow<NetworkResult<MutableList<UpcomingModel>>>
 }

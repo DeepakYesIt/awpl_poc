@@ -5,6 +5,7 @@ import android.provider.Settings
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
@@ -442,6 +443,18 @@ class HomeActivity : AppCompatActivity() {
         binding.drawerLayout.closeDrawer(GravityCompat.START)
 
     }
+    fun isNotificationPermissionGranted(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            // Permission is granted by default below Android 13
+            true
+        }
+    }
+
 
 
     private val requestPermissionLauncher =

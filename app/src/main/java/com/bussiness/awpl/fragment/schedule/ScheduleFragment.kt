@@ -12,9 +12,11 @@ import android.widget.Toast
 import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
 import com.bussiness.awpl.adapter.AppointmentAdapter
 import com.bussiness.awpl.adapter.CancelledAdapter
@@ -22,11 +24,16 @@ import com.bussiness.awpl.adapter.CompletedAdapter
 import com.bussiness.awpl.databinding.DialogCancelAppointmentBinding
 import com.bussiness.awpl.databinding.FragmentScheduleBinding
 import com.bussiness.awpl.model.AppointmentModel
+import com.bussiness.awpl.model.UpcomingModel
+import com.bussiness.awpl.utils.LoadingUtils
+import com.bussiness.awpl.viewmodel.MyAppointmentViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
+@AndroidEntryPoint
 class ScheduleFragment : Fragment() {
 
+    private lateinit var viewModel: MyAppointmentViewModel
     private var _binding: FragmentScheduleBinding? = null
     private val binding get() = _binding!!
     private lateinit var appointmentAdapter: AppointmentAdapter
@@ -60,6 +67,7 @@ class ScheduleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentScheduleBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this)[MyAppointmentViewModel::class.java]
         return binding.root
     }
 
@@ -94,6 +102,7 @@ class ScheduleFragment : Fragment() {
                     upperLay.visibility = View.GONE
                     view.visibility = View.VISIBLE
                     binding.recyclerView.adapter = appointmentAdapter
+                    callingUpcomingApi()
                 }
                 1 -> {
                     txtCompleted.setTextColor(ContextCompat.getColor(requireContext(), R.color.darkGreyColor))
@@ -115,6 +124,44 @@ class ScheduleFragment : Fragment() {
         }
     }
 
+    private fun callingUpcomingApi(){
+        lifecycleScope.launch {
+            LoadingUtils.showDialog(requireContext(),false)
+            viewModel.upcomingAppoint().collect{
+                when(it){
+                    is NetworkResult.Success ->{
+                        LoadingUtils.hideDialog()
+                        var data = it.data
+                        if (data != null) {
+                            if(data.size > 0) {
+                                binding.noDataView.visibility = View.GONE
+                                binding.recyclerView.visibility = View.VISIBLE
+                               appointmentAdapter.updateAdapter(data)
+                           }else{
+                                binding.apply {
+                                    noDataView.visibility = View.VISIBLE
+                                    recyclerView.visibility = View.GONE
+                                }
+                            }
+                        }else{
+                            binding.apply {
+                                noDataView.visibility = View.VISIBLE
+                                recyclerView.visibility = View.GONE
+                            }
+                        }
+                    }
+                    is NetworkResult.Error ->{
+                        LoadingUtils.hideDialog()
+                        LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
+                    }
+                    else ->{
+
+                    }
+                }
+            }
+        }
+    }
+
 
     private fun setUpRecyclerView() {
 
@@ -128,7 +175,7 @@ class ScheduleFragment : Fragment() {
             })
 
         appointmentAdapter = AppointmentAdapter(
-            appointments.toMutableList(),
+            mutableListOf(),
             onCancelClick = { appointment -> cancelDialog(appointment) },
             onRescheduleClick = { Toast.makeText(requireContext(), "Reschedule clicked", Toast.LENGTH_SHORT).show() },
             onInfoClick = { _, infoIcon -> showInfoPopup(infoIcon) }
@@ -217,7 +264,7 @@ class ScheduleFragment : Fragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun cancelDialog(appointment: AppointmentModel) {
+    private fun cancelDialog(appointment: UpcomingModel) {
         val dialog = Dialog(requireContext())
         val binding = DialogCancelAppointmentBinding.inflate(layoutInflater)
         dialog.setContentView(binding.root)
@@ -248,11 +295,11 @@ class ScheduleFragment : Fragment() {
             noDataView.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
 
-            lifecycleScope.launch {
-                delay(3000)
-                noDataView.visibility = View.GONE
-                recyclerView.visibility = View.VISIBLE
-            }
+//            lifecycleScope.launch {
+//                delay(3000)
+//                noDataView.visibility = View.GONE
+//                recyclerView.visibility = View.VISIBLE
+//            }
         }
     }
 

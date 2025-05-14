@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -197,6 +198,7 @@ class AppointmentBooking : Fragment() {
 
                     dateView.setOnClickListener {
                         selectedDate = date
+                        Log.d("TESTING_DATE",selectedDate.toString())
                         updateCalendar()
                     }
 
