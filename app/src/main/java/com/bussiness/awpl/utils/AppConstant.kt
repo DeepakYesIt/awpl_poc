@@ -1,6 +1,8 @@
 package com.bussiness.awpl.utils
 
 object AppConstant {
+    val BOOK_MODEL: String? ="book_model"
+    val ID: String? ="id"
     val FOR_ME: String? = "for_me"
     val OTHERS: String? ="others"
     val DISEASE_ID: String? ="disease_id"

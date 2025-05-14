@@ -9,17 +9,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bussiness.awpl.R
 import com.bussiness.awpl.adapter.SummaryAdapter
 import com.bussiness.awpl.databinding.DialogCongratulationsBinding
 import com.bussiness.awpl.databinding.FragmentSummaryScreenBinding
+import com.bussiness.awpl.model.BookingResponseModel
 import com.bussiness.awpl.model.SummaryModel
+import com.bussiness.awpl.utils.AppConstant
+import kotlinx.coroutines.launch
 
 class SummaryScreen : Fragment() {
     private var _binding: FragmentSummaryScreenBinding? = null
     private val binding get() = _binding!!
+    private  var bookingResponseModel: BookingResponseModel? =null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,10 +36,25 @@ class SummaryScreen : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setupRecyclerView()
+
         clickListener()
+
+        bookingResponseModel = arguments?.getParcelable<BookingResponseModel>(AppConstant.BOOK_MODEL)
+
         binding.textStrikedPrice.text = Html.fromHtml(getString(R.string.striked_price), Html.FROM_HTML_MODE_LEGACY)
 
+        settingDataToUi()
+    }
+
+    private fun settingDataToUi(){
+        bookingResponseModel?.let { obj->
+           if(!obj.is_first_consultation){
+               binding.textFree.text = "₹ "+obj.payment_amount.toString()
+           }
+
+        }
     }
 
     private fun setupRecyclerView() {
@@ -49,6 +69,8 @@ class SummaryScreen : Fragment() {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             this.adapter = adapter
         }
+
+
     }
 
     private fun clickListener() {

@@ -154,8 +154,11 @@ class ScheduledCallConsultation : Fragment() {
                 when(it){
                     is NetworkResult.Success ->{
                         LoadingUtils.hideDialog()
-                        LoadingUtils.showSuccessDialog(requireContext(),it.data.toString()){
-                            findNavController().navigate(R.id.appointmentBooking)
+                        LoadingUtils.showSuccessDialog(requireContext(),"Details Uploaded Successfully"){
+                            var bundle = Bundle().apply {
+                                putString(AppConstant.ID,it.data.toString())
+                            }
+                            findNavController().navigate(R.id.appointmentBooking,bundle)
                         }
                     }
                     is NetworkResult.Error ->{

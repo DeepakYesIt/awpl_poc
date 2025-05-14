@@ -1,5 +1,6 @@
 package com.bussiness.awpl.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,8 +27,8 @@ class AppointmentAdapter(
                 dateTxt.text = appointment.date
                 timeTxt.text = appointment.time
               //  doctorImage.setImageResource(appointment.doctorImage)
-
-                Glide.with(binding.root.context).load(AppConstant.Base_URL+doctorName).into(doctorImage)
+                Log.d("TESTING_UPCOMING","name :- "+ appointment.doctorName+" Date:- "+ appointment.date+" Time:- "+appointment.time)
+                Glide.with(binding.root.context).load(AppConstant.Base_URL+appointment.doctorImage).into(doctorImage)
 
                 cancelButton.setOnClickListener { onCancelClick(appointment) }
                 rescheduleButton.setOnClickListener { onRescheduleClick(appointment) }

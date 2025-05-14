@@ -20,4 +20,12 @@ class BookingViewModel @Inject constructor(private var repository: AwplRepositor
 
         }
     }
+
+
+    suspend fun getScheduleTime(date :String): Flow<NetworkResult<MutableList<String>>>{
+        return repository.getScheduleTime(date).onEach {
+
+        }
+    }
+
 }

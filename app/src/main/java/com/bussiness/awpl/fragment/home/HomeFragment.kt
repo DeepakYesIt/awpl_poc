@@ -63,6 +63,9 @@ class HomeFragment : Fragment() {
 
         homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
 
+        binding.textView45.setOnClickListener {
+            findNavController().navigate(R.id.appointmentBooking)
+        }
         return binding.root
     }
 

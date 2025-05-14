@@ -124,6 +124,7 @@
                         android:text="@string/striked_price"
                         android:textColor="@color/darkGreyColor"
                         android:textSize="14sp"
+                        android:visibility="gone"
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_10sdp"
                         app:layout_constraintEnd_toEndOf="parent"

@@ -3,6 +3,7 @@ package com.bussiness.awpl.fragment.schedule
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -133,6 +134,7 @@ class ScheduleFragment : Fragment() {
                         LoadingUtils.hideDialog()
                         var data = it.data
                         if (data != null) {
+                            Log.d("TESTING_SIZE","Size of the list is "+data.size.toString())
                             if(data.size > 0) {
                                 binding.noDataView.visibility = View.GONE
                                 binding.recyclerView.visibility = View.VISIBLE
@@ -162,10 +164,50 @@ class ScheduleFragment : Fragment() {
         }
     }
 
+    private fun callingCompletedApi(type:String){
+        lifecycleScope.launch {
+            LoadingUtils.showDialog(requireContext(),false)
+            viewModel.completedAppointment(type).collect{
+                when(it){
+                    is NetworkResult.Success ->{
+                        LoadingUtils.hideDialog()
+                        var data = it.data
+                        if (data != null) {
+                            Log.d("TESTING_SIZE","Size of the list is "+data.size.toString())
+                            if(data.size > 0) {
+                                binding.noDataView.visibility = View.GONE
+                                binding.recyclerView.visibility = View.VISIBLE
+                                completedAdapter.updateAdapter(data)
+                            }else{
+                                binding.apply {
+                                    noDataView.visibility = View.VISIBLE
+                                    recyclerView.visibility = View.GONE
+                                }
+                            }
+                        }else{
+                            binding.apply {
+                                noDataView.visibility = View.VISIBLE
+                                recyclerView.visibility = View.GONE
+                            }
+                        }
+                    }
+                    is NetworkResult.Error ->{
+                        LoadingUtils.hideDialog()
+                        LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
+                    }
+                    else ->{
+
+                    }
+                }
+            }
+        }
+    }
+
 
     private fun setUpRecyclerView() {
 
-        completedAdapter = CompletedAdapter(appointmentList,
+        completedAdapter = CompletedAdapter(
+            mutableListOf(),
             onCheckDetailsClick = { appointment ->
                 findNavController().navigate(R.id.doctorChatFragment)
             },
@@ -200,7 +242,8 @@ class ScheduleFragment : Fragment() {
             binding.tv2.setTextColor(android.graphics.Color.parseColor("#858484"))
             binding.scheduleCall2.background = null
             binding.tV1.setTextColor(android.graphics.Color.parseColor("#356598"))
-           completedAdapter.update(true,appointmentList)
+
+           completedAdapter.update(true, mutableListOf())
         }
 
         binding.scheduleCall2.setOnClickListener {
@@ -209,7 +252,7 @@ class ScheduleFragment : Fragment() {
             binding.scheduleCall1.background = null
 
             binding.tv2.setTextColor(android.graphics.Color.parseColor("#356598"))
-            completedAdapter.update(false,appointmentList)
+            completedAdapter.update(false, mutableListOf())
         }
 
         binding.apply {

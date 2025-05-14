@@ -2,6 +2,7 @@ package com.bussiness.awpl.repository
 
 import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.model.BookingResponseModel
+import com.bussiness.awpl.model.CompletedAppointmentModel
 import com.bussiness.awpl.model.DoctorModel
 import com.bussiness.awpl.model.FAQItem
 import com.bussiness.awpl.model.HomeModel
@@ -102,4 +103,11 @@ interface AwplRepository {
     ) : Flow<NetworkResult<BookingResponseModel>>
 
     suspend fun upcomingAppointment() : Flow<NetworkResult<MutableList<UpcomingModel>>>
+
+    suspend fun completedAppointment(
+        @Field("for")appointmentFor:String
+    ) : Flow<NetworkResult<MutableList<CompletedAppointmentModel>>>
+
+    suspend fun getScheduleTime(date : String) :Flow<NetworkResult<MutableList<String>>>
+
 }

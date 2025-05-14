@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bussiness.awpl.R
 
 class TimeSlotAdapter(
-    private val timeSlots: List<String>,
+    private var timeSlots: List<String>,
     private val onTimeSlotSelected: (String) -> Unit
     ) : RecyclerView.Adapter<TimeSlotAdapter.TimeSlotViewHolder>() {
 
@@ -59,4 +59,11 @@ class TimeSlotAdapter(
     }
 
     override fun getItemCount(): Int = timeSlots.size
-}
+
+    fun updateAdapter( timeSlots: List<String>){
+        this.timeSlots = timeSlots
+        notifyDataSetChanged()
+    }
+
+
+    }

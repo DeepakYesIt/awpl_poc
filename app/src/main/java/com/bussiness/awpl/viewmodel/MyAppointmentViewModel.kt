@@ -2,6 +2,7 @@ package com.bussiness.awpl.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.bussiness.awpl.NetworkResult
+import com.bussiness.awpl.model.CompletedAppointmentModel
 import com.bussiness.awpl.model.LoginModel
 import com.bussiness.awpl.model.UpcomingModel
 import com.bussiness.awpl.repository.AwplRepository
@@ -18,4 +19,13 @@ class MyAppointmentViewModel @Inject constructor(private var repository: AwplRep
 
         }
     }
+
+
+    suspend fun completedAppointment(appointmentFor: String): Flow<NetworkResult<MutableList<CompletedAppointmentModel>>> {
+        return repository.completedAppointment(appointmentFor).onEach {
+
+        }
+    }
+
+
 }

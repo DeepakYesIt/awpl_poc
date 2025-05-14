@@ -156,8 +156,10 @@ class HomeScheduleCallFragment : Fragment() {
                     is NetworkResult.Success ->{
                         LoadingUtils.hideDialog()
 
-                        LoadingUtils.showSuccessDialog(requireContext(),it.data.toString()){
-                            findNavController().navigate(R.id.appointmentBooking)
+                        LoadingUtils.showSuccessDialog(requireContext(),"Your Call Schedule Successfully"){
+                            var bundle =Bundle()
+                            bundle.putString(AppConstant.ID,it.data)
+                            findNavController().navigate(R.id.appointmentBooking,bundle)
                         }
 
                     }

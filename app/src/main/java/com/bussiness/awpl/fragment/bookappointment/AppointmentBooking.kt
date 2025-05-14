@@ -17,12 +17,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
 import com.bussiness.awpl.activities.HomeActivity
 import com.bussiness.awpl.adapter.TimeSlotAdapter
 import com.bussiness.awpl.databinding.FragmentApointmentBookingBinding
+import com.bussiness.awpl.utils.AppConstant
+import com.bussiness.awpl.utils.LoadingUtils
 import com.bussiness.awpl.viewmodel.BookingViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
@@ -38,6 +42,8 @@ class AppointmentBooking : Fragment() {
     private lateinit var timeSlotAdapter: TimeSlotAdapter
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var bookingViewModel :BookingViewModel
+    private  var callId =0
+    private var selectTime =""
     private var currentMonth: YearMonth = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         YearMonth.now()
     } else {
@@ -45,6 +51,7 @@ class AppointmentBooking : Fragment() {
     }
     @RequiresApi(Build.VERSION_CODES.O)
     private var selectedDate: LocalDate? = LocalDate.now()
+    private  var selectedDateStr =""
 
     val timeSlots = mutableListOf<String>()
 
@@ -54,7 +61,13 @@ class AppointmentBooking : Fragment() {
     ): View {
         _binding = FragmentApointmentBookingBinding.inflate(inflater, container, false)
         bookingViewModel= ViewModelProvider(this)[BookingViewModel::class.java]
-        callingMakeTimeSlot()
+        arguments?.let {
+            if(it.containsKey(AppConstant.ID)){
+                callId = it.getString(AppConstant.ID)?.let { it1 -> Integer.parseInt(it1) }?:0
+            }
+        }
+
+
 
         return binding.root
     }
@@ -64,24 +77,51 @@ class AppointmentBooking : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
+        val today = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val formattedDate = today.format(formatter)
+        selectedDateStr = formattedDate
+        callingMakeTimeSlot(formattedDate)
         clickListener()
         updateCalendar()
     }
 
 
 
-    private fun callingMakeTimeSlot(){
+    private fun callingMakeTimeSlot(date:String){
 
-        for (hour in 0..23) {
-            for (minute in listOf(0, 15, 30, 45)) {
-                val amPm = if (hour < 12) "AM" else "PM"
-                val hourFormatted = when {
-                    hour == 0 -> 12
-                    hour > 12 -> hour - 12
-                    else -> hour
-                }
-                val time = String.format("%02d:%02d %s", hourFormatted, minute, amPm)
-                timeSlots.add(time)
+//        for (hour in 0..23) {
+//            for (minute in listOf(0, 15, 30, 45)) {
+//                val amPm = if (hour < 12) "AM" else "PM"
+//                val hourFormatted = when {
+//                    hour == 0 -> 12
+//                    hour > 12 -> hour - 12
+//                    else -> hour
+//                }
+//                val time = String.format("%02d:%02d %s", hourFormatted, minute, amPm)
+//                timeSlots.add(time)
+//            }
+//        }
+        lifecycleScope.launch {
+            LoadingUtils.showDialog(requireContext(),false)
+            bookingViewModel.getScheduleTime(date).collect{
+               when(it){
+                   is NetworkResult.Success ->{
+                       LoadingUtils.hideDialog()
+                       timeSlots.clear()
+                       it.data?.let { it1 -> timeSlots.addAll(it1)
+                           Log.d("TESTING_SIZE",it.data.size.toString()+"from api")
+                           Log.d("TESTING_SIZE",timeSlots.size.toString()+" from local")
+                           timeSlotAdapter.updateAdapter(timeSlots)
+                       }
+                   }
+                   is NetworkResult.Error ->{
+                       LoadingUtils.hideDialog()
+                   }
+                   else ->{
+
+                   }
+               }
             }
         }
     }
@@ -94,6 +134,7 @@ class AppointmentBooking : Fragment() {
             this.layoutManager = this@AppointmentBooking.layoutManager
             timeSlotAdapter = TimeSlotAdapter(timeSlots) { selectedTime ->
                 binding.textView25.text = "Selected: $selectedTime"
+                selectTime = selectedTime
             }
             adapter = timeSlotAdapter
         }
@@ -115,9 +156,8 @@ class AppointmentBooking : Fragment() {
                 }
             }
             btnNext.setOnClickListener {
-
                 callingBookingSlotApi()
-                findNavController().navigate(R.id.summaryScreen)
+
             }
             appointmentPolicyTxt.setOnClickListener {
                 findNavController().navigate(R.id.appointmentPolicyFragment)
@@ -127,9 +167,31 @@ class AppointmentBooking : Fragment() {
 
     private fun callingBookingSlotApi(){
         lifecycleScope.launch {
+            if(!selectTime.isEmpty()) {
+                  LoadingUtils.showDialog(requireContext(),false)
+                bookingViewModel.booking(selectedDateStr,selectTime,callId).collect {
+                    when(it){
+                        is NetworkResult.Success ->{
+                            LoadingUtils.hideDialog()
+                            var model = it.data
+                            var bundle = Bundle().apply {
+                                putParcelable(AppConstant.BOOK_MODEL,model)
+                            }
 
-//            bookingViewModel.booking()
+                            findNavController().navigate(R.id.summaryScreen,bundle)
+                        }
+                        is NetworkResult.Error ->{
+                            LoadingUtils.hideDialog()
 
+                        }
+                        else ->{
+
+                        }
+                    }
+                }
+            }else{
+                LoadingUtils.showErrorDialog(requireContext(),"Please select an appointment time.")
+            }
         }
     }
 
@@ -199,7 +261,9 @@ class AppointmentBooking : Fragment() {
                     dateView.setOnClickListener {
                         selectedDate = date
                         Log.d("TESTING_DATE",selectedDate.toString())
+                        selectedDateStr= selectedDate.toString()
                         updateCalendar()
+                        callingMakeTimeSlot(selectedDate.toString())
                     }
 
                     when (date) {
@@ -237,7 +301,6 @@ class AppointmentBooking : Fragment() {
             next.setOnClickListener {
                 currentMonth = currentMonth.plusMonths(1)
                 updateCalendar()
-
             }
             parentLayout.addView(monthView)
         }
