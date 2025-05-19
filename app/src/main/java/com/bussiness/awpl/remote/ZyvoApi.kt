@@ -139,4 +139,16 @@ interface ZyvoApi {
     @POST("getScheduleTime")
     @FormUrlEncoded
     suspend fun getScheduleTime(@Field("date")date:String) : Response<JsonObject>
+
+    @POST("applyPromo")
+    @FormUrlEncoded
+    suspend fun applyPromoCode(
+        @Field("promoCode") promoCode :String,
+        @Field("appointment_id") appointmentId :Int
+    ) : Response<JsonObject>
+
+    @POST("cancelledAppointment")
+    suspend fun cancelAppointment() : Response<JsonObject>
+
+
 }

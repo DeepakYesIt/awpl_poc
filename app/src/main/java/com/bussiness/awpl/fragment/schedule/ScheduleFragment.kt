@@ -120,48 +120,76 @@ class ScheduleFragment : Fragment() {
                     upperLay.visibility = View.GONE
                     view.visibility = View.VISIBLE
                     binding.recyclerView.adapter = cancelledAdapter
+                    cancelApiCall()
                 }
             }
         }
     }
 
-    private fun callingUpcomingApi(){
+
+    private fun cancelApiCall(){
         lifecycleScope.launch {
             LoadingUtils.showDialog(requireContext(),false)
-            viewModel.upcomingAppoint().collect{
+            viewModel.cancelAppointment().collect{
                 when(it){
                     is NetworkResult.Success ->{
-                        LoadingUtils.hideDialog()
-                        var data = it.data
-                        if (data != null) {
-                            Log.d("TESTING_SIZE","Size of the list is "+data.size.toString())
-                            if(data.size > 0) {
-                                binding.noDataView.visibility = View.GONE
-                                binding.recyclerView.visibility = View.VISIBLE
-                               appointmentAdapter.updateAdapter(data)
-                           }else{
-                                binding.apply {
-                                    noDataView.visibility = View.VISIBLE
-                                    recyclerView.visibility = View.GONE
-                                }
-                            }
-                        }else{
-                            binding.apply {
-                                noDataView.visibility = View.VISIBLE
-                                recyclerView.visibility = View.GONE
-                            }
-                        }
+
                     }
                     is NetworkResult.Error ->{
-                        LoadingUtils.hideDialog()
-                        LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
+
                     }
-                    else ->{
+                    else->{
 
                     }
                 }
             }
         }
+
+    }
+
+    private fun callingUpcomingApi(){
+      if(viewModel.upcomingList.size > 0){
+          appointmentAdapter.updateAdapter(viewModel.upcomingList)
+      }else {
+          lifecycleScope.launch {
+              LoadingUtils.showDialog(requireContext(), false)
+              viewModel.upcomingAppoint().collect {
+                  when (it) {
+                      is NetworkResult.Success -> {
+                          LoadingUtils.hideDialog()
+                          var data = it.data
+                          if (data != null) {
+                              Log.d("TESTING_SIZE", "Size of the list is " + data.size.toString())
+                              if (data.size > 0) {
+                                  binding.noDataView.visibility = View.GONE
+                                  binding.recyclerView.visibility = View.VISIBLE
+                                  appointmentAdapter.updateAdapter(data)
+                              } else {
+                                  binding.apply {
+                                      noDataView.visibility = View.VISIBLE
+                                      recyclerView.visibility = View.GONE
+                                  }
+                              }
+                          } else {
+                              binding.apply {
+                                  noDataView.visibility = View.VISIBLE
+                                  recyclerView.visibility = View.GONE
+                              }
+                          }
+                      }
+
+                      is NetworkResult.Error -> {
+                          LoadingUtils.hideDialog()
+                          LoadingUtils.showErrorDialog(requireContext(), it.message.toString())
+                      }
+
+                      else -> {
+
+                      }
+                  }
+              }
+          }
+      }
     }
 
     private fun callingCompletedApi(type:String){
@@ -202,7 +230,6 @@ class ScheduleFragment : Fragment() {
             }
         }
     }
-
 
     private fun setUpRecyclerView() {
 
@@ -293,7 +320,6 @@ class ScheduleFragment : Fragment() {
 
     }
 
-
     private fun showInfoPopup(anchorView: View) {
         val popupView = LayoutInflater.from(requireContext()).inflate(R.layout.item_popup_info_icon, null)
 
@@ -346,9 +372,9 @@ class ScheduleFragment : Fragment() {
         }
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
 }

@@ -2,11 +2,13 @@ package com.bussiness.awpl.repository
 
 import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.model.BookingResponseModel
+import com.bussiness.awpl.model.CancelledAppointment
 import com.bussiness.awpl.model.CompletedAppointmentModel
 import com.bussiness.awpl.model.DoctorModel
 import com.bussiness.awpl.model.FAQItem
 import com.bussiness.awpl.model.HomeModel
 import com.bussiness.awpl.model.LoginModel
+import com.bussiness.awpl.model.PromoCodeModel
 import com.bussiness.awpl.model.UpcomingModel
 import com.bussiness.awpl.model.VideoModel
 import com.bussiness.awpl.viewmodel.DiseaseModel
@@ -109,5 +111,13 @@ interface AwplRepository {
     ) : Flow<NetworkResult<MutableList<CompletedAppointmentModel>>>
 
     suspend fun getScheduleTime(date : String) :Flow<NetworkResult<MutableList<String>>>
+
+    suspend fun applyPromoCode(
+         promoCode :String,
+         appointmentId :Int
+    ) :Flow<NetworkResult<PromoCodeModel>>
+
+
+    suspend fun cancelAppointment() : Flow<NetworkResult<MutableList<CancelledAppointment>>>
 
 }

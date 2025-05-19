@@ -1,20 +1,30 @@
 package com.bussiness.awpl.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bussiness.awpl.R
 import com.bussiness.awpl.databinding.ItemSummaryBinding
+import com.bussiness.awpl.model.Doctor
 import com.bussiness.awpl.model.SummaryModel
+import com.bussiness.awpl.utils.AppConstant
 
-class SummaryAdapter(private val summaryList: List<SummaryModel>) :
+class SummaryAdapter(private var summaryList: List<Doctor>) :
     RecyclerView.Adapter<SummaryAdapter.SummaryViewHolder>() {
 
     inner class SummaryViewHolder(private val binding: ItemSummaryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(summaryModel: SummaryModel) {
+        fun bind(summaryModel: Doctor) {
             binding.doctorName.text = summaryModel.name
-            binding.doctorExperience.text = summaryModel.experience
-            binding.doctorImage.setImageResource(summaryModel.imageResId)
+            binding.doctorExperience.text = summaryModel.experience_yrs
+            Log.d("TESTING_PAYMENT",AppConstant.Base_URL+ summaryModel.profile_path)
+            Glide.with(binding.root.context)
+                .load(AppConstant.Base_URL+summaryModel.profile_path ).placeholder(
+                R.drawable.ic_not_found_img
+            ).into(binding.doctorImage)
+            //binding.doctorImage.setImageResource(summaryModel.imageResId)
         }
     }
 
@@ -28,4 +38,11 @@ class SummaryAdapter(private val summaryList: List<SummaryModel>) :
     }
 
     override fun getItemCount(): Int = summaryList.size
-}
+
+    fun updateAdapter( summaryList: List<Doctor>){
+       this.summaryList = summaryList
+        notifyDataSetChanged()
+    }
+
+
+    }

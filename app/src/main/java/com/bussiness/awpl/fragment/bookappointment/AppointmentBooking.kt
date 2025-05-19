@@ -43,6 +43,7 @@ class AppointmentBooking : Fragment() {
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var bookingViewModel :BookingViewModel
     private  var callId =0
+
     private var selectTime =""
     private var currentMonth: YearMonth = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         YearMonth.now()
@@ -60,14 +61,15 @@ class AppointmentBooking : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentApointmentBookingBinding.inflate(inflater, container, false)
-        bookingViewModel= ViewModelProvider(this)[BookingViewModel::class.java]
+        bookingViewModel= ViewModelProvider(requireActivity())[BookingViewModel::class.java]
+
         arguments?.let {
             if(it.containsKey(AppConstant.ID)){
                 callId = it.getString(AppConstant.ID)?.let { it1 -> Integer.parseInt(it1) }?:0
             }
         }
 
-
+        bookingViewModel.selectedCallId = callId
 
         return binding.root
     }
@@ -81,6 +83,7 @@ class AppointmentBooking : Fragment() {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val formattedDate = today.format(formatter)
         selectedDateStr = formattedDate
+        bookingViewModel.selectedDateStr = selectedDateStr
         callingMakeTimeSlot(formattedDate)
         clickListener()
         updateCalendar()
@@ -135,6 +138,7 @@ class AppointmentBooking : Fragment() {
             timeSlotAdapter = TimeSlotAdapter(timeSlots) { selectedTime ->
                 binding.textView25.text = "Selected: $selectedTime"
                 selectTime = selectedTime
+                bookingViewModel.selectTime = selectedTime
             }
             adapter = timeSlotAdapter
         }
@@ -169,19 +173,21 @@ class AppointmentBooking : Fragment() {
         lifecycleScope.launch {
             if(!selectTime.isEmpty()) {
                   LoadingUtils.showDialog(requireContext(),false)
-                bookingViewModel.booking(selectedDateStr,selectTime,callId).collect {
+                bookingViewModel.booking(bookingViewModel.selectedDateStr,bookingViewModel.selectTime,bookingViewModel.selectedCallId).collect {
                     when(it){
                         is NetworkResult.Success ->{
                             LoadingUtils.hideDialog()
                             var model = it.data
                             var bundle = Bundle().apply {
                                 putParcelable(AppConstant.BOOK_MODEL,model)
+                                putInt(AppConstant.ID,callId)
                             }
 
                             findNavController().navigate(R.id.summaryScreen,bundle)
                         }
                         is NetworkResult.Error ->{
                             LoadingUtils.hideDialog()
+                            LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
 
                         }
                         else ->{
@@ -262,6 +268,7 @@ class AppointmentBooking : Fragment() {
                         selectedDate = date
                         Log.d("TESTING_DATE",selectedDate.toString())
                         selectedDateStr= selectedDate.toString()
+                         bookingViewModel.selectedDateStr = selectedDateStr
                         updateCalendar()
                         callingMakeTimeSlot(selectedDate.toString())
                     }
