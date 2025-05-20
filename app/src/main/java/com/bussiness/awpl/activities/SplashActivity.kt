@@ -35,5 +35,14 @@ class SplashActivity : AppCompatActivity() {
             }
             finish()
         }, 3000)
+//           Handler(Looper.getMainLooper()).postDelayed({
+//            if (sessionManager.isLoggedIn()) {
+//                startActivity(Intent(this, PaytmActivity::class.java))
+//            } else {
+//                startActivity(Intent(this, PaytmActivity::class.java))
+//            }
+//            finish()
+//        }, 3000)
+
     }
 }

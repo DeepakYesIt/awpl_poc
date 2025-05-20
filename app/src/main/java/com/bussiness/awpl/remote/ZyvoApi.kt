@@ -89,7 +89,6 @@ interface ZyvoApi {
         @Part("disease") disease : RequestBody
     ) : Response<JsonObject>
 
-
     @POST("scheduledCallForMe")
     @Multipart
     suspend fun scheduleCallForMe(

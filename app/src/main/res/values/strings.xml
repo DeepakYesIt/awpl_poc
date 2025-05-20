@@ -393,6 +393,6 @@
     <string name="schedule_appoint">Schedule Appointment</string>
     <string name="my_perception">My Prescriptions</string>
     <string name="others_prescriptions">Others Prescriptions</string>
-
+    <string name="agora_app_id">1c45615e45194910baa3e4cad81a27fa</string>
 
 </resources>

@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.ui.android)
+    implementation(files("..\\libs\\libs\\agora-rtm-sdk.jar"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -95,7 +96,6 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.52")
     kapt("com.google.dagger:hilt-android-compiler:2.52")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-
     implementation("com.hbb20:ccp:2.6.0")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
@@ -103,10 +103,10 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10")
     implementation ("com.squareup.okhttp3:okhttp:4.9.1")
     implementation ("com.airbnb.android:lottie:3.4.0")
-
     implementation ("com.airbnb.android:lottie:3.4.0")
     implementation("com.razorpay:checkout:1.6.40")
     implementation("de.hdodenhof:circleimageview:3.1.0")
-
+    implementation("io.agora.rtc:full-sdk:4.2.1")
+    implementation("in.payu:payu-checkout-pro:2.8.0")
 
 }

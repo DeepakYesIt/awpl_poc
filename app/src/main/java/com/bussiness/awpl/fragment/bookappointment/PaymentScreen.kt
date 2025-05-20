@@ -2,11 +2,13 @@ package com.bussiness.awpl.fragment.bookappointment
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.bussiness.awpl.R
@@ -15,6 +17,11 @@ import com.bussiness.awpl.databinding.DialogConfirmAppointmentBinding
 import com.bussiness.awpl.databinding.DialogLogoutBinding
 import com.bussiness.awpl.databinding.FragmentPaymentScreenBinding
 import com.bussiness.awpl.databinding.FragmentSummaryScreenBinding
+import com.payu.base.models.ErrorResponse
+import com.payu.base.models.PayUPaymentParams
+import com.payu.checkoutpro.PayUCheckoutPro
+import com.payu.ui.model.listeners.PayUCheckoutProListener
+import com.payu.ui.model.listeners.PayUHashGenerationListener
 import com.razorpay.Checkout
 
 
@@ -23,6 +30,7 @@ class PaymentScreen : Fragment() {
     private val binding get() = _binding!!
     private var isPaytmSelected = false
     private var isRazorpaySelected = false
+    val preGeneratedHash = "TERA_BACKEND_GENERATED_HASH_STRING"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +38,7 @@ class PaymentScreen : Fragment() {
     ): View {
         _binding = FragmentPaymentScreenBinding.inflate(inflater, container, false)
 
+        callPaymentTaskPayU()
 
         return binding.root
     }
@@ -42,6 +51,61 @@ class PaymentScreen : Fragment() {
         restoreSelection()
 
         clickListener()
+    }
+
+
+    private fun callPaymentTaskPayU(){
+        val payUPaymentParams = PayUPaymentParams.Builder()
+            .setAmount("1.00") // Amount
+            .setIsProduction(true) // false for testing
+            .setKey("292KmR")
+            .setProductInfo("Test Product")
+            .setTransactionId("TXN123456") // Unique for every transaction
+            .setPhone("9999999999")
+            .setFirstName("John")
+            .setEmail("john@example.com")
+            .setSurl("http://awplconnectadmin.tgastaging.com/api/payu/payment-callback")
+            .setFurl("http://awplconnectadmin.tgastaging.com/api/payu/payment-callback")
+
+            .build()
+
+        PayUCheckoutPro.open(requireActivity(), payUPaymentParams, object : PayUCheckoutProListener {
+            override fun onPaymentSuccess(response: Any) {
+                Log.d("PayU", "Payment Success: $response")
+            }
+
+            override fun setWebViewProperties(webView: WebView?, bank: Any?) {
+
+            }
+
+            override fun onPaymentFailure(response: Any) {
+                Log.d("PayU", "Payment Failed: $response")
+            }
+
+            override fun generateHash(
+                map: HashMap<String, String?>,
+                hashGenerationListener: PayUHashGenerationListener
+            ) {
+//                val hashName = map["hashName"]  // e.g., "payment_hash"
+//                val hashValue = "TERA_BACKEND_GENERATED_HASH"
+//                val payUHash = PayUHash()
+//                payUHash.hashName = hashName
+//                payUHash.hashString = hashValue
+//                payUHash.hashGeneratedBy = PayUHash.PAYU_HASH_GENERATION_BY.MERCHANT_SERVER
+//                hashGenerationListener.onHashGenerated(payUHash)
+//                hashGenerationListener.onHashGenerated(preGeneratedHash)
+            }
+
+            override fun onError(errorResponse: ErrorResponse) {
+
+            }
+
+            override fun onPaymentCancel(isTxnInitiated: Boolean) {
+                Log.d("PayU", "Payment Cancelled. Txn started? $isTxnInitiated")
+            }
+
+
+        })
     }
 
     private fun restoreSelection() {
