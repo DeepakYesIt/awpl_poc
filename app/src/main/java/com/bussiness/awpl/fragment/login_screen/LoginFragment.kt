@@ -24,6 +24,7 @@ import com.bussiness.awpl.utils.LoadingUtils
 import com.bussiness.awpl.utils.MultipartUtil
 import com.bussiness.awpl.utils.SessionManager
 import com.bussiness.awpl.viewmodel.LoginViewModel
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -34,6 +35,7 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentWelcome3Binding? = null
     private val binding get() = _binding!!
     private var isPasswordVisible = false
+    private var token :String =""
     private val loginViewModel: LoginViewModel by lazy {
         ViewModelProvider(this)[LoginViewModel::class.java]
     }
@@ -48,6 +50,7 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         clickListener()
+        gettingToken()
     }
 
     private fun clickListener() {
@@ -75,13 +78,27 @@ class LoginFragment : Fragment() {
         }
     }
 
+    private fun gettingToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@addOnCompleteListener
+            }
+
+            // Get new FCM registration token
+            token = task.result
+            Log.d("AWPL_TOKEN", token)
+            // Log or send the token to your server
+        }
+    }
+
+
     private fun loginApi(){
 //        LoaderManager.showDialog(requireContext(), isCancelable = false)
 
         LoadingUtils.showDialog(requireContext(),false)
 
         lifecycleScope.launch {
-            loginViewModel.login(binding.DSCOdeEditTxt.text.toString() , binding.passwordEditText.text.toString()).collect{
+            loginViewModel.login(binding.DSCOdeEditTxt.text.toString() , binding.passwordEditText.text.toString() , token,"android").collect{
 
                 when(it){
                     is NetworkResult.Success ->{

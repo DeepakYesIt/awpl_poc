@@ -1,15 +1,17 @@
 package com.bussiness.awpl.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bussiness.awpl.databinding.ItemDateHeaderBinding
 import com.bussiness.awpl.databinding.ItemNotificationBinding
 import com.bussiness.awpl.model.NotificationModel
+import com.bussiness.awpl.model.PatinetNotification
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NotificationAdapter(private val notifications: List<NotificationModel>) :
+class NotificationAdapter(private var notifications: List<PatinetNotification>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -18,10 +20,6 @@ class NotificationAdapter(private val notifications: List<NotificationModel>) :
     }
 
     private val groupedNotifications = mutableListOf<Any>()
-
-    init {
-        groupNotificationsByDate()
-    }
 
     private fun groupNotificationsByDate() {
         var lastDate = ""
@@ -36,14 +34,16 @@ class NotificationAdapter(private val notifications: List<NotificationModel>) :
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (groupedNotifications[position] is String) VIEW_TYPE_HEADER else VIEW_TYPE_ITEM
+        return if (notifications[position].id.isEmpty() || notifications[position].title.isEmpty()) VIEW_TYPE_HEADER else VIEW_TYPE_ITEM
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == VIEW_TYPE_HEADER) {
+              Log.d("TESTING_HEADERS","INSIDE THE HEADER MAIN")
             val binding = ItemDateHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             DateHeaderViewHolder(binding)
         } else {
+            Log.d("TESTING_HEADERS","INSIDE THE  MAIN VIEW")
             val binding = ItemNotificationBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             NotificationViewHolder(binding)
         }
@@ -51,22 +51,22 @@ class NotificationAdapter(private val notifications: List<NotificationModel>) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is DateHeaderViewHolder) {
-            holder.bind(groupedNotifications[position] as String) // Fixed `items` reference
+            holder.bind(notifications[position].date) // Fixed `items` reference
         } else if (holder is NotificationViewHolder) {
-            holder.bind(groupedNotifications[position] as NotificationModel) // Fixed `items` reference
+            holder.bind(notifications[position]) // Fixed `items` reference
         }
     }
 
-    override fun getItemCount(): Int = groupedNotifications.size
+    override fun getItemCount(): Int = notifications.size
 
     // ViewHolder for Notification Item
     inner class NotificationViewHolder(private val binding: ItemNotificationBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(notification: NotificationModel) {
+        fun bind(notification: PatinetNotification) {
             binding.tvNotificationTitle.text = notification.title
             binding.tvNotificationDescription.text = notification.description
             binding.tvTime.text = notification.time
-            binding.ivNotificationIcon.setImageResource(notification.icon)
+
         }
     }
 
@@ -111,4 +111,11 @@ class NotificationAdapter(private val notifications: List<NotificationModel>) :
         }
         notifyDataSetChanged()
     }
+
+    fun updateAdapter(notifications: List<PatinetNotification>){
+        this.notifications = notifications
+        notifyDataSetChanged()
+    }
+
+
 }

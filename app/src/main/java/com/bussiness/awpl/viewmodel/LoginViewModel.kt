@@ -13,8 +13,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(private var repository: AwplRepository): ViewModel() {
 
-   suspend fun login(dsCode :String, password:String) : Flow<NetworkResult<LoginModel>> {
-       return repository.login(dsCode,password).onEach{
+   suspend fun login(dsCode :String, password:String,fcmTokem :String , type:String) : Flow<NetworkResult<LoginModel>> {
+       return repository.login(dsCode,password, fcmTokem,type).onEach{
 
         }
     }

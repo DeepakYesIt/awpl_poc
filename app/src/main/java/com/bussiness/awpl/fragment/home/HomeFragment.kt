@@ -3,6 +3,7 @@ package com.bussiness.awpl.fragment.home
 import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -109,9 +110,12 @@ class HomeFragment : Fragment() {
            binding.stDoctorName.setText(it.doctorName.toString())
            binding.tvDate.setText(it.date)
            binding.tvTime.setText(it.time)
+            Log.d("TESTING_URL",AppConstant.Base_URL+ MultipartUtil.ensureStartsWithSlash(it.doctorImage))
            Glide.with(this).load(AppConstant.Base_URL+ MultipartUtil.ensureStartsWithSlash(it.doctorImage)).into(binding.stDoctorImage)
          //  var time = MultipartUtil.getMinutesUntilStart(it.time.split("-")[0].trim())
-       }
+       } ?: {
+           binding.llTop.visibility =View.GONE
+        }
 
         data?.upcomingAppointDetails?.let {
             binding.scheduleCardAppointment.visibility = View.GONE
@@ -119,6 +123,7 @@ class HomeFragment : Fragment() {
             binding.doctorName.setText(it.doctorName)
             binding.tvDateUpCom.setText(it.date)
             binding.tvTimeUpCom.setText(it.time)
+            Log.d("TESTING_URL",AppConstant.Base_URL+ MultipartUtil.ensureStartsWithSlash(it.doctorImage))
             Glide.with(this).load(AppConstant.Base_URL+ MultipartUtil.ensureStartsWithSlash(it.doctorImage)).into(binding.upDoctorImage)
         } ?: {
             binding.scheduleCardAppointment.visibility = View.VISIBLE
@@ -136,6 +141,22 @@ class HomeFragment : Fragment() {
 
     }
 
+    private fun tempData(selectedDisease: DiseaseModel) {
+//        val result = if((0..1).random() == 0)"one" else " two"
+
+
+        var bundle = Bundle().apply {
+            putInt(AppConstant.DISEASE_ID, selectedDisease.id)
+        }
+
+        if (selectedDisease.category == "major"){
+            findNavController().navigate( R.id.doctorConsultationFragment,bundle)
+        }
+        else{
+            findNavController().navigate( R.id.onlineConsultationFragment,bundle)
+        }
+
+    }
 
     private fun setupRecyclerViews() {
 
@@ -143,7 +164,7 @@ class HomeFragment : Fragment() {
         binding.deptRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             organListAdapter = OrganListAdapter(mutableListOf()){ selectedDisease ->
-
+                              tempData(selectedDisease)
             }
             adapter = organListAdapter
         }
@@ -154,7 +175,13 @@ class HomeFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
             healthJourneyAdapter = HealthJourneyAdapter1(healthJourneyList) { item ->
-                findNavController().navigate(R.id.homeScheduleCallFragment)
+                var bundle = Bundle().apply {
+                        putString("type","schedule")
+                        putSerializable(AppConstant.DISEASE_LIST , ArrayList(diseaseList))
+                    }
+                    findNavController().navigate(R.id.diseasesBottomFragment,bundle)
+
+
             }
 
             adapter = healthJourneyAdapter

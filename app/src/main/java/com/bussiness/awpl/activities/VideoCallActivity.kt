@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.SurfaceView
+import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +26,7 @@ class VideoCallActivity : AppCompatActivity() {
 
     private lateinit var agoraEngine : RtcEngine
     private var isMuted = false
-
+    private var isCameraOn = true
   //  private val appId = "40c77d114a684733ae30fcb9fcb0369c"
     private val appId = "1c45615e45194910baa3e4cad81a27fa"
     private val token = null
@@ -90,6 +92,9 @@ class VideoCallActivity : AppCompatActivity() {
                     runOnUiThread {
                         Log.d("TESTING_NIKUNJ", "offline $uid")
                         removeRemoteVideo()
+                        agoraEngine.leaveChannel()
+                        // Finish the call screen
+                        finish()
                     }
                 }
 
@@ -97,6 +102,7 @@ class VideoCallActivity : AppCompatActivity() {
                     super.onError(err)
                     Log.d("TESTING_NIKUNJ", "Inside Error" +err)
                 }
+
 
             })
 
@@ -179,16 +185,26 @@ class VideoCallActivity : AppCompatActivity() {
 
     private fun setupUi() {
 
-        findViewById<Button>(R.id.btn_mute).setOnClickListener {
+        findViewById<ImageView>(R.id.btn_mute).setOnClickListener {
             isMuted = !isMuted
             agoraEngine.muteLocalAudioStream(isMuted)
         }
 
-        findViewById<Button>(R.id.btn_switch_camera).setOnClickListener {
-            agoraEngine.switchCamera()
+        findViewById<ImageView>(R.id.btn_switch_camera).setOnClickListener {
+//            if(isCameraOn) {
+//                agoraEngine.disableVideo()
+//            }else{
+//                agoraEngine.enableVideo()
+//            }
+           // agoraEngine.switchCamera()
+            isCameraOn =!isCameraOn
+            agoraEngine.muteLocalVideoStream(!isCameraOn)
+            var fmLay = findViewById<FrameLayout>(R.id.local_video_view)
+            fmLay.visibility = if (isCameraOn) View.VISIBLE else View.GONE
         }
 
-        findViewById<Button>(R.id.btn_end_call).setOnClickListener {
+        findViewById<ImageView>(R.id.btn_end_call).setOnClickListener {
+          agoraEngine.leaveChannel()
             finish()
         }
     }

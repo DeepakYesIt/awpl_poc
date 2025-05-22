@@ -7,6 +7,7 @@ plugins {
     id("dagger.hilt.android.plugin")
 
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
 
 }
 
@@ -70,7 +71,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.ui.android)
-    implementation(files("..\\libs\\libs\\agora-rtm-sdk.jar"))
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -108,5 +109,10 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("io.agora.rtc:full-sdk:4.2.1")
     implementation("in.payu:payu-checkout-pro:2.8.0")
+    //firebase
+    implementation("com.google.firebase:firebase-messaging:23.2.1")
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
+    implementation("com.google.android.gms:play-services-location:21.2.0")
+    implementation("com.google.android.gms:play-services-auth:21.1.1")
 
 }

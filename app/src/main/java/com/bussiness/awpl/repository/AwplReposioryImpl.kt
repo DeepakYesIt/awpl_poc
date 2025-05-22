@@ -12,6 +12,7 @@ import com.bussiness.awpl.model.ErrorHandler
 import com.bussiness.awpl.model.FAQItem
 import com.bussiness.awpl.model.HomeModel
 import com.bussiness.awpl.model.LoginModel
+import com.bussiness.awpl.model.PatinetNotification
 import com.bussiness.awpl.model.PromoCodeModel
 import com.bussiness.awpl.model.UpcomingModel
 import com.bussiness.awpl.model.VideoModel
@@ -30,16 +31,18 @@ import retrofit2.HttpException
 import retrofit2.Response
 import retrofit2.http.Part
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Locale
 import javax.inject.Inject
 
 class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRepository{
 
     var TAG = "AWPL_RESP_IMPL";
 
-    override suspend fun login(dsCode: String, password: String): Flow<NetworkResult<LoginModel>> = flow{
+    override suspend fun login(dsCode: String, password: String,fcmToken :String, type:String): Flow<NetworkResult<LoginModel>> = flow{
 
         try {
-            api.login(dsCode, password).apply {
+            api.login(dsCode, password,fcmToken,type).apply {
                 if (isSuccessful) {
                     body()?.let { resp ->
                         if (resp.has("status") && resp.get("status").asBoolean) {
@@ -627,6 +630,83 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
             emit(NetworkResult.Error(ErrorHandler.emitError(e)))
         }
     }
+
+    override suspend fun patientNotification(): Flow<NetworkResult<MutableList<PatinetNotification>>> =flow{
+        try {
+            Log.d("TESTING_NOTIFICATION","inside notification Api")
+            api.patientNotification().apply {
+                if (isSuccessful) {
+                    body()?.let { resp ->
+                        if (resp.has("status") && resp.get("status").asBoolean) {
+                            var obj = resp.get("data").asJsonArray
+
+                            var resultList = mutableListOf<PatinetNotification>()
+                            obj.forEach {
+                                val model: PatinetNotification = Gson().fromJson(it.toString(), PatinetNotification::class.java)
+                                resultList.add(model)
+                            }
+
+                            Log.d("TESTING_URL","Result List Size is :- "+resultList.size)
+                            emit(NetworkResult.Success(resultList))
+                        } else {
+                            emit(NetworkResult.Error(resp.get("message").asString))
+                        }
+                    } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
+                } else {
+                    try {
+                        val jsonObj = this.errorBody()?.string()?.let { JSONObject(it) }
+                        emit(
+                            NetworkResult.Error(
+                                jsonObj?.getString("message") ?: AppConstant.unKnownError
+                            )
+                        )
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        emit(NetworkResult.Error(AppConstant.unKnownError))
+                    }
+                }
+            }
+        }
+        catch (e: Exception) {
+            emit(NetworkResult.Error(ErrorHandler.emitError(e)))
+        }
+    }
+
+    override suspend fun markAllRead(): Flow<NetworkResult<String>> =flow{
+        try {
+            Log.d("TESTING_NOTIFICATION","inside notification Api")
+            api.markAllRead().apply {
+                if (isSuccessful) {
+                    body()?.let { resp ->
+                        if (resp.has("status") && resp.get("status").asBoolean) {
+                            var obj = resp.get("message").asString
+
+
+                            emit(NetworkResult.Success(obj))
+                        } else {
+                            emit(NetworkResult.Error(resp.get("message").asString))
+                        }
+                    } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
+                } else {
+                    try {
+                        val jsonObj = this.errorBody()?.string()?.let { JSONObject(it) }
+                        emit(
+                            NetworkResult.Error(
+                                jsonObj?.getString("message") ?: AppConstant.unKnownError
+                            )
+                        )
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        emit(NetworkResult.Error(AppConstant.unKnownError))
+                    }
+                }
+            }
+        }
+        catch (e: Exception) {
+            emit(NetworkResult.Error(ErrorHandler.emitError(e)))
+        }
+    }
+
 
     override suspend fun doctor(): Flow<NetworkResult<MutableList<DoctorModel>>> = flow {
         try {

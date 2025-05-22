@@ -56,17 +56,16 @@ class PaymentScreen : Fragment() {
 
     private fun callPaymentTaskPayU(){
         val payUPaymentParams = PayUPaymentParams.Builder()
-            .setAmount("1.00") // Amount
+            .setAmount("1") // Amount
             .setIsProduction(true) // false for testing
             .setKey("292KmR")
             .setProductInfo("Test Product")
-            .setTransactionId("TXN123456") // Unique for every transaction
-            .setPhone("9999999999")
+            .setTransactionId("unique12345") // Unique for every transaction
+            .setPhone("8145714585")
             .setFirstName("John")
-            .setEmail("john@example.com")
+            .setEmail("john@gmail.com")
             .setSurl("http://awplconnectadmin.tgastaging.com/api/payu/payment-callback")
             .setFurl("http://awplconnectadmin.tgastaging.com/api/payu/payment-callback")
-
             .build()
 
         PayUCheckoutPro.open(requireActivity(), payUPaymentParams, object : PayUCheckoutProListener {

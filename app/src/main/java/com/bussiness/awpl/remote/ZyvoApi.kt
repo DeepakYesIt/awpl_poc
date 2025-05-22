@@ -25,7 +25,9 @@ interface ZyvoApi {
 
     @POST("login")
     @FormUrlEncoded
-    suspend fun login(@Field("ds_code")dsCode :String,@Field("password")password :String) :Response<JsonObject>
+    suspend fun login(@Field("ds_code")dsCode :String,@Field("password")password :String,
+                      @Field("fcm_token")fcmToken :String ,@Field("device_type") deviceType :String
+                      ) :Response<JsonObject>
 
 
     @POST("basicInfo")
@@ -148,6 +150,12 @@ interface ZyvoApi {
 
     @POST("cancelledAppointment")
     suspend fun cancelAppointment() : Response<JsonObject>
+
+    @GET("patientNotifications")
+    suspend fun patientNotification() : Response<JsonObject>
+
+    @POST("markAsReadPatientNotification")
+    suspend fun  markAllRead() : Response<JsonObject>
 
 
 }

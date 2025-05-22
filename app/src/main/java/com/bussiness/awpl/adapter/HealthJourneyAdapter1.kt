@@ -62,7 +62,7 @@ class HealthJourneyAdapter1(private val items: List<HealthListModel>, private va
         fun bind(item: HealthListModel, onScheduleCallClick: (HealthListModel) -> Unit) {
             // binding.headingTxt.text = item.title
             // binding.doctorImage.setImageResource(item.imageRes)
-            // binding.scheduleCallBtn.setOnClickListener { onScheduleCallClick(item) }
+            binding.root.setOnClickListener { onScheduleCallClick(item) }
         }
     }
 

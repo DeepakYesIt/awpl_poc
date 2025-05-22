@@ -8,6 +8,7 @@ import com.bussiness.awpl.model.DoctorModel
 import com.bussiness.awpl.model.FAQItem
 import com.bussiness.awpl.model.HomeModel
 import com.bussiness.awpl.model.LoginModel
+import com.bussiness.awpl.model.PatinetNotification
 import com.bussiness.awpl.model.PromoCodeModel
 import com.bussiness.awpl.model.UpcomingModel
 import com.bussiness.awpl.model.VideoModel
@@ -25,7 +26,7 @@ import retrofit2.http.Part
 interface AwplRepository {
 
 
-    suspend fun login(dsCode :String, password :String) : Flow<NetworkResult<LoginModel>>
+    suspend fun login(dsCode: String, password: String,fcmToken :String, type:String) : Flow<NetworkResult<LoginModel>>
 
     suspend fun basicInfo(@Field("name") name :String,
                           @Field("height") height :String,
@@ -120,4 +121,7 @@ interface AwplRepository {
 
     suspend fun cancelAppointment() : Flow<NetworkResult<MutableList<CancelledAppointment>>>
 
+    suspend fun patientNotification() : Flow<NetworkResult<MutableList<PatinetNotification>>>
+
+    suspend fun  markAllRead() : Flow<NetworkResult<String>>
 }

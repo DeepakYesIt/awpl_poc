@@ -55,15 +55,15 @@ class PaytmActivity : AppCompatActivity(), PaymentResultWithDataListener {
 
         postParams = mapOf(
             "key" to "292KmR",
-            "txnid" to "TXN123456",
-            "amount" to "1.00",
+            "txnid" to "unique12345",
+            "amount" to "1",
             "productinfo" to "Test Product",
             "firstname" to "John",
-            "email" to "john@example.com",
-            "phone" to "9999999999",
+            "email" to "john@gmail.com",
+            "phone" to "8145714585",
             "surl" to "http://awplconnectadmin.tgastaging.com/api/payu/payment-callback",
             "furl" to "http://awplconnectadmin.tgastaging.com/api/payu/payment-callback",
-            "hash" to "9698ab90dafc17b3a92e7037f30b02ba44f9e357ce85477b320a874f2d1a73f602e0cae04e9789b60c235cd91e6cdbe1383ca91785b0debdf43d3b120fa65c86"
+            "hash" to "6b08f03949ab314c03c3ca051ccaff4461e8cf53174b1111c1662d1bb7c20a5cdd792624db8f99e2387a4a338bc4161516142181a18cb685ffa7636505164a21"
         )
         // POST request WebView me load karo
         val postData = buildPostData(postParams)

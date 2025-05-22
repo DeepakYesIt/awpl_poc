@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".activities.VideoCallActivity">
 
     <FrameLayout
@@ -20,30 +21,35 @@
         android:layout_margin="16dp"/>
 
     <LinearLayout
+        android:id="@+id/bottom_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="bottom|center"
         android:padding="16dp"
+        android:layout_alignParentBottom="true"
         android:gravity="center">
 
 
-        <Button
+        <ImageView
             android:id="@+id/btn_mute"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mute" />
+            android:src="@drawable/ic_audio"
+            android:layout_marginHorizontal="@dimen/_7sdp"/>
 
-        <Button
+        <ImageView
             android:id="@+id/btn_switch_camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Switch" />
-        <Button
+            android:src="@drawable/ic_video"
+            android:layout_marginHorizontal="@dimen/_8sdp"/>
+        <ImageView
             android:id="@+id/btn_end_call"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="End Call" />
+            android:src="@drawable/ic_call_cut"
+            android:layout_marginHorizontal="@dimen/_7sdp"/>
 
 
     </LinearLayout>

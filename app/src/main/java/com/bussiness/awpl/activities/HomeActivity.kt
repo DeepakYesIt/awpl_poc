@@ -70,7 +70,6 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         BuildConfig.BASE_URL
-
         sessionManager = SessionManager(this)
         sessionManager?.applySavedLanguage()
 
@@ -82,6 +81,7 @@ class HomeActivity : AppCompatActivity() {
 
 //        binding.customBottomNav.setupWithNavController(navController)
 
+        binding.chatFab.visibility =View.GONE
         binding.ivBell.setOnClickListener { navigate(R.id.notificationFragment) }
 
         val fragmentToLoad = intent.getStringExtra("LOAD_HOME_FRAGMENT")
@@ -111,7 +111,7 @@ class HomeActivity : AppCompatActivity() {
                         imgBackProfile.setOnClickListener {
                             drawerLayout.openDrawer(GravityCompat.START)
                         }
-                        chatFab.visibility = View.VISIBLE
+                        chatFab.visibility = View.GONE
                     }
                     updateBottomNavSelection("home")
                 }
@@ -287,7 +287,7 @@ class HomeActivity : AppCompatActivity() {
             imgBackProfile.setOnClickListener {
                 findNavController(R.id.nav_host_fragment_home).navigateUp()
             }
-            chatFab.visibility = if (fab) View.VISIBLE else View.GONE
+            chatFab.visibility = if (fab) View.GONE else View.GONE
         }
     }
 
