@@ -4,6 +4,7 @@ import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.model.BookingResponseModel
 import com.bussiness.awpl.model.CancelledAppointment
 import com.bussiness.awpl.model.CompletedAppointmentModel
+import com.bussiness.awpl.model.CompletedSymptomsModel
 import com.bussiness.awpl.model.DoctorModel
 import com.bussiness.awpl.model.FAQItem
 import com.bussiness.awpl.model.HomeModel
@@ -124,4 +125,13 @@ interface AwplRepository {
     suspend fun patientNotification() : Flow<NetworkResult<MutableList<PatinetNotification>>>
 
     suspend fun  markAllRead() : Flow<NetworkResult<String>>
+
+    suspend fun resheduleAppointment(
+        @Field("appointment_id") appointmentId : Int,
+        @Field("date") date :String,
+        @Field("time") time :String
+    ) : Flow<NetworkResult<String>>
+
+
+    suspend fun completedSymptomsUpload() :  Flow<NetworkResult<MutableList<CompletedSymptomsModel>>>
 }

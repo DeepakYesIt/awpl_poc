@@ -49,6 +49,7 @@ import com.bussiness.awpl.utils.ErrorMessages
 import com.bussiness.awpl.utils.LoadingUtils
 
 import com.bussiness.awpl.utils.MultipartUtil
+import com.bussiness.awpl.utils.SessionManager
 import com.bussiness.awpl.viewmodel.MyProfileViewModel
 import com.bussiness.awpl.viewmodel.MyprofileModel
 import com.bussiness.awpl.viewmodel.PrivacyViewModel
@@ -322,6 +323,8 @@ class ProfileFragment : Fragment() {
                         LoadingUtils.hideDialog()
                         binding.llEditDelete.visibility =View.VISIBLE
                         binding.llSaveCancel.visibility =View.VISIBLE
+                        SessionManager(requireContext()).setUserName(binding.etName.text.toString())
+
                         disableAllEdlitText()
                         dialogACCOUNTSuccess()
                     }

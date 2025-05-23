@@ -157,5 +157,15 @@ interface ZyvoApi {
     @POST("markAsReadPatientNotification")
     suspend fun  markAllRead() : Response<JsonObject>
 
+    @POST("reschedule_appoitnement")
+    @FormUrlEncoded
+    suspend fun resheduleAppointment(
+        @Field("appointment_id") appointmentId : Int,
+        @Field("date") date :String,
+        @Field("time") time :String
+    ) : Response<JsonObject>
+
+    @POST("completedSymptomUploads")
+    suspend fun completedSymptomsUpload() : Response<JsonObject>
 
 }

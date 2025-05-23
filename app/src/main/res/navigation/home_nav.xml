@@ -130,4 +130,9 @@
         android:label="fragment_video_call"
         tools:layout="@layout/fragment_video_call" />
 
+    <fragment
+        android:id="@+id/reschedule_call"
+        android:name="com.bussiness.awpl.fragment.reshedule.ResheduleFragment"
+        android:label="reschedule_call"
+        />
 </navigation>

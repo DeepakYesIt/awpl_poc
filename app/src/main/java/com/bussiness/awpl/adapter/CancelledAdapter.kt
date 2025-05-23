@@ -3,12 +3,16 @@ package com.bussiness.awpl.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bussiness.awpl.R
 import com.bussiness.awpl.databinding.ItemCancelledBinding
 import com.bussiness.awpl.model.AppointmentModel
+import com.bussiness.awpl.model.CancelledAppointment
+import com.bussiness.awpl.utils.AppConstant
 
 class CancelledAdapter(
-    private val appointmentList: List<AppointmentModel>,
-    private val onRescheduleClick: (AppointmentModel) -> Unit
+    private var appointmentList: List<CancelledAppointment>,
+    private val onRescheduleClick: (CancelledAppointment) -> Unit
 ) : RecyclerView.Adapter<CancelledAdapter.CancelledViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CancelledViewHolder {
@@ -30,18 +34,25 @@ class CancelledAdapter(
     inner class CancelledViewHolder(private val binding: ItemCancelledBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(appointment: AppointmentModel) {
+        fun bind(appointment: CancelledAppointment) {
             with(binding) {
-                doctorImage.setImageResource(appointment.doctorImage)
+                Glide.with(binding.root).load(AppConstant.Base_URL+appointment.doctorImage).placeholder(
+                    R.drawable.ic_not_found_img).into(doctorImage)
                 doctorName.text = appointment.doctorName
-                dateAndTime.text = appointment.appointmentDate
+
+                dateAndTime.text = appointment.date
+
                 rescheduleButton.setOnClickListener {
                     onRescheduleClick(appointment)
                 }
-            }
-
+             }
+           }
         }
 
+    fun updateAdapter(appointmentList: List<CancelledAppointment>){
+        this.appointmentList = appointmentList
+        notifyDataSetChanged()
     }
+
 
 }

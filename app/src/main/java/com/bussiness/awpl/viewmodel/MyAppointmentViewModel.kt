@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.model.CancelledAppointment
 import com.bussiness.awpl.model.CompletedAppointmentModel
+import com.bussiness.awpl.model.CompletedSymptomsModel
 import com.bussiness.awpl.model.LoginModel
 import com.bussiness.awpl.model.UpcomingModel
 import com.bussiness.awpl.repository.AwplRepository
@@ -52,6 +53,13 @@ class MyAppointmentViewModel @Inject constructor(private var repository: AwplRep
             }
         }
     }
+
+    suspend fun completedSymptomsUpload() :  Flow<NetworkResult<MutableList<CompletedSymptomsModel>>>{
+        return repository.completedSymptomsUpload().onEach {
+
+        }
+    }
+
 
 
 }

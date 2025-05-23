@@ -2,6 +2,7 @@ package com.bussiness.awpl.fragment.schedule
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -22,10 +24,13 @@ import com.bussiness.awpl.R
 import com.bussiness.awpl.adapter.AppointmentAdapter
 import com.bussiness.awpl.adapter.CancelledAdapter
 import com.bussiness.awpl.adapter.CompletedAdapter
+import com.bussiness.awpl.adapter.SymptomsUploadCompleteAdapter
 import com.bussiness.awpl.databinding.DialogCancelAppointmentBinding
 import com.bussiness.awpl.databinding.FragmentScheduleBinding
 import com.bussiness.awpl.model.AppointmentModel
 import com.bussiness.awpl.model.UpcomingModel
+import com.bussiness.awpl.utils.AppConstant
+import com.bussiness.awpl.utils.DownloadWorker
 import com.bussiness.awpl.utils.LoadingUtils
 import com.bussiness.awpl.viewmodel.MyAppointmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,8 +45,10 @@ class ScheduleFragment : Fragment() {
     private lateinit var appointmentAdapter: AppointmentAdapter
     private lateinit var cancelledAdapter: CancelledAdapter
     private lateinit var completedAdapter: CompletedAdapter
+    private lateinit var completedSymptomsAdapter :SymptomsUploadCompleteAdapter
     private var selectedTab = 0
     private var isSelected = false
+
     private val appointmentList = listOf(
         AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM","Scheduled Call Consultations","", R.drawable.doctor_bg_icon),
         AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM","Symptom Upload Consultations","Thu May 14", R.drawable.doctor_bg_icon),
@@ -50,6 +57,7 @@ class ScheduleFragment : Fragment() {
         AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM","Scheduled Call Consultations","", R.drawable.doctor_bg_icon),
         AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM","Symptom Upload Consultations","Thu May 14", R.drawable.doctor_bg_icon),
     )
+
     private val appointments = listOf(
         AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM", "","",R.drawable.doctor_bg_icon),
         AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM", "","",R.drawable.doctor_bg_icon),
@@ -63,11 +71,16 @@ class ScheduleFragment : Fragment() {
         AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM", "","",R.drawable.doctor_bg_icon),
     )
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentScheduleBinding.inflate(inflater, container, false)
+        completedSymptomsAdapter = SymptomsUploadCompleteAdapter(mutableListOf()){ path->
+            var url = AppConstant.Base_URL+path.file_path
+            DownloadWorker().downloadPdfWithNotification(requireContext(),url,"Prescription_${System.currentTimeMillis()}.pdf")
+        }
         viewModel = ViewModelProvider(this)[MyAppointmentViewModel::class.java]
         return binding.root
     }
@@ -133,10 +146,12 @@ class ScheduleFragment : Fragment() {
             viewModel.cancelAppointment().collect{
                 when(it){
                     is NetworkResult.Success ->{
-
+                        LoadingUtils.hideDialog()
+                        it.data?.let { it1 -> cancelledAdapter.updateAdapter(it1) }
                     }
                     is NetworkResult.Error ->{
-
+                           LoadingUtils.hideDialog()
+                           LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
                     }
                     else->{
 
@@ -212,7 +227,8 @@ class ScheduleFragment : Fragment() {
                                     recyclerView.visibility = View.GONE
                                 }
                             }
-                        }else{
+                        }
+                        else{
                             binding.apply {
                                 noDataView.visibility = View.VISIBLE
                                 recyclerView.visibility = View.GONE
@@ -246,13 +262,24 @@ class ScheduleFragment : Fragment() {
         appointmentAdapter = AppointmentAdapter(
             mutableListOf(),
             onCancelClick = { appointment -> cancelDialog(appointment) },
-            onRescheduleClick = { Toast.makeText(requireContext(), "Reschedule clicked", Toast.LENGTH_SHORT).show() },
+            onRescheduleClick = {
+
+                var bundle = Bundle().apply {
+                    putInt(AppConstant.AppoitmentId,it.id)
+                }
+                findNavController().navigate(R.id.reschedule_call,bundle)
+
+                                },
             onInfoClick = { _, infoIcon -> showInfoPopup(infoIcon) }
         )
 
-        cancelledAdapter = CancelledAdapter(appointments) { appointment ->
+        cancelledAdapter = CancelledAdapter(mutableListOf()) { appointment ->
             // Handle reschedule button click here
-            Toast.makeText(requireContext(), "Rescheduled: ${appointment.doctorName}", Toast.LENGTH_SHORT).show()
+            var bundle =Bundle().apply {
+                putInt(AppConstant.AppoitmentId,appointment.id)
+            }
+            findNavController().navigate(R.id.reschedule_call,bundle)
+           // Toast.makeText(requireContext(), "Rescheduled: ${appointment.doctorName}", Toast.LENGTH_SHORT).show()
         }
 
         binding.recyclerView.apply {
@@ -269,17 +296,21 @@ class ScheduleFragment : Fragment() {
             binding.tv2.setTextColor(android.graphics.Color.parseColor("#858484"))
             binding.scheduleCall2.background = null
             binding.tV1.setTextColor(android.graphics.Color.parseColor("#356598"))
-
-           completedAdapter.update(true, mutableListOf())
+            binding.filterBtn.visibility =View.VISIBLE
+            completedAdapter.update(true, mutableListOf())
+            binding.recyclerView.adapter = completedAdapter
         }
 
         binding.scheduleCall2.setOnClickListener {
             binding.scheduleCall2.setBackgroundResource(R.drawable.bg_four_side_corner_inner_white)
             binding.tV1.setTextColor(android.graphics.Color.parseColor("#858484"))
             binding.scheduleCall1.background = null
-
+            binding.filterBtn.visibility =View.GONE
+            binding.recyclerView.adapter  = completedSymptomsAdapter
             binding.tv2.setTextColor(android.graphics.Color.parseColor("#356598"))
             completedAdapter.update(false, mutableListOf())
+            completedSymptomsUpload()
+
         }
 
         binding.apply {
@@ -295,6 +326,30 @@ class ScheduleFragment : Fragment() {
             }
         }
     }
+
+    private fun completedSymptomsUpload(){
+        lifecycleScope.launch {
+            LoadingUtils.showDialog(requireContext(),false)
+            viewModel.completedSymptomsUpload().collect {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        LoadingUtils.hideDialog()
+                        Log.d("TESTING_SIZE_ANDROID",it.data?.size.toString())
+                        it.data?.let { it1 -> completedSymptomsAdapter.updateAdapter(it1) }
+                    }
+                    is NetworkResult.Error ->{
+                        LoadingUtils.hideDialog()
+                        LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
+
+                    }
+                    else ->{
+
+                    }
+                }
+            }
+        }
+    }
+
 
     @SuppressLint("InflateParams")
     private fun filterPopUp(anchorView: View) {
@@ -371,6 +426,9 @@ class ScheduleFragment : Fragment() {
 //            }
         }
     }
+
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -7,6 +7,7 @@ import com.bussiness.awpl.model.AppointmentModel
 import com.bussiness.awpl.model.BookingResponseModel
 import com.bussiness.awpl.model.CancelledAppointment
 import com.bussiness.awpl.model.CompletedAppointmentModel
+import com.bussiness.awpl.model.CompletedSymptomsModel
 import com.bussiness.awpl.model.DoctorModel
 import com.bussiness.awpl.model.ErrorHandler
 import com.bussiness.awpl.model.FAQItem
@@ -29,6 +30,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.HttpException
 import retrofit2.Response
+import retrofit2.http.Field
 import retrofit2.http.Part
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -592,7 +594,7 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
 
     override suspend fun cancelAppointment(): Flow<NetworkResult<MutableList<CancelledAppointment>>> =flow{
         try {
-            api.doctor().apply {
+            api.cancelAppointment().apply {
                 if (isSuccessful) {
                     body()?.let { resp ->
                         if (resp.has("status") && resp.get("status").asBoolean) {
@@ -796,7 +798,14 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
                     body()?.let { resp ->
                         if (resp.has("status") && resp.get("status").asBoolean) {
                             val obj = resp.get("message").asString
-                            emit(NetworkResult.Success(obj))
+                            var obj1 = resp.get("patient").asJsonObject
+                            var img = ""
+                            if(obj1.has("profile_path") && obj1.get("profile_path").isJsonNull == false){
+                                 img = AppConstant.Base_URL + obj1.get("profile_path").asString
+                            }
+
+
+                            emit(NetworkResult.Success(obj + "-----"+img))
                         }
                         else {
                             emit(NetworkResult.Error(resp.get("message").asString))
@@ -910,6 +919,83 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
                         if (resp.has("status") && resp.get("status").asBoolean) {
                             var obj = resp.get("message").asString
                             emit(NetworkResult.Success(obj))
+                        }
+                        else {
+                            emit(NetworkResult.Error(resp.get("message").asString))
+                        }
+                    } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
+                } else {
+                    try {
+                        val jsonObj = this.errorBody()?.string()?.let { JSONObject(it) }
+                        emit(
+                            NetworkResult.Error(
+                                jsonObj?.getString("message") ?: AppConstant.unKnownError
+                            )
+                        )
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        emit(NetworkResult.Error(AppConstant.unKnownError))
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            emit(NetworkResult.Error(ErrorHandler.emitError(e)))
+        }
+    }
+
+   override  suspend fun resheduleAppointment(
+        @Field("appointment_id") appointmentId : Int,
+        @Field("date") date :String,
+        @Field("time") time :String
+    ) : Flow<NetworkResult<String>> = flow{
+        try {
+            api.resheduleAppointment(appointmentId, date, time).apply {
+                if (isSuccessful) {
+                    body()?.let { resp ->
+                        if (resp.has("status") && resp.get("status").asBoolean) {
+                            var obj = resp.get("message").asString
+                            emit(NetworkResult.Success(obj))
+                        }
+                        else {
+                            emit(NetworkResult.Error(resp.get("message").asString))
+                        }
+                    } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
+                } else {
+                    try {
+                        val jsonObj = this.errorBody()?.string()?.let { JSONObject(it) }
+                        emit(
+                            NetworkResult.Error(
+                                jsonObj?.getString("message") ?: AppConstant.unKnownError
+                            )
+                        )
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        emit(NetworkResult.Error(AppConstant.unKnownError))
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            emit(NetworkResult.Error(ErrorHandler.emitError(e)))
+        }
+    }
+
+    override suspend fun completedSymptomsUpload(): Flow<NetworkResult<MutableList<CompletedSymptomsModel>>> =flow{
+        try {
+            api.completedSymptomsUpload().apply {
+                if (isSuccessful) {
+                    body()?.let { resp ->
+                        if (resp.has("status") && resp.get("status").asBoolean) {
+                            var obj = resp.get("data").asJsonObject
+                            var completeSymptomsUpload = obj.get("completed_symptom_uploads").asJsonArray
+                            var resultList = mutableListOf<CompletedSymptomsModel>()
+                            completeSymptomsUpload.forEach {
+                                val model: CompletedSymptomsModel =
+                                    Gson().fromJson(it.toString(), CompletedSymptomsModel::class.java)
+                                 resultList.add(model)
+                            }
+
+
+                            emit(NetworkResult.Success(resultList))
                         }
                         else {
                             emit(NetworkResult.Error(resp.get("message").asString))

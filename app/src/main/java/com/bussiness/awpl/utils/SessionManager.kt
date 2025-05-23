@@ -27,6 +27,31 @@ class SessionManager(private val context: Context) {
         }
     }
 
+    fun to24Hour(time12h: String): String {
+        // Regex: 1–2 digits hour, colon, 1–2 digits minute, optional spaces, AM/PM (any case)
+        val regex = Regex("""^\s*(\d{1,2}):(\d{1,2})\s*([AaPp][Mm])\s*$""")
+        val match = regex.matchEntire(time12h)
+            ?: throw IllegalArgumentException("Invalid time format: \"$time12h\"")
+
+        val (hStr, mStr, ampm) = match.destructured
+        val hour12 = hStr.toInt().also {
+            require(it in 1..12) { "Hour must be 1–12: found $it" }
+        }
+        val minute = mStr.toInt().also {
+            require(it in 0..59) { "Minute must be 0–59: found $it" }
+        }
+
+        // Convert to 24h
+        val hour24 = when {
+            ampm.equals("AM", true) && hour12 == 12 -> 0      // 12 AM → 00
+            ampm.equals("AM", true)                            -> hour12 // 1 AM–11 AM unchanged
+            ampm.equals("PM", true) && hour12 < 12             -> hour12 + 12 // 1 PM–11 PM → 13–23
+            else                                               -> 12    // 12 PM → 12
+        }
+
+        return String.format("%02d:%02d", hour24, minute)
+    }
+
     // Get the current selected language from SharedPreferences
     private fun getLanguage(): String {
         return preferences.getString(LANGUAGE_KEY, "en") ?: "en"

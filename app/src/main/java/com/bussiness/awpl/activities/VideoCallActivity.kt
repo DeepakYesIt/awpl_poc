@@ -30,7 +30,7 @@ class VideoCallActivity : AppCompatActivity() {
   //  private val appId = "40c77d114a684733ae30fcb9fcb0369c"
     private val appId = "1c45615e45194910baa3e4cad81a27fa"
     private val token = null
-    private var channelName = "sk"
+    private var channelName = "Doctor_web"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,7 +115,6 @@ class VideoCallActivity : AppCompatActivity() {
 
     private fun setupLocalVideo() {
         val container = findViewById<FrameLayout>(R.id.local_video_view)
-
         // Step 1: Create SurfaceView
         val surfaceView = SurfaceView(this).apply {
             setZOrderMediaOverlay(true) // important for local video overlay
@@ -125,7 +124,7 @@ class VideoCallActivity : AppCompatActivity() {
         container.addView(surfaceView)
 
         // Step 3: Set it in Agora
-        val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_FIT, 0)
+        val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.VIEW_SETUP_MODE_REPLACE, 0)
         agoraEngine.setupLocalVideo(videoCanvas)
         agoraEngine.startPreview()
     }
@@ -157,8 +156,9 @@ class VideoCallActivity : AppCompatActivity() {
         surfaceView.setZOrderMediaOverlay(true)  // Optional: only if needed
         container.addView(surfaceView)
 
-        val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, uid)
+        val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.VIEW_SETUP_MODE_REPLACE, uid)
         agoraEngine?.setupRemoteVideo(videoCanvas)
+        setupLocalVideo()
     }
 
     private fun removeRemoteVideo() {
@@ -170,7 +170,8 @@ class VideoCallActivity : AppCompatActivity() {
 
         agoraEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION)
         agoraEngine.enableVideo()
-        agoraEngine.joinChannel(null, channelName, "", 0)
+        agoraEngine.joinChannel("007eJxTYGhZuya8uJ9/SVlkqOUtIdW+p7+t/P7a6JaqzeFxnRGivF6BwTDZxNTM0DTVxNTQ0sTS0CApMdE41SQ5McXCMNHIPC1RQcUgoyGQkWHDrmZGRgYIBPG5GFzyk0vyi+LLU5MYGABnTB9v"
+                 , channelName, "", 0)
     }
 
     private fun leaveChannel() {
@@ -197,10 +198,23 @@ class VideoCallActivity : AppCompatActivity() {
 //                agoraEngine.enableVideo()
 //            }
            // agoraEngine.switchCamera()
-            isCameraOn =!isCameraOn
-            agoraEngine.muteLocalVideoStream(!isCameraOn)
+
+//            isCameraOn =!isCameraOn
+//            agoraEngine.muteLocalVideoStream(!isCameraOn)
             var fmLay = findViewById<FrameLayout>(R.id.local_video_view)
-            fmLay.visibility = if (isCameraOn) View.VISIBLE else View.GONE
+//            fmLay.visibility = if (isCameraOn) View.VISIBLE else View.GONE
+
+            isCameraOn = !isCameraOn
+
+            agoraEngine.muteLocalVideoStream(!isCameraOn)
+
+            if (isCameraOn) {
+                agoraEngine.startPreview() // resumes camera if needed
+                fmLay.visibility = View.VISIBLE
+            } else {
+                agoraEngine.stopPreview() // optional: stop camera
+                fmLay.visibility = View.GONE // hide from local UI too
+            }
         }
 
         findViewById<ImageView>(R.id.btn_end_call).setOnClickListener {
