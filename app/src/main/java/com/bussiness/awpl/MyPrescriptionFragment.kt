@@ -7,21 +7,33 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bussiness.awpl.adapter.MyPersecptionAdapter
 import com.bussiness.awpl.databinding.FragmentMyPrescriptionBinding
 import com.bussiness.awpl.model.PrepareData
+import com.bussiness.awpl.utils.LoadingUtils
+import com.bussiness.awpl.viewmodel.MyPrescriptionViewModel
 import com.google.android.material.checkbox.MaterialCheckBox
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
+@AndroidEntryPoint
 class MyPrescriptionFragment : Fragment() {
 
     lateinit var binding :FragmentMyPrescriptionBinding
     private var isSelected = false
     lateinit var adapter :MyPersecptionAdapter
-    var whichselected = 2;
+    var whichselected = "all";
+
+    lateinit var viewModel :MyPrescriptionViewModel
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this)[MyPrescriptionViewModel::class.java]
         arguments?.let {
 
         }
@@ -32,9 +44,8 @@ class MyPrescriptionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMyPrescriptionBinding.inflate(LayoutInflater.from(requireContext()))
-        adapter = MyPersecptionAdapter(PrepareData.filterPrescriptionsByReferred(PrepareData.getDummyPrescriptions())){ pres->
+        adapter = MyPersecptionAdapter(mutableListOf()){ pres->
             findNavController().navigate(R.id.doctorChatFragment)
-
         }
         binding.recyclerPresecption.adapter = adapter
         binding.imgBack.setOnClickListener {
@@ -51,8 +62,43 @@ class MyPrescriptionFragment : Fragment() {
                     binding.imgIconUpDown.setImageResource(R.drawable.ic_down_white)
                 }
         }
+        callingMyPrescriptionApi("all")
         return binding.root
     }
+
+    private fun callingMyPrescriptionApi(type:String){
+        lifecycleScope.launch {
+            try {
+                LoadingUtils.showDialog(requireContext(),false)
+                viewModel.myPrescription(type).collect{
+
+                    when(it){
+                        is NetworkResult.Success ->{
+                            LoadingUtils.hideDialog()
+                            var data = it.data
+                            if (data != null) {
+                                adapter.updateAdapter(data)
+                            }
+                        }
+                        is NetworkResult.Error ->{
+                            LoadingUtils.hideDialog()
+
+                        }
+                        else ->{
+
+                        }
+                    }
+
+
+                }
+            }catch(e:Exception){
+
+            }
+        }
+
+    }
+
+
 
 
     private fun filterPopUp(anchorView: View) {
@@ -65,45 +111,79 @@ class MyPrescriptionFragment : Fragment() {
          var myPresc = popupView.findViewById<MaterialCheckBox>(R.id.appCompatCheckBox)
          var otherPresc = popupView.findViewById<MaterialCheckBox>(R.id.appCompatCheckBox2)
 
-        if(whichselected ==2){
-            otherPresc.isChecked = true
-            myPresc.isChecked = false
-        }else{
-            otherPresc.isChecked = false
+        if(whichselected == "me"){
             myPresc.isChecked = true
         }
+        else if(whichselected == "others"){
+            otherPresc.isChecked = true
+        }
 
-        myPresc.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-              otherPresc.isChecked = false
-                whichselected = 1
-              adapter.updateAdapter(PrepareData.getSelfReferredPrescriptions(PrepareData.getDummyPrescriptions()))
+        myPresc.setOnClickListener {
+            if(myPresc.isChecked){
+                otherPresc.isChecked = false
+                whichselected ="me"
+                callingMyPrescriptionApi("me")
                 popupWindow.dismiss()
-            }
-            else {
-                whichselected = 2
-                otherPresc.isChecked = true
-                adapter.updateAdapter(PrepareData.filterPrescriptionsByReferred(PrepareData.getDummyPrescriptions()))
+            }else{
+                whichselected ="all"
+                callingMyPrescriptionApi("all")
                 popupWindow.dismiss()
             }
         }
 
-        otherPresc.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                whichselected = 2
-                myPresc.isChecked = false
-
-                adapter.updateAdapter(PrepareData.filterPrescriptionsByReferred(PrepareData.getDummyPrescriptions()))
+        otherPresc.setOnClickListener {
+            if(otherPresc.isChecked) {
+                otherPresc.isChecked = false
+                whichselected ="others"
+                callingMyPrescriptionApi("others")
                 popupWindow.dismiss()
-            }
-            else {
-                whichselected = 1
-                myPresc.isChecked = true
-                adapter.updateAdapter(PrepareData.getSelfReferredPrescriptions(PrepareData.getDummyPrescriptions()))
+            }else{
+                whichselected="all"
+                callingMyPrescriptionApi("all")
                 popupWindow.dismiss()
-
             }
         }
+
+
+//        if(whichselected ==2){
+//            otherPresc.isChecked = true
+//            myPresc.isChecked = false
+//        }else{
+//            otherPresc.isChecked = false
+//            myPresc.isChecked = true
+//        }
+//
+//        myPresc.setOnCheckedChangeListener { buttonView, isChecked ->
+//            if (isChecked) {
+//              otherPresc.isChecked = false
+//                whichselected = 1
+//             // adapter.updateAdapter(PrepareData.getSelfReferredPrescriptions(PrepareData.getDummyPrescriptions()))
+//                popupWindow.dismiss()
+//            }
+//            else {
+//                whichselected = 2
+//                otherPresc.isChecked = true
+//              //  adapter.updateAdapter(PrepareData.filterPrescriptionsByReferred(PrepareData.getDummyPrescriptions()))
+//                popupWindow.dismiss()
+//            }
+//        }
+//
+//        otherPresc.setOnCheckedChangeListener { buttonView, isChecked ->
+//            if (isChecked) {
+//                whichselected = 2
+//                myPresc.isChecked = false
+//
+//              //  adapter.updateAdapter(PrepareData.filterPrescriptionsByReferred(PrepareData.getDummyPrescriptions()))
+//                popupWindow.dismiss()
+//            }
+//            else {
+//                whichselected = 1
+//                myPresc.isChecked = true
+//              //  adapter.updateAdapter(PrepareData.getSelfReferredPrescriptions(PrepareData.getDummyPrescriptions()))
+//                popupWindow.dismiss()
+//
+//            }
+//        }
 
 
         // Handle dismiss listener to reset UI
@@ -121,6 +201,9 @@ class MyPrescriptionFragment : Fragment() {
 
 
     }
+
+
+
 
 
 }

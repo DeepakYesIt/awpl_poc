@@ -48,7 +48,7 @@
                 android:fontFamily="@font/lato_regular"
                 android:padding="10dp"
                 app:buttonTint="#00BD90"
-                android:checked="true"
+
                 android:text="@string/others_prescriptions"
                 android:textAllCaps="false"
                 android:textColor="@color/darkGreyColor"

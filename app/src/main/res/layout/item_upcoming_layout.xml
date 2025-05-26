@@ -6,6 +6,7 @@
     android:layout_marginHorizontal="@dimen/_2sdp"
     android:layout_marginBottom="@dimen/_10sdp">
     <LinearLayout
+        android:id="@+id/ll_dwnld"
         android:layout_width="match_parent"
         android:layout_toStartOf="@id/imgBack"
         android:layout_height="wrap_content"

@@ -168,4 +168,23 @@ interface ZyvoApi {
     @POST("completedSymptomUploads")
     suspend fun completedSymptomsUpload() : Response<JsonObject>
 
+
+    @POST("patientPrescription")
+    @FormUrlEncoded
+    suspend fun myPrescription(
+       @Field("for") forWhich:String
+    ) : Response<JsonObject>
+
+    @POST("payu/initiate-payment")
+    @FormUrlEncoded
+    suspend fun initiatePayment(
+       @Field("appointment_id") appointmentId :Int,
+        @Field("txnid") txnId :String,
+        @Field("amount") amount :String,
+        @Field("productinfo") productInfo :String,
+        @Field("firstname") firstName :String?,
+        @Field("email") email :String?,
+        @Field("phone") phone:String?
+    ) : Response<JsonObject>
+
 }

@@ -4,12 +4,15 @@ import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.model.BookingResponseModel
 import com.bussiness.awpl.model.CancelledAppointment
 import com.bussiness.awpl.model.CompletedAppointmentModel
+import com.bussiness.awpl.model.CompletedScheduleCallModel
 import com.bussiness.awpl.model.CompletedSymptomsModel
 import com.bussiness.awpl.model.DoctorModel
 import com.bussiness.awpl.model.FAQItem
 import com.bussiness.awpl.model.HomeModel
 import com.bussiness.awpl.model.LoginModel
 import com.bussiness.awpl.model.PatinetNotification
+import com.bussiness.awpl.model.PayuPaymentModel
+import com.bussiness.awpl.model.PrescriptionModel
 import com.bussiness.awpl.model.PromoCodeModel
 import com.bussiness.awpl.model.UpcomingModel
 import com.bussiness.awpl.model.VideoModel
@@ -110,7 +113,7 @@ interface AwplRepository {
 
     suspend fun completedAppointment(
         @Field("for")appointmentFor:String
-    ) : Flow<NetworkResult<MutableList<CompletedAppointmentModel>>>
+    ) :  Flow<NetworkResult<MutableList<CompletedScheduleCallModel>>>
 
     suspend fun getScheduleTime(date : String) :Flow<NetworkResult<MutableList<String>>>
 
@@ -134,4 +137,19 @@ interface AwplRepository {
 
 
     suspend fun completedSymptomsUpload() :  Flow<NetworkResult<MutableList<CompletedSymptomsModel>>>
+
+
+    suspend fun myPrescription(forWhich :String) : Flow<NetworkResult<MutableList<PrescriptionModel>>>
+
+
+    suspend fun initiatePayment(
+        @Field("appointment_id") appointmentId :Int,
+        @Field("txnid") txnId :String,
+        @Field("amount") amount :String,
+        @Field("productinfo") productInfo :String,
+        @Field("firstname") firstName :String?,
+        @Field("email") email :String?,
+        @Field("phone") phone:String?
+    ) : Flow<NetworkResult<PayuPaymentModel>>
+
 }

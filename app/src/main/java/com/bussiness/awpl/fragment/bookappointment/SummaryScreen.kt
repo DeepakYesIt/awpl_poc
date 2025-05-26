@@ -1,6 +1,8 @@
 package com.bussiness.awpl.fragment.bookappointment
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
 import android.text.Html
@@ -9,6 +11,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -16,16 +20,25 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
+import com.bussiness.awpl.activities.PaytmActivity
 import com.bussiness.awpl.adapter.SummaryAdapter
+import com.bussiness.awpl.databinding.DialogConfirmAppointmentBinding
 import com.bussiness.awpl.databinding.DialogCongratulationsBinding
 import com.bussiness.awpl.databinding.FragmentSummaryScreenBinding
 import com.bussiness.awpl.model.BookingResponseModel
+import com.bussiness.awpl.model.PayuPaymentModel
 import com.bussiness.awpl.model.SummaryModel
 import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.LoadingUtils
+import com.bussiness.awpl.utils.SessionManager
 import com.bussiness.awpl.viewmodel.SummaryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.UUID
+
 @AndroidEntryPoint
 class SummaryScreen : Fragment() {
 
@@ -34,7 +47,12 @@ class SummaryScreen : Fragment() {
     private  var bookingResponseModel: BookingResponseModel? =null
     private lateinit var adapter : SummaryAdapter
     private  var appointmentId :Int =0
+    private var paymentAmount :String =""
+
     private lateinit var summaryViewModel : SummaryViewModel
+
+    var date :String =""
+    var time :String =""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -54,6 +72,11 @@ class SummaryScreen : Fragment() {
         arguments?.let {
             if(it.containsKey(AppConstant.ID)){
                 appointmentId = it.getInt(AppConstant.ID)
+                summaryViewModel.appoitmentId = appointmentId
+                date = it.getString(AppConstant.DATE).toString()
+                summaryViewModel.date = date
+                time = it.getString(AppConstant.TIME).toString()
+                summaryViewModel.time = time
             }
         }
         bookingResponseModel = arguments?.getParcelable<BookingResponseModel>(AppConstant.BOOK_MODEL)
@@ -67,10 +90,12 @@ class SummaryScreen : Fragment() {
         bookingResponseModel?.let { obj->
             Log.d("TESTING_BOOKING",bookingResponseModel.toString())
            if(!obj.is_first_consultation){
+               paymentAmount = obj.payment_amount
                binding.textFree.text = "₹ "+obj.payment_amount.toString()
                binding.btnNext.text = "₹ "+obj.payment_amount.toString()+" |"+ " (Pay and Consult)"
            }
            else{
+               paymentAmount="0.0"
                binding.textFree.text = "Free"
            }
 
@@ -98,7 +123,10 @@ class SummaryScreen : Fragment() {
 
     private fun clickListener() {
         binding.apply {
-            btnNext.setOnClickListener { congratsDialog() }
+            btnNext.setOnClickListener {
+                callingPaymentApi()
+
+            }
             arrowIcon.setOnClickListener {
                 if(edtPromoCode.text.toString().isNotEmpty()){
                     callingPromoCodeApi(edtPromoCode.text.toString())
@@ -107,6 +135,36 @@ class SummaryScreen : Fragment() {
             }
             txtPrivacyPolicy.setOnClickListener { findNavController().navigate(R.id.privacyPolicyFragment) }
             txtTermsConditions.setOnClickListener { findNavController().navigate(R.id.termsAndConditionFragment) }
+        }
+    }
+
+    private fun callingPaymentApi(){
+        lifecycleScope.launch {
+
+            LoadingUtils.showDialog(requireContext(),false)
+            summaryViewModel.initiatePayment(summaryViewModel.appoitmentId,
+                    generateTransactionId(summaryViewModel.appoitmentId.toString()),paymentAmount,"medical_prescription",
+                    SessionManager(requireContext()).getUserName(),SessionManager(requireContext()).getUserEmail(),""
+                ).collect{
+
+                    when(it){
+                        is NetworkResult.Success ->{
+                            LoadingUtils.hideDialog()
+                            var data = it.data
+                            openActivityWithUser(data)
+                        }
+
+                        is NetworkResult.Error ->{
+                            LoadingUtils.hideDialog()
+                        }
+                        else ->{
+
+                        }
+                    }
+
+
+            }
+
         }
     }
 
@@ -120,6 +178,7 @@ class SummaryScreen : Fragment() {
                         binding.applyPromoConstraintLayout.visibility = View.GONE
                         binding.promoValidate.visibility = View.VISIBLE
                         it.data?.final_amount?.let {
+                            paymentAmount = it.toString()
                             val value = "₹ $it"
                             binding.textFree.text = value
                         }
@@ -171,8 +230,72 @@ class SummaryScreen : Fragment() {
 
     }
 
+
+    private fun confirmDialog(){
+        val dialog = Dialog(requireContext())
+        val binding = DialogConfirmAppointmentBinding.inflate(layoutInflater)
+        dialog.setContentView(binding.root)
+
+        binding.apply {
+            btnClose.setOnClickListener {
+                dialog.dismiss()
+                findNavController().navigate(R.id.homeFragment)
+            }
+            btnOkay.setOnClickListener {
+                dialog.dismiss()
+                findNavController().navigate(R.id.homeFragment)
+            }
+
+            description2.setText("Your appointment is confirmed for ${summaryViewModel.date} at ${summaryViewModel.time}.")
+        }
+
+        //    binding.textView36.paintFlags = binding.textView36.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+
+        dialog.apply {
+            setCancelable(false)
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            val displayMetrics = context.resources.displayMetrics
+            val screenWidth = displayMetrics.widthPixels
+            val marginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, displayMetrics).toInt()
+            window?.setLayout(screenWidth - (2 * marginPx), ViewGroup.LayoutParams.WRAP_CONTENT)
+            show()
+        }
+
+    }
+
+
+    private val activityLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data
+            val resultMessage = data?.getStringExtra("result_key")
+             Log.d("TESTING_PAYMENT","Result: $resultMessage")
+            if(resultMessage == "Success"){
+                confirmDialog()
+            }else{
+                LoadingUtils.showErrorDialog(requireContext(),"Payment Failed!!")
+            }
+
+        }
+    }
+
+    private fun openActivityWithUser(data: PayuPaymentModel?) {
+
+        val intent = Intent(requireContext(), PaytmActivity::class.java).apply {
+            putExtra("user_data", data)
+        }
+        activityLauncher.launch(intent)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun generateTransactionId(appointmentId: String): String {
+        val timestamp = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(Date())
+        val uuidPart = UUID.randomUUID().toString().take(8).uppercase()
+        return "TXN_${appointmentId}_$timestamp$uuidPart"
     }
 }

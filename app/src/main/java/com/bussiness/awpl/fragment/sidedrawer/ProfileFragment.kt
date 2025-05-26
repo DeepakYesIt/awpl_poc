@@ -316,7 +316,7 @@ class ProfileFragment : Fragment() {
             }
             var gender = MultipartUtil.stringToRequestBody(selectedGender)
 
-           LoadingUtils.showDialog(requireContext(),false)
+            LoadingUtils.showDialog(requireContext(),false)
             viewModel.updateProfile(fullName,height,weight,age,gender,imageProfileMultiPart).collect{
                 when(it){
                     is NetworkResult.Success ->{
@@ -324,7 +324,9 @@ class ProfileFragment : Fragment() {
                         binding.llEditDelete.visibility =View.VISIBLE
                         binding.llSaveCancel.visibility =View.VISIBLE
                         SessionManager(requireContext()).setUserName(binding.etName.text.toString())
-
+                        val parts = it.data?.split("-----")
+                        val path = AppConstant.Base_URL +(parts?.get(1) ?: "")
+                        SessionManager(requireContext()).setUserImage(path)
                         disableAllEdlitText()
                         dialogACCOUNTSuccess()
                     }

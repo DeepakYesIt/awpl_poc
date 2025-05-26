@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.model.CancelledAppointment
 import com.bussiness.awpl.model.CompletedAppointmentModel
+import com.bussiness.awpl.model.CompletedScheduleCallModel
 import com.bussiness.awpl.model.CompletedSymptomsModel
 import com.bussiness.awpl.model.LoginModel
 import com.bussiness.awpl.model.UpcomingModel
@@ -40,7 +41,7 @@ class MyAppointmentViewModel @Inject constructor(private var repository: AwplRep
     }
 
 
-    suspend fun completedAppointment(appointmentFor: String): Flow<NetworkResult<MutableList<CompletedAppointmentModel>>> {
+    suspend fun completedAppointment(appointmentFor: String):  Flow<NetworkResult<MutableList<CompletedScheduleCallModel>>> {
         return repository.completedAppointment(appointmentFor).onEach {
 
         }

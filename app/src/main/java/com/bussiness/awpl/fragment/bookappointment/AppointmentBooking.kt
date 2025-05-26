@@ -180,7 +180,9 @@ class AppointmentBooking : Fragment() {
                             var model = it.data
                             var bundle = Bundle().apply {
                                 putParcelable(AppConstant.BOOK_MODEL,model)
-                                putInt(AppConstant.ID,callId)
+                                model?.appointment_id?.let { it1 -> putInt(AppConstant.ID, it1) }
+                                putString(AppConstant.DATE,selectedDateStr)
+                                putString(AppConstant.TIME,selectTime)
                             }
 
                             findNavController().navigate(R.id.summaryScreen,bundle)

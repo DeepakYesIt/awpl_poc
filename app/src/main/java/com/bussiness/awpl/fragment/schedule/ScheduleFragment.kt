@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.AppCompatButton
 import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -33,6 +34,7 @@ import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.DownloadWorker
 import com.bussiness.awpl.utils.LoadingUtils
 import com.bussiness.awpl.viewmodel.MyAppointmentViewModel
+import com.google.android.material.checkbox.MaterialCheckBox
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -48,6 +50,7 @@ class ScheduleFragment : Fragment() {
     private lateinit var completedSymptomsAdapter :SymptomsUploadCompleteAdapter
     private var selectedTab = 0
     private var isSelected = false
+    private var filter ="all"
 
     private val appointmentList = listOf(
         AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM","Scheduled Call Consultations","", R.drawable.doctor_bg_icon),
@@ -82,16 +85,18 @@ class ScheduleFragment : Fragment() {
             DownloadWorker().downloadPdfWithNotification(requireContext(),url,"Prescription_${System.currentTimeMillis()}.pdf")
         }
         viewModel = ViewModelProvider(this)[MyAppointmentViewModel::class.java]
+
+        clickListener()
+        setUpRecyclerView()
+        selectTab(selectedTab)
+        callingUpcomingApi()
         return binding.root
     }
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        showTemporaryData()
-        clickListener()
-        setUpRecyclerView()
-        selectTab(selectedTab)
+
     }
 
     private fun selectTab(index: Int) {
@@ -125,6 +130,7 @@ class ScheduleFragment : Fragment() {
                     view.visibility = View.VISIBLE
                     upperLay.visibility = View.VISIBLE
                     binding.recyclerView.adapter = completedAdapter
+                    callingCompletedApi("all")
                 }
                 2 -> {
                     txtCanceled.setTextColor(ContextCompat.getColor(requireContext(), R.color.darkGreyColor))
@@ -173,7 +179,7 @@ class ScheduleFragment : Fragment() {
                       is NetworkResult.Success -> {
                           LoadingUtils.hideDialog()
                           var data = it.data
-                          if (data != null) {
+                          if (data != null && data.size> 0) {
                               Log.d("TESTING_SIZE", "Size of the list is " + data.size.toString())
                               if (data.size > 0) {
                                   binding.noDataView.visibility = View.GONE
@@ -299,6 +305,7 @@ class ScheduleFragment : Fragment() {
             binding.filterBtn.visibility =View.VISIBLE
             completedAdapter.update(true, mutableListOf())
             binding.recyclerView.adapter = completedAdapter
+            callingCompletedApi(filter)
         }
 
         binding.scheduleCall2.setOnClickListener {
@@ -358,6 +365,39 @@ class ScheduleFragment : Fragment() {
         val popupWindow = PopupWindow(
             popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true
         )
+       var forMeCheckBox = popupView.findViewById<MaterialCheckBox>(R.id.appCompatCheckBox)
+        var forOtherBox = popupView.findViewById<androidx.appcompat.widget.AppCompatCheckBox>(R.id.appCompatCheckBox2)
+
+
+        if(filter == "me"){
+            forMeCheckBox.isChecked = true
+        }
+        else if(filter == "others"){
+            forOtherBox.isChecked = true
+        }
+
+        forMeCheckBox.setOnClickListener {
+            if(forMeCheckBox.isChecked){
+                forOtherBox.isChecked = false
+                filter ="me"
+                callingCompletedApi("me")
+            }else{
+                filter ="all"
+                callingCompletedApi("all")
+            }
+        }
+
+        forOtherBox.setOnClickListener {
+            if(forOtherBox.isChecked) {
+                forMeCheckBox.isChecked = false
+                filter ="others"
+                callingCompletedApi("others")
+            }else{
+                filter="all"
+                callingCompletedApi("all")
+            }
+        }
+
 
         // Handle dismiss listener to reset UI
         popupWindow.setOnDismissListener {

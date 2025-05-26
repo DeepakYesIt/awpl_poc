@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bussiness.awpl.R
@@ -37,18 +38,17 @@ class SymptomsUploadCompleteAdapter(private var appointments: List<CompletedSymp
 
     inner class CancelledViewHolder(private val binding: UploadSymptomsAdapterBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(appointment: CompletedSymptomsModel) {
-            with(binding) {
+            fun bind(appointment: CompletedSymptomsModel) {
+               with(binding) {
                 Log.d("TESTING_UPLOAD_WORK",appointment.upload_date.toString())
                 tvUploadDate.text = appointment.upload_date
                 if(appointment.file_path != null){
                 rescheduleButton.setOnClickListener {
                     onDownloadPrescriptionClick(appointment)
+                  }
                 }
-
-               }else{
-
+                else{
+                    rescheduleButton.setBackgroundResource(R.drawable.dark_grey_btn)
                 }
             }
         }
@@ -59,9 +59,4 @@ class SymptomsUploadCompleteAdapter(private var appointments: List<CompletedSymp
         Log.d("TESTING_APPOITMENT_SIZE",this.appointments.size.toString())
         notifyDataSetChanged()
     }
-
-
-
-
-
 }

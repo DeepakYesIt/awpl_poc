@@ -5,13 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.databinding.ItemCompletedBinding
 import com.bussiness.awpl.model.AppointmentModel
 import com.bussiness.awpl.model.CompletedAppointmentModel
+import com.bussiness.awpl.model.CompletedScheduleCallModel
 import com.bussiness.awpl.utils.AppConstant
+import kotlinx.coroutines.flow.Flow
 
 class CompletedAdapter(
-    private var appointments: List<CompletedAppointmentModel>,
+    private var appointments: List<CompletedScheduleCallModel>,
     private val onCheckDetailsClick: (AppointmentModel) -> Unit,
     private val onDownloadPrescriptionClick: (AppointmentModel) -> Unit
 ) : RecyclerView.Adapter<CompletedAdapter.CompleteViewHolder>() {
@@ -21,7 +24,7 @@ class CompletedAdapter(
     inner class CompleteViewHolder(private val binding: ItemCompletedBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-            fun bind(appointment: CompletedAppointmentModel) {
+            fun bind(appointment:CompletedScheduleCallModel) {
                binding.apply {
                      llAppointment.visibility = View.VISIBLE
                      llSymptom.visibility =View.GONE
@@ -45,13 +48,13 @@ class CompletedAdapter(
 
     override fun getItemCount(): Int = appointments.size
 
-    fun update(value:Boolean, appointments: List<CompletedAppointmentModel>){
+    fun update(value:Boolean, appointments: List<CompletedScheduleCallModel>){
         this.type = value
         this.appointments = appointments
         notifyDataSetChanged()
     }
 
-    fun updateAdapter(appointments :List<CompletedAppointmentModel>){
+    fun updateAdapter(appointments :List< CompletedScheduleCallModel>){
         this.appointments = appointments
         notifyDataSetChanged()
     }

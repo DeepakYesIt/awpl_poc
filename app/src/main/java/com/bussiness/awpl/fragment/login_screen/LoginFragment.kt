@@ -109,6 +109,7 @@ class LoginFragment : Fragment() {
                             sessionManager.setAuthToken(it1) }
                         data?.userId?.let { it1-> sessionManager.setUserId(it1)}
                         data?.name?.let { it1-> sessionManager.setUserName(it1) }
+                        data?.email?.let { it1->sessionManager.setUserEmail(it1) }
                         data?.profile_path?.let {
                             it1-> sessionManager.setUserImage(AppConstant.Base_URL+ MultipartUtil.ensureStartsWithSlash(it1))
                         }

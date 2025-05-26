@@ -20,5 +20,8 @@ object AppConstant {
     var FullName ="fullName"
     var Gender ="gender"
     var TYPE ="type"
+    var DATE = "date"
+    var TIME ="time"
+    var EMAIL ="email"
 
 }

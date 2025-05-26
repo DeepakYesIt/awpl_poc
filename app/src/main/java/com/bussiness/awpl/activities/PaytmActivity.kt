@@ -1,5 +1,7 @@
 package com.bussiness.awpl.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -13,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bussiness.awpl.R
+import com.bussiness.awpl.model.PayuPaymentModel
 import com.google.gson.JsonObject
 import com.payu.base.models.ErrorResponse
 import com.payu.base.models.PayUPaymentParams
@@ -34,6 +37,16 @@ class PaytmActivity : AppCompatActivity(), PaymentResultWithDataListener {
     private lateinit var webView: WebView
     private lateinit var paymentUrl: String
     private lateinit var postParams: Map<String, String>
+    var key =""
+    var tranxId :String =""
+    var amount :String =""
+    var productInfo :String =""
+    var firstName :String =""
+    var hash :String =""
+    var sUrl :String =""
+    var lUrl :String =""
+    var email :String? = null
+    var phone :String? =""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,17 +66,40 @@ class PaytmActivity : AppCompatActivity(), PaymentResultWithDataListener {
         paymentUrl = "https://secure.payu.in/_payment" // Production URL
        // paymentUrl = "https://sandbox.payu.in/_payment" // Production URL
 
-        postParams = mapOf(
-            "key" to "292KmR",
-            "txnid" to "unique12345",
-            "amount" to "1",
-            "productinfo" to "Test Product",
-            "firstname" to "John",
-            "email" to "john@gmail.com",
-            "phone" to "8145714585",
-            "surl" to "http://awplconnectadmin.tgastaging.com/api/payu/payment-callback",
-            "furl" to "http://awplconnectadmin.tgastaging.com/api/payu/payment-callback",
-            "hash" to "6b08f03949ab314c03c3ca051ccaff4461e8cf53174b1111c1662d1bb7c20a5cdd792624db8f99e2387a4a338bc4161516142181a18cb685ffa7636505164a21"
+        val user = intent.getSerializableExtra("user_data") as? PayuPaymentModel
+        user?.let {
+            key = it.key.toString()
+            tranxId = it.txnid.toString()
+            amount = it.amount.toString()
+            productInfo = it.productinfo.toString()
+             it.firstname?.let {  firstName = it}
+            it.hash?.let { hash =it }
+            it.surl?.let {  sUrl = it }
+            it.furl?.let { lUrl = it }
+            it.email?.let { email =it }
+
+            Log.d("TESTING_PAYMENT_KEY","key ${it.key}")
+            Log.d("TESTING_PAYMENT_KEY","txnid ${it.txnid}")
+            Log.d("TESTING_PAYMENT_KEY","amount ${it.amount}")
+            Log.d("TESTING_PAYMENT_KEY","productinfo ${it.productinfo}")
+            Log.d("TESTING_PAYMENT_KEY","firstName ${it.firstname}")
+            Log.d("TESTING_PAYMENT_KEY","hash ${it.hash}")
+            Log.d("TESTING_PAYMENT_KEY","surl ${it.surl}")
+            Log.d("TESTING_PAYMENT_KEY","furl ${it.furl}")
+            Log.d("TESTING_PAYMENT_KEY","email ${it.email}")
+        }
+
+        val postParams: Map<String, String> = mapOf(
+            "key" to key.toString(),
+            "txnid" to tranxId.toString(),
+            "amount" to amount.toString(),
+            "productinfo" to productInfo.toString(),
+            "firstname" to firstName.toString(),
+            "email" to email.toString(),
+            "phone" to "",
+            "surl" to sUrl.toString(),
+            "furl" to lUrl.toString(),
+            "hash" to hash.toString()
         )
         // POST request WebView me load karo
         val postData = buildPostData(postParams)
@@ -85,13 +121,26 @@ class PaytmActivity : AppCompatActivity(), PaymentResultWithDataListener {
                 // Success or failure URL detect karo
                 url?.let {
                     if (it.contains("success")) {
-                        Toast.makeText(this@PaytmActivity, "Payment Successful!", Toast.LENGTH_LONG).show()
-                        // Apne app ke success flow me jao
+
+                        val resultIntent = Intent().apply {
+                            putExtra("result_key", "Success")
+                        }
+                        setResult(Activity.RESULT_OK, resultIntent)
                         finish()
+//                        Toast.makeText(this@PaytmActivity, "Payment Successful!", Toast.LENGTH_LONG).show()
+//                        // Apne app ke success flow me jao
+//                        finish()
                     } else if (it.contains("failure")) {
-                        Toast.makeText(this@PaytmActivity, "Payment Failed!", Toast.LENGTH_LONG).show()
-                        // Apne failure handling logic
+
+                        val resultIntent = Intent().apply {
+                            putExtra("result_key", "Failure")
+                        }
+                        setResult(Activity.RESULT_OK, resultIntent)
                         finish()
+
+//                        Toast.makeText(this@PaytmActivity, "Payment Failed!", Toast.LENGTH_LONG).show()
+//                        // Apne failure handling logic
+//                        finish()
                     }
                 }
             }

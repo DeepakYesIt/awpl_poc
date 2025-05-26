@@ -1,5 +1,6 @@
 package com.bussiness.awpl.activities
 
+import android.graphics.Color
 import android.Manifest
 import android.provider.Settings
 import android.annotation.SuppressLint
@@ -28,7 +29,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
-import androidx.compose.ui.graphics.Color
+
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
@@ -186,7 +187,23 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-    }
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.statusBarColor = Color.TRANSPARENT
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Android 11+ handles insets with decorFitsSystemWindows = false
+        } else {
+            // For Android 10 and below
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        }
+      }
+
 
 
 
@@ -340,22 +357,7 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-//        forOther.setOnClickListener {
-//            var bundle = Bundle().apply {
-//                putString(AppConstant.TYPE,AppConstant.OTHERS)
-//            }
-//
-//            navController.navigate(R.id.diseasesBottomFragment,bundle)
-//            closeDrawer()
-//        }
-//
-//        forMe.setOnClickListener {
-//            var bundle = Bundle().apply {
-//                  putString(AppConstant.TYPE,AppConstant.FOR_ME)
-//            }
-//            navController.navigate(R.id.diseasesBottomFragment,bundle)
-//            closeDrawer()
-//        }
+
 
         doctor.setOnClickListener {
             navController.navigate(R.id.yourDoctorFragment)

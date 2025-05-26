@@ -108,6 +108,16 @@ class SessionManager(private val context: Context) {
         }
     }
 
+    fun setUserEmail(email :String?){
+        preferences.edit{
+            putString(AppConstant.EMAIL,email)
+        }
+    }
+
+    fun getUserEmail():String{
+        return preferences.getString(AppConstant.EMAIL,"")?:""
+    }
+
     fun setUserName(name :String){
         preferences.edit {
             putString(AppConstant.NAME, name)

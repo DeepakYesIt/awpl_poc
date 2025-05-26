@@ -30,7 +30,7 @@ class VideoCallActivity : AppCompatActivity() {
   //  private val appId = "40c77d114a684733ae30fcb9fcb0369c"
     private val appId = "1c45615e45194910baa3e4cad81a27fa"
     private val token = null
-    private var channelName = "Doctor_web"
+    private var channelName = "Doctor_Web"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -170,7 +170,7 @@ class VideoCallActivity : AppCompatActivity() {
 
         agoraEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION)
         agoraEngine.enableVideo()
-        agoraEngine.joinChannel("007eJxTYGhZuya8uJ9/SVlkqOUtIdW+p7+t/P7a6JaqzeFxnRGivF6BwTDZxNTM0DTVxNTQ0sTS0CApMdE41SQ5McXCMNHIPC1RQcUgoyGQkWHDrmZGRgYIBPG5GFzyk0vyi+LLU5MYGABnTB9v"
+        agoraEngine.joinChannel("007eJxTYLipcSeTZ4nZ4TclToJqrrln9279XiuavjnTbPPbDzXmgkEKDImGiQbGycmm5qbGxibGFsYWicYpJolGpmaJyYkWBibJmXkmGQ2BjAxfn7IxMEIhiM/F4JKfXJJfFB+emsTAAAABESFK"
                  , channelName, "", 0)
     }
 
@@ -186,35 +186,19 @@ class VideoCallActivity : AppCompatActivity() {
 
     private fun setupUi() {
 
+        var hideView = findViewById<FrameLayout>(R.id.local_video_view1)
+
         findViewById<ImageView>(R.id.btn_mute).setOnClickListener {
             isMuted = !isMuted
             agoraEngine.muteLocalAudioStream(isMuted)
         }
 
         findViewById<ImageView>(R.id.btn_switch_camera).setOnClickListener {
-//            if(isCameraOn) {
-//                agoraEngine.disableVideo()
-//            }else{
-//                agoraEngine.enableVideo()
-//            }
-           // agoraEngine.switchCamera()
-
-//            isCameraOn =!isCameraOn
-//            agoraEngine.muteLocalVideoStream(!isCameraOn)
             var fmLay = findViewById<FrameLayout>(R.id.local_video_view)
-//            fmLay.visibility = if (isCameraOn) View.VISIBLE else View.GONE
-
             isCameraOn = !isCameraOn
+            agoraEngine.muteLocalVideoStream(isCameraOn)
+//
 
-            agoraEngine.muteLocalVideoStream(!isCameraOn)
-
-            if (isCameraOn) {
-                agoraEngine.startPreview() // resumes camera if needed
-                fmLay.visibility = View.VISIBLE
-            } else {
-                agoraEngine.stopPreview() // optional: stop camera
-                fmLay.visibility = View.GONE // hide from local UI too
-            }
         }
 
         findViewById<ImageView>(R.id.btn_end_call).setOnClickListener {
