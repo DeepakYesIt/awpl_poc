@@ -49,9 +49,9 @@ class HomeScheduleCallFragment : Fragment() {
     var currentScreen :String = "for_me"
     private lateinit var viewModel :ScheduleCallViewModel
     private var diseaseId :Int =0
+    private var type :String =""
 
-    private val imagePickerLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val uri: Uri? = result.data?.data
                 uri?.let {
@@ -68,20 +68,62 @@ class HomeScheduleCallFragment : Fragment() {
     ): View {
         _binding = FragmentHomeScheduleCallBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[ScheduleCallViewModel::class.java]
+        clickListener()
+        setUpRecyclerView()
+        return binding.root
+    }
 
-        arguments?.let {
-            if(it.containsKey(AppConstant.DISEASE_ID)) {
-               diseaseId = it.getInt(AppConstant.DISEASE_ID)
+
+
+    private fun selectTypeTask(type:String){
+        if(type ==AppConstant.OTHERS) {
+            // Button UI Updates
+            Log.d("INSIDE_FRAG",type+" type here ")
+            currentScreen="for_others"
+            binding.apply {
+                forOthers.setBackgroundResource(R.drawable.forother_btn)
+                forOthers.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                forMe.setBackgroundResource(R.drawable.for_mr_bg)
+                forMe.setTextColor(ContextCompat.getColor(requireContext(), R.color.darkGreyColor))
+                val bundle = Bundle().apply {
+                    putString("TYPE", "forHome")
+                    putInt(AppConstant.DISEASE_ID, diseaseId)
+                }
+                this@HomeScheduleCallFragment.type =""
+                findNavController().navigate(R.id.basicInfoScreen2, bundle)
+                return
             }
         }
 
-        return binding.root
+        else {
+            // Button UI Updates
+            currentScreen = "for_me"
+
+            binding.apply {
+                forMe.setBackgroundResource(R.drawable.forother_btn)
+                forMe.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                forOthers.setBackgroundResource(R.drawable.for_mr_bg)
+                forOthers.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.darkGreyColor
+                    )
+                )
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        clickListener()
-        setUpRecyclerView()
+        arguments?.let {
+            if(it.containsKey(AppConstant.DISEASE_ID)) {
+                diseaseId = it.getInt(AppConstant.DISEASE_ID)
+                type = it.getString(AppConstant.TYPE).toString()
+                if(!type.isEmpty()){
+                    selectTypeTask(type)
+                }
+            }
+        }
     }
 
     private fun setUpRecyclerView(){

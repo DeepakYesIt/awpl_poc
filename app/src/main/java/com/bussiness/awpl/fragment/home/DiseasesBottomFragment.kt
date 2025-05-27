@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bussiness.awpl.HealthDataStore
 import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
 import com.bussiness.awpl.adapter.OrganListAdapter
@@ -56,16 +57,20 @@ class DiseasesBottomFragment : BottomSheetDialogFragment() {
 //    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+
+
+        diseaseList = HealthDataStore.getHealthNeeds().toMutableList()
+
         arguments?.let {
             if(it.containsKey("type")){
                type = it.getString("type").toString()
-
             }
             if(it.containsKey(AppConstant.DISEASE_LIST)){
                 diseaseList = (arguments?.getSerializable(AppConstant.DISEASE_LIST) as? ArrayList<DiseaseModel>)!!
                 Log.d("TESTING_LIST_SIZE",diseaseList.size.toString())
             }
         }
+
         _binding = FragmentDiseasesBottomBinding.inflate(inflater, container, false)
 
         Log.d("TESTING_DISEASE","SIZE OF DISEASE IS "+ DiseaseStore.getDiseases().size)
@@ -130,10 +135,9 @@ class DiseasesBottomFragment : BottomSheetDialogFragment() {
 
     private fun tempData(selectedDisease: DiseaseModel) {
 //        val result = if((0..1).random() == 0)"one" else " two"
-
-
         var bundle = Bundle().apply {
             putInt(AppConstant.DISEASE_ID, selectedDisease.id)
+            putString(AppConstant.TYPE,type)
         }
 
         if (selectedDisease.category == "major"){

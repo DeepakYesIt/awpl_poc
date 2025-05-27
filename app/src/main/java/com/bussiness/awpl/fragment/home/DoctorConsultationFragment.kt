@@ -16,6 +16,7 @@ class DoctorConsultationFragment : Fragment() {
     private var _binding: FragmentDoctorConsultationBinding? = null
     private val binding get() = _binding!!
     private var diseaseId :Int =0
+    private var type :String =""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,6 +27,7 @@ class DoctorConsultationFragment : Fragment() {
         arguments?.let {
             if(it.containsKey(AppConstant.DISEASE_ID)){
                 diseaseId = it.getInt(AppConstant.DISEASE_ID)
+                type = it.getString(AppConstant.TYPE).toString()
             }
         }
 
@@ -44,6 +46,7 @@ class DoctorConsultationFragment : Fragment() {
             proceedBtn.setOnClickListener {
                 val bundle = Bundle().apply {
                     putInt(AppConstant.DISEASE_ID,diseaseId)
+                    putString(AppConstant.TYPE,type)
                 }
                 findNavController().navigate(R.id.homeScheduleCallFragment,bundle)
             }

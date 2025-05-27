@@ -20,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bussiness.awpl.HealthDataStore
 import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
 import com.bussiness.awpl.adapter.BrowseVideoAdapter
@@ -133,6 +134,7 @@ class HomeFragment : Fragment() {
         data?.healthNeeds?.let {
             diseaseList = it.toMutableList()
             organListAdapter.updateAdapter(it)
+            HealthDataStore.saveHealthNeeds(it)
         }
 
         data?.videos?.let {

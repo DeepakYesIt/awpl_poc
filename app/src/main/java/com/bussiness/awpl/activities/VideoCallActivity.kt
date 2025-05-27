@@ -7,12 +7,14 @@ import android.provider.Settings
 import android.util.Log
 import android.view.SurfaceView
 import android.view.View
+import android.graphics.Color
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bussiness.awpl.PermissionsHelper
@@ -98,6 +100,28 @@ class VideoCallActivity : AppCompatActivity() {
                     }
                 }
 
+                override fun onRemoteVideoStateChanged(
+                    uid: Int,
+                    state: Int,
+                    reason: Int,
+                    elapsed: Int
+                ) {
+                    super.onRemoteVideoStateChanged(uid, state, reason, elapsed)
+
+                    if (state == Constants.REMOTE_VIDEO_STATE_STOPPED || reason == Constants.REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED) {
+                        // Hide the remote video view or show blank screen
+                        runOnUiThread {
+                            showBlankScreenForUser()
+                        }
+
+                    } else  {
+                        // Remote video resumed
+                        runOnUiThread {
+                            setupRemoteVideo(uid)
+                        }
+                    }
+                }
+
                 override fun onError(err: Int) {
                     super.onError(err)
                     Log.d("TESTING_NIKUNJ", "Inside Error" +err)
@@ -111,6 +135,15 @@ class VideoCallActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.e("AGORA", "Init error: $e")
         }
+    }
+
+    private fun showBlankScreenForUser(){
+        val remoteContainer = findViewById<FrameLayout>(R.id.remote_video_view)
+        remoteContainer.removeAllViews()
+
+        val blankView = View(this)
+        blankView.setBackgroundColor(Color.BLACK)
+        remoteContainer.addView(blankView)
     }
 
     private fun setupLocalVideo() {
@@ -130,24 +163,6 @@ class VideoCallActivity : AppCompatActivity() {
     }
 
     private fun setupRemoteVideo(uid: Int) {
-
-//        val view = RtcEngine.createRendererView(applicationContext)
-//        view.setZOrderMediaOverlay(true)
-//        mLocalContainer.addView(view)
-//
-//        mLocalVideo = VideoCanvas(view, VideoCanvas.RENDER_MODE_HIDDEN, 0)
-//        mRtcEngine?.setupLocalVideo(mLocalVideo)
-
-//        val container = findViewById<FrameLayout>(R.id.remote_video_view)
-//        container.removeAllViews()
-//
-//        val surfaceView = SurfaceView(this)
-//
-//        container.addView(surfaceView)
-//
-//        val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_FIT, uid)
-//        agoraEngine.setupRemoteVideo(videoCanvas)
-
 
         val container = findViewById<FrameLayout>(R.id.remote_video_view)
         container.removeAllViews()
@@ -198,7 +213,6 @@ class VideoCallActivity : AppCompatActivity() {
             isCameraOn = !isCameraOn
             agoraEngine.muteLocalVideoStream(isCameraOn)
 //
-
         }
 
         findViewById<ImageView>(R.id.btn_end_call).setOnClickListener {

@@ -358,6 +358,21 @@ class HomeActivity : AppCompatActivity() {
         }
 
 
+        forMe.setOnClickListener {
+            val bundle =Bundle().apply {
+                putString("type",AppConstant.FOR_ME)
+            }
+            navController.navigate(R.id.diseasesBottomFragment,bundle)
+            closeDrawer()
+        }
+
+        forOther.setOnClickListener {
+            val bundle  = Bundle().apply {
+                putString("type",AppConstant.OTHERS)
+            }
+            navController.navigate(R.id.diseasesBottomFragment,bundle)
+            closeDrawer()
+        }
 
         doctor.setOnClickListener {
             navController.navigate(R.id.yourDoctorFragment)
@@ -366,6 +381,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         resources.setOnClickListener {
+
             navController.navigate(R.id.resourceFragment)
             updateBottomNavSelection("resource")
             closeDrawer()
