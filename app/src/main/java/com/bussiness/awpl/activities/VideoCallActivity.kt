@@ -32,7 +32,7 @@ class VideoCallActivity : AppCompatActivity() {
   //  private val appId = "40c77d114a684733ae30fcb9fcb0369c"
     private val appId = "1c45615e45194910baa3e4cad81a27fa"
     private val token = null
-    private var channelName = "Doctor_Web"
+    private var channelName = "AWPL_Doctor_Web"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -174,6 +174,7 @@ class VideoCallActivity : AppCompatActivity() {
         val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.VIEW_SETUP_MODE_REPLACE, uid)
         agoraEngine?.setupRemoteVideo(videoCanvas)
         setupLocalVideo()
+
     }
 
     private fun removeRemoteVideo() {
@@ -185,7 +186,7 @@ class VideoCallActivity : AppCompatActivity() {
 
         agoraEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION)
         agoraEngine.enableVideo()
-        agoraEngine.joinChannel("007eJxTYLipcSeTZ4nZ4TclToJqrrln9279XiuavjnTbPPbDzXmgkEKDImGiQbGycmm5qbGxibGFsYWicYpJolGpmaJyYkWBibJmXkmGQ2BjAxfn7IxMEIhiM/F4JKfXJJfFB+emsTAAAABESFK"
+        agoraEngine.joinChannel("007eJxTYHhZ2dL4aIXR3YQFWXlf/zrxrWD3uDL/7+uFrz6dd7I6cv+HAkNqsnFacpqZZZJlipmJiYVJonFKirFpkrmhRaqppbFl2rXlZhkNgYwMM4SPMTIyQCCIz8/gGB7gE++Sn1ySXxQfnprEwAAAWXMn3A=="
                  , channelName, "", 0)
     }
 
@@ -212,7 +213,11 @@ class VideoCallActivity : AppCompatActivity() {
             var fmLay = findViewById<FrameLayout>(R.id.local_video_view)
             isCameraOn = !isCameraOn
             agoraEngine.muteLocalVideoStream(isCameraOn)
-//
+            if(isCameraOn) {
+                fmLay.visibility = View.VISIBLE
+            }else{
+                fmLay.visibility =View.GONE
+            }
         }
 
         findViewById<ImageView>(R.id.btn_end_call).setOnClickListener {

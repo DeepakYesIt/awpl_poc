@@ -2,13 +2,10 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
 //    id ("com.google.devtools.ksp")
-
     id ("kotlin-kapt")
     id("dagger.hilt.android.plugin")
-
     id("kotlin-parcelize")
     id("com.google.gms.google-services")
-
 }
 
 android {
@@ -21,7 +18,6 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -29,20 +25,14 @@ android {
         debug {
             val BASE_URL = project.property("BASE_URL")
             buildConfigField("String", "BASE_URL", "${BASE_URL}")
-
         }
-
         release {
             isMinifyEnabled = false
-
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro")
-
             val BASE_URL = project.property("BASE_URL")
             buildConfigField("String", "BASE_URL", "${BASE_URL}")
-
         }
-
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -71,6 +61,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.ui.android)
+    implementation(libs.play.services.cast.framework)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -115,7 +106,5 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.2.0")
     implementation("com.google.android.gms:play-services-auth:21.1.1")
     implementation("androidx.work:work-runtime-ktx:2.9.0")
-
-
-
+    implementation("com.github.dhaval2404:imagepicker:2.1")
 }

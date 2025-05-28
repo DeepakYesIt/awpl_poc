@@ -6,7 +6,7 @@ coreSplashscreen = "1.0.1"
 dotsindicator = "4.3"
 glide = "4.16.0"
 googleMaterial = "1.12.0"
-kotlin = "1.9.0"
+kotlin = "2.1.0"
 coreKtx = "1.10.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -25,6 +25,7 @@ navigationFragmentKtx = "2.8.8"
 navigationUiKtx = "2.8.8"
 viewpager2 = "1.1.0"
 uiAndroid = "1.7.8"
+playServicesCastFramework = "22.1.0"
 
 [libraries]
 androidx-constraintlayout-v221 = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
@@ -53,6 +54,7 @@ ssp-android = { module = "com.intuit.ssp:ssp-android", version.ref = "sspAndroid
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 androidx-ui-android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "uiAndroid" }
+play-services-cast-framework = { group = "com.google.android.gms", name = "play-services-cast-framework", version.ref = "playServicesCastFramework" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

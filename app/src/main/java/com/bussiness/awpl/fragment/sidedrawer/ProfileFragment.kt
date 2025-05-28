@@ -16,12 +16,14 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -53,6 +55,8 @@ import com.bussiness.awpl.utils.SessionManager
 import com.bussiness.awpl.viewmodel.MyProfileViewModel
 import com.bussiness.awpl.viewmodel.MyprofileModel
 import com.bussiness.awpl.viewmodel.PrivacyViewModel
+
+import com.github.dhaval2404.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -68,20 +72,26 @@ class ProfileFragment : Fragment() {
     private val PREFS_NAME = "ProfilePrefs"
     private val IMAGE_URI_KEY = "profile_image_uri"
     private var imageProfileMultiPart :MultipartBody.Part? = null
+    private var selectedImageUri: Uri? = null
+
     private val viewModel: MyProfileViewModel by lazy {
         ViewModelProvider(this)[MyProfileViewModel::class.java]
     }
 
-    private val galleryLauncher = registerForActivityResult(
-        ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let {
-            binding.profileImage.setImageURI(it)
-            imageProfileMultiPart = MultipartUtil.uriToMultipart(requireContext(),it,"profileImage")
+    private val pickImageLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val uri = result.data?.data
+                selectedImageUri = uri
+                binding.profileImage.setImageURI(uri)
+                imageProfileMultiPart =
+                    selectedImageUri?.let {
+                        MultipartUtil.uriToMultipart(requireContext(),
+                            it,"profileImage")
+                    }
 
-            saveImageUri(it.toString()) // Save URI to SharedPreferences
+            }
         }
-    }
 
     private val cameraLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -96,6 +106,8 @@ class ProfileFragment : Fragment() {
             }
         }
     }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -195,6 +207,7 @@ class ProfileFragment : Fragment() {
     fun ensureStartsWithSlash(path: String): String {
         return if (path.startsWith("/")) path else "/$path"
     }
+
     private fun showHeightPickerDialog() {
 
         val dialogView = layoutInflater.inflate(R.layout.dialog_height_picker, null)
@@ -300,8 +313,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-
-
     private fun callingProfileSaveApi(){
         lifecycleScope.launch {
             var fullName = MultipartUtil.stringToRequestBody(binding.etName.text.toString())
@@ -327,6 +338,7 @@ class ProfileFragment : Fragment() {
                         val parts = it.data?.split("-----")
                         val path = AppConstant.Base_URL +(parts?.get(1) ?: "")
                         SessionManager(requireContext()).setUserImage(path)
+                        Log.d("TESTING_PROFILE_SAVE",path.toString())
                         disableAllEdlitText()
                         dialogACCOUNTSuccess()
                     }
@@ -450,48 +462,56 @@ class ProfileFragment : Fragment() {
         builder.setItems(options) { _, which ->
             when (which) {
                 0 -> openCamera()
-                1 -> openGallery()
+                1 -> {
+                    ImagePicker.with(this@ProfileFragment)
+                        .crop()         // Optional
+                        .compress(1024) // Final image size < 1 MB
+                        .galleryOnly()
+                        .createIntent { intent ->
+                            pickImageLauncher.launch(intent)
+                        }
+                }
             }
         }
         builder.show()
     }
 
     private fun openGallery() {
-        when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE -> { // Android 14+
-                if (ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    galleryLauncher.launch("image/*")
-                } else {
-                    requestPermissions(arrayOf(Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED), STORAGE_PERMISSION_REQUEST_CODE)
-                }
-            }
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> { // Android 13
-                if (ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.READ_MEDIA_IMAGES
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    galleryLauncher.launch("image/*")
-                } else {
-                    requestPermissions(arrayOf(Manifest.permission.READ_MEDIA_IMAGES), STORAGE_PERMISSION_REQUEST_CODE)
-                }
-            }
-            else -> { // Android 12 and below
-                if (ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    galleryLauncher.launch("image/*")
-                } else {
-                    requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), STORAGE_PERMISSION_REQUEST_CODE)
-                }
-            }
-        }
+//        when {
+//            Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE -> { // Android 14+
+//                if (ContextCompat.checkSelfPermission(
+//                        requireContext(),
+//                        Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
+//                    ) == PackageManager.PERMISSION_GRANTED
+//                ) {
+//                    galleryLauncher.launch("image/*")
+//                } else {
+//                    requestPermissions(arrayOf(Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED), STORAGE_PERMISSION_REQUEST_CODE)
+//                }
+//            }
+//            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> { // Android 13
+//                if (ContextCompat.checkSelfPermission(
+//                        requireContext(),
+//                        Manifest.permission.READ_MEDIA_IMAGES
+//                    ) == PackageManager.PERMISSION_GRANTED
+//                ) {
+//                    galleryLauncher.launch("image/*")
+//                } else {
+//                    requestPermissions(arrayOf(Manifest.permission.READ_MEDIA_IMAGES), STORAGE_PERMISSION_REQUEST_CODE)
+//                }
+//            }
+//            else -> { // Android 12 and below
+//                if (ContextCompat.checkSelfPermission(
+//                        requireContext(),
+//                        Manifest.permission.READ_EXTERNAL_STORAGE
+//                    ) == PackageManager.PERMISSION_GRANTED
+//                ) {
+//                    galleryLauncher.launch("image/*")
+//                } else {
+//                    requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), STORAGE_PERMISSION_REQUEST_CODE)
+//                }
+//            }
+//        }
     }
 
     private fun openCamera() {
