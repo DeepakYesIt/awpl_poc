@@ -94,15 +94,15 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:5.0.0-alpha.10")
     implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10")
     implementation ("com.squareup.okhttp3:okhttp:4.9.1")
+
     implementation ("com.airbnb.android:lottie:3.4.0")
-    implementation ("com.airbnb.android:lottie:3.4.0")
-    implementation("com.razorpay:checkout:1.6.40")
+
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("io.agora.rtc:full-sdk:4.2.1")
     implementation("in.payu:payu-checkout-pro:2.8.0")
     //firebase
     implementation("com.google.firebase:firebase-messaging:23.2.1")
-    implementation("com.google.android.gms:play-services-maps:18.1.0")
+
     implementation("com.google.android.gms:play-services-location:21.2.0")
     implementation("com.google.android.gms:play-services-auth:21.1.1")
     implementation("androidx.work:work-runtime-ktx:2.9.0")

@@ -22,7 +22,7 @@ import com.payu.base.models.PayUPaymentParams
 import com.payu.checkoutpro.PayUCheckoutPro
 import com.payu.ui.model.listeners.PayUCheckoutProListener
 import com.payu.ui.model.listeners.PayUHashGenerationListener
-import com.razorpay.Checkout
+
 
 
 class PaymentScreen : Fragment() {

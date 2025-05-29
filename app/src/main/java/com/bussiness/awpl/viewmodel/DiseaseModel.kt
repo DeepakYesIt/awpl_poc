@@ -1,7 +1,6 @@
 package com.bussiness.awpl.viewmodel
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+
 import java.io.Serializable
 
 

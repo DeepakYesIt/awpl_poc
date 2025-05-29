@@ -8,9 +8,12 @@ import android.util.Log
 import android.view.SurfaceView
 import android.view.View
 import android.graphics.Color
+import android.os.Handler
+import android.os.Looper
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -24,15 +27,25 @@ import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.video.VideoCanvas
 
+
 class VideoCallActivity : AppCompatActivity() {
 
     private lateinit var agoraEngine : RtcEngine
     private var isMuted = false
-    private var isCameraOn = true
-  //  private val appId = "40c77d114a684733ae30fcb9fcb0369c"
+    private var isCameraOn = false
+    //  private val appId = "40c77d114a684733ae30fcb9fcb0369c"
     private val appId = "1c45615e45194910baa3e4cad81a27fa"
     private val token = null
     private var channelName = "AWPL_Doctor_Web"
+
+    private var localSurfaceView: SurfaceView? = null
+    private var remoteSurfaceView: SurfaceView? = null
+    private var remoteUid: Int? = null
+    private var isSwitched = false
+
+    private var callStartTime: Long = 0L
+    private var callTimerHandler: Handler? = null
+    private var callTimerRunnable: Runnable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,10 +68,36 @@ class VideoCallActivity : AppCompatActivity() {
 
     }
 
+    private fun startCallDurationTimer() {
+        callStartTime = System.currentTimeMillis()
+        callTimerHandler = Handler(Looper.getMainLooper())
+        callTimerRunnable = object : Runnable {
+            override fun run() {
+                val elapsedMillis = System.currentTimeMillis() - callStartTime
+                val seconds = (elapsedMillis / 1000) % 60
+                val minutes = (elapsedMillis / (1000 * 60)) % 60
+                val hours = (elapsedMillis / (1000 * 60 * 60))
+
+                val timeString = String.format("Call : %02d:%02d:%02d", hours, minutes, seconds)
+                runOnUiThread {
+                    findViewById<TextView>(R.id.tv_timer)?.text = timeString
+                }
+
+                callTimerHandler?.postDelayed(this, 1000)
+            }
+        }
+        callTimerHandler?.post(callTimerRunnable!!)
+    }
+
 
     private fun hasPermissions() = PermissionsHelper.hasPermissions(this)
     private fun requestPermissions() = PermissionsHelper.requestPermissions(this)
 
+    private fun stopCallDurationTimer() {
+        callTimerHandler?.removeCallbacks(callTimerRunnable ?: return)
+        callTimerHandler = null
+        callTimerRunnable = null
+    }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (PermissionsHelper.handleResult(requestCode, grantResults)) {
@@ -87,13 +126,16 @@ class VideoCallActivity : AppCompatActivity() {
                 override fun onUserJoined(uid: Int, elapsed: Int) {
                     runOnUiThread {
                         Log.d("TESTING_NIKUNJ", "Joined: $uid")
-                        setupRemoteVideo(uid) }
+                        setupRemoteVideo(uid)
+                        startCallDurationTimer()
+                    }
                 }
 
                 override fun onUserOffline(uid: Int, reason: Int) {
                     runOnUiThread {
                         Log.d("TESTING_NIKUNJ", "offline $uid")
                         removeRemoteVideo()
+                        stopCallDurationTimer()
                         agoraEngine.leaveChannel()
                         // Finish the call screen
                         finish()
@@ -146,6 +188,8 @@ class VideoCallActivity : AppCompatActivity() {
         remoteContainer.addView(blankView)
     }
 
+
+
     private fun setupLocalVideo() {
         val container = findViewById<FrameLayout>(R.id.local_video_view)
         // Step 1: Create SurfaceView
@@ -187,7 +231,7 @@ class VideoCallActivity : AppCompatActivity() {
         agoraEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION)
         agoraEngine.enableVideo()
         agoraEngine.joinChannel("007eJxTYHhZ2dL4aIXR3YQFWXlf/zrxrWD3uDL/7+uFrz6dd7I6cv+HAkNqsnFacpqZZZJlipmJiYVJonFKirFpkrmhRaqppbFl2rXlZhkNgYwMM4SPMTIyQCCIz8/gGB7gE++Sn1ySXxQfnprEwAAAWXMn3A=="
-                 , channelName, "", 0)
+            , channelName, "", 0)
     }
 
     private fun leaveChannel() {
@@ -207,6 +251,7 @@ class VideoCallActivity : AppCompatActivity() {
         findViewById<ImageView>(R.id.btn_mute).setOnClickListener {
             isMuted = !isMuted
             agoraEngine.muteLocalAudioStream(isMuted)
+       //  switchVideoViews()
         }
 
         findViewById<ImageView>(R.id.btn_switch_camera).setOnClickListener {
@@ -221,9 +266,11 @@ class VideoCallActivity : AppCompatActivity() {
         }
 
         findViewById<ImageView>(R.id.btn_end_call).setOnClickListener {
-          agoraEngine.leaveChannel()
+            agoraEngine.leaveChannel()
             finish()
         }
     }
+
+
 
 }

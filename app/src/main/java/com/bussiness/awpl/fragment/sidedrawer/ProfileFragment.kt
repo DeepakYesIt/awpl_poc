@@ -100,7 +100,8 @@ class ProfileFragment : Fragment() {
             val bitmap = result.data?.extras?.get("data") as? Bitmap
             bitmap?.let {
                 val imageUri = saveBitmapToInternalStorage(it) // Save bitmap & get URI
-                binding.profileImage.setImageURI(imageUri)
+                Glide.with(requireContext()).load(imageUri).into(binding.profileImage)
+
                 imageProfileMultiPart = MultipartUtil.uriToMultipart(requireContext(),imageUri,"profileImage")
                 saveImageUri(imageUri.toString())
             }

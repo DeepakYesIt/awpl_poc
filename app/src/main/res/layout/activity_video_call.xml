@@ -8,10 +8,42 @@
     android:background="@color/black"
     tools:context=".activities.VideoCallActivity">
 
+
+    <LinearLayout
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_24sdp"
+        android:layout_marginHorizontal="@dimen/_24sdp"
+        android:elevation="@dimen/_30sdp"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/rec_dot_ic"
+            android:layout_gravity="center"
+            >
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/tv_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue"
+            android:layout_marginStart="@dimen/_10sdp"
+            />
+
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/remote_video_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+
+
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/local_video_view"
@@ -22,6 +54,7 @@
         android:layout_alignParentEnd="true"
         android:elevation="@dimen/_20sdp"
         android:layout_marginHorizontal="16dp"
+
         android:layout_above="@id/bottom_view"
         android:layout_marginBottom="@dimen/_100sdp"/>
 

@@ -65,10 +65,10 @@ class DiseasesBottomFragment : BottomSheetDialogFragment() {
             if(it.containsKey("type")){
                type = it.getString("type").toString()
             }
-            if(it.containsKey(AppConstant.DISEASE_LIST)){
-                diseaseList = (arguments?.getSerializable(AppConstant.DISEASE_LIST) as? ArrayList<DiseaseModel>)!!
-                Log.d("TESTING_LIST_SIZE",diseaseList.size.toString())
-            }
+//            if(it.containsKey(AppConstant.DISEASE_LIST)){
+//                diseaseList = (arguments?.getSerializable(AppConstant.DISEASE_LIST) as? ArrayList<DiseaseModel>)!!
+//                Log.d("TESTING_LIST_SIZE",diseaseList.size.toString())
+//            }
         }
 
         _binding = FragmentDiseasesBottomBinding.inflate(inflater, container, false)

@@ -38,7 +38,15 @@ import com.bussiness.awpl.utils.LoadingUtils
 import com.bussiness.awpl.utils.MultipartUtil
 import com.bussiness.awpl.viewmodel.DiseaseModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -47,10 +55,12 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var organListAdapter: OrganListAdapter
+    private var countdownJob: Job? = null
     private lateinit var healthJourneyAdapter: HealthJourneyAdapter1
     private lateinit var browseVideoAdapter: BrowseVideoAdapter
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var diseaseList : MutableList<DiseaseModel>
+    private var appoitmentId :Int =0
 
     private val healthJourneyList = listOf(
         HealthListModel("Begin Your Health\nJourney with a \nFree Consultation!", R.drawable.women_doctor),
@@ -79,7 +89,6 @@ class HomeFragment : Fragment() {
         callingHomeApi()
        // callingDiseaseApi()
 
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -106,19 +115,28 @@ class HomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun settingDataToUi(data: HomeModel?) {
 
+        if(data?.startAppointDetails == null){
+            binding.llTop.visibility =View.GONE
+        }
         data?.startAppointDetails?.let {
            binding.llTop.visibility = View.VISIBLE
            binding.stDoctorName.setText(it.doctorName.toString())
            binding.tvDate.setText(it.date)
            binding.tvTime.setText(it.time)
+            startCountdown(it.time)
             Log.d("TESTING_URL",AppConstant.Base_URL+ MultipartUtil.ensureStartsWithSlash(it.doctorImage))
            Glide.with(this).load(AppConstant.Base_URL+ MultipartUtil.ensureStartsWithSlash(it.doctorImage)).into(binding.stDoctorImage)
          //  var time = MultipartUtil.getMinutesUntilStart(it.time.split("-")[0].trim())
        } ?: {
            binding.llTop.visibility =View.GONE
         }
+        if(data?.upcomingAppointDetails == null){
+            binding.scheduleCardAppointment.visibility = View.VISIBLE
+            binding.cardView4.visibility = View.GONE
+        }
 
         data?.upcomingAppointDetails?.let {
+            appoitmentId=  it.id
             binding.scheduleCardAppointment.visibility = View.GONE
             binding.cardView4.visibility = View.VISIBLE
             binding.doctorName.setText(it.doctorName)
@@ -179,7 +197,7 @@ class HomeFragment : Fragment() {
             healthJourneyAdapter = HealthJourneyAdapter1(healthJourneyList) { item ->
                 var bundle = Bundle().apply {
                         putString("type","schedule")
-                        putSerializable(AppConstant.DISEASE_LIST , ArrayList(diseaseList))
+                       // putSerializable(AppConstant.DISEASE_LIST , ArrayList(diseaseList))
                     }
                     findNavController().navigate(R.id.diseasesBottomFragment,bundle)
 
@@ -203,17 +221,24 @@ class HomeFragment : Fragment() {
     private fun clickListener() {
         binding.apply {
 
+            scheduleButton.setOnClickListener {
+                val bundle = Bundle().apply {
+                    putSerializable(AppConstant.DISEASE_LIST , ArrayList(diseaseList))
+                }
+                findNavController().navigate(R.id.diseasesBottomFragment)
+            }
+
             txtSeeAllDisease.setOnClickListener {
                 val bundle = Bundle().apply {
                     putSerializable(AppConstant.DISEASE_LIST , ArrayList(diseaseList))
                 }
-                findNavController().navigate(R.id.diseasesBottomFragment,bundle)
+                findNavController().navigate(R.id.diseasesBottomFragment)
             }
 
             symptomUploadBtn.setOnClickListener {
 
                 val bundle = Bundle().apply {
-                    putSerializable(AppConstant.DISEASE_LIST , ArrayList(diseaseList))
+                  //  putSerializable(AppConstant.DISEASE_LIST , ArrayList(diseaseList))
                     putString("type","symptom")
                 }
                 findNavController().navigate(R.id.diseasesBottomFragment,bundle)
@@ -226,9 +251,9 @@ class HomeFragment : Fragment() {
             scheduleCallBtn.setOnClickListener  {
                 var bundle = Bundle().apply {
                     putString("type","schedule")
-                    putSerializable(AppConstant.DISEASE_LIST , ArrayList(diseaseList))
+                  //  putSerializable(AppConstant.DISEASE_LIST , ArrayList(diseaseList))
                 }
-                findNavController().navigate(R.id.diseasesBottomFragment,bundle)
+               findNavController().navigate(R.id.diseasesBottomFragment,bundle)
             }
 
             upcomingSeeAll.setOnClickListener   {
@@ -236,7 +261,13 @@ class HomeFragment : Fragment() {
             }
 
             rescheduleButton.setOnClickListener {
-                findNavController().navigate(R.id.appointmentBooking)
+
+                if(appoitmentId !=0) {
+                    var bundle = Bundle().apply {
+                        putInt(AppConstant.AppoitmentId, appoitmentId)
+                    }
+                    findNavController().navigate(R.id.reschedule_call,bundle)
+                }
             }
 
             startAppointmentBtn.setOnClickListener{
@@ -284,6 +315,82 @@ class HomeFragment : Fragment() {
     private fun updateAdapter(){
 
     }
+
+
+    private fun startCountdown(timeRange: String) {
+        countdownJob?.cancel()
+
+        countdownJob = CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val parts = timeRange.trim().split("-")
+                if (parts.size != 2) {
+                    showCountdownMessage("Invalid time range")
+                    return@launch
+                }
+
+                val startTimeRaw = parts[0].trim()              // "08:00"
+                val endTimePart = parts[1].trim()               // "08:15 AM"
+                val amPm = endTimePart.takeLast(2).uppercase(Locale.getDefault()) // "AM" or "PM"
+                val fullStartTime = "$startTimeRaw $amPm"       // "08:00 AM"
+
+                val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
+                val parsedStartTime = try {
+                    sdf.parse(fullStartTime)
+                } catch (e: Exception) {
+                    null
+                }
+
+                if (parsedStartTime == null) {
+                    showCountdownMessage("Invalid time format")
+                    return@launch
+                }
+
+                val calendarNow = Calendar.getInstance()
+                val calendarTarget = Calendar.getInstance().apply {
+                    time = parsedStartTime
+                    set(Calendar.YEAR, calendarNow.get(Calendar.YEAR))
+                    set(Calendar.MONTH, calendarNow.get(Calendar.MONTH))
+                    set(Calendar.DAY_OF_MONTH, calendarNow.get(Calendar.DAY_OF_MONTH))
+                    if (before(calendarNow)) {
+                        add(Calendar.DAY_OF_MONTH, 1)
+                    }
+                }
+
+                while (true) {
+                    val now = Calendar.getInstance()
+                    val millisLeft = calendarTarget.timeInMillis - now.timeInMillis
+
+                    if (millisLeft <= 0) {
+                        withContext(Dispatchers.Main) {
+                            binding.startAppointmentBtn.text= "Start Appointment"
+                        }
+                        break
+                    }
+
+                    val minutes = (millisLeft / 1000) / 60
+                    val seconds = (millisLeft / 1000) % 60
+
+                    withContext(Dispatchers.Main) {
+                        binding.startAppointmentBtn.text =
+                            String.format("Start appointment in %02d:%02d min", minutes, seconds)
+                    }
+
+                    delay(1000)
+                }
+            } catch (e: Exception) {
+                Log.e("COUNTDOWN", "Unexpected error: ${e.message}")
+                showCountdownMessage("Something went wrong")
+            }
+        }
+    }
+
+    private suspend fun showCountdownMessage(message: String) {
+        withContext(Dispatchers.Main) {
+            binding.startAppointmentBtn.text = message
+        }
+    }
+
+
 
 }
 

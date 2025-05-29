@@ -24,13 +24,10 @@ import com.payu.checkoutpro.utils.PayUCheckoutProConstants.CP_HASH_NAME
 import com.payu.checkoutpro.utils.PayUCheckoutProConstants.CP_HASH_STRING
 import com.payu.ui.model.listeners.PayUCheckoutProListener
 import com.payu.ui.model.listeners.PayUHashGenerationListener
-import com.razorpay.Checkout
-import com.razorpay.PaymentData
-import com.razorpay.PaymentResultListener
-import com.razorpay.PaymentResultWithDataListener
+
 import org.json.JSONObject
 
-class PaytmActivity : AppCompatActivity(), PaymentResultWithDataListener {
+class PaytmActivity : AppCompatActivity() {
 
     var amt :String =""
 
@@ -63,8 +60,8 @@ class PaytmActivity : AppCompatActivity(), PaymentResultWithDataListener {
         setupWebView()
 
         // Ye data backend se pass hua maan ke chal rahe hain
-        paymentUrl = "https://secure.payu.in/_payment" // Production URL
-       // paymentUrl = "https://sandbox.payu.in/_payment" // Production URL
+      //  paymentUrl = "https://secure.payu.in/_payment" // Production URL
+        paymentUrl = "https://sandbox.payu.in/_payment" // Production URL
 
         val user = intent.getSerializableExtra("user_data") as? PayuPaymentModel
         user?.let {
@@ -218,34 +215,34 @@ class PaytmActivity : AppCompatActivity(), PaymentResultWithDataListener {
         val hashBytes = digest.digest(input.toByteArray(Charsets.UTF_8))
         return hashBytes.joinToString("") { "%02x".format(it) }
     }
-    private fun paymentWork(){
-        Checkout.preload(applicationContext)
-        val co = Checkout()
-        // apart from setting it in AndroidManifest.xml, keyId can also be set
-        // programmatically during runtime
-        co.setKeyID("rzp_live_XXXXXXXXXXXXXX")
-        var amount :Int = Math.round(amt.toFloat() *100)
-        var jsonObject = JsonObject()
-       try {
-           val options = JSONObject()
-           options.put("name","AWPL PAYMENT")
-           options.put("description","Fees")
-           options.put("currency","INR")
-           options.put("theme.color","")
-           options.put("amount",amount)
-           co.open(this,options)
-       }catch (e:Exception){
-           Log.d("TAG",e.message.toString())
-       }
-    }
-
-    override fun onPaymentSuccess(p0: String?, p1: PaymentData?) {
-    }
-
-    
-
-    override fun onPaymentError(p0: Int, p1: String?, p2: PaymentData?) {
-    }
+//    private fun paymentWork(){
+//        Checkout.preload(applicationContext)
+//        val co = Checkout()
+//        // apart from setting it in AndroidManifest.xml, keyId can also be set
+//        // programmatically during runtime
+//        co.setKeyID("rzp_live_XXXXXXXXXXXXXX")
+//        var amount :Int = Math.round(amt.toFloat() *100)
+//        var jsonObject = JsonObject()
+//       try {
+//           val options = JSONObject()
+//           options.put("name","AWPL PAYMENT")
+//           options.put("description","Fees")
+//           options.put("currency","INR")
+//           options.put("theme.color","")
+//           options.put("amount",amount)
+//           co.open(this,options)
+//       }catch (e:Exception){
+//           Log.d("TAG",e.message.toString())
+//       }
+//    }
+//
+//    override fun onPaymentSuccess(p0: String?, p1: PaymentData?) {
+//    }
+//
+//
+//
+//    override fun onPaymentError(p0: Int, p1: String?, p2: PaymentData?) {
+//    }
 
 
 }

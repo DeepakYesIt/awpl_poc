@@ -53,23 +53,23 @@ class SplashActivity : AppCompatActivity() {
         // Apply language preferences
         sessionManager.applySavedLanguage()
 
-//        Handler(Looper.getMainLooper()).postDelayed({
-//            if (sessionManager.isLoggedIn()) {
-//                startActivity(Intent(this, HomeActivity::class.java))
-//            } else {
-//                startActivity(Intent(this, OnBoardActivity::class.java))
-//            }
-//            finish()
-//        }, 3000)
-//
-           Handler(Looper.getMainLooper()).postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             if (sessionManager.isLoggedIn()) {
-                startActivity(Intent(this, VideoCallActivity::class.java))
+                startActivity(Intent(this, HomeActivity::class.java))
             } else {
-                startActivity(Intent(this, VideoCallActivity::class.java))
+                startActivity(Intent(this, OnBoardActivity::class.java))
             }
             finish()
         }, 3000)
+//
+//           Handler(Looper.getMainLooper()).postDelayed({
+//            if (sessionManager.isLoggedIn()) {
+//                startActivity(Intent(this, VideoCallActivity::class.java))
+//            } else {
+//                startActivity(Intent(this, VideoCallActivity::class.java))
+//            }
+//            finish()
+//        }, 3000)
 
     }
 
