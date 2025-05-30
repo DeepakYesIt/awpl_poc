@@ -1,6 +1,7 @@
 package com.bussiness.awpl.fragment.home
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,7 @@ import com.bumptech.glide.Glide
 import com.bussiness.awpl.HealthDataStore
 import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
+import com.bussiness.awpl.activities.VideoCallActivity
 import com.bussiness.awpl.adapter.BrowseVideoAdapter
 import com.bussiness.awpl.adapter.HealthJourneyAdapter
 import com.bussiness.awpl.adapter.HealthJourneyAdapter1
@@ -61,6 +63,7 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var diseaseList : MutableList<DiseaseModel>
     private var appoitmentId :Int =0
+    private var startAppointment :Int =0
 
     private val healthJourneyList = listOf(
         HealthListModel("Begin Your Health\nJourney with a \nFree Consultation!", R.drawable.women_doctor),
@@ -87,6 +90,43 @@ class HomeFragment : Fragment() {
         setupRecyclerViews()
         clickListener()
         callingHomeApi()
+
+        binding.startAppointmentBtn.setOnClickListener {
+
+            if(startAppointment !=0) {
+                lifecycleScope.launch {
+                    LoadingUtils.showDialog(requireContext(),false)
+                    homeViewModel.createChannel(startAppointment).collect {
+                        when(it){
+                            is NetworkResult.Success ->{
+                               LoadingUtils.hideDialog()
+                                it.data?.let {
+
+                                    val intent = Intent(requireContext(), VideoCallActivity::class.java)
+                                    intent.putExtra(AppConstant.APPID,it.appId)
+                                    intent.putExtra(AppConstant.AuthToken,it.token)
+                                    intent.putExtra(AppConstant.CHANNEL_NAME,it.channelName)
+                                    intent.putExtra(AppConstant.uid,it.uid)
+                                    startActivity(intent)
+
+                                }
+
+
+                            }
+                            is NetworkResult.Error ->{
+                                LoadingUtils.hideDialog()
+                                LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
+
+                            }
+                            else ->{
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
        // callingDiseaseApi()
 
     }
@@ -118,7 +158,9 @@ class HomeFragment : Fragment() {
         if(data?.startAppointDetails == null){
             binding.llTop.visibility =View.GONE
         }
+
         data?.startAppointDetails?.let {
+            startAppointment = it.id
            binding.llTop.visibility = View.VISIBLE
            binding.stDoctorName.setText(it.doctorName.toString())
            binding.tvDate.setText(it.date)

@@ -22,6 +22,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bussiness.awpl.PermissionsHelper
 import com.bussiness.awpl.R
+import com.bussiness.awpl.utils.AppConstant
 import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
@@ -34,8 +35,8 @@ class VideoCallActivity : AppCompatActivity() {
     private var isMuted = false
     private var isCameraOn = false
     //  private val appId = "40c77d114a684733ae30fcb9fcb0369c"
-    private val appId = "1c45615e45194910baa3e4cad81a27fa"
-    private val token = null
+    private var appId = "1c45615e45194910baa3e4cad81a27fa"
+    private var token: String? = null
     private var channelName = "AWPL_Doctor_Web"
 
     private var localSurfaceView: SurfaceView? = null
@@ -44,6 +45,7 @@ class VideoCallActivity : AppCompatActivity() {
     private var isSwitched = false
 
     private var callStartTime: Long = 0L
+    var uid :Int =0
     private var callTimerHandler: Handler? = null
     private var callTimerRunnable: Runnable? = null
 
@@ -56,6 +58,12 @@ class VideoCallActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+         appId = intent.getStringExtra(AppConstant.APPID)?.takeIf { it.isNotBlank() } ?: ""
+         token = intent.getStringExtra(AppConstant.AuthToken) ?: ""
+         channelName = intent.getStringExtra(AppConstant.CHANNEL_NAME)?.takeIf { it.isNotBlank() } ?: ""
+         uid = intent.getIntExtra(AppConstant.uid, 0)
+
         if (hasPermissions()) {
             Log.d("TESTING_NIKUNJ", "Inside oncreate")
             initAgora()
@@ -118,7 +126,7 @@ class VideoCallActivity : AppCompatActivity() {
 
     private fun initAgora() {
         try {
-            agoraEngine = RtcEngine.create(baseContext, getString(R.string.agora_app_id), object : IRtcEngineEventHandler() {
+            agoraEngine = RtcEngine.create(baseContext, appId, object : IRtcEngineEventHandler() {
                 override fun onJoinChannelSuccess(channel: String?, uid: Int, elapsed: Int) {
                     Log.d("TESTING_NIKUNJ", "Join Success: $channel")
                 }
@@ -230,7 +238,7 @@ class VideoCallActivity : AppCompatActivity() {
 
         agoraEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION)
         agoraEngine.enableVideo()
-        agoraEngine.joinChannel("007eJxTYHhZ2dL4aIXR3YQFWXlf/zrxrWD3uDL/7+uFrz6dd7I6cv+HAkNqsnFacpqZZZJlipmJiYVJonFKirFpkrmhRaqppbFl2rXlZhkNgYwMM4SPMTIyQCCIz8/gGB7gE++Sn1ySXxQfnprEwAAAWXMn3A=="
+        agoraEngine.joinChannel(token
             , channelName, "", 0)
     }
 

@@ -191,14 +191,15 @@ class HomeScheduleCallFragment : Fragment() {
             }
             Log.d("CHECKING_DISEASE_ID","Disease Id is working here is "+diseaseId.toString())
 
+            LoadingUtils.showDialog(requireContext(),false)
             viewModel.scheduleCallForMe(answer1,answer2,answer3,answer4,disease,
                 ArrayList(imgList)).collect(){
-                LoadingUtils.showDialog(requireContext(),false)
+
                 when(it){
                     is NetworkResult.Success ->{
                         LoadingUtils.hideDialog()
 
-                        LoadingUtils.showSuccessDialog(requireContext(),"Your Call Schedule Successfully"){
+                        LoadingUtils.showSuccessDialog(requireContext(),"Data submitted successfully. You can now book an appointment."){
                             var bundle =Bundle()
                             bundle.putString(AppConstant.ID,it.data)
                             findNavController().navigate(R.id.appointmentBooking,bundle)

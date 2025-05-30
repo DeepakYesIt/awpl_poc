@@ -203,10 +203,7 @@ class ScheduleFragment : Fragment() {
                           LoadingUtils.hideDialog()
                           LoadingUtils.showErrorDialog(requireContext(), it.message.toString())
                       }
-
-                      else -> {
-
-                      }
+                      else -> { }
                   }
               }
           }
@@ -295,7 +292,10 @@ class ScheduleFragment : Fragment() {
 
     }
 
-    private fun clickListener() {
+    private fun clickListener()
+
+
+    {
 
         binding.scheduleCall1.setOnClickListener {
             binding.scheduleCall1.setBackgroundResource(R.drawable.bg_four_side_corner_inner_white)

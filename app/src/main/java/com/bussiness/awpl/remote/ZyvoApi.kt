@@ -187,4 +187,10 @@ interface ZyvoApi {
         @Field("phone") phone:String?
     ) : Response<JsonObject>
 
+    @POST("create-channel")
+    @FormUrlEncoded
+    suspend fun createChannel(
+        @Field("appointmentId") appointmentId :Int
+     ) : Response<JsonObject>
+
 }

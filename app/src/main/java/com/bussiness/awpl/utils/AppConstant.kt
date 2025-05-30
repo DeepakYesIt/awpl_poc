@@ -1,6 +1,8 @@
 package com.bussiness.awpl.utils
 
 object AppConstant {
+    val uid: String? ="uid"
+    val CHANNEL_NAME: String?="channel_name"
     val AppoitmentId: String? ="appointment_id"
     val BOOK_MODEL: String? ="book_model"
     val ID: String? ="id"
@@ -22,6 +24,7 @@ object AppConstant {
     var TYPE ="type"
     var DATE = "date"
     var TIME ="time"
+    var APPID ="APPID"
     var EMAIL ="email"
 
 }

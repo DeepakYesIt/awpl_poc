@@ -1,6 +1,7 @@
 package com.bussiness.awpl.repository
 
 import com.bussiness.awpl.NetworkResult
+import com.bussiness.awpl.model.AgoraCallModel
 import com.bussiness.awpl.model.BookingResponseModel
 import com.bussiness.awpl.model.CancelledAppointment
 import com.bussiness.awpl.model.CompletedAppointmentModel
@@ -151,5 +152,10 @@ interface AwplRepository {
         @Field("email") email :String?,
         @Field("phone") phone:String?
     ) : Flow<NetworkResult<PayuPaymentModel>>
+
+
+    suspend fun createChannel(
+        @Field("appointmentId") appointmentId :Int
+    ) :Flow<NetworkResult<AgoraCallModel>>
 
 }

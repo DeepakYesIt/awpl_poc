@@ -51,7 +51,8 @@ class MultipartUtil {
             return RequestBody.create(mediaType.toMediaTypeOrNull(), value)
         }
 
-        fun ensureStartsWithSlash(path: String): String {
+        fun ensureStartsWithSlash(path: String?): String {
+           if(path == null) return ""
             return if (path.startsWith("/")) path else "/$path"
         }
 

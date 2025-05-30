@@ -3,6 +3,7 @@ package com.bussiness.awpl.repository
 import android.util.Log
 import com.business.zyvo.remote.ZyvoApi
 import com.bussiness.awpl.NetworkResult
+import com.bussiness.awpl.model.AgoraCallModel
 import com.bussiness.awpl.model.AppointmentModel
 import com.bussiness.awpl.model.BookingResponseModel
 import com.bussiness.awpl.model.CancelledAppointment
@@ -1081,6 +1082,46 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
                             var obj = resp.get("data").asJsonObject
                                 val model: PayuPaymentModel =
                                     Gson().fromJson(obj.toString(), PayuPaymentModel::class.java)
+
+
+
+
+                            emit(NetworkResult.Success(model))
+                        }
+                        else {
+                            emit(NetworkResult.Error(resp.get("message").asString))
+                        }
+                    } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
+                } else {
+                    try {
+                        val jsonObj = this.errorBody()?.string()?.let { JSONObject(it) }
+                        emit(
+                            NetworkResult.Error(
+                                jsonObj?.getString("message") ?: AppConstant.unKnownError
+                            )
+                        )
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        emit(NetworkResult.Error(AppConstant.unKnownError))
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            emit(NetworkResult.Error(ErrorHandler.emitError(e)))
+        }
+    }
+
+    override suspend fun createChannel(appointmentId: Int): Flow<NetworkResult<AgoraCallModel>> = flow {
+
+        try {
+            api.createChannel(appointmentId).apply {
+                if (isSuccessful) {
+                    body()?.let { resp ->
+                        if (resp.has("status") && resp.get("status").asBoolean) {
+
+                            var obj = resp.get("data").asJsonObject
+                            val model: AgoraCallModel =
+                                Gson().fromJson(obj.toString(), AgoraCallModel::class.java)
 
 
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
+import com.bussiness.awpl.model.AgoraCallModel
 import com.bussiness.awpl.model.HealthJourneyItem
 import com.bussiness.awpl.model.HomeModel
 import com.bussiness.awpl.model.OrganDeptModel
@@ -61,7 +62,11 @@ class HomeViewModel @Inject constructor(private var repository: AwplRepository):
         }
 
     }
+    suspend fun createChannel(appointmentId: Int): Flow<NetworkResult<AgoraCallModel>>{
+        return repository.createChannel(appointmentId).onEach {
 
+        }
+    }
 
 
     private val _timeLeft = MutableLiveData<Long>()
