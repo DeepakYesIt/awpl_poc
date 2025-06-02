@@ -13,12 +13,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.ViewModelProvider
+import com.bussiness.awpl.ChatMessage
+import com.bussiness.awpl.adapter.ChatAdapter
 import com.bussiness.awpl.adapter.MediaAdapter
 import com.bussiness.awpl.databinding.FragmentDoctorChatBinding
 import com.bussiness.awpl.model.MediaItem
 import com.bussiness.awpl.model.MediaType
+import com.bussiness.awpl.repository.ChatRepository
 import com.bussiness.awpl.utils.MediaUtils
+import com.bussiness.awpl.viewmodel.ChatViewModel
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DoctorChatFragment : Fragment() {
 
     private var _binding: FragmentDoctorChatBinding? = null
@@ -27,6 +36,13 @@ class DoctorChatFragment : Fragment() {
     private var currentType: String = ""
     private val mediaList = mutableListOf<MediaItem>()
     private lateinit var mediaAdapter: MediaAdapter
+    lateinit var chatAdapter: ChatAdapter
+    var currentUserId ="nikunj"
+    var receiverId ="rajan"
+    var chatId ="nikunj_rajan"
+    private lateinit var chatViewModel: ChatViewModel
+
+
 
     private val imagePickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -44,13 +60,16 @@ class DoctorChatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDoctorChatBinding.inflate(inflater, container, false)
+        chatAdapter = ChatAdapter(mutableListOf(),"nik")
+        chatViewModel =ViewModelProvider(this)[ChatViewModel::class.java]
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         clickListeners()
+        chatViewModel.initChat(receiverId,currentUserId,chatId, ChatRepository(FirebaseFirestore.getInstance(),
+            FirebaseStorage.getInstance()))
 
     }
 

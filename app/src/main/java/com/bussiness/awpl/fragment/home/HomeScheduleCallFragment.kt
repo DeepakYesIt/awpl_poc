@@ -198,7 +198,6 @@ class HomeScheduleCallFragment : Fragment() {
                 when(it){
                     is NetworkResult.Success ->{
                         LoadingUtils.hideDialog()
-
                         LoadingUtils.showSuccessDialog(requireContext(),"Data submitted successfully. You can now book an appointment."){
                             var bundle =Bundle()
                             bundle.putString(AppConstant.ID,it.data)
@@ -206,12 +205,15 @@ class HomeScheduleCallFragment : Fragment() {
                         }
 
                     }
+
                     is NetworkResult.Error ->{
                         LoadingUtils.hideDialog()
                         LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
                     }
+
                     else ->{
                     }
+
                 }
             }
 

@@ -94,7 +94,6 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:5.0.0-alpha.10")
     implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10")
     implementation ("com.squareup.okhttp3:okhttp:4.9.1")
-
     implementation ("com.airbnb.android:lottie:3.4.0")
 
     implementation("de.hdodenhof:circleimageview:3.1.0")
@@ -102,9 +101,14 @@ dependencies {
     implementation("in.payu:payu-checkout-pro:2.8.0")
     //firebase
     implementation("com.google.firebase:firebase-messaging:23.2.1")
-
     implementation("com.google.android.gms:play-services-location:21.2.0")
     implementation("com.google.android.gms:play-services-auth:21.1.1")
     implementation("androidx.work:work-runtime-ktx:2.9.0")
     implementation("com.github.dhaval2404:imagepicker:2.1")
+
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx")
+    implementation (platform("com.google.firebase:firebase-bom:33.14.0"))
+
 }
