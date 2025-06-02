@@ -13,6 +13,8 @@ class MyApp : Application() {
         FirebaseApp.initializeApp(this)
         val sessionManager = SessionManager(applicationContext)
         sessionManager.applySavedLanguage()
+        FirebaseApp.initializeApp(this)
+
         AppContextProvider.initialize(applicationContext)
     }
 

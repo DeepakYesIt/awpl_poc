@@ -35,7 +35,7 @@ class ChatViewModel @Inject constructor() : ViewModel() {
 
         viewModelScope.launch {
             repo.observeMessages(chatId).collect {
-                _messages.value = it
+                _messages.postValue(it)
             }
         }
     }

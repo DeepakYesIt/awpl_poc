@@ -27,6 +27,7 @@ import com.bussiness.awpl.viewmodel.ChatViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.UUID
 
 @AndroidEntryPoint
 class DoctorChatFragment : Fragment() {
@@ -38,10 +39,11 @@ class DoctorChatFragment : Fragment() {
     private val mediaList = mutableListOf<MediaItem>()
     private lateinit var mediaAdapter: MediaAdapter
     lateinit var chatAdapter: ChatAdapter
-    var currentUserId ="nikunj"
-    var receiverId ="rajan"
+    var currentUserId ="rajan"
+    var receiverId ="nikunj"
     var chatId ="nikunj_rajan"
     private lateinit var chatViewModel: ChatViewModel
+    private  var messageList = mutableListOf<ChatMessage>()
 
 
 
@@ -61,7 +63,7 @@ class DoctorChatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDoctorChatBinding.inflate(inflater, container, false)
-        chatAdapter = ChatAdapter(mutableListOf(),"nik")
+        chatAdapter = ChatAdapter(mutableListOf(),"rajan")
         chatViewModel =ViewModelProvider(this)[ChatViewModel::class.java]
         binding.chatRecyclerView.layoutManager =LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         binding.chatRecyclerView.adapter =chatAdapter
@@ -69,6 +71,7 @@ class DoctorChatFragment : Fragment() {
         chatViewModel.messages.observe(viewLifecycleOwner) { messages ->
 
             chatAdapter.submitList(messages)
+            messageList =messages.toMutableList()
              binding.chatRecyclerView.scrollToPosition(messages.size - 1)
         }
         return binding.root
@@ -92,6 +95,12 @@ class DoctorChatFragment : Fragment() {
             }
             sendMessageButton.setOnClickListener{
                 chatViewModel.sendTextMessage(messageEditText.text.toString())
+                val message = ChatMessage(
+                    id = UUID.randomUUID().toString(),
+                    senderId = currentUserId,
+                    receiverId = receiverId,
+                    message = messageEditText.text.toString()
+                )
             }
         }
 
@@ -101,7 +110,10 @@ class DoctorChatFragment : Fragment() {
         currentType = type
         mediaUploadDialog = MediaUtils(
             requireContext(), type, onFileSelected = { selectedFiles ->
-                selectedFiles.forEach { addMediaItem(it, type) }
+                selectedFiles.forEach {
+                    chatViewModel.sendImage(it)
+                //addMediaItem(it, type)
+                }
             }, onBrowseClicked = {
                 openImagePicker(type) // this will launch intent from fragment
             }
