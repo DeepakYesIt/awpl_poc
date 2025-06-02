@@ -11,8 +11,8 @@ import com.bumptech.glide.Glide
 import com.bussiness.awpl.ChatMessage
 import com.bussiness.awpl.R
 
-class ChatAdapter(private val messages: List<ChatMessage>,
-                    private val currentUserId: String
+class ChatAdapter(private var messages: List<ChatMessage>,
+                  private val currentUserId: String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var senderImageUrl =""
@@ -108,4 +108,10 @@ class ChatAdapter(private val messages: List<ChatMessage>,
                 .into(profileImage)
         }
     }
+
+
+     fun submitList( messages: List<ChatMessage>){
+         this.messages = messages
+         notifyDataSetChanged()
+     }
 }

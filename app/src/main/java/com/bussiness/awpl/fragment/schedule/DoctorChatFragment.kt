@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bussiness.awpl.ChatMessage
 import com.bussiness.awpl.adapter.ChatAdapter
 import com.bussiness.awpl.adapter.MediaAdapter
@@ -62,6 +63,14 @@ class DoctorChatFragment : Fragment() {
         _binding = FragmentDoctorChatBinding.inflate(inflater, container, false)
         chatAdapter = ChatAdapter(mutableListOf(),"nik")
         chatViewModel =ViewModelProvider(this)[ChatViewModel::class.java]
+        binding.chatRecyclerView.layoutManager =LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+        binding.chatRecyclerView.adapter =chatAdapter
+
+        chatViewModel.messages.observe(viewLifecycleOwner) { messages ->
+
+            chatAdapter.submitList(messages)
+             binding.chatRecyclerView.scrollToPosition(messages.size - 1)
+        }
         return binding.root
     }
 
@@ -80,6 +89,9 @@ class DoctorChatFragment : Fragment() {
             attachmentIcon.setOnClickListener {
                 Log.d("TESTING","I AM INSIDE THE ON CLICK")
                 openMediaDialog("image")
+            }
+            sendMessageButton.setOnClickListener{
+                chatViewModel.sendTextMessage(messageEditText.text.toString())
             }
         }
 

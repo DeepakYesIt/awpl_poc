@@ -15,10 +15,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class ChatViewModel @Inject constructor(
-
-   
-) : ViewModel() {
+class ChatViewModel @Inject constructor() : ViewModel() {
 
 
     private var chatId :String=""
