@@ -10,13 +10,28 @@
 
 
     <LinearLayout
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_24sdp"
         android:layout_marginHorizontal="@dimen/_24sdp"
         android:elevation="@dimen/_30sdp"
+        android:orientation="vertical"
         >
+
+        <TextView
+            android:id="@+id/tv_doctor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="Test Doctor"
+            android:textSize="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+        />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,7 +48,7 @@
             android:textColor="@color/blue"
             android:layout_marginStart="@dimen/_10sdp"
             />
-
+        </LinearLayout>
     </LinearLayout>
 
     <FrameLayout

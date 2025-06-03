@@ -33,9 +33,9 @@ class VideoCallActivity : AppCompatActivity() {
 
     private lateinit var agoraEngine : RtcEngine
     private var isMuted = false
-    private var isCameraOn = false
-    //  private val appId = "40c77d114a684733ae30fcb9fcb0369c"
-    private var appId = "1c45615e45194910baa3e4cad81a27fa"
+    private var isCameraOn = true
+      private val appId = "40c77d114a684733ae30fcb9fcb0369c"
+   // private var appId = "1c45615e45194910baa3e4cad81a27fa"
     private var token: String? = null
     private var channelName = "AWPL_Doctor_Web"
 
@@ -58,11 +58,14 @@ class VideoCallActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+      //  appId = getString(R.string.agora_app_id)
+      //  channelName ="nikunj"
+      //  token = null
 
-         appId = intent.getStringExtra(AppConstant.APPID)?.takeIf { it.isNotBlank() } ?: ""
-         token = intent.getStringExtra(AppConstant.AuthToken) ?: ""
-         channelName = intent.getStringExtra(AppConstant.CHANNEL_NAME)?.takeIf { it.isNotBlank() } ?: ""
-         uid = intent.getIntExtra(AppConstant.uid, 0)
+//         appId = intent.getStringExtra(AppConstant.APPID)?.takeIf { it.isNotBlank() } ?: ""
+//         token = intent.getStringExtra(AppConstant.AuthToken) ?: ""
+//         channelName = intent.getStringExtra(AppConstant.CHANNEL_NAME)?.takeIf { it.isNotBlank() } ?: ""
+//         uid = intent.getIntExtra(AppConstant.uid, 0)
 
         if (hasPermissions()) {
             Log.d("TESTING_NIKUNJ", "Inside oncreate")
@@ -267,9 +270,9 @@ class VideoCallActivity : AppCompatActivity() {
             isCameraOn = !isCameraOn
             agoraEngine.muteLocalVideoStream(isCameraOn)
             if(isCameraOn) {
-                fmLay.visibility = View.VISIBLE
-            }else{
                 fmLay.visibility =View.GONE
+            }else{
+                fmLay.visibility = View.VISIBLE
             }
         }
 

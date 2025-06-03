@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -16,6 +17,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -62,7 +64,9 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.http.Multipart
+import java.net.URLConnection
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -86,7 +90,7 @@ class ProfileFragment : Fragment() {
                 binding.profileImage.setImageURI(uri)
                 imageProfileMultiPart =
                     selectedImageUri?.let {
-                        MultipartUtil.uriToMultipart(requireContext(),
+                        uriToMultipart(requireContext(),
                             it,"profileImage")
                     }
 
@@ -102,8 +106,10 @@ class ProfileFragment : Fragment() {
                 val imageUri = saveBitmapToInternalStorage(it) // Save bitmap & get URI
                 Glide.with(requireContext()).load(imageUri).into(binding.profileImage)
 
-                imageProfileMultiPart = MultipartUtil.uriToMultipart(requireContext(),imageUri,"profileImage")
-                saveImageUri(imageUri.toString())
+
+                Log.d("TESTING_MULTIPART","URI IS:- "+imageUri)
+                imageProfileMultiPart = uriToMultipart(requireContext(),imageUri,"profileImage")
+                Log.d("TESTING_MULTIPART", imageProfileMultiPart.toString())
             }
         }
     }
@@ -337,7 +343,7 @@ class ProfileFragment : Fragment() {
                         binding.llSaveCancel.visibility =View.VISIBLE
                         SessionManager(requireContext()).setUserName(binding.etName.text.toString())
                         val parts = it.data?.split("-----")
-                        val path = AppConstant.Base_URL +(parts?.get(1) ?: "")
+                        val path = (parts?.get(1) ?: "")
                         SessionManager(requireContext()).setUserImage(path)
                         Log.d("TESTING_PROFILE_SAVE",path.toString())
                         disableAllEdlitText()
@@ -588,4 +594,49 @@ class ProfileFragment : Fragment() {
         private const val CAMERA_PERMISSION_REQUEST_CODE = 1001
         private const val STORAGE_PERMISSION_REQUEST_CODE = 1002
     }
+
+
+    fun uriToMultipart(
+        context: Context,
+        uri: Uri,
+        partName: String = "file"
+    ): MultipartBody.Part? {
+        return if (uri.scheme == "file") {
+            // Handle file:// URIs
+            val file = File(uri.path!!)
+            val mimeType = URLConnection.guessContentTypeFromName(file.name) ?: "application/octet-stream"
+            val requestFile = file.asRequestBody(mimeType.toMediaTypeOrNull())
+            MultipartBody.Part.createFormData(partName, file.name, requestFile)
+        } else {
+            // Handle content:// URIs
+            val contentResolver = context.contentResolver
+            val fileName = getFileName(contentResolver, uri) ?: return null
+            val mimeType = contentResolver.getType(uri) ?: "application/octet-stream"
+
+            val inputStream = contentResolver.openInputStream(uri) ?: return null
+            val fileBytes = inputStream.use { it.readBytes() }
+            val requestFile = RequestBody.create(mimeType.toMediaTypeOrNull(), fileBytes)
+            MultipartBody.Part.createFormData(partName, fileName, requestFile)
+        }
+    }
+
+    private fun getFileName(contentResolver: ContentResolver, uri: Uri): String? {
+        if (uri.scheme == "file") {
+            return File(uri.path!!).name
+        }
+
+        var name: String? = null
+        val returnCursor = contentResolver.query(uri, null, null, null, null)
+        returnCursor?.use {
+            if (it.moveToFirst()) {
+                val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                if (nameIndex >= 0) {
+                    name = it.getString(nameIndex)
+                }
+            }
+        }
+        return name
+    }
+
+
 }

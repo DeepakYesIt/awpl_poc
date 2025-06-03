@@ -65,6 +65,8 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private var isArrowUp = false
     private var notificationPermissionThere = false
+    lateinit var img:de.hdodenhof.circleimageview.CircleImageView
+    lateinit var notification :SwitchCompat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,7 +112,17 @@ class HomeActivity : AppCompatActivity() {
                         ivBell.visibility = View.VISIBLE
                         imgBackProfile.setImageResource(R.drawable.profile_icons)
                         imgBackProfile.setOnClickListener {
+                            updateDrawerContent()
                             drawerLayout.openDrawer(GravityCompat.START)
+
+//                            Glide.with(this@HomeActivity).load(SessionManager(this@HomeActivity).getUserImage()).placeholder(R.drawable.ic_profile_new_opt).into(img)
+//                            if(SessionManager(this@HomeActivity).isNotificationPermissionGranted(this@HomeActivity)){
+//                                Log.d("Testing_notification","YES NOTIFICATION_ENABLE")
+//                                notification.isChecked = true
+//                            }else{
+//                                Log.d("Testing_notification","NO NOTIFICATION_ENABLE")
+//                                notification.isChecked = false
+//                            }
                         }
                         chatFab.visibility = View.GONE
                     }
@@ -195,7 +207,19 @@ class HomeActivity : AppCompatActivity() {
       }
 
 
+    private fun updateDrawerContent() {
+        val navigationView: NavigationView = binding.root.findViewById(R.id.navigation_side_nav_bar)
+        val img = navigationView.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.profileIcon)
+        val notification = navigationView.findViewById<SwitchCompat>(R.id.switchNotification)
 
+
+        Glide.with(this)
+            .load(SessionManager(this).getUserImage())
+            .placeholder(R.drawable.ic_profile_new_opt)
+            .into(img)
+
+        notification.isChecked = SessionManager(this).isNotificationPermissionGranted(this)
+    }
 
     private fun setupBottomNav() {
         binding.homeFragment.setOnClickListener {
@@ -321,7 +345,7 @@ class HomeActivity : AppCompatActivity() {
         var forOther = navigationView.findViewById<LinearLayout>(R.id.ll_for_other)
         var scheduleLayout = navigationView.findViewById<LinearLayout>(R.id.llschedule)
         var userName = navigationView.findViewById<TextView>(R.id.tv_user_name)
-        var img = navigationView.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.profileIcon)
+        img = navigationView.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.profileIcon)
         userName.setText(SessionManager(this).getUserName() ?: "")
         var imgIcon = navigationView.findViewById<ImageView>(R.id.arr_sch)
         var scheduleMain = navigationView.findViewById<LinearLayout>(R.id.ll_schedule_main)
@@ -449,8 +473,8 @@ class HomeActivity : AppCompatActivity() {
 
     private fun closeDrawer() {
         binding.drawerLayout.closeDrawer(GravityCompat.START)
-
     }
+
     fun isNotificationPermissionGranted(context: Context): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ContextCompat.checkSelfPermission(

@@ -91,6 +91,11 @@ class HomeFragment : Fragment() {
         clickListener()
         callingHomeApi()
 
+//        binding.swipeRefreshLayout.setOnRefreshListener {
+//            // Reload data here
+//            fetchData()
+//        }
+
         binding.startAppointmentBtn.setOnClickListener {
 
             if(startAppointment !=0) {
@@ -127,8 +132,29 @@ class HomeFragment : Fragment() {
             }
         }
 
+        setupSwipeToRefresh()
        // callingDiseaseApi()
 
+    }
+
+    private fun setupSwipeToRefresh() {
+//        binding.swipeRefreshLayout.setOnRefreshListener {
+//            loadFaqs()
+//        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun loadFaqs() {
+
+//        binding.swipeRefreshLayout.isRefreshing = true
+//        callingHomeApi()
+
+    }
+
+    private fun fetchData() {
+        // Load data here (API, DB, etc.)
+      //  callingHomeApi()
+        // After data is loaded
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -142,7 +168,8 @@ class HomeFragment : Fragment() {
                           settingDataToUi(it.data)
                       }
                       is NetworkResult.Error ->{
-                        LoadingUtils.hideDialog()
+
+                          LoadingUtils.hideDialog()
                       }
                       else ->{
                       }
