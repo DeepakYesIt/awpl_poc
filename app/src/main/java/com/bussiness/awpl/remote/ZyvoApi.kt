@@ -193,4 +193,11 @@ interface ZyvoApi {
         @Field("appointmentId") appointmentId :Int
      ) : Response<JsonObject>
 
+    @POST("check_appointment_details")
+    @FormUrlEncoded
+    suspend fun checkAppoitmentDetails(
+        @Field("appointment_id") appointmentId: Int
+    ) : Response<JsonObject>
+
+
 }

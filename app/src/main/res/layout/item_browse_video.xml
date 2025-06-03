@@ -16,6 +16,13 @@
                 android:src="@drawable/video_thumbnail"
                 app:shapeAppearanceOverlay="@style/doctorImgBg"
                 android:scaleType="centerCrop" />
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_play_icon"
+                android:layout_centerInParent="true"
+                />
+
             <TextView
                 android:id="@+id/videoTxt"
                 android:layout_width="match_parent"

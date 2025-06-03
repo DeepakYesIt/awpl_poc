@@ -19,6 +19,7 @@ import com.bussiness.awpl.model.PatinetNotification
 import com.bussiness.awpl.model.PayuPaymentModel
 import com.bussiness.awpl.model.PrescriptionModel
 import com.bussiness.awpl.model.PromoCodeModel
+import com.bussiness.awpl.model.ScheduleTimeModel
 import com.bussiness.awpl.model.UpcomingModel
 import com.bussiness.awpl.model.VideoModel
 import com.bussiness.awpl.utils.AppConstant
@@ -500,10 +501,9 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
         catch (e: Exception) {
             emit(NetworkResult.Error(ErrorHandler.emitError(e)))
         }
-
     }
 
-    override suspend fun getScheduleTime(date :String): Flow<NetworkResult<MutableList<String>>> = flow {
+    override suspend fun getScheduleTime(date :String): Flow<NetworkResult<ScheduleTimeModel>> = flow {
             try {
             api.getScheduleTime(date).apply {
                 if (isSuccessful) {
@@ -513,6 +513,17 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
                             var obj = resp.get("data").asJsonObject
                             var timeSlotArr = obj.get("available_time_slots").asJsonArray
                             var resultList = mutableListOf<String>()
+                            var scheduleModel = ScheduleTimeModel()
+                            var profileObj = obj.get("profile_details").asJsonObject
+
+                            if(profileObj.has("email") && profileObj.get("email").isJsonNull ==false){
+                               scheduleModel.email = profileObj.get("email").asString
+                            }
+
+                            if(profileObj.has("phone") && profileObj.get("phone").isJsonNull == false){
+                                scheduleModel.phone = profileObj.get("phone").asString
+                            }
+
 
                             timeSlotArr.forEach {
                                var obj = it.asJsonObject
@@ -520,12 +531,16 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
                                 if(availableTime){
                                     resultList.add(obj.get("display_time").asString)
                                 }
-                                Log.d("TESTING_SIZE","Result size is "+resultList.size.toString())
-                                emit(NetworkResult.Success(resultList))
+
                             }
 
+
+
+                            scheduleModel.timeSlotList = resultList
+
+
                             Log.d("TESTING_URL","Result List Size is :- "+resultList.size)
-                            emit(NetworkResult.Success(resultList))
+                            emit(NetworkResult.Success(scheduleModel))
                         }
                         else {
                             emit(NetworkResult.Error(resp.get("message").asString))
@@ -1149,6 +1164,10 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
         } catch (e: Exception) {
             emit(NetworkResult.Error(ErrorHandler.emitError(e)))
         }
+    }
+
+    override suspend fun checkAppoitmentDetails(appointmentId: Int) {
+
     }
 
 }

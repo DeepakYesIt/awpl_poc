@@ -11,12 +11,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bussiness.awpl.ChatItem
 import com.bussiness.awpl.ChatMessage
 import com.bussiness.awpl.adapter.ChatAdapter
+
 import com.bussiness.awpl.adapter.MediaAdapter
 import com.bussiness.awpl.databinding.FragmentDoctorChatBinding
 import com.bussiness.awpl.model.MediaItem
@@ -27,6 +30,9 @@ import com.bussiness.awpl.viewmodel.ChatViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.UUID
 
 @AndroidEntryPoint
@@ -39,16 +45,13 @@ class DoctorChatFragment : Fragment() {
     private val mediaList = mutableListOf<MediaItem>()
     private lateinit var mediaAdapter: MediaAdapter
     lateinit var chatAdapter: ChatAdapter
-    var currentUserId ="rajan"
-    var receiverId ="nikunj"
-    var chatId ="nikunj_rajan"
+    var currentUserId ="6"
+    var receiverId ="11"
+    var chatId ="13_11_6"
     private lateinit var chatViewModel: ChatViewModel
     private  var messageList = mutableListOf<ChatMessage>()
 
-
-
-    private val imagePickerLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val uri: Uri? = result.data?.data
                 uri?.let {
@@ -63,18 +66,47 @@ class DoctorChatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDoctorChatBinding.inflate(inflater, container, false)
-        chatAdapter = ChatAdapter(mutableListOf(),"rajan")
+        chatAdapter = ChatAdapter(mutableListOf(),"6")
         chatViewModel =ViewModelProvider(this)[ChatViewModel::class.java]
         binding.chatRecyclerView.layoutManager =LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         binding.chatRecyclerView.adapter =chatAdapter
 
         chatViewModel.messages.observe(viewLifecycleOwner) { messages ->
 
-            chatAdapter.submitList(messages)
+            chatAdapter.submitList(groupMessagesByDate(messages))
             messageList =messages.toMutableList()
              binding.chatRecyclerView.scrollToPosition(messages.size - 1)
         }
         return binding.root
+    }
+
+    fun groupMessagesByDate(messages: List<ChatMessage>): List<ChatItem> {
+        val grouped = messages.sortedBy { it.timestamp }
+            .groupBy {
+                SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(Date(it.timestamp))
+            }
+
+        val chatItems = mutableListOf<ChatItem>()
+        for ((date, items) in grouped) {
+            chatItems.add(ChatItem.DateHeader(date))
+            chatItems.addAll(items.map { ChatItem.MessageItem(it) })
+        }
+        Log.d("Testing_chat_size",chatItems.size.toString())
+        chatItems.forEach {
+
+            when (val item = it) {
+                is ChatItem.DateHeader -> {
+                    Log.d("testing_date", item.date)
+                }
+
+                is ChatItem.MessageItem -> {
+                    Log.d("testing_date", item.message.message.toString())
+                }
+
+            }
+        }
+
+        return chatItems
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -95,8 +127,9 @@ class DoctorChatFragment : Fragment() {
             }
             sendMessageButton.setOnClickListener{
                 chatViewModel.sendTextMessage(messageEditText.text.toString())
+                messageEditText.setText("")
                 val message = ChatMessage(
-                    id = UUID.randomUUID().toString(),
+
                     senderId = currentUserId,
                     receiverId = receiverId,
                     message = messageEditText.text.toString()
@@ -151,4 +184,9 @@ class DoctorChatFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
+
+
+
 }

@@ -15,6 +15,7 @@ import com.bussiness.awpl.model.PatinetNotification
 import com.bussiness.awpl.model.PayuPaymentModel
 import com.bussiness.awpl.model.PrescriptionModel
 import com.bussiness.awpl.model.PromoCodeModel
+import com.bussiness.awpl.model.ScheduleTimeModel
 import com.bussiness.awpl.model.UpcomingModel
 import com.bussiness.awpl.model.VideoModel
 import com.bussiness.awpl.viewmodel.DiseaseModel
@@ -116,7 +117,7 @@ interface AwplRepository {
         @Field("for")appointmentFor:String
     ) :  Flow<NetworkResult<MutableList<CompletedScheduleCallModel>>>
 
-    suspend fun getScheduleTime(date : String) :Flow<NetworkResult<MutableList<String>>>
+    suspend fun getScheduleTime(date : String) :Flow<NetworkResult<ScheduleTimeModel>>
 
     suspend fun applyPromoCode(
          promoCode :String,
@@ -157,5 +158,10 @@ interface AwplRepository {
     suspend fun createChannel(
         @Field("appointmentId") appointmentId :Int
     ) :Flow<NetworkResult<AgoraCallModel>>
+
+
+    suspend fun checkAppoitmentDetails(
+        @Field("appointment_id") appointmentId: Int
+    )
 
 }

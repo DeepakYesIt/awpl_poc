@@ -1,6 +1,7 @@
 package com.bussiness.awpl.utils
 
 object AppConstant {
+    val DOCTOR: String ="DOCTOR"
     val uid: String? ="uid"
     val CHANNEL_NAME: String?="channel_name"
     val AppoitmentId: String? ="appointment_id"

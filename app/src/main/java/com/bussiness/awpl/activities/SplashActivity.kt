@@ -61,7 +61,7 @@ class SplashActivity : AppCompatActivity() {
             }
             finish()
         }, 3000)
-//
+
 //           Handler(Looper.getMainLooper()).postDelayed({
 //            if (sessionManager.isLoggedIn()) {
 //                startActivity(Intent(this, VideoCallActivity::class.java))

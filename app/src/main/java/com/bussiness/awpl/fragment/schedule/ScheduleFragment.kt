@@ -2,6 +2,7 @@ package com.bussiness.awpl.fragment.schedule
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -22,6 +23,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
+import com.bussiness.awpl.activities.VideoCallActivity
 import com.bussiness.awpl.adapter.AppointmentAdapter
 import com.bussiness.awpl.adapter.CancelledAdapter
 import com.bussiness.awpl.adapter.CompletedAdapter
@@ -191,7 +193,8 @@ class ScheduleFragment : Fragment() {
                                       recyclerView.visibility = View.GONE
                                   }
                               }
-                          } else {
+                          }
+                          else {
                               binding.apply {
                                   noDataView.visibility = View.VISIBLE
                                   recyclerView.visibility = View.GONE
@@ -273,7 +276,8 @@ class ScheduleFragment : Fragment() {
                 findNavController().navigate(R.id.reschedule_call,bundle)
 
                                 },
-            onInfoClick = { _, infoIcon -> showInfoPopup(infoIcon) }
+            onInfoClick = { _, infoIcon -> showInfoPopup(infoIcon) },
+            startAppoitmentClick={ apoitnment -> openVideoCall(apoitnment)}
         )
 
         cancelledAdapter = CancelledAdapter(mutableListOf()) { appointment ->
@@ -290,6 +294,37 @@ class ScheduleFragment : Fragment() {
             adapter = completedAdapter
         }
 
+    }
+
+    private fun openVideoCall(model :UpcomingModel){
+        lifecycleScope.launch {
+            LoadingUtils.showDialog(requireContext(),false)
+            viewModel.createChannel(model.id).collect {
+                when(it){
+                    is NetworkResult.Success ->{
+                        LoadingUtils.hideDialog()
+                        it.data?.let {
+                            val intent = Intent(requireContext(), VideoCallActivity::class.java)
+                            intent.putExtra(AppConstant.APPID,it.appId)
+                            intent.putExtra(AppConstant.AuthToken,it.token)
+                            intent.putExtra(AppConstant.CHANNEL_NAME,it.channelName)
+                            intent.putExtra(AppConstant.uid,it.uid)
+                            intent.putExtra(AppConstant.DOCTOR,model.doctorName)
+                            startActivity(intent)
+                        }
+
+                    }
+                    is NetworkResult.Error ->{
+                        LoadingUtils.hideDialog()
+                        LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
+
+                    }
+                    else ->{
+
+                    }
+                }
+            }
+        }
     }
 
     private fun clickListener()

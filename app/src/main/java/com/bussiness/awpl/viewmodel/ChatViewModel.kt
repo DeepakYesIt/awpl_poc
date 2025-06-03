@@ -11,6 +11,9 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.UUID
 import javax.inject.Inject
 
@@ -35,11 +38,26 @@ class ChatViewModel @Inject constructor() : ViewModel() {
 
         viewModelScope.launch {
             repo.observeMessages(chatId).collect {
+                it.forEach {
+                    it.date = formatTimestamp(it.timestamp).first
+                    it.time = formatTimestamp(it.timestamp).second
+                }
                 _messages.postValue(it)
             }
         }
     }
 
+    fun formatTimestamp(timestamp: Long): Pair<String, String> {
+        val date = Date(timestamp)
+
+        val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+        val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+
+        val formattedDate = dateFormat.format(date) // "14 May 2025"
+        val formattedTime = timeFormat.format(date) // "21:15"
+
+        return Pair(formattedDate, formattedTime)
+    }
     private fun fetchChatHistory() {
         viewModelScope.launch {
             repo.observeMessages(chatId).collectLatest { messageList ->
@@ -50,7 +68,7 @@ class ChatViewModel @Inject constructor() : ViewModel() {
 
     fun sendTextMessage(text: String) {
         val message = ChatMessage(
-            id = UUID.randomUUID().toString(),
+
             senderId = currentUserId,
             receiverId = receiverId,
             message = text
@@ -62,7 +80,7 @@ class ChatViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             val url = repo.uploadImage(uri)
             val message = ChatMessage(
-                id = UUID.randomUUID().toString(),
+
                 senderId = currentUserId,
                 receiverId = receiverId,
                 imageUrl = url

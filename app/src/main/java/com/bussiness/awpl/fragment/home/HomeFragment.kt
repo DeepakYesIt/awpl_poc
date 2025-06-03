@@ -2,6 +2,7 @@ package com.bussiness.awpl.fragment.home
 
 import android.app.Dialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -64,6 +65,7 @@ class HomeFragment : Fragment() {
     private lateinit var diseaseList : MutableList<DiseaseModel>
     private var appoitmentId :Int =0
     private var startAppointment :Int =0
+    private var doctorName :String =""
 
     private val healthJourneyList = listOf(
         HealthListModel("Begin Your Health\nJourney with a \nFree Consultation!", R.drawable.women_doctor),
@@ -112,6 +114,7 @@ class HomeFragment : Fragment() {
                                     intent.putExtra(AppConstant.AuthToken,it.token)
                                     intent.putExtra(AppConstant.CHANNEL_NAME,it.channelName)
                                     intent.putExtra(AppConstant.uid,it.uid)
+                                    intent.putExtra(AppConstant.DOCTOR,doctorName)
                                     startActivity(intent)
 
                                 }
@@ -190,6 +193,7 @@ class HomeFragment : Fragment() {
             startAppointment = it.id
            binding.llTop.visibility = View.VISIBLE
            binding.stDoctorName.setText(it.doctorName.toString())
+            doctorName = it.doctorName
            binding.tvDate.setText(it.date)
            binding.tvTime.setText(it.time)
             startCountdown(it.time)
@@ -280,11 +284,18 @@ class HomeFragment : Fragment() {
         // Browse Video RecyclerView
         binding.videoRecyclerView.apply {
             browseVideoAdapter = BrowseVideoAdapter(mutableListOf()) { item ->
-                Toast.makeText(requireContext(), "Playing Video: ${item.title}", Toast.LENGTH_SHORT).show()
+               
+            openVideo(item.video_link)
             }
             adapter = browseVideoAdapter
         }
 
+    }
+    private fun openVideo(videoUrl :String){
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.setDataAndType(Uri.parse(videoUrl), "video/*")
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
     }
 
     private fun clickListener() {
@@ -339,9 +350,6 @@ class HomeFragment : Fragment() {
                 }
             }
 
-            startAppointmentBtn.setOnClickListener{
-                findNavController().navigate(R.id.videoCallFragment)
-            }
 
             cancelBtn.setOnClickListener{
                 cancelDialog()

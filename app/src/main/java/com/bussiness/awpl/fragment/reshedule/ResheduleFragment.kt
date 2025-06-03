@@ -110,8 +110,8 @@ class ResheduleFragment : Fragment() {
                     is NetworkResult.Success ->{
                         LoadingUtils.hideDialog()
                         timeSlots.clear()
-                        it.data?.let { it1 -> timeSlots.addAll(it1)
-                            Log.d("TESTING_SIZE",it.data.size.toString()+"from api")
+                        it.data?.let { it1 -> timeSlots.addAll(it1.timeSlotList)
+
                             Log.d("TESTING_SIZE",timeSlots.size.toString()+" from local")
                             timeSlotAdapter.updateAdapter(timeSlots)
                         }

@@ -1,5 +1,7 @@
 package com.bussiness.awpl.adapter
 
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -38,11 +40,14 @@ class BrowseVideoAdapter(
             binding.videoTxt.text = item.title
 
             binding.root.setOnClickListener {
+
                 onVideoClick(item)
             }
         }
 
 }
+
+
 
     fun updateAdapter(items: List<HealthJourneyItem>){
         this.items = items

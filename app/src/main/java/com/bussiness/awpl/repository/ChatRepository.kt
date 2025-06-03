@@ -21,13 +21,14 @@ class ChatRepository(
         return firestore.collection("chats")
             .document(chatId)
             .collection("messages")
-            .document(message.id)
+            .document()
             .set(message)
     }
 
 
 
     fun observeMessages(chatId: String): Flow<List<ChatMessage>> = callbackFlow {
+       // .orderBy("timestamp")
         val subscription = firestore.collection("chats")
             .document(chatId)
             .collection("messages")

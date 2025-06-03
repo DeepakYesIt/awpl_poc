@@ -2,6 +2,7 @@ package com.bussiness.awpl.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.bussiness.awpl.NetworkResult
+import com.bussiness.awpl.model.AgoraCallModel
 import com.bussiness.awpl.model.CancelledAppointment
 import com.bussiness.awpl.model.CompletedAppointmentModel
 import com.bussiness.awpl.model.CompletedScheduleCallModel
@@ -37,6 +38,12 @@ class MyAppointmentViewModel @Inject constructor(private var repository: AwplRep
 
                 }
             }
+        }
+    }
+
+    suspend fun createChannel(appointmentId: Int): Flow<NetworkResult<AgoraCallModel>>{
+        return repository.createChannel(appointmentId).onEach {
+
         }
     }
 

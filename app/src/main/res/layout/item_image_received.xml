@@ -6,6 +6,7 @@
     android:orientation="horizontal"
     android:padding="8dp">
 
+    <!-- Profile image -->
     <ImageView
         android:id="@+id/profileImage"
         android:layout_width="36dp"
@@ -16,12 +17,29 @@
         android:background="@drawable/bg_circle"
         android:src="@drawable/ic_not_found_img" />
 
-    <ImageView
-        android:id="@+id/imageMessage"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+    <!-- Image message with time below -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:background="@drawable/bg_message"
-        android:scaleType="centerCrop" />
+        android:padding="4dp">
 
+        <ImageView
+            android:id="@+id/imageMessage"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true" />
 
+        <TextView
+            android:id="@+id/imageTime1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="21:15"
+            android:textSize="12sp"
+            android:textColor="#888888"
+            android:layout_gravity="end"
+            android:paddingTop="4dp" />
+    </LinearLayout>
 </LinearLayout>

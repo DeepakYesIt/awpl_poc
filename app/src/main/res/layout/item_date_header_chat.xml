@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+   android:layout_marginBottom="@dimen/_5sdp"
+     android:layout_height="wrap_content" android:layout_width="match_parent">
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_toLeftOf="@id/dateHeaderText"
+        android:layout_centerVertical="true"
+        />
+
+    <TextView
+    android:id="@+id/dateHeaderText"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:textColor="#363636"
+   android:text="24 May 2025"
+    android:textSize="15sp"
+  android:fontFamily="popins"
+    android:padding="6dp"
+    android:layout_centerInParent="true"
+    android:gravity="center_horizontal"
+    android:layout_marginVertical="8dp"/>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_toRightOf="@id/dateHeaderText"
+        android:layout_centerVertical="true"
+        />
+    </RelativeLayout>

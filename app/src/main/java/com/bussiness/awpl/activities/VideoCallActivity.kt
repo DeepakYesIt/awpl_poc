@@ -34,7 +34,7 @@ class VideoCallActivity : AppCompatActivity() {
     private lateinit var agoraEngine : RtcEngine
     private var isMuted = false
     private var isCameraOn = true
-      private val appId = "40c77d114a684733ae30fcb9fcb0369c"
+      private var appId = "40c77d114a684733ae30fcb9fcb0369c"
    // private var appId = "1c45615e45194910baa3e4cad81a27fa"
     private var token: String? = null
     private var channelName = "AWPL_Doctor_Web"
@@ -43,6 +43,7 @@ class VideoCallActivity : AppCompatActivity() {
     private var remoteSurfaceView: SurfaceView? = null
     private var remoteUid: Int? = null
     private var isSwitched = false
+    private var doctorName :String =""
 
     private var callStartTime: Long = 0L
     var uid :Int =0
@@ -58,14 +59,21 @@ class VideoCallActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-      //  appId = getString(R.string.agora_app_id)
-      //  channelName ="nikunj"
-      //  token = null
+//        appId = getString(R.string.agora_app_id)
+//        channelName ="nikunj"
+//        token = null
+         doctorName = intent.getStringExtra(AppConstant.DOCTOR)?.takeIf { it.isNotBlank() }?:""
+         appId = intent.getStringExtra(AppConstant.APPID)?.takeIf { it.isNotBlank() } ?: ""
+         token = intent.getStringExtra(AppConstant.AuthToken) ?: ""
+         channelName = intent.getStringExtra(AppConstant.CHANNEL_NAME)?.takeIf { it.isNotBlank() } ?: ""
+         uid = intent.getIntExtra(AppConstant.uid, 0)
 
-//         appId = intent.getStringExtra(AppConstant.APPID)?.takeIf { it.isNotBlank() } ?: ""
-//         token = intent.getStringExtra(AppConstant.AuthToken) ?: ""
-//         channelName = intent.getStringExtra(AppConstant.CHANNEL_NAME)?.takeIf { it.isNotBlank() } ?: ""
-//         uid = intent.getIntExtra(AppConstant.uid, 0)
+        var doctorTv = findViewById<TextView>(R.id.tv_doctor)
+        doctorTv.setText(doctorName)
+        Log.d("TESTING_VIDEO_LOG","appid "+appId)
+        Log.d("TESTING_VIDEO_LOG","appid "+token)
+        Log.d("TESTING_VIDEO_LOG","channelName"+channelName)
+
 
         if (hasPermissions()) {
             Log.d("TESTING_NIKUNJ", "Inside oncreate")
@@ -240,9 +248,13 @@ class VideoCallActivity : AppCompatActivity() {
     private fun joinChannel() {
 
         agoraEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION)
+
         agoraEngine.enableVideo()
-        agoraEngine.joinChannel(token
-            , channelName, "", 0)
+
+        agoraEngine.joinChannel(token,
+            channelName,
+            "",
+            0)
     }
 
     private fun leaveChannel() {
@@ -259,19 +271,28 @@ class VideoCallActivity : AppCompatActivity() {
 
         var hideView = findViewById<FrameLayout>(R.id.local_video_view1)
 
+        var imgBtn = findViewById<ImageView>(R.id.btn_mute)
         findViewById<ImageView>(R.id.btn_mute).setOnClickListener {
             isMuted = !isMuted
+            if(isMuted){
+                imgBtn.setImageResource(R.drawable.ic_audio_mute)
+            }else{
+                imgBtn.setImageResource(R.drawable.ic_audio)
+            }
             agoraEngine.muteLocalAudioStream(isMuted)
        //  switchVideoViews()
         }
 
+        var switchCamera = findViewById<ImageView>(R.id.btn_switch_camera)
         findViewById<ImageView>(R.id.btn_switch_camera).setOnClickListener {
             var fmLay = findViewById<FrameLayout>(R.id.local_video_view)
             isCameraOn = !isCameraOn
             agoraEngine.muteLocalVideoStream(isCameraOn)
             if(isCameraOn) {
+                switchCamera.setImageResource(R.drawable.ic_video_mute)
                 fmLay.visibility =View.GONE
             }else{
+                switchCamera.setImageResource(R.drawable.ic_video)
                 fmLay.visibility = View.VISIBLE
             }
         }

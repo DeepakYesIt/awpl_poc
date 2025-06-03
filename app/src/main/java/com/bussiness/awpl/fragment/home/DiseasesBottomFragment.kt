@@ -1,6 +1,8 @@
 package com.bussiness.awpl.fragment.home
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +34,7 @@ class DiseasesBottomFragment : BottomSheetDialogFragment() {
     var type:String =""
     private val viewModel: HomeViewModel by viewModels()
     private  var diseaseList: MutableList<DiseaseModel> = mutableListOf()
+    private var diseaseFilter :MutableList<DiseaseModel> = mutableListOf()
 //    private val diseasesList = listOf(
 //        OrganDeptModel(R.drawable.rectangle, "Kidney Disease"),
 //        OrganDeptModel(R.drawable.rectangle, "Liver Disease"),
@@ -60,7 +63,7 @@ class DiseasesBottomFragment : BottomSheetDialogFragment() {
 
 
         diseaseList = HealthDataStore.getHealthNeeds().toMutableList()
-
+        diseaseFilter = HealthDataStore.getHealthNeeds().toMutableList()
         arguments?.let {
             if(it.containsKey("type")){
                type = it.getString("type").toString()
@@ -73,6 +76,18 @@ class DiseasesBottomFragment : BottomSheetDialogFragment() {
 
         _binding = FragmentDiseasesBottomBinding.inflate(inflater, container, false)
 
+        binding.searchView2.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                Log.d("SEARCH", "User typed: $s")
+                callingFilterTask(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+
         Log.d("TESTING_DISEASE","SIZE OF DISEASE IS "+ DiseaseStore.getDiseases().size)
         if(DiseaseStore.getDiseases().size ==0){
           //  callingDiseaseApi()
@@ -81,6 +96,13 @@ class DiseasesBottomFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
+    private fun callingFilterTask(diseaseName: String) {
+       var newList = diseaseFilter.filter {
+            it.name.startsWith(diseaseName,ignoreCase = true)
+        }
+
+        bottomCardDiseaseAdapter.updateAdapter(newList)
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
