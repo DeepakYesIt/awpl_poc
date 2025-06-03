@@ -7,6 +7,7 @@ import com.bussiness.awpl.model.AgoraCallModel
 import com.bussiness.awpl.model.AppointmentModel
 import com.bussiness.awpl.model.BookingResponseModel
 import com.bussiness.awpl.model.CancelledAppointment
+import com.bussiness.awpl.model.ChatAppotmentDetails
 import com.bussiness.awpl.model.CompletedAppointmentModel
 import com.bussiness.awpl.model.CompletedScheduleCallModel
 import com.bussiness.awpl.model.CompletedSymptomsModel
@@ -1166,8 +1167,44 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
         }
     }
 
-    override suspend fun checkAppoitmentDetails(appointmentId: Int) {
+    override suspend fun checkAppoitmentDetails(
+        appointmentId: Int
+    ) : Flow<NetworkResult<ChatAppotmentDetails>> = flow{
+        try {
+            api.checkAppoitmentDetails(appointmentId).apply {
+                if (isSuccessful) {
+                    body()?.let { resp ->
+                        if (resp.has("status") && resp.get("status").asBoolean) {
 
+                            var obj = resp.get("data").asJsonObject
+                         
+
+
+
+
+                            emit(NetworkResult.Success(model))
+                        }
+                        else {
+                            emit(NetworkResult.Error(resp.get("message").asString))
+                        }
+                    } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
+                } else {
+                    try {
+                        val jsonObj = this.errorBody()?.string()?.let { JSONObject(it) }
+                        emit(
+                            NetworkResult.Error(
+                                jsonObj?.getString("message") ?: AppConstant.unKnownError
+                            )
+                        )
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        emit(NetworkResult.Error(AppConstant.unKnownError))
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            emit(NetworkResult.Error(ErrorHandler.emitError(e)))
+        }
     }
 
 }

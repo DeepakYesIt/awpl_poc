@@ -4,6 +4,7 @@ import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.model.AgoraCallModel
 import com.bussiness.awpl.model.BookingResponseModel
 import com.bussiness.awpl.model.CancelledAppointment
+import com.bussiness.awpl.model.ChatAppotmentDetails
 import com.bussiness.awpl.model.CompletedAppointmentModel
 import com.bussiness.awpl.model.CompletedScheduleCallModel
 import com.bussiness.awpl.model.CompletedSymptomsModel
@@ -162,6 +163,6 @@ interface AwplRepository {
 
     suspend fun checkAppoitmentDetails(
         @Field("appointment_id") appointmentId: Int
-    )
+    ) : Flow<NetworkResult<ChatAppotmentDetails>>
 
 }
