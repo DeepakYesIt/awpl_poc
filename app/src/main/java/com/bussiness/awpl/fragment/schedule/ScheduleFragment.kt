@@ -153,15 +153,15 @@ class ScheduleFragment : Fragment() {
             LoadingUtils.showDialog(requireContext(),false)
             viewModel.cancelAppointment().collect{
                 when(it){
-                    is NetworkResult.Success ->{
+                    is NetworkResult.Success -> {
                         LoadingUtils.hideDialog()
                         it.data?.let { it1 -> cancelledAdapter.updateAdapter(it1) }
                     }
-                    is NetworkResult.Error ->{
+                    is NetworkResult.Error -> {
                            LoadingUtils.hideDialog()
                            LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
                     }
-                    else->{
+                    else-> {
 
                     }
                 }
@@ -258,7 +258,18 @@ class ScheduleFragment : Fragment() {
         completedAdapter = CompletedAdapter(
             mutableListOf(),
             onCheckDetailsClick = { appointment ->
-                findNavController().navigate(R.id.doctorChatFragment)
+                var chatId = if(appointment.chat_id != null) appointment.chat_id else null
+                var bundle =Bundle().apply {
+                    putInt(AppConstant.AppoitmentId,appointment.id)
+
+                    putString(AppConstant.Chat, chatId)
+                }
+                if(chatId != null){
+                    findNavController().navigate(R.id.doctorChatFragment,bundle)
+                }
+
+
+
             },
             onDownloadPrescriptionClick = { appointment ->
                 // Handle download prescription button click
@@ -327,10 +338,7 @@ class ScheduleFragment : Fragment() {
         }
     }
 
-    private fun clickListener()
-
-
-    {
+    private fun clickListener() {
 
         binding.scheduleCall1.setOnClickListener {
             binding.scheduleCall1.setBackgroundResource(R.drawable.bg_four_side_corner_inner_white)

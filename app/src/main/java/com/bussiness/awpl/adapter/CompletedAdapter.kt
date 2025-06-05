@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.Flow
 
 class CompletedAdapter(
     private var appointments: List<CompletedScheduleCallModel>,
-    private val onCheckDetailsClick: (AppointmentModel) -> Unit,
+    private val onCheckDetailsClick: (CompletedScheduleCallModel) -> Unit,
     private val onDownloadPrescriptionClick: (AppointmentModel) -> Unit
 ) : RecyclerView.Adapter<CompletedAdapter.CompleteViewHolder>() {
 
@@ -33,6 +33,11 @@ class CompletedAdapter(
                      timeTxt.text = obj.time
                      doctorName.text = obj.doctorName
                      Glide.with(binding.root.context).load(AppConstant.Base_URL+obj.doctorImage).into(binding.doctorImage)
+
+                   checkDetail11.setOnClickListener {
+                       onCheckDetailsClick(appointment)
+                   }
+
                }
             }
         }

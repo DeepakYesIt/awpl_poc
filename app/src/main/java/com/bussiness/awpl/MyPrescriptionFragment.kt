@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.bussiness.awpl.adapter.MyPersecptionAdapter
 import com.bussiness.awpl.databinding.FragmentMyPrescriptionBinding
 import com.bussiness.awpl.model.PrepareData
+import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.LoadingUtils
 import com.bussiness.awpl.viewmodel.MyPrescriptionViewModel
 import com.google.android.material.checkbox.MaterialCheckBox
@@ -34,9 +35,7 @@ class MyPrescriptionFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[MyPrescriptionViewModel::class.java]
-        arguments?.let {
-
-        }
+        arguments?.let { }
     }
 
     override fun onCreateView(
@@ -45,7 +44,14 @@ class MyPrescriptionFragment : Fragment() {
     ): View? {
         binding = FragmentMyPrescriptionBinding.inflate(LayoutInflater.from(requireContext()))
         adapter = MyPersecptionAdapter(mutableListOf()){ pres->
-            findNavController().navigate(R.id.doctorChatFragment)
+            var chatId = if(pres.chat_id != null) pres.chat_id else null
+            var bundle =Bundle().apply {
+                putInt(AppConstant.AppoitmentId,pres.prescription_id)
+                putString(AppConstant.Chat, chatId)
+            }
+            if(chatId != null) {
+                findNavController().navigate(R.id.doctorChatFragment, bundle)
+            }
         }
         binding.recyclerPresecption.adapter = adapter
         binding.imgBack.setOnClickListener {
@@ -53,14 +59,14 @@ class MyPrescriptionFragment : Fragment() {
         }
 
         binding.llFilters.setOnClickListener {
-            isSelected = !isSelected // Toggle state
-
-                if (isSelected) {
+            isSelected = !isSelected
+            if (isSelected) {
                     binding.imgIconUpDown.setImageResource(R.drawable.up_arrow)
                     filterPopUp(it)
-                } else {
+            }
+            else {
                     binding.imgIconUpDown.setImageResource(R.drawable.ic_down_white)
-                }
+            }
         }
         callingMyPrescriptionApi("all")
         return binding.root

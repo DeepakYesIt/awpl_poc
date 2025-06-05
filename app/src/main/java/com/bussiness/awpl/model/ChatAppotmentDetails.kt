@@ -10,4 +10,5 @@ class ChatAppotmentDetails {
     var time :String? =""
     var referred_name :String? =""
     var prescription :String? =""
+    var doctor_name:String? =""
 }

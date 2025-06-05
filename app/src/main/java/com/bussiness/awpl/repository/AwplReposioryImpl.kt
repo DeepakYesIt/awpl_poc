@@ -1175,13 +1175,8 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
                 if (isSuccessful) {
                     body()?.let { resp ->
                         if (resp.has("status") && resp.get("status").asBoolean) {
-
-                            var obj = resp.get("data").asJsonObject
-                         
-
-
-
-
+                            val obj = resp.get("data").asJsonObject
+                            val model: ChatAppotmentDetails = Gson().fromJson(obj.toString(), ChatAppotmentDetails::class.java)
                             emit(NetworkResult.Success(model))
                         }
                         else {

@@ -59,9 +59,8 @@ class PaytmActivity : AppCompatActivity() {
         webView = findViewById(R.id.webView)
         setupWebView()
 
-        // Ye data backend se pass hua maan ke chal rahe hain
-      //  paymentUrl = "https://secure.payu.in/_payment" // Production URL
-        paymentUrl = "https://test.payu.in/_payment" // TESTING URL
+      //  paymentUrl = "https://secure.payu.in/_payment"
+        paymentUrl = "https://test.payu.in/_payment"
         val user = intent.getSerializableExtra("user_data") as? PayuPaymentModel
         user?.let {
             key = it.key.toString()

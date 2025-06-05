@@ -1,7 +1,7 @@
 package com.bussiness.awpl.model
 
 data class PrescriptionModel(
-    val chat_id: Any,
+    val chat_id: String?,
     val date: String?,
     val diagnosis: String?,
     val file_path: String?,

@@ -2,8 +2,10 @@ package com.bussiness.awpl.fragment.schedule
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.DownloadManager
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -11,29 +13,39 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.bussiness.awpl.ChatItem
 import com.bussiness.awpl.ChatMessage
+import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.adapter.ChatAdapter
 
 import com.bussiness.awpl.adapter.MediaAdapter
 import com.bussiness.awpl.databinding.FragmentDoctorChatBinding
+import com.bussiness.awpl.model.ChatAppotmentDetails
 import com.bussiness.awpl.model.MediaItem
 import com.bussiness.awpl.model.MediaType
 import com.bussiness.awpl.repository.ChatRepository
+import com.bussiness.awpl.utils.AppConstant
+import com.bussiness.awpl.utils.DownloadWorker
+import com.bussiness.awpl.utils.LoadingUtils
 import com.bussiness.awpl.utils.MediaUtils
+import com.bussiness.awpl.utils.SessionManager
 import com.bussiness.awpl.viewmodel.ChatViewModel
+import com.bussiness.awpl.viewmodel.ChattingViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.UUID
 
 @AndroidEntryPoint
 class DoctorChatFragment : Fragment() {
@@ -49,7 +61,10 @@ class DoctorChatFragment : Fragment() {
     var receiverId ="11"
     var chatId ="13_11_6"
     private lateinit var chatViewModel: ChatViewModel
+    private lateinit var chattingViewModel :ChattingViewModel
     private  var messageList = mutableListOf<ChatMessage>()
+    private var appoitnmentId :Int= 54
+    private var pdfUrl = ""
 
     private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -59,8 +74,9 @@ class DoctorChatFragment : Fragment() {
                     mediaUploadDialog?.handleSelectedFile(it)
                 }
             }
-        }
+   }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,14 +87,83 @@ class DoctorChatFragment : Fragment() {
         binding.chatRecyclerView.layoutManager =LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         binding.chatRecyclerView.adapter =chatAdapter
 
-        chatViewModel.messages.observe(viewLifecycleOwner) { messages ->
+        arguments?.let {
+            if(it.containsKey(AppConstant.Chat) && it.getString(AppConstant.Chat) != null){
+                var cc = it.getString(AppConstant.Chat)
+                var arr = cc?.split("_")
+                currentUserId  = arr?.get(2) ?: "0"
+                receiverId = arr?.get(1)?:"0"
+                if (cc != null) {
+                    chatId = cc
+                }
+            }
+            if(it.containsKey(AppConstant.AppoitmentId)){
+                appoitnmentId = it.getInt(AppConstant.AppoitmentId)
+            }
 
+        }
+        chattingViewModel = ViewModelProvider(this)[ChattingViewModel::class.java]
+
+        chatViewModel.messages.observe(viewLifecycleOwner) { messages ->
             chatAdapter.submitList(groupMessagesByDate(messages))
             messageList =messages.toMutableList()
-             binding.chatRecyclerView.scrollToPosition(messages.size - 1)
+            binding.chatRecyclerView.scrollToPosition(messages.size - 1)
         }
+
+        callingChatApi()
+        binding.downloadPrescriptionBtn.setOnClickListener {
+                  DownloadWorker().downloadPdfWithNotification(requireContext(),pdfUrl,"Presception"+System.currentTimeMillis())
+        }
+
         return binding.root
     }
+
+    private fun callingChatApi(){
+        lifecycleScope.launch {
+            LoadingUtils.showDialog(requireContext(),false)
+            chattingViewModel.checkAppoitmentDetails(appoitnmentId).onEach {
+                when(it){
+                    is NetworkResult.Success ->{
+                        LoadingUtils.hideDialog()
+                        settingDataToUi(it.data)
+                    }
+                    is NetworkResult.Error ->{
+                        LoadingUtils.hideDialog()
+                    }
+                    else->{
+
+                    }
+                }
+            }
+        }
+    }
+
+    private fun settingDataToUi(data: ChatAppotmentDetails?) {
+        data?.let {
+            binding.doctorName.setText(data.doctor_name.toString())
+            data.doctor_profile_path?.let {
+                Glide.with(requireContext()).load(AppConstant.Base_URL+it).into(binding.doctorImage)
+            }
+            it.date?.let {
+                binding.dateTxt.setText(it)
+            }
+            it.time?.let {
+                binding.timeTxt.setText(it)
+            }
+            it.prescription?.let {
+                pdfUrl = AppConstant.Base_URL+ it
+            }
+            it.doctor_profile_path?.let {
+                chatAdapter.receiverImageUrl = AppConstant.Base_URL+ it
+            }
+
+            it.patient_profile_path?.let {
+                chatAdapter.senderImageUrl = AppConstant.Base_URL+it
+            }
+
+        }
+    }
+
 
     fun groupMessagesByDate(messages: List<ChatMessage>): List<ChatItem> {
         val grouped = messages.sortedBy { it.timestamp }

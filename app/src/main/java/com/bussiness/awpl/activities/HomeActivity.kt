@@ -199,12 +199,7 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-
-
-
-
-
-      }
+    }
 
 
     private fun updateDrawerContent() {
@@ -233,8 +228,14 @@ class HomeActivity : AppCompatActivity() {
         }
 
         binding.yourDoctorFragment.setOnClickListener {
-            navController.navigate(R.id.yourDoctorFragment)
-            updateBottomNavSelection("doctor")
+
+
+            val destinationId = R.id.yourDoctorFragment
+            if(destinationId != navController.currentDestination?.id) {
+                navController.navigate(R.id.yourDoctorFragment)
+                updateBottomNavSelection("doctor")
+            }
+
         }
 
         binding.resourceFragment.setOnClickListener {
