@@ -60,6 +60,15 @@
                 android:src="@drawable/back_icon"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/profile" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profileIcon"
+                android:layout_width="@dimen/_42sdp"
+                android:layout_height="@dimen/_42sdp"
+                android:src="@drawable/ic_profile_icon_new"
+                app:civ_border_width="1dp"
+                app:civ_border_color="#FF000000"
+                android:visibility="gone"/>
         </androidx.appcompat.widget.Toolbar>
 
         <!-- Navigation Host Fragment -->

@@ -1169,15 +1169,54 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
 
     override suspend fun checkAppoitmentDetails(
         appointmentId: Int
-    ) : Flow<NetworkResult<ChatAppotmentDetails>> = flow{
+    ) : Flow<NetworkResult<ChatAppotmentDetails>> = flow {
         try {
-            api.checkAppoitmentDetails(appointmentId).apply {
+        Log.d("TESTING_CHAT_API", appointmentId.toString())
+        api.checkAppoitmentDetails(appointmentId).apply {
+            if (isSuccessful) {
+                body()?.let { resp ->
+                    Log.d("TESTING_CHAT_API", "Inside response sucess")
+                    if (resp.has("status") && resp.get("status").asBoolean) {
+                        Log.d("TESTING_CHAT_API", "Inside response sucess inner")
+                        val obj = resp.get("data").asJsonObject
+                        val model: ChatAppotmentDetails =
+                            Gson().fromJson(obj.toString(), ChatAppotmentDetails::class.java)
+                        emit(NetworkResult.Success(model))
+                    } else {
+                        emit(NetworkResult.Error(resp.get("message").asString))
+                    }
+                } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
+            } else {
+                Log.d("TESTING_CHAT_API", "Inside response error inner")
+                try {
+                    val jsonObj = this.errorBody()?.string()?.let { JSONObject(it) }
+                    emit(
+                        NetworkResult.Error(
+                            jsonObj?.getString("message") ?: AppConstant.unKnownError
+                        )
+                    )
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                    emit(NetworkResult.Error(AppConstant.unKnownError))
+                }
+            }
+        }
+
+        } catch (e: Exception) {
+            emit(NetworkResult.Error(ErrorHandler.emitError(e)))
+        }
+    }
+    override suspend fun callJoined(
+        @Field("appointmentId") appointmentId: Int
+    ) :Flow<NetworkResult<String>> = flow{
+        try {
+            api.callJoined(appointmentId).apply {
                 if (isSuccessful) {
                     body()?.let { resp ->
-                        if (resp.has("status") && resp.get("status").asBoolean) {
-                            val obj = resp.get("data").asJsonObject
-                            val model: ChatAppotmentDetails = Gson().fromJson(obj.toString(), ChatAppotmentDetails::class.java)
-                            emit(NetworkResult.Success(model))
+                        if (resp.has("success") && resp.get("success").asBoolean) {
+                            val obj = resp.get("message").asString
+                          //  val model: ChatAppotmentDetails = Gson().fromJson(obj.toString(), ChatAppotmentDetails::class.java)
+                            emit(NetworkResult.Success(obj))
                         }
                         else {
                             emit(NetworkResult.Error(resp.get("message").asString))

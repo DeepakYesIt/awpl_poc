@@ -228,6 +228,11 @@ class BasicInfoScreen : Fragment() {
                 etAge.requestFocus()
                return false
             }
+            if(etAge.text.toString().toInt() <=12){
+                etAge.error ="Age Should be more than 12 years"
+                etAge.requestFocus()
+                return false
+            }
 
             val selectedGender = listOf(txtMale, txtFemale, txtOthers).any {
                 it.currentTextColor == "#FFFFFF".toColorInt()

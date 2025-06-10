@@ -293,7 +293,7 @@ class SymptomUpload : Fragment() {
 
         binding.btnOkay.setOnClickListener {
             dialog.dismiss()
-            downloadReportDialog()
+
         }
         dialog.show()
     }

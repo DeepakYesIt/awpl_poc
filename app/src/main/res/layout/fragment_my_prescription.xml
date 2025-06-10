@@ -87,5 +87,19 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         />
 
+    <TextView
+        android:id="@+id/tv_no_data_pres"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Presecrption Found"
+        android:textColor="@color/black"
+        android:fontFamily="@font/lato_regular"
+        android:textSize="@dimen/_15sdp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/_10sdp"
+        />
+
     
 </LinearLayout>

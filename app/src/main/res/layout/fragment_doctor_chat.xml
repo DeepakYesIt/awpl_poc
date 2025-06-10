@@ -209,7 +209,7 @@
         <!-- Chat Box with EditText + Attachment -->
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_45sdp"
             android:layout_weight="1"
             android:orientation="horizontal"
             android:background="@drawable/chat_box_bg"
@@ -227,7 +227,7 @@
                 android:background="@android:color/transparent"
                 android:padding="8dp"
                 android:singleLine="true"
-                android:inputType="textMultiLine"
+
                 android:maxLines="4"
                 android:minLines="1" />
 

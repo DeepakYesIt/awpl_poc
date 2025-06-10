@@ -51,6 +51,7 @@ class DownloadWorker  {
             .setOnlyAlertOnce(true)
             .setProgress(100, 0, true)
             .setOngoing(true)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         notificationManager.notify(notificationId, builder.build())
 

@@ -21,7 +21,7 @@ import javax.inject.Inject
 class ChatViewModel @Inject constructor() : ViewModel() {
 
 
-    private var chatId :String=""
+    private var chatId :String="105_11_12"
     private val _messages = MutableLiveData<List<ChatMessage>>()
     val messages: LiveData<List<ChatMessage>> get() = _messages
     private lateinit var  repo: ChatRepository

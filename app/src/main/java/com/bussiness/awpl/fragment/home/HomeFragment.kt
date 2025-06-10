@@ -10,13 +10,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -27,12 +22,10 @@ import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
 import com.bussiness.awpl.activities.VideoCallActivity
 import com.bussiness.awpl.adapter.BrowseVideoAdapter
-import com.bussiness.awpl.adapter.HealthJourneyAdapter
 import com.bussiness.awpl.adapter.HealthJourneyAdapter1
 import com.bussiness.awpl.adapter.OrganListAdapter
 import com.bussiness.awpl.databinding.DialogCancelAppointmentBinding
 import com.bussiness.awpl.databinding.FragmentHomeBinding
-import com.bussiness.awpl.model.HealthJourneyItem
 import com.bussiness.awpl.model.HealthListModel
 import com.bussiness.awpl.model.HomeModel
 import com.bussiness.awpl.utils.AppConstant
@@ -106,17 +99,16 @@ class HomeFragment : Fragment() {
                     homeViewModel.createChannel(startAppointment).collect {
                         when(it){
                             is NetworkResult.Success ->{
-                               LoadingUtils.hideDialog()
                                 it.data?.let {
+                                    val intent =
+                                        Intent(requireContext(), VideoCallActivity::class.java)
+                                    intent.putExtra(AppConstant.APPID, it.appId)
+                                    intent.putExtra(AppConstant.AuthToken, it.token)
+                                    intent.putExtra(AppConstant.CHANNEL_NAME, it.channelName)
+                                    intent.putExtra(AppConstant.uid, it.uid)
+                                    intent.putExtra(AppConstant.DOCTOR, doctorName)
 
-                                    val intent = Intent(requireContext(), VideoCallActivity::class.java)
-                                    intent.putExtra(AppConstant.APPID,it.appId)
-                                    intent.putExtra(AppConstant.AuthToken,it.token)
-                                    intent.putExtra(AppConstant.CHANNEL_NAME,it.channelName)
-                                    intent.putExtra(AppConstant.uid,it.uid)
-                                    intent.putExtra(AppConstant.DOCTOR,doctorName)
-                                    startActivity(intent)
-
+                                    callingCallJoinedApi(startAppointment,intent)
                                 }
 
 
@@ -138,6 +130,29 @@ class HomeFragment : Fragment() {
         setupSwipeToRefresh()
        // callingDiseaseApi()
 
+    }
+
+    private fun callingCallJoinedApi(startAppointment: Int, intent: Intent) {
+
+        lifecycleScope.launch {
+            homeViewModel.callJoined(startAppointment).collect{
+                when(it){
+                    is NetworkResult.Success ->{
+                        LoadingUtils.hideDialog()
+
+                        startActivity(intent)
+
+                    }
+                    is NetworkResult.Error ->{
+
+                        LoadingUtils.hideDialog()
+                    }
+                    else ->{
+
+                    }
+                }
+            }
+        }
     }
 
     private fun setupSwipeToRefresh() {

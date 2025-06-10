@@ -1,7 +1,9 @@
 package com.bussiness.awpl.repository
 
 import android.net.Uri
+import android.util.Log
 import com.bussiness.awpl.ChatMessage
+import com.bussiness.awpl.utils.AppConstant
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -29,17 +31,45 @@ class ChatRepository(
 
     fun observeMessages(chatId: String): Flow<List<ChatMessage>> = callbackFlow {
        // .orderBy("timestamp")
+//        val subscription = firestore.collection("chats")
+//            .document(chatId)
+//            .collection("messages")
+//            .orderBy("timestamp")
+//            .addSnapshotListener { snapshots, _ ->
+//                val msgs = snapshots?.documents?.mapNotNull {
+//                    it.toObject(ChatMessage::class.java)
+//                } ?: emptyList()
+//                trySend(msgs)
+//            }
+//
+//        awaitClose { subscription.remove() }
+        var cc = chatId
+        var arr = cc?.split("_")
+      var   currentUserId  = arr?.get(2) ?: "0"
+
         val subscription = firestore.collection("chats")
             .document(chatId)
             .collection("messages")
             .orderBy("timestamp")
             .addSnapshotListener { snapshots, _ ->
-                val msgs = snapshots?.documents?.mapNotNull {
-                    it.toObject(ChatMessage::class.java)
-                } ?: emptyList()
-                trySend(msgs)
-            }
+                val messages = mutableListOf<ChatMessage>()
+                snapshots?.documents?.forEach { doc ->
+                    val msg = doc.toObject(ChatMessage::class.java)
+                    msg?.let {
+                        // Update seen status if not seen and it's not the sender
 
+                        if (!it.seen && it.receiverId == currentUserId) {
+                            firestore.collection("chats")
+                                .document(chatId)
+                                .collection("messages")
+                                .document(doc.id)
+                                .update("seen", true)
+                        }
+                        messages.add(it)
+                    }
+                }
+                trySend(messages)
+            }
         awaitClose { subscription.remove() }
     }
 
