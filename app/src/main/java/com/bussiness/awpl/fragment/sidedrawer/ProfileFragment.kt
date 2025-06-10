@@ -340,7 +340,7 @@ class ProfileFragment : Fragment() {
                     is NetworkResult.Success ->{
                         LoadingUtils.hideDialog()
                         binding.llEditDelete.visibility =View.VISIBLE
-                        binding.llSaveCancel.visibility =View.VISIBLE
+                        binding.llSaveCancel.visibility =View.GONE
                         SessionManager(requireContext()).setUserName(binding.etName.text.toString())
                         val parts = it.data?.split("-----")
                         val path = (parts?.get(1) ?: "")
@@ -372,6 +372,7 @@ class ProfileFragment : Fragment() {
             etHeight.isEnabled = true
             etweight.isEnabled = true
             etAge.isEnabled = true
+            editIcon.visibility = View.VISIBLE
         }
     }
     private fun disableAllEdlitText(){
@@ -380,6 +381,7 @@ class ProfileFragment : Fragment() {
             etHeight.isEnabled = false
             etweight.isEnabled = false
             etAge.isEnabled = false
+            editIcon.visibility = View.GONE
         }
     }
 

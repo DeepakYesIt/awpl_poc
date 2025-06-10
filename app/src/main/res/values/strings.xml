@@ -150,7 +150,7 @@
     <string name="notification">Notification</string>
     <string name="privacy_policy"><u>Privacy Policy</u></string>
     <string name="terms_of_services">Terms of Services</string>
-    <string name="terms_services"><u>Terms of Services</u></string>
+    <string name="terms_services"><u>Terms &amp; Conditions</u></string>
     <string name="logout">Logout</string>
     <string name="select_language">Select Language</string>
     <string name="logout_">Logout</string>
@@ -372,9 +372,9 @@
     <string name="proceed">Proceed</string>
     <string name="doctor_consultation_recommended">Doctor Consultation Recommended</string>
     <string name="the_disease_you_selected_seems_to_fall_under_the_major_category">The disease you selected seems to fall under the Major category.</string>
-    <string name="this_condition_requires_a_more_detailed_consultation_we_recommend_scheduling_a_call_with_a_doctor_for_a_thorough_assessment">This condition requires a more detailed consultation. We recommend scheduling a call with a doctor for a thorough assessment</string>
-    <string name="to_help_the_doctor_better_understand_your_n_condition_before_the_call_please_answer_a_few_n_more_questions_and_upload_any_relevant_images">To help the doctor better understand your condition before the call, please answer a few more questions and upload any relevant images</string>
-    <string name="our_doctors_will_review_your_information_and_n_provide_a_prescription_you_ll_be_notified_when_it_s_n_ready_to_download">Our doctors will review your information and provide a prescription. You’ll be notified when it\'s\n ready to download</string>
+    <string name="this_condition_requires_a_more_detailed_consultation_we_recommend_scheduling_a_call_with_a_doctor_for_a_thorough_assessment">This condition requires a more detailed consultation. We recommend scheduling a call with a doctor for a thorough assessment.</string>
+    <string name="to_help_the_doctor_better_understand_your_n_condition_before_the_call_please_answer_a_few_n_more_questions_and_upload_any_relevant_images">To help the doctor better understand your condition before the call, please answer a few more questions and upload any relevant images.</string>
+    <string name="our_doctors_will_review_your_information_and_n_provide_a_prescription_you_ll_be_notified_when_it_s_n_ready_to_download">Our doctors will review your information and provide a prescription. You’ll be notified when it\'s\n ready to download.</string>
     <string name="hindi_C">अपनी भाषा चुनें</string>
     <string name="type_a_message">Type a message</string>
     <string name="this_chat_will_be_available_for_7_days_from_the_appointment_date">

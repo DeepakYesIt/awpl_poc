@@ -1,5 +1,6 @@
 package com.bussiness.awpl.fragment.bookappointment
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
@@ -13,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -86,17 +88,22 @@ class SummaryScreen : Fragment() {
         settingDataToUi()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun settingDataToUi(){
         bookingResponseModel?.let { obj->
             Log.d("TESTING_BOOKING",bookingResponseModel.toString())
            if(!obj.is_first_consultation){
                paymentAmount = obj.payment_amount
-               binding.textFree.text = "₹ "+obj.payment_amount.toString()
-               binding.btnNext.text = "₹ "+obj.payment_amount.toString()+" |"+ " (Pay and Consult)"
+               binding.textFree.text = "₹ "+ obj.payment_amount
+               binding.btnNext.text = "₹ "+ obj.payment_amount +" |"+ " (Pay and Consult)"
+               binding.applyPromoConstraintLayout.visibility = View.VISIBLE
+               binding.promoHeading.visibility = View.VISIBLE
            }
            else{
                paymentAmount="0.0"
                binding.textFree.text = "Free"
+               binding.applyPromoConstraintLayout.visibility = View.GONE
+               binding.promoHeading.visibility = View.GONE
            }
 
          //   adapter.updateAdapter(obj.doctor_list)
@@ -106,11 +113,6 @@ class SummaryScreen : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        val doctorList = listOf(
-            SummaryModel(R.drawable.doctor_image, "Dr. Aman Sharma", "Experience: 5 Years"),
-            SummaryModel(R.drawable.doctor_image, "Dr. Priya Mehta", "Experience: 8 Years"),
-            SummaryModel(R.drawable.doctor_image, "Dr. Rahul Verma", "Experience: 10 Years")
-        )
 
          adapter = SummaryAdapter(mutableListOf())
         binding.recyclerViewDoctors.apply {
@@ -246,7 +248,7 @@ class SummaryScreen : Fragment() {
                 findNavController().navigate(R.id.homeFragment)
             }
 
-            description2.setText("Your appointment is confirmed for ${summaryViewModel.date} at ${summaryViewModel.time}.")
+            description2.text = "Your appointment is confirmed for ${summaryViewModel.date} at ${summaryViewModel.time}."
         }
 
         //    binding.textView36.paintFlags = binding.textView36.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
@@ -293,7 +295,7 @@ class SummaryScreen : Fragment() {
         _binding = null
     }
 
-    fun generateTransactionId(appointmentId: String): String {
+    private fun generateTransactionId(appointmentId: String): String {
         val timestamp = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(Date())
         val uuidPart = UUID.randomUUID().toString().take(8).uppercase()
         return "TXN_${appointmentId}_$timestamp$uuidPart"

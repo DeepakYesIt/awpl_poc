@@ -193,14 +193,28 @@ class SymptomUpload : Fragment() {
 
 
     private fun openMediaDialog(type: String) {
+        val listSize = when (type) {
+            "image" -> imageList.size
+            "video" -> videoList.size
+            "PDF" -> pdfList.size
+            else -> 0
+        }
+
+        if (listSize >= 5) {
+            LoadingUtils.showErrorDialog(requireContext(), "You’ve already uploaded 5 $type files.")
+            return
+        }
+
         currentType = type
         mediaUploadDialog = MediaUtils(requireContext(), type,
-            onFileSelected = { selectedFiles -> selectedFiles.forEach { addMediaItem(it, type) } },
+            onFileSelected = { selectedFiles ->
+                selectedFiles.forEach { addMediaItem(it, type) }
+            },
             onBrowseClicked = { openImagePicker(type) }
         )
-
         mediaUploadDialog?.show()
     }
+
 
 
     private fun openImagePicker(type: String) {
@@ -229,23 +243,37 @@ class SymptomUpload : Fragment() {
 
         when (mediaType) {
             MediaType.IMAGE -> {
-
+                if (imageList.size >= 5) {
+                    LoadingUtils.showErrorDialog(requireContext(), "Only 5 images can be uploaded.")
+                    return
+                }
                 imageList.add(mediaItem)
                 imageAdapter.notifyItemInserted(imageList.size - 1)
                 binding.viewImage.visibility = View.VISIBLE
             }
+
             MediaType.VIDEO -> {
+                if (videoList.size >= 5) {
+                    LoadingUtils.showErrorDialog(requireContext(), "Only 5 videos can be uploaded.")
+                    return
+                }
                 videoList.add(mediaItem)
                 videoAdapter.notifyItemInserted(videoList.size - 1)
                 binding.viewVideo.visibility = View.VISIBLE
             }
+
             MediaType.PDF -> {
+                if (pdfList.size >= 5) {
+                    LoadingUtils.showErrorDialog(requireContext(), "Only 5 PDFs can be uploaded.")
+                    return
+                }
                 pdfList.add(mediaItem)
                 pdfAdapter.notifyItemInserted(pdfList.size - 1)
                 binding.ViewPdf.visibility = View.VISIBLE
             }
         }
     }
+
 
     private fun validations() : Boolean {
         binding.apply {
@@ -329,5 +357,11 @@ class SymptomUpload : Fragment() {
         _binding = null
         mediaUploadDialog = null
     }
+    companion object {
+        private const val MAX_ITEMS = 5
+    }
+
 
 }
+
+

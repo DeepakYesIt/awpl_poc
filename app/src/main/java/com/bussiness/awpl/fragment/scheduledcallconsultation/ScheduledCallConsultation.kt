@@ -214,30 +214,26 @@ class ScheduledCallConsultation : Fragment() {
 
     private fun validations(): Boolean {
         binding.apply {
-            var isValid = true
+            val isValid = true
 
             if (ansNO1.text.toString().isEmpty()) {
                 ansNO1.error = ErrorMessages.ERROR_MANDATORY
                 ansNO1.requestFocus()
-                isValid = false
                 return false
             }
             if (ansNo2.text.toString().isEmpty()) {
                 ansNo2.error = ErrorMessages.ERROR_MANDATORY
                 ansNo2.requestFocus()
-                isValid = false
                 return  false
             }
             if (ansNo3.text.toString().isEmpty()) {
                 ansNo3.error = ErrorMessages.ERROR_MANDATORY
                 ansNo3.requestFocus()
-                isValid = false
                 return false
             }
             if (ans4.text.toString().isEmpty()) {
                 ans4.error = ErrorMessages.ERROR_MANDATORY
                 ans4.requestFocus()
-                isValid = false
                 return false
             }
             return isValid
