@@ -1,5 +1,6 @@
 package com.bussiness.awpl.adapter
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -16,9 +17,10 @@ class YourDoctorAdapter(private var summaryList: MutableList<DoctorModel>) :
 
     inner class DoctorViewHolder(private val binding: ItemYourDoctorBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(summaryModel: DoctorModel) {
             binding.doctorName.text = summaryModel.doctorName
-            binding.doctorExperience.text = summaryModel.experience_yrs
+            binding.doctorExperience.text = "Experience: ${summaryModel.experience_yrs}"
             summaryModel.doctorImage?.let {
                 Glide.with(binding.root.context)
                     .load(AppConstant.Base_URL + summaryModel.doctorImage).placeholder(

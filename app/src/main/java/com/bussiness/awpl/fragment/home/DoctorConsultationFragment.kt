@@ -41,7 +41,7 @@ class DoctorConsultationFragment : Fragment() {
 
     private fun clickListeners() {
         binding.apply {
-            cancelBtn.setOnClickListener { findNavController().navigate(R.id.homeFragment) }
+            cancel.setOnClickListener { findNavController().navigate(R.id.homeFragment) }
 
             proceedBtn.setOnClickListener {
                 val bundle = Bundle().apply {

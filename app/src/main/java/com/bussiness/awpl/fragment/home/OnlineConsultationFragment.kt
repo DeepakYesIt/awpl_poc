@@ -41,7 +41,7 @@ class OnlineConsultationFragment : Fragment() {
 
     private fun clickListeners() {
         binding.apply {
-            cancelBtn.setOnClickListener { findNavController().navigate(R.id.homeFragment) }
+            cancel.setOnClickListener { findNavController().navigate(R.id.homeFragment) }
             proceedBtn.setOnClickListener {
                 val bundle = Bundle().apply {
                     putInt(AppConstant.DISEASE_ID,diseaseId)
