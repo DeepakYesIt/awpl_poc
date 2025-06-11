@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -198,19 +199,38 @@ class ScheduledCallConsultation : Fragment() {
         imagePickerLauncher.launch(intent)
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun addMediaItem(uri: Uri, type: String) {
         val mediaType = when (type.lowercase()) {
             "image" -> MediaType.IMAGE
-            else -> throw IllegalArgumentException("Unknown media type: $type")
+            else -> {
+                Log.e("MediaItemError", "Unsupported media type: $type")
+                return
+            }
         }
 
-        val mediaItem = MediaItem(mediaType, uri)  // Convert Uri to String
-        mediaList.add(mediaItem)
-        mediaAdapter.notifyItemInserted(mediaList.size - 1)
+        // Limit check
+        if (mediaList.size >= 5) {
+            LoadingUtils.showErrorDialog(requireContext(), "Only 5 images can be uploaded.")
+            return
+        }
 
-        binding.viewImage.visibility = if (mediaList.any { it.type == MediaType.IMAGE }) View.VISIBLE else View.GONE
+        val mediaItem = MediaItem(mediaType, uri)
+
+        // Prevent duplicate entries if needed (optional)
+        if (mediaList.any { it.uri == uri }) {
+            Toast.makeText(requireContext(), "This image is already added.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Add and notify adapter safely
+        mediaList.add(mediaItem)
+        mediaAdapter.notifyItemInserted(mediaList.lastIndex)
+
+        // Update UI visibility
+        binding.viewImage.visibility =
+            if (mediaList.any { it.type == MediaType.IMAGE }) View.VISIBLE else View.GONE
     }
+
 
     private fun validations(): Boolean {
         binding.apply {
