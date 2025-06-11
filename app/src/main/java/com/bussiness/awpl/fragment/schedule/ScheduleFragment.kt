@@ -400,7 +400,7 @@ class ScheduleFragment : Fragment() {
             txtUpcoming.setOnClickListener { selectTab(0) }
             txtCompleted.setOnClickListener { selectTab(1) }
             txtCanceled.setOnClickListener { selectTab(2) }
-            btnNext.setOnClickListener { findNavController().navigate(R.id.appointmentBooking) }
+            btnNext.setOnClickListener { findNavController().navigate(R.id.diseasesBottomFragment) }
             filterBtn.setOnClickListener {
                 isSelected = !isSelected // Toggle state
                 if (isSelected) {

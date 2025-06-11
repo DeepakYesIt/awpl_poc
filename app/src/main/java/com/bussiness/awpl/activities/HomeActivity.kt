@@ -178,6 +178,7 @@ class HomeActivity : AppCompatActivity() {
 
                 R.id.profileFragment ->{ setToolbar("My Profile")
                     binding.profileIcon.visibility =View.GONE
+                    binding.imgBackProfile.visibility =View.VISIBLE
 
                 }
                 R.id.videoGalleryFragment ->{ setToolbar("Video Gallery", showBottomNav = false)
