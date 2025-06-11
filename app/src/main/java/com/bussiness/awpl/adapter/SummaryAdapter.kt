@@ -1,5 +1,6 @@
 package com.bussiness.awpl.adapter
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -16,9 +17,10 @@ class SummaryAdapter(private var summaryList: List<Doctor>) :
 
     inner class SummaryViewHolder(private val binding: ItemSummaryBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(summaryModel: Doctor) {
             binding.doctorName.text = summaryModel.name
-            binding.doctorExperience.text = summaryModel.experience_yrs
+            binding.doctorExperience.text = "Experience : ${summaryModel.experience_yrs}"
             Log.d("TESTING_PAYMENT",AppConstant.Base_URL+ summaryModel.profile_path)
             Glide.with(binding.root.context)
                 .load(AppConstant.Base_URL+summaryModel.profile_path ).placeholder(

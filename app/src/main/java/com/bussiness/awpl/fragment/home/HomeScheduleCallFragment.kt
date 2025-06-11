@@ -22,6 +22,7 @@ import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
 import com.bussiness.awpl.activities.HomeActivity
 import com.bussiness.awpl.activities.OnBoardActivity
+import com.bussiness.awpl.adapter.ImageOnlyAdapter
 import com.bussiness.awpl.adapter.MediaAdapter
 import com.bussiness.awpl.databinding.FragmentHomeScheduleCallBinding
 import com.bussiness.awpl.model.MediaItem
@@ -45,7 +46,8 @@ class HomeScheduleCallFragment : Fragment() {
     private var mediaUploadDialog: MediaUtils? = null
     private var currentType: String = ""
     private val mediaList = mutableListOf<MediaItem>()
-    private lateinit var mediaAdapter: MediaAdapter
+//    private lateinit var mediaAdapter: MediaAdapter
+    private lateinit var imageOnlyAdapter: ImageOnlyAdapter
     var currentScreen :String = "for_me"
     private lateinit var viewModel :ScheduleCallViewModel
     private var diseaseId :Int =0
@@ -69,7 +71,7 @@ class HomeScheduleCallFragment : Fragment() {
         _binding = FragmentHomeScheduleCallBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[ScheduleCallViewModel::class.java]
         clickListener()
-        setUpRecyclerView()
+        setupRecyclerView()
         return binding.root
     }
 
@@ -126,16 +128,18 @@ class HomeScheduleCallFragment : Fragment() {
         }
     }
 
-    private fun setUpRecyclerView(){
-        mediaAdapter = MediaAdapter(mediaList) { mediaItem ->
-            mediaList.remove(mediaItem)
-            if (mediaList.isEmpty()) {
+    private fun setupRecyclerView() {
+        imageOnlyAdapter = ImageOnlyAdapter { mediaItem ->
+            // Visibility check AFTER removing the image
+            if (imageOnlyAdapter.getImageList().isEmpty()) {
                 binding.viewImage.visibility = View.GONE
             }
         }
+
+
         binding.imageRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = mediaAdapter
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = imageOnlyAdapter
         }
     }
 
@@ -226,44 +230,41 @@ class HomeScheduleCallFragment : Fragment() {
 
 
     private fun openMediaDialog(type: String) {
-        currentType = type
+        if (type != "image") return // Only allow image for now
+
         mediaUploadDialog = MediaUtils(
             requireContext(),
             type,
             onFileSelected = { selectedFiles ->
-                selectedFiles.forEach { addMediaItem(it, type) }
+                selectedFiles.forEach { uri ->
+                    addMediaItem(uri, type)
+                }
             },
-            onBrowseClicked = {
-                openImagePicker(type)
-            }
+            onBrowseClicked = { openImagePicker() }
         )
         mediaUploadDialog?.show()
     }
 
-    private fun openImagePicker(type: String) {
-        val intent = when (type) {
-            "image" -> Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            else -> {
-                Toast.makeText(requireContext(), "Unknown media type: $type", Toast.LENGTH_SHORT).show()
-                return
-            }
-        }
+    private fun openImagePicker() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         imagePickerLauncher.launch(intent)
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun addMediaItem(uri: Uri, type: String) {
-        val mediaType = when (type.lowercase()) {
-            "image" -> MediaType.IMAGE
-            else -> throw IllegalArgumentException("Unknown media type: $type")
+        if (type.lowercase() != "image") return
+
+        if (imageOnlyAdapter.getImageList().size >= 5) {
+            LoadingUtils.showErrorDialog(requireContext(), "Only 5 images can be uploaded.")
+            return
         }
 
-        val mediaItem = MediaItem(mediaType, uri)  // Convert Uri to String
+        val mediaItem = MediaItem(MediaType.IMAGE, uri)
+        imageOnlyAdapter.addImage(mediaItem)
         mediaList.add(mediaItem)
-        mediaAdapter.notifyItemInserted(mediaList.size - 1)
-
-        binding.viewImage.visibility = if (mediaList.any { it.type == MediaType.IMAGE }) View.VISIBLE else View.GONE
+        binding.viewImage.visibility = View.VISIBLE
     }
+
+
 
     private fun validations(): Boolean {
         binding.apply {
