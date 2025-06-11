@@ -1,9 +1,12 @@
 package com.bussiness.awpl.adapter
 
+import android.app.Dialog
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.webkit.URLUtil
 import android.widget.ImageView
 import android.widget.TextView
@@ -134,15 +137,22 @@ class ChatAdapter(private var messages: List<ChatItem>,
 
         fun bind(message: ChatMessage) {
 
+            Log.d("TESTING_IMAGE",message.message)
+
+            imageMessage.setOnClickListener {
+                showImageDialog(itemView.rootView.context,message.message)
+            }
+
             if(message.senderId != currentUserId){
+
                 Glide.with(itemView.context)
-                    .load(senderImageUrl)
+                    .load(message.message)
                     .placeholder(R.drawable.ic_not_found_img)
                     .into(imageMessage)
 
             }else{
                 Glide.with(itemView.context)
-                    .load(receiverImageUrl)
+                    .load(message.message)
                     .placeholder(R.drawable.ic_not_found_img)
                     .into(imageMessage)
             }
@@ -172,4 +182,24 @@ class ChatAdapter(private var messages: List<ChatItem>,
          this.messages = messages
          notifyDataSetChanged()
      }
+
+    fun showImageDialog(context: Context, imageUrl: String) {
+        val dialog = Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_image_preview)
+
+        val imageView = dialog.findViewById<ImageView>(R.id.fullImageView)
+
+        // Load the image using Glide or your preferred library
+        Glide.with(context)
+            .load(imageUrl)
+            .into(imageView)
+
+        imageView.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
 }

@@ -93,13 +93,10 @@ class ProfileFragment : Fragment() {
                         uriToMultipart(requireContext(),
                             it,"profileImage")
                     }
-
             }
         }
 
-    private val cameraLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
+    private val cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val bitmap = result.data?.extras?.get("data") as? Bitmap
             bitmap?.let {
@@ -117,8 +114,7 @@ class ProfileFragment : Fragment() {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         callingProfileApi()
@@ -206,10 +202,8 @@ class ProfileFragment : Fragment() {
                          it
                      )
                  }).placeholder(R.drawable.ic_not_found_img).into(profileImage)
-
              }
-
-    }
+       }
 
     fun ensureStartsWithSlash(path: String): String {
         return if (path.startsWith("/")) path else "/$path"
@@ -332,15 +326,17 @@ class ProfileFragment : Fragment() {
                 binding.txtOthers.currentTextColor == Color.parseColor("#FFFFFF") -> "others"
                 else -> "" // or "None"
             }
-            var gender = MultipartUtil.stringToRequestBody(selectedGender)
 
+            var gender = MultipartUtil.stringToRequestBody(selectedGender)
             LoadingUtils.showDialog(requireContext(),false)
+
             viewModel.updateProfile(fullName,height,weight,age,gender,imageProfileMultiPart).collect{
                 when(it){
                     is NetworkResult.Success ->{
                         LoadingUtils.hideDialog()
                         binding.llEditDelete.visibility =View.VISIBLE
                         binding.llSaveCancel.visibility =View.GONE
+                        Log.d("testing_profile_name", binding.etName.text.toString() )
                         SessionManager(requireContext()).setUserName(binding.etName.text.toString())
                         val parts = it.data?.split("-----")
                         val path = (parts?.get(1) ?: "")

@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -44,7 +45,9 @@ class SymptomsUploadCompleteAdapter(private var appointments: List<CompletedSymp
                 tvUploadDate.text = appointment.upload_date
                 if(appointment.file_path != null){
                 rescheduleButton.setOnClickListener {
+                    it.disableFor(2000)
                     onDownloadPrescriptionClick(appointment)
+
                   }
                 }
                 else{
@@ -52,6 +55,11 @@ class SymptomsUploadCompleteAdapter(private var appointments: List<CompletedSymp
                 }
             }
         }
+    }
+
+    fun View.disableFor(millis: Long) {
+        isEnabled = false
+        postDelayed({ isEnabled = true }, millis)
     }
 
     fun updateAdapter(appointmentList: List<CompletedSymptomsModel>){

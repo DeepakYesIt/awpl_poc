@@ -97,6 +97,11 @@ class NotificationFragment : Fragment() {
                              }
                         }
                         Log.d("TESTING_LIST_SIZE",newList.size.toString())
+                        if(newList == null || newList.size ==0){
+                            binding.tvNoData.visibility =View.VISIBLE
+                        }else{
+                            binding.tvNoData.visibility = View.GONE
+                        }
                         notificationAdapter.updateAdapter(newList)
                     }
                     is NetworkResult.Error ->{

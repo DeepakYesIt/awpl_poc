@@ -251,15 +251,20 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
+
+
+
     }
 
 
     private fun updateDrawerContent() {
         val navigationView: NavigationView = binding.root.findViewById(R.id.navigation_side_nav_bar)
         val img = navigationView.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.profileIcon)
+        val nameTv = navigationView.findViewById<TextView>(R.id.tv_user_name)
         val notification = navigationView.findViewById<SwitchCompat>(R.id.switchNotification)
 
 
+        nameTv.text = SessionManager(this).getUserName()?:""
         Glide.with(this)
             .load(SessionManager(this).getUserImage())
             .placeholder(R.drawable.ic_profile_new_opt)
@@ -280,8 +285,6 @@ class HomeActivity : AppCompatActivity() {
         }
 
         binding.yourDoctorFragment.setOnClickListener {
-
-
             val destinationId = R.id.yourDoctorFragment
             if(destinationId != navController.currentDestination?.id) {
                 navController.navigate(R.id.yourDoctorFragment)
@@ -458,12 +461,12 @@ class HomeActivity : AppCompatActivity() {
         perception.setOnClickListener {
             closeDrawer()
             navController.navigate(R.id.prescription_frgament)
-
         }
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
-        notification.thumbTintList = ColorStateList.valueOf(android.graphics.Color.WHITE)
+        notification.thumbTintList =
+            ColorStateList.valueOf(android.graphics.Color.WHITE)
 
         notification.trackTintList =
             ContextCompat.getColorStateList(this, R.color.switch_track_color)
@@ -473,7 +476,8 @@ class HomeActivity : AppCompatActivity() {
             if (isChecked) {
                 // Enable notifications
                 Toast.makeText(this, "Notifications enabled", Toast.LENGTH_SHORT).show()
-            } else {
+            }
+            else {
                 // Disable notifications
                 Toast.makeText(this, "Notifications disabled", Toast.LENGTH_SHORT).show()
             }

@@ -44,14 +44,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
 @AndroidEntryPoint
 class DoctorChatFragment : Fragment() {
+
     private var _binding: FragmentDoctorChatBinding? = null
-
-
     private val binding get() = _binding!!
     private var mediaUploadDialog: MediaUtils? = null
     private var currentType: String = ""
@@ -61,6 +61,7 @@ class DoctorChatFragment : Fragment() {
     var currentUserId ="12"
     var receiverId ="11"
     var chatId ="105_11_12"
+    var hashMap =HashMap<Uri,Boolean>()
 
     private lateinit var chatViewModel: ChatViewModel
 
@@ -77,7 +78,11 @@ class DoctorChatFragment : Fragment() {
                 val uri: Uri? = result.data?.data
                 uri?.let {
                     // Show in dialog first
-                    mediaUploadDialog?.handleSelectedFile(it)
+//                    if(!hashMap.containsKey(it)) {
+//                        hashMap.put(it,true)
+//                        chatViewModel.sendImage(it)
+                        mediaUploadDialog?.handleSelectedFile(it)
+
                 }
             }
    }
@@ -193,7 +198,23 @@ class DoctorChatFragment : Fragment() {
     fun groupMessagesByDate(messages: List<ChatMessage>): List<ChatItem> {
         val grouped = messages.sortedBy { it.timestamp }
             .groupBy {
-                SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(Date(it.timestamp))
+                val msgDate = Calendar.getInstance().apply { timeInMillis = it.timestamp }
+                val today = Calendar.getInstance()
+                val yesterday = Calendar.getInstance().apply { add(Calendar.DATE, -1) }
+
+                when {
+                    msgDate.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
+                            msgDate.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR) -> {
+                        "Today"
+                    }
+                    msgDate.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) &&
+                            msgDate.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR) -> {
+                        "Yesterday"
+                    }
+                    else -> {
+                        SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(Date(it.timestamp))
+                    }
+                }
             }
 
         val chatItems = mutableListOf<ChatItem>()
@@ -201,23 +222,39 @@ class DoctorChatFragment : Fragment() {
             chatItems.add(ChatItem.DateHeader(date))
             chatItems.addAll(items.map { ChatItem.MessageItem(it) })
         }
-        Log.d("Testing_chat_size",chatItems.size.toString())
-        chatItems.forEach {
-
-            when (val item = it) {
-                is ChatItem.DateHeader -> {
-                    Log.d("testing_date", item.date)
-                }
-
-                is ChatItem.MessageItem -> {
-                    Log.d("testing_date", item.message.message.toString())
-                }
-
-            }
-        }
 
         return chatItems
     }
+
+//old solution
+//    fun groupMessagesByDate(messages: List<ChatMessage>): List<ChatItem> {
+//        val grouped = messages.sortedBy { it.timestamp }
+//            .groupBy {
+//                SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(Date(it.timestamp))
+//            }
+//
+//        val chatItems = mutableListOf<ChatItem>()
+//        for ((date, items) in grouped) {
+//            chatItems.add(ChatItem.DateHeader(date))
+//            chatItems.addAll(items.map { ChatItem.MessageItem(it) })
+//        }
+//        Log.d("Testing_chat_size",chatItems.size.toString())
+//        chatItems.forEach {
+//
+//            when (val item = it) {
+//                is ChatItem.DateHeader -> {
+//                    Log.d("testing_date", item.date)
+//                }
+//
+//                is ChatItem.MessageItem -> {
+//                    Log.d("testing_date", item.message.message.toString())
+//                }
+//
+//            }
+//        }
+//
+//        return chatItems
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -259,7 +296,8 @@ class DoctorChatFragment : Fragment() {
                 }
             }, onBrowseClicked = {
                 openImagePicker(type) // this will launch intent from fragment
-            }
+            },
+            "Send"
         )
         mediaUploadDialog?.show()
 

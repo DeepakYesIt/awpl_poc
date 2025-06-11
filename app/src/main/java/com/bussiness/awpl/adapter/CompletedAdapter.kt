@@ -23,13 +23,18 @@ class CompletedAdapter(
 
     inner class CompleteViewHolder(private val binding: ItemCompletedBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
             fun bind(appointment:CompletedScheduleCallModel) {
                binding.apply {
                      llAppointment.visibility = View.VISIBLE
                      llSymptom.visibility =View.GONE
                     var obj = appointments.get(position)
                      dateTxt.setText(obj.date)
+                   obj.referred_name?.let {
+                       doctorNameRef.text ="Referred Name: "+it
+                   }
+                   if(obj.referred_name == null){
+                       doctorNameRef.visibility=View.GONE
+                   }
                      timeTxt.text = obj.time
                      doctorName.text = obj.doctorName
                      Glide.with(binding.root.context).load(AppConstant.Base_URL+obj.doctorImage).into(binding.doctorImage)

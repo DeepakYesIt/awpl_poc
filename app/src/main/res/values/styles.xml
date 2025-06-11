@@ -19,6 +19,12 @@
         <item name="fontFamily">@font/lato_regular</item>
     </style>
 
+    <style name="RoundedImageStyle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item> <!-- adjust as needed -->
+    </style>
+
+
     <!-- Calendar Week Day (S M T W T F S): small, gray, all caps -->
     <style name="CalendarWeekDay" parent="TextAppearance.AppCompat.Medium">
         <item name="android:textColor">#363636</item> <!-- Light Gray -->

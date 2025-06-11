@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@id/headline">
 
         <!-- Doctor Image -->
-        <com.google.android.material.imageview.ShapeableImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/doctorImage"
             android:layout_width="48dp"
             android:layout_height="48dp"
