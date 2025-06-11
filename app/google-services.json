@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "70994480464",
-    "project_id": "awpl-d2745",
-    "storage_bucket": "awpl-d2745.firebasestorage.app"
+    "project_number": "112089804788",
+    "project_id": "awpl-connect",
+    "storage_bucket": "awpl-connect.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:70994480464:android:3ea6ac60eb88a6920b3055",
+        "mobilesdk_app_id": "1:112089804788:android:3be9579a70c13a221413a1",
         "android_client_info": {
           "package_name": "com.bussiness.awpl"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBjO-3l0PrInO5X8tE6Hn-IUQh1GrjO4Zw"
+          "current_key": "AIzaSyCS9fJ2ci5bSNzqn6efW7GY2pYhvjGb9lE"
         }
       ],
       "services": {

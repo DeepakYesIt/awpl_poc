@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
+import retrofit2.http.Field
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,6 +44,13 @@ class MyAppointmentViewModel @Inject constructor(private var repository: AwplRep
 
     suspend fun createChannel(appointmentId: Int): Flow<NetworkResult<AgoraCallModel>>{
         return repository.createChannel(appointmentId).onEach {
+
+        }
+    }
+    suspend fun callJoined(
+        @Field("appointmentId") appointmentId: Int
+    ) :Flow<NetworkResult<String>>{
+       return repository.callJoined(appointmentId).onEach {
 
         }
     }

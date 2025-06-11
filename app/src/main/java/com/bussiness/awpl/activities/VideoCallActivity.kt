@@ -49,6 +49,7 @@ class VideoCallActivity : AppCompatActivity() {
     var uid :Int =0
     private var callTimerHandler: Handler? = null
     private var callTimerRunnable: Runnable? = null
+    private var frontOpen = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,6 +118,7 @@ class VideoCallActivity : AppCompatActivity() {
         callTimerHandler = null
         callTimerRunnable = null
     }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (PermissionsHelper.handleResult(requestCode, grantResults)) {
@@ -284,6 +286,7 @@ class VideoCallActivity : AppCompatActivity() {
         }
 
         var switchCamera = findViewById<ImageView>(R.id.btn_switch_camera)
+        var switchCameraToBackFront = findViewById<ImageView>(R.id.switch_icon)
         findViewById<ImageView>(R.id.btn_switch_camera).setOnClickListener {
             var fmLay = findViewById<FrameLayout>(R.id.local_video_view)
             isCameraOn = !isCameraOn
@@ -291,15 +294,21 @@ class VideoCallActivity : AppCompatActivity() {
             if(isCameraOn) {
                 switchCamera.setImageResource(R.drawable.ic_video_mute)
                 fmLay.visibility =View.GONE
+                switchCameraToBackFront.visibility = View.GONE
             }else{
                 switchCamera.setImageResource(R.drawable.ic_video)
                 fmLay.visibility = View.VISIBLE
+                switchCameraToBackFront.visibility = View.VISIBLE
             }
         }
 
         findViewById<ImageView>(R.id.btn_end_call).setOnClickListener {
             agoraEngine.leaveChannel()
             finish()
+        }
+        switchCameraToBackFront.setOnClickListener {
+            frontOpen = !frontOpen
+            agoraEngine.switchCamera()
         }
     }
 

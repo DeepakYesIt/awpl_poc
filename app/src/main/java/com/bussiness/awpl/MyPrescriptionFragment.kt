@@ -77,13 +77,17 @@ class MyPrescriptionFragment : Fragment() {
             try {
                 LoadingUtils.showDialog(requireContext(),false)
                 viewModel.myPrescription(type).collect{
-
                     when(it){
                         is NetworkResult.Success ->{
                             LoadingUtils.hideDialog()
                             var data = it.data
                             if (data != null) {
+                                if(data.size ==0){
+                                    binding.tvNoDataPres.visibility =View.VISIBLE
+                                }
                                 adapter.updateAdapter(data)
+                            }else{
+                                binding.tvNoDataPres.visibility =View.VISIBLE
                             }
                         }
                         is NetworkResult.Error ->{
@@ -190,7 +194,6 @@ class MyPrescriptionFragment : Fragment() {
 //
 //            }
 //        }
-
 
         // Handle dismiss listener to reset UI
         popupWindow.setOnDismissListener {

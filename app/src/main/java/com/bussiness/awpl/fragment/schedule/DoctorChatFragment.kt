@@ -49,21 +49,27 @@ import java.util.Locale
 
 @AndroidEntryPoint
 class DoctorChatFragment : Fragment() {
-
     private var _binding: FragmentDoctorChatBinding? = null
+
+
     private val binding get() = _binding!!
     private var mediaUploadDialog: MediaUtils? = null
     private var currentType: String = ""
     private val mediaList = mutableListOf<MediaItem>()
     private lateinit var mediaAdapter: MediaAdapter
     lateinit var chatAdapter: ChatAdapter
-    var currentUserId ="6"
+    var currentUserId ="12"
     var receiverId ="11"
-    var chatId ="13_11_6"
+    var chatId ="105_11_12"
+
     private lateinit var chatViewModel: ChatViewModel
+
     private lateinit var chattingViewModel :ChattingViewModel
+
     private  var messageList = mutableListOf<ChatMessage>()
+
     private var appoitnmentId :Int= 54
+
     private var pdfUrl = ""
 
     private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -82,10 +88,9 @@ class DoctorChatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDoctorChatBinding.inflate(inflater, container, false)
-        chatAdapter = ChatAdapter(mutableListOf(),"6")
+
         chatViewModel =ViewModelProvider(this)[ChatViewModel::class.java]
-        binding.chatRecyclerView.layoutManager =LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
-        binding.chatRecyclerView.adapter =chatAdapter
+
 
         arguments?.let {
             if(it.containsKey(AppConstant.Chat) && it.getString(AppConstant.Chat) != null){
@@ -97,22 +102,38 @@ class DoctorChatFragment : Fragment() {
                     chatId = cc
                 }
             }
+            chatAdapter = ChatAdapter(mutableListOf(),currentUserId)
+            binding.chatRecyclerView.layoutManager =LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+            binding.chatRecyclerView.adapter =chatAdapter
+
             if(it.containsKey(AppConstant.AppoitmentId)){
                 appoitnmentId = it.getInt(AppConstant.AppoitmentId)
+                Log.d("TESTING_ID",appoitnmentId.toString())
             }
 
         }
+
         chattingViewModel = ViewModelProvider(this)[ChattingViewModel::class.java]
 
         chatViewModel.messages.observe(viewLifecycleOwner) { messages ->
             chatAdapter.submitList(groupMessagesByDate(messages))
             messageList =messages.toMutableList()
-            binding.chatRecyclerView.scrollToPosition(messages.size - 1)
+            binding.chatRecyclerView.scrollToPosition(messages.size)
         }
 
-        callingChatApi()
+         callingChatApi()
+
         binding.downloadPrescriptionBtn.setOnClickListener {
-                  DownloadWorker().downloadPdfWithNotification(requireContext(),pdfUrl,"Presception"+System.currentTimeMillis())
+            if(pdfUrl == null||pdfUrl.length ==0 ){
+              LoadingUtils.showErrorDialog(requireContext(),"The prescription hasn't been uploaded yet.")
+            }
+            else {
+                DownloadWorker().downloadPdfWithNotification(
+                    requireContext(),
+                    pdfUrl,
+                    "Presception" + System.currentTimeMillis()
+                )
+            }
         }
 
         return binding.root
@@ -121,14 +142,16 @@ class DoctorChatFragment : Fragment() {
     private fun callingChatApi(){
         lifecycleScope.launch {
             LoadingUtils.showDialog(requireContext(),false)
-            chattingViewModel.checkAppoitmentDetails(appoitnmentId).onEach {
+            chattingViewModel.checkAppoitmentDetails(appoitnmentId).collect {
                 when(it){
                     is NetworkResult.Success ->{
                         LoadingUtils.hideDialog()
                         settingDataToUi(it.data)
+                        Log.d("TESTING_CHAT_API","INSIDE SUCESS")
                     }
                     is NetworkResult.Error ->{
                         LoadingUtils.hideDialog()
+                        Log.d("TESTING_CHAT_API","INSIDE Failure")
                     }
                     else->{
 
@@ -155,10 +178,12 @@ class DoctorChatFragment : Fragment() {
             }
             it.doctor_profile_path?.let {
                 chatAdapter.receiverImageUrl = AppConstant.Base_URL+ it
+                Log.d("PROFILE_IAMGE",AppConstant.Base_URL+ it)
             }
 
             it.patient_profile_path?.let {
                 chatAdapter.senderImageUrl = AppConstant.Base_URL+it
+                Log.d("PROFILE_IAMGE",AppConstant.Base_URL+ it)
             }
 
         }

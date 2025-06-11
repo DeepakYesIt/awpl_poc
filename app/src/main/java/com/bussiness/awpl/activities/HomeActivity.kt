@@ -110,8 +110,11 @@ class HomeActivity : AppCompatActivity() {
                         customBottomNav.visibility = View.VISIBLE
                         toolbarTitle.text = ""
                         ivBell.visibility = View.VISIBLE
-                        imgBackProfile.setImageResource(R.drawable.profile_icons)
-                        imgBackProfile.setOnClickListener {
+                        imgBackProfile.visibility =View.GONE
+                        profileIcon.visibility =View.VISIBLE
+                        Glide.with(this@HomeActivity).load(SessionManager(this@HomeActivity).getUserImage()).into(profileIcon)
+
+                        profileIcon.setOnClickListener {
                             updateDrawerContent()
                             drawerLayout.openDrawer(GravityCompat.START)
 
@@ -129,53 +132,93 @@ class HomeActivity : AppCompatActivity() {
                     updateBottomNavSelection("home")
                 }
 
-                R.id.notificationFragment -> setToolbar(
-                    "Notifications",
-                    showBottomNav = false,
-                    showBell = false
-                )
+                R.id.notificationFragment -> {
+                    setToolbar(
+                        "Notifications",
+                        showBottomNav = false,
+                        showBell = false
+                    )
+                    binding.profileIcon.visibility =View.GONE
+                }
 
-                R.id.privacyPolicyFragment -> setToolbar(
-                    "Privacy Policy",
-                    showBottomNav = false,
-                    showBell = false
-                )
+                R.id.privacyPolicyFragment -> {
+                    setToolbar(
+                        "Privacy Policy",
+                        showBottomNav = false,
+                        showBell = false
+                    )
+                    binding.profileIcon.visibility =View.GONE
+                }
 
-                R.id.termsAndConditionFragment -> setToolbar(
-                    "Terms & Conditions",
-                    showBottomNav = false,
-                    showBell = false
-                )
+                R.id.termsAndConditionFragment -> {
+                    setToolbar(
+                        "Terms & Conditions",
+                        showBottomNav = false,
+                        showBell = false
+                    )
+                    binding.profileIcon.visibility =View.GONE
+                }
 
-                R.id.appointmentPolicyFragment -> setToolbar(
-                    "Appointment Policy",
-                    showBottomNav = false,
-                    showBell = false
-                )
+                R.id.appointmentPolicyFragment -> {
+                    setToolbar(
+                        "Appointment Policy",
+                        showBottomNav = false,
+                        showBell = false
+                    )
+                    binding.profileIcon.visibility =View.GONE
+                }
+                R.id.refundPolicyFragment -> {
+                    setToolbar(
+                        "Refund Policy",
+                        showBottomNav = false,
+                        showBell = false
+                    )
+                    binding.profileIcon.visibility =View.GONE
+                }
 
-                R.id.refundPolicyFragment -> setToolbar(
-                    "Refund Policy",
-                    showBottomNav = false,
-                    showBell = false
-                )
+                R.id.profileFragment ->{ setToolbar("My Profile")
+                    binding.profileIcon.visibility =View.GONE
 
-                R.id.profileFragment -> setToolbar("My Profile")
-                R.id.videoGalleryFragment -> setToolbar("Video Gallery", showBottomNav = false)
-                R.id.FAQFragment3 -> setToolbar("FAQ", showBottomNav = false)
-                R.id.scheduleFragment -> setToolbar("My Appointments", fab = true)
-                R.id.resourceFragment -> setToolbar("Resources", fab = true)
-                R.id.yourDoctorFragment -> setToolbar("Your Doctors", fab = true)
-                R.id.appointmentBooking -> setToolbar("Book Appointment", showBottomNav = false)
-                R.id.summaryScreen -> setToolbar("Summary", showBottomNav = false)
-                R.id.paymentScreen -> setToolbar("Payment Method", showBottomNav = false)
-                R.id.homeScheduleCallFragment -> setToolbar(
-                    "Scheduled Call\nConsultations",
-                    showBottomNav = false,
-                    showBell = false
-                )
+                }
+                R.id.videoGalleryFragment ->{ setToolbar("Video Gallery", showBottomNav = false)
+                    binding.profileIcon.visibility =View.GONE
+                }
+                R.id.FAQFragment3 ->{ setToolbar("FAQ", showBottomNav = false)
+                    binding.profileIcon.visibility =View.GONE
+                }
+                R.id.scheduleFragment ->{ setToolbar("My Appointments", fab = true)
+                    binding.profileIcon.visibility =View.GONE
+                }
+                R.id.resourceFragment ->{ setToolbar("Resources", fab = true)
+                    binding.profileIcon.visibility =View.GONE
+                }
+                R.id.yourDoctorFragment ->{ setToolbar("Your Doctors", fab = true)
+                    binding.profileIcon.visibility =View.GONE
+                }
+                R.id.appointmentBooking ->{ setToolbar("Book Appointment", showBottomNav = false)
+                    binding.profileIcon.visibility =View.GONE
+                }
+                R.id.summaryScreen ->{ setToolbar("Summary", showBottomNav = false)
+                    binding.profileIcon.visibility =View.GONE
+                }
+                R.id.paymentScreen -> {setToolbar("Payment Method", showBottomNav = false)
+                    binding.profileIcon.visibility =View.GONE
+                }
+                R.id.homeScheduleCallFragment -> {
+                    setToolbar(
+                        "Scheduled Call\nConsultations",
+                        showBottomNav = false,
+                        showBell = false
+                    )
+                    binding.profileIcon.visibility =View.GONE
+                }
 
-                R.id.doctorChatFragment -> setToolbar("My Appointments", showBottomNav = false)
-                R.id.prescription_frgament -> setToolbar("My Prescriptions", fab = false)
+                R.id.doctorChatFragment ->{ setToolbar("My Appointments", showBottomNav = false)
+                    binding.profileIcon.visibility =View.GONE
+                }
+                R.id.prescription_frgament ->{ setToolbar("My Prescriptions", fab = false)
+                    binding.profileIcon.visibility =View.GONE
+                }
                 R.id.symptomUpload,
                 R.id.onlineConsultationFragment,
                 R.id.doctorConsultationFragment,
@@ -322,6 +365,7 @@ class HomeActivity : AppCompatActivity() {
             chatFab.visibility = if (fab) View.GONE else View.GONE
         }
     }
+
 
     private fun navigate(destinationId: Int) {
         findNavController(R.id.nav_host_fragment_home).navigate(destinationId)

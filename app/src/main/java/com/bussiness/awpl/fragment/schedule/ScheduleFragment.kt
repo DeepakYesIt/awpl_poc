@@ -82,6 +82,13 @@ class ScheduleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentScheduleBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    @SuppressLint("SetTextI18n")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         completedSymptomsAdapter = SymptomsUploadCompleteAdapter(mutableListOf()){ path->
             var url = AppConstant.Base_URL+path.file_path
             DownloadWorker().downloadPdfWithNotification(requireContext(),url,"Prescription_${System.currentTimeMillis()}.pdf")
@@ -92,13 +99,6 @@ class ScheduleFragment : Fragment() {
         setUpRecyclerView()
         selectTab(selectedTab)
         callingUpcomingApi()
-        return binding.root
-    }
-
-    @SuppressLint("SetTextI18n")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
     }
 
     private fun selectTab(index: Int) {
@@ -172,6 +172,18 @@ class ScheduleFragment : Fragment() {
 
     private fun callingUpcomingApi(){
       if(viewModel.upcomingList.size > 0){
+
+          if (viewModel.upcomingList.size > 0) {
+              binding.noDataView.visibility = View.GONE
+              binding.recyclerView.visibility = View.VISIBLE
+              appointmentAdapter.updateAdapter(viewModel.upcomingList)
+          } else {
+              binding.apply {
+                  noDataView.visibility = View.VISIBLE
+                  recyclerView.visibility = View.GONE
+              }
+          }
+
           appointmentAdapter.updateAdapter(viewModel.upcomingList)
       }else {
           lifecycleScope.launch {
@@ -307,13 +319,33 @@ class ScheduleFragment : Fragment() {
 
     }
 
+    private fun callingCallJoinedApi(startAppointment: Int, intent: Intent) {
+
+        lifecycleScope.launch {
+            viewModel.callJoined(startAppointment).collect{
+                when(it){
+                    is NetworkResult.Success ->{
+                        LoadingUtils.hideDialog()
+                        Log.d("TESTING_CALL_JOINED","Calling joined call")
+                        startActivity(intent)
+                    }
+                    is NetworkResult.Error ->{
+                        Log.d("TESTING_CALL_JOINED","Calling joined cancel")
+                        LoadingUtils.hideDialog()
+                    }
+                    else ->{
+                    }
+                }
+            }
+        }
+    }
+
     private fun openVideoCall(model :UpcomingModel){
         lifecycleScope.launch {
             LoadingUtils.showDialog(requireContext(),false)
             viewModel.createChannel(model.id).collect {
                 when(it){
                     is NetworkResult.Success ->{
-                        LoadingUtils.hideDialog()
                         it.data?.let {
                             val intent = Intent(requireContext(), VideoCallActivity::class.java)
                             intent.putExtra(AppConstant.APPID,it.appId)
@@ -321,7 +353,8 @@ class ScheduleFragment : Fragment() {
                             intent.putExtra(AppConstant.CHANNEL_NAME,it.channelName)
                             intent.putExtra(AppConstant.uid,it.uid)
                             intent.putExtra(AppConstant.DOCTOR,model.doctorName)
-                            startActivity(intent)
+                            //  startActivity(intent)
+                          callingCallJoinedApi(model.id,intent)
                         }
 
                     }

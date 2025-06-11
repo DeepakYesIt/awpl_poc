@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Selected/Pressed thumb -->
+    <item android:state_selected="true" android:drawable="@drawable/thumb_selected_shape" />
+    <item android:state_pressed="true" android:drawable="@drawable/thumb_selected_shape" />
+
+    <!-- Default (not selected) -->
+    <item android:drawable="@drawable/thumb_default_shape" />
+</selector>

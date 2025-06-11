@@ -176,7 +176,9 @@ class ResheduleFragment : Fragment() {
                     when(it){
                         is NetworkResult.Success ->{
                             LoadingUtils.hideDialog()
-                            LoadingUtils.showSuccessDialog(requireContext(),it.data.toString())
+                            LoadingUtils.showSuccessDialog(requireContext(),it.data.toString()){
+                                findNavController().navigate(R.id.scheduleFragment)
+                            }
                         }
                         is NetworkResult.Error ->{
                             LoadingUtils.hideDialog()

@@ -14,7 +14,7 @@ import com.bussiness.awpl.ChatMessage
 import com.bussiness.awpl.R
 
 class ChatAdapter(private var messages: List<ChatItem>,
-                  private val currentUserId: String
+                  val currentUserId: String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var senderImageUrl =""
@@ -93,10 +93,17 @@ class ChatAdapter(private var messages: List<ChatItem>,
         private val textMessage: TextView = itemView.findViewById(R.id.textMessage)
         private val profileImage: ImageView = itemView.findViewById(R.id.profileImage)
         private val timeTv :TextView = itemView.findViewById(R.id.textTime)
+        private val tickImg :ImageView = itemView.findViewById(R.id.tickIcon)
 
         fun bind(message: ChatMessage) {
             message.date?.let {
                 Log.d("TESTINGtIME",it)
+            }
+
+            if(message.seen && message.senderId == currentUserId){
+                tickImg.visibility =View.VISIBLE
+            }else{
+                tickImg.visibility =View.GONE
             }
             message.time?.let {
                 Log.d("TESTINGtIME",it+"time")
@@ -127,10 +134,18 @@ class ChatAdapter(private var messages: List<ChatItem>,
 
         fun bind(message: ChatMessage) {
 
-            Glide.with(itemView.context)
-                .load(message.imageUrl)
-                .placeholder(R.drawable.ic_not_found_img)
-                .into(imageMessage)
+            if(message.senderId != currentUserId){
+                Glide.with(itemView.context)
+                    .load(senderImageUrl)
+                    .placeholder(R.drawable.ic_not_found_img)
+                    .into(imageMessage)
+
+            }else{
+                Glide.with(itemView.context)
+                    .load(receiverImageUrl)
+                    .placeholder(R.drawable.ic_not_found_img)
+                    .into(imageMessage)
+            }
 
             message.time?.let {
                 Log.d("TESTINGtIME",it+"time")

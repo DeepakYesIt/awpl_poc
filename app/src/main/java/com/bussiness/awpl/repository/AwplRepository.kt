@@ -165,4 +165,9 @@ interface AwplRepository {
         @Field("appointment_id") appointmentId: Int
     ) : Flow<NetworkResult<ChatAppotmentDetails>>
 
+    suspend fun callJoined(
+        @Field("appointmentId") appointmentId: Int
+    ) :Flow<NetworkResult<String>>
+
+
 }
