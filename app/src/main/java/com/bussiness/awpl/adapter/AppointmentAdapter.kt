@@ -23,8 +23,7 @@ class AppointmentAdapter(
     private val startAppoitmentClick :(UpcomingModel) ->Unit
     ) : RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder>() {
 
-    inner class AppointmentViewHolder(private val binding: ItemAppointmentBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class AppointmentViewHolder(private val binding: ItemAppointmentBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(appointment: UpcomingModel) {
             binding.apply {

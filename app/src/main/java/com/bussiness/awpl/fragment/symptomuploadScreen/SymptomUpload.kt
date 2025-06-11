@@ -321,7 +321,7 @@ class SymptomUpload : Fragment() {
 
         binding.btnOkay.setOnClickListener {
             dialog.dismiss()
-
+             findNavController().navigate(R.id.homeFragment)
         }
         dialog.show()
     }

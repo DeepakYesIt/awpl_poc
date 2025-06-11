@@ -16,7 +16,8 @@ class MediaUtils(
     context: Context,
     type: String,
     private val onFileSelected: (List<Uri>) -> Unit,
-    private val onBrowseClicked: (() -> Unit)? = null
+    private val onBrowseClicked: (() -> Unit)? = null,
+    var buttonName : String ="Save"
 ) : Dialog(context) {
 
     private val selectedFiles = mutableListOf<Uri>()
@@ -57,6 +58,7 @@ class MediaUtils(
                 onBrowseClicked?.invoke()
             }
         }
+        binding.btnSave.setText(buttonName)
 
         binding.btnSave.setOnClickListener {
             if (selectedFiles.isNotEmpty()) {
@@ -64,20 +66,22 @@ class MediaUtils(
                 dismiss()
             }
         }
-
         updateVisibility()
     }
 
     fun handleSelectedFile(uri: Uri) {
+
         if (selectedFiles.size >= MAX_FILE_LIMIT) {
             Toast.makeText(context, "Maximum of $MAX_FILE_LIMIT files allowed.", Toast.LENGTH_SHORT).show()
             return
         }
+
         if (!selectedFiles.contains(uri)) {
             selectedFiles.add(uri)
             dialogAdapter.notifyItemInserted(selectedFiles.size - 1)
             updateVisibility()
         }
+
     }
 
 

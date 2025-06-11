@@ -92,9 +92,9 @@ class ScheduleFragment : Fragment() {
         completedSymptomsAdapter = SymptomsUploadCompleteAdapter(mutableListOf()){ path->
             var url = AppConstant.Base_URL+path.file_path
             DownloadWorker().downloadPdfWithNotification(requireContext(),url,"Prescription_${System.currentTimeMillis()}.pdf")
+            Toast.makeText(requireContext(),"Download Started",Toast.LENGTH_LONG).show()
         }
         viewModel = ViewModelProvider(this)[MyAppointmentViewModel::class.java]
-
         clickListener()
         setUpRecyclerView()
         selectTab(selectedTab)

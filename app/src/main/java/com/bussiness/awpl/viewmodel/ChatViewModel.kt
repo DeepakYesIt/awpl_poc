@@ -47,17 +47,34 @@ class ChatViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    //OLD TIME STAMP
+//    fun formatTimestamp(timestamp: Long): Pair<String, String> {
+//        val date = Date(timestamp)
+//
+//        val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+//        val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+//
+//        val formattedDate = dateFormat.format(date) // "14 May 2025"
+//        val formattedTime = timeFormat.format(date) // "21:15"
+//
+//        return Pair(formattedDate, formattedTime)
+//    }
+
+    //NEW TIME STAMP
+
     fun formatTimestamp(timestamp: Long): Pair<String, String> {
         val date = Date(timestamp)
 
         val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
-        val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault()) // Changed here
 
-        val formattedDate = dateFormat.format(date) // "14 May 2025"
-        val formattedTime = timeFormat.format(date) // "21:15"
+        val formattedDate = dateFormat.format(date) // e.g., "14 May 2025"
+        val formattedTime = timeFormat.format(date) // e.g., "09:15 PM"
 
         return Pair(formattedDate, formattedTime)
     }
+
+
     private fun fetchChatHistory() {
         viewModelScope.launch {
             repo.observeMessages(chatId).collectLatest { messageList ->
@@ -78,14 +95,19 @@ class ChatViewModel @Inject constructor() : ViewModel() {
 
     fun sendImage(uri: Uri) {
         viewModelScope.launch {
-            val url = repo.uploadImage(uri)
-            val message = ChatMessage(
 
+            val url = repo.uploadImage(uri)
+
+            val message = ChatMessage(
                 senderId = currentUserId,
                 receiverId = receiverId,
-                imageUrl = url
+                message = url
             )
+
             repo.sendMessage(chatId, message)
         }
+
     }
+
+
 }
