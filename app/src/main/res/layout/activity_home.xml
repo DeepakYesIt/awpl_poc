@@ -55,6 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
+                android:visibility="visible"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:src="@drawable/back_icon"

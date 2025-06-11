@@ -182,24 +182,31 @@ class HomeActivity : AppCompatActivity() {
                 }
                 R.id.videoGalleryFragment ->{ setToolbar("Video Gallery", showBottomNav = false)
                     binding.profileIcon.visibility =View.GONE
+                    binding.imgBackProfile.visibility =View.VISIBLE
                 }
                 R.id.FAQFragment3 ->{ setToolbar("FAQ", showBottomNav = false)
                     binding.profileIcon.visibility =View.GONE
+                    binding.imgBackProfile.visibility =View.VISIBLE
                 }
                 R.id.scheduleFragment ->{ setToolbar("My Appointments", fab = true)
                     binding.profileIcon.visibility =View.GONE
+                    binding.imgBackProfile.visibility =View.VISIBLE
                 }
                 R.id.resourceFragment ->{ setToolbar("Resources", fab = true)
                     binding.profileIcon.visibility =View.GONE
+                    binding.imgBackProfile.visibility =View.VISIBLE
                 }
                 R.id.yourDoctorFragment ->{ setToolbar("Your Doctors", fab = true)
                     binding.profileIcon.visibility =View.GONE
+                    binding.imgBackProfile.visibility =View.VISIBLE
                 }
                 R.id.appointmentBooking ->{ setToolbar("Book Appointment", showBottomNav = false)
                     binding.profileIcon.visibility =View.GONE
+                    binding.imgBackProfile.visibility =View.VISIBLE
                 }
                 R.id.summaryScreen ->{ setToolbar("Summary", showBottomNav = false)
                     binding.profileIcon.visibility =View.GONE
+                    binding.imgBackProfile.visibility =View.VISIBLE
                 }
                 R.id.paymentScreen -> {setToolbar("Payment Method", showBottomNav = false)
                     binding.profileIcon.visibility =View.GONE
@@ -211,6 +218,7 @@ class HomeActivity : AppCompatActivity() {
                         showBell = false
                     )
                     binding.profileIcon.visibility =View.GONE
+                    binding.imgBackProfile.visibility =View.GONE
                 }
 
                 R.id.doctorChatFragment ->{ setToolbar("My Appointments", showBottomNav = false)
@@ -218,6 +226,7 @@ class HomeActivity : AppCompatActivity() {
                 }
                 R.id.prescription_frgament ->{ setToolbar("My Prescriptions", fab = false)
                     binding.profileIcon.visibility =View.GONE
+                    binding.imgBackProfile.visibility =View.VISIBLE
                 }
                 R.id.symptomUpload,
                 R.id.onlineConsultationFragment,
