@@ -7,5 +7,6 @@ data class PrescriptionModel(
     val file_path: String?,
     val prescription_id: Int,
     val time: String?,
-    val referred_name :String?
+    val referred_name :String?,
+    val appointment_id :Int
 )

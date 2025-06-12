@@ -1040,7 +1040,7 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
     }
 
     override suspend fun myPrescription(forWhich :String): Flow<NetworkResult<MutableList<PrescriptionModel>>> =flow{
-        try {
+//        try {
             api.myPrescription(forWhich).apply {
                 if (isSuccessful) {
                     body()?.let { resp ->
@@ -1053,6 +1053,7 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
                                     Gson().fromJson(it.toString(), PrescriptionModel::class.java)
                                 resultList.add(model)
                             }
+
 
 
                             emit(NetworkResult.Success(resultList))
@@ -1075,9 +1076,9 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
                     }
                 }
             }
-        } catch (e: Exception) {
-            emit(NetworkResult.Error(ErrorHandler.emitError(e)))
-        }
+//        } catch (e: Exception) {
+//            emit(NetworkResult.Error(ErrorHandler.emitError(e)))
+//        }
     }
 
     override suspend fun initiatePayment(
