@@ -398,4 +398,19 @@
 <!--    <string name="agora_app_id">a1a03cc5753343838a3d4a256aca804c</string>-->
     <string name="agora_app_id">ec3fcf69b9d64484a3dd35b718e5939f</string>
     <string name="no_notification">No Notification Found</string>
+    <string name="appointment_nrescheduled">Appointment \nRescheduled</string>
+    <string name="your_appointment_scheduled_with_dr_original_doctor_s_name_on_date_time_has_been_reassigned_to_dr_new_doctor_s_name_due_to_unforeseen_circumstances"><![CDATA[Your appointment scheduled with Dr. [Original Doctor\'s Name] on [Date & Time] has been reassigned to Dr. [New Doctor\'s Name] due to unforeseen circumstances.]]></string>
+    <string name="new_appointment_details">New Appointment Details:</string>
+    <string name="date">Date:</string>
+    <string name="time">Time:</string>
+    <string name="doctor">Doctor:</string>
+    <string name="dr_new_doctor_s_name">Dr. [New Doctor\'s Name]</string>
+    <string name="we_apologize_for_any_inconvenience_and_appreciate_your_understanding_if_you_have_any_concerns_or_need_to_reschedule_please_contact_us_at_support_contact">We apologize for any inconvenience and appreciate your understanding. If you have any concerns or need to reschedule, please contact us at [Support Contact].</string>
+    <string name="ok">Ok</string>
+    <string name="reminder">Reminder:</string>
+    <string name="doctor_s_name__">Doctor\'s Name:</string>
+    <string name="date_and_time">Date and Time:</string>
+    <string name="make_sure_you_re_in_a_quiet_place_ready_for_your_consultation">Make sure you\'re in a quiet place, ready for your consultation.</string>
+    <string name="done">Done</string>
+    <string name="your_appointment_starts_in_n_15_minutes">Your Appointment Starts in\n 15 Minutes!</string>
 </resources>
