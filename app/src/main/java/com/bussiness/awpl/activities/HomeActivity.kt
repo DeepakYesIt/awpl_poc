@@ -46,6 +46,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.bussiness.awpl.BuildConfig
+import com.bussiness.awpl.DialogStartAppointment
+import com.bussiness.awpl.DownloadDialog
+import com.bussiness.awpl.DownloadRescheduleAppointment
 import com.bussiness.awpl.R
 import com.bussiness.awpl.base.CommonUtils
 import com.bussiness.awpl.databinding.ActivityHomeBinding
@@ -273,6 +276,42 @@ class HomeActivity : AppCompatActivity() {
                 date = intent.getStringExtra("date").toString()
                 downloadReportDialog()
             }
+            else if(it.hasExtra("doctor_name")&& it.hasExtra("date")) {
+                val dialog = DialogStartAppointment(this,intent.getStringExtra("doctor_name").toString() ,
+                    intent.getStringExtra("date").toString())
+                dialog.show()
+            }
+
+            else if (it.hasExtra("doctor_name") &&
+                it.hasExtra("when_time") &&
+                it.hasExtra("new_doctor") &&
+                it.hasExtra("new_date") &&
+                it.hasExtra("new_time")) {
+
+                val doctorName = it.getStringExtra("doctor_name")
+                val whenTime = it.getStringExtra("when_time")
+                val newDoctor = it.getStringExtra("new_doctor")
+                val newDate = it.getStringExtra("new_date")
+                val newTime = it.getStringExtra("new_time")
+
+                // Use these values as needed
+                Log.d("IntentData", "Old: $doctorName @ $whenTime | New: $newDoctor on $newDate at $newTime")
+
+                // Optional: Show dialog
+                if (doctorName != null && !doctorName.isEmpty()) {
+                    if (whenTime != null && !whenTime.isEmpty()) {
+                        if (newDoctor != null && !newDoctor.isEmpty()) {
+                            if (newDate != null && !newDate.isEmpty()) {
+                                if (newTime != null && !newTime.isEmpty()) {
+                                    DownloadRescheduleAppointment(this, doctorName, whenTime, newDoctor, newDate, newTime).show()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
         }
 
 

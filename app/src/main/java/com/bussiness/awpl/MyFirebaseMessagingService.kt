@@ -50,6 +50,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             var fileUrl:String? = null
             var date :String? =null
             var type = it.get("type")
+
             if (type != null) {
                 Log.d("testing_notification",type)
             }else{
@@ -81,13 +82,20 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 val doctorName = data["doctor_name"]
                 val date = data["date"]
                 if (isAppInForeground1()) {
-                    // Foreground: send local broadcast to open dialog
-                    val intent = Intent("SHOW_APPOINTMENT_DIALOG")
-                    intent.putExtra("doctor_name", doctorName)
-                    intent.putExtra("date", date)
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+                    MyApp.currentActivity?.let { activity ->
+                        activity.runOnUiThread {
+                            val dialog =
+                                doctorName?.let { it1 ->
+                                    if (date != null) {
+                                        DialogStartAppointment(activity,
+                                            it1, date)
+                                    }
+                                }
+
+                        }
+                    }
                 } else {
-                    // Background/killed: show notification
+
                     showNotificationStartAppointment(doctorName ?: "", date ?: "")
                 }
             }
@@ -99,14 +107,32 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 val newTime = data["new_time"]
 
                 if (isAppInForeground()) {
-                    val intent = Intent("SHOW_RESCHEDULE_DIALOG")
-                    intent.putExtra("original_doctor_name", originalDoctor)
-                    intent.putExtra("when", originalWhen)
-                    intent.putExtra("new_doctor", newDoctor)
-                    intent.putExtra("new_date", newDate)
-                    intent.putExtra("new_time", newTime)
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
-                } else {
+                    MyApp.currentActivity?.let { activity ->
+                        activity.runOnUiThread {
+                            val dialog = originalDoctor?.let { it1 ->
+                                if (originalWhen != null) {
+                                    if (newDoctor != null) {
+                                        if (newTime != null) {
+                                            if (newDate != null) {
+                                                DownloadRescheduleAppointment(
+                                                    activity,
+                                                    it1,
+                                                    originalWhen,
+                                                    newDoctor,
+                                                    newDate,
+                                                    newTime
+                                                ).show()
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+
+                        }
+                    }
+                }
+                else {
                     showNotificationReschedule(originalDoctor ?: "", originalWhen ?: "", newDoctor ?: "", newDate ?: "", newTime ?: "")
                 }
             } else {
