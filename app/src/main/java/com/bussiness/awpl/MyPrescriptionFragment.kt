@@ -1,11 +1,16 @@
 package com.bussiness.awpl
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -43,16 +48,65 @@ class MyPrescriptionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMyPrescriptionBinding.inflate(LayoutInflater.from(requireContext()))
-        adapter = MyPersecptionAdapter(mutableListOf()){ pres->
-            var chatId = if(pres.chat_id != null) pres.chat_id else null
-            var bundle =Bundle().apply {
-                putInt(AppConstant.AppoitmentId,pres.prescription_id)
-                putString(AppConstant.Chat, chatId)
+//        adapter = MyPersecptionAdapter(mutableListOf()){ pres->
+//            var chatId = if(pres.chat_id != null) pres.chat_id else null
+//            var bundle =Bundle().apply {
+//                putInt(AppConstant.AppoitmentId,pres.prescription_id)
+//                putString(AppConstant.Chat, chatId)
+//            }
+//            if(chatId != null) {
+//                findNavController().navigate(R.id.doctorChatFragment, bundle)
+//            }
+//        }
+
+         adapter = MyPersecptionAdapter(
+            mutableListOf(),
+            onScheduleCallClick = { pres ->
+                val chatId = pres.chat_id
+                val bundle = Bundle().apply {
+                    putInt(AppConstant.AppoitmentId, pres.appointment_id)
+                    putString(AppConstant.Chat, chatId)
+                }
+                if (chatId != null) {
+                    findNavController().navigate(R.id.doctorChatFragment, bundle)
+                }
+            },
+            onViewPdf = { pdfLink ->
+                Log.d("TESTING_URL",AppConstant.Base_URL+pdfLink.toString())
+
+                try {
+                    if (pdfLink.isBlank()) {
+                        Toast.makeText(context, "Invalid PDF link", Toast.LENGTH_SHORT).show()
+                        return@MyPersecptionAdapter
+                    }
+
+                    val uri = Uri.parse(pdfLink)
+
+                    // Check if it's a web link
+                    if (uri.scheme == "http" || uri.scheme == "https") {
+                        // Always open in browser for remote PDFs
+                        val browserIntent = Intent(Intent.ACTION_VIEW, uri)
+                        browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        context?.startActivity(browserIntent)
+                    } else {
+                        // Try to open local PDF with viewer
+                        val intent = Intent(Intent.ACTION_VIEW)
+                        intent.setDataAndType(uri, "application/pdf")
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        if (context?.packageManager?.let { intent.resolveActivity(it) } != null) {
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(context, "No app found to open PDF", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(context, "Could not open PDF: ${e.message}", Toast.LENGTH_LONG).show()
+                }
             }
-            if(chatId != null) {
-                findNavController().navigate(R.id.doctorChatFragment, bundle)
-            }
-        }
+        )
+
         binding.recyclerPresecption.adapter = adapter
         binding.imgBack.setOnClickListener {
             findNavController().navigateUp()
@@ -82,9 +136,15 @@ class MyPrescriptionFragment : Fragment() {
                             LoadingUtils.hideDialog()
                             var data = it.data
                             if (data != null) {
-                                if(data.size ==0){
-                                    binding.tvNoDataPres.visibility =View.VISIBLE
+                                Log.d("TESTING_AWPL_DATA",data.size.toString())
+
+                                data.forEach {
+                                    Log.d("TESTING_AWPL_DATA",it.time.toString())
                                 }
+
+//                                if(data.size ==0){
+//                                    binding.tvNoDataPres.visibility =View.VISIBLE
+//                                }
                                 adapter.updateAdapter(data)
                             }else{
                                 binding.tvNoDataPres.visibility =View.VISIBLE
@@ -92,10 +152,9 @@ class MyPrescriptionFragment : Fragment() {
                         }
                         is NetworkResult.Error ->{
                             LoadingUtils.hideDialog()
-
+                            LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
                         }
                         else ->{
-
                         }
                     }
 

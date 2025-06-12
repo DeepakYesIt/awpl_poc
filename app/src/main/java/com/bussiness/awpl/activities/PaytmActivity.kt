@@ -10,6 +10,7 @@ import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -45,6 +46,8 @@ class PaytmActivity : AppCompatActivity() {
     var email :String? = null
     var phone :String? =""
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -58,6 +61,8 @@ class PaytmActivity : AppCompatActivity() {
         //  paymentWork()
         webView = findViewById(R.id.webView)
         setupWebView()
+
+
 
       //  paymentUrl = "https://secure.payu.in/_payment"
         paymentUrl = "https://test.payu.in/_payment"
@@ -99,7 +104,16 @@ class PaytmActivity : AppCompatActivity() {
         // POST request WebView me load karo
         val postData = buildPostData(postParams)
         webView.postUrl(paymentUrl, postData.toByteArray(Charsets.UTF_8))
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Do nothing to block the back press
+                // Optional: Show a Toast or dialog
+                // Toast.makeText(this@YourActivity, "Back press disabled", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
+
 
     private fun setupWebView() {
         webView.settings.javaScriptEnabled = true
@@ -242,5 +256,10 @@ class PaytmActivity : AppCompatActivity() {
 //    override fun onPaymentError(p0: Int, p1: String?, p2: PaymentData?) {
 //    }
 
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        // Do nothing to disable back press
+    }
 
 }

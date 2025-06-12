@@ -18,6 +18,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.view.WindowInsetsController
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -26,6 +27,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
@@ -47,18 +49,23 @@ import com.bussiness.awpl.BuildConfig
 import com.bussiness.awpl.R
 import com.bussiness.awpl.base.CommonUtils
 import com.bussiness.awpl.databinding.ActivityHomeBinding
+import com.bussiness.awpl.databinding.DialogReportDownloadBinding
 import com.bussiness.awpl.fragment.home.HomeViewModel
 import com.bussiness.awpl.utils.AppConstant
+import com.bussiness.awpl.utils.DownloadWorker
 
 import com.bussiness.awpl.utils.SessionManager
 import com.bussiness.awpl.viewmodel.SharedViewModel
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.UUID
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
 
+    private var fileUrl :String =""
+    private var date :String =""
     private lateinit var binding: ActivityHomeBinding
     private lateinit var navHostFragment: NavHostFragment
     private var sessionManager: SessionManager? = null
@@ -68,6 +75,7 @@ class HomeActivity : AppCompatActivity() {
     lateinit var img:de.hdodenhof.circleimageview.CircleImageView
     lateinit var notification :SwitchCompat
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -252,11 +260,50 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
+        intent?.let {
+            if(it.hasExtra("fileUrl") && it.hasExtra("date")){
+                fileUrl = intent.getStringExtra("fileUrl").toString()
+                date = intent.getStringExtra("date").toString()
+                downloadReportDialog()
+            }
+        }
 
 
 
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun downloadReportDialog() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        val binding = DialogReportDownloadBinding.inflate(layoutInflater)
+        dialog.setContentView(binding.root)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
+        // Set width with margin
+        val displayMetrics = resources.displayMetrics
+        val screenWidth = displayMetrics.widthPixels
+        val marginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, displayMetrics).toInt()
+        val dialogWidth = screenWidth - (2 * marginPx)
+
+        // Apply width to the dialog window
+        dialog.window?.setLayout(dialogWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        binding.description4.text =date
+
+        binding.btnOkay.setOnClickListener {
+            dialog.dismiss()
+            var intent = Intent(this,HomeActivity::class.java)
+            DownloadWorker().downloadPdfWithNotification(this,fileUrl,"Presription/${UUID.randomUUID()}")
+            Toast.makeText(this,"Download Started!",Toast.LENGTH_LONG).show()
+            startActivity(intent)
+        }
+        binding.btnClose.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
 
     private fun updateDrawerContent() {
         val navigationView: NavigationView = binding.root.findViewById(R.id.navigation_side_nav_bar)

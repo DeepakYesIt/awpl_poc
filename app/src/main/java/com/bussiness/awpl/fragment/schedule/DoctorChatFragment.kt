@@ -138,6 +138,7 @@ class DoctorChatFragment : Fragment() {
                     pdfUrl,
                     "Presception" + System.currentTimeMillis()
                 )
+                Toast.makeText(requireContext(),"Download Started!",Toast.LENGTH_LONG).show()
             }
         }
 
@@ -273,6 +274,9 @@ class DoctorChatFragment : Fragment() {
                 openMediaDialog("image")
             }
             sendMessageButton.setOnClickListener{
+                if(messageEditText.text.length ==0){
+                    return@setOnClickListener
+                }
                 chatViewModel.sendTextMessage(messageEditText.text.toString())
                 messageEditText.setText("")
                 val message = ChatMessage(

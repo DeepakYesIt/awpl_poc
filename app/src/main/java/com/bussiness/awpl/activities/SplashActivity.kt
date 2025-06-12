@@ -40,6 +40,8 @@ class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
     private val sessionManager: SessionManager by lazy { SessionManager(this) }
 
+    var fileUrl =""
+    var date =""
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -48,6 +50,14 @@ class SplashActivity : AppCompatActivity() {
 
         binding = ActivitySplashBinding.inflate(layoutInflater)
 
+        intent?.let {
+            if(it.hasExtra("fileUrl") && it.hasExtra("date")){
+                 fileUrl = intent.getStringExtra("fileUrl").toString()
+                 date = intent.getStringExtra("date").toString()
+
+            }
+        }
+
         setContentView(binding.root)
 
         // Apply language preferences
@@ -55,10 +65,16 @@ class SplashActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             if (sessionManager.isLoggedIn()) {
-                startActivity(Intent(this, HomeActivity::class.java))
+              var intent = Intent(this, HomeActivity::class.java)
+               intent.putExtra("fileUrl",fileUrl)
+                intent.putExtra("date",date)
+                startActivity(intent)
+
             } else {
                 startActivity(Intent(this, OnBoardActivity::class.java))
             }
+
+
             finish()
         }, 3000)
 
