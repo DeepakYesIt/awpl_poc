@@ -147,6 +147,7 @@ class HomeActivity : AppCompatActivity() {
                         showBell = false
                     )
                     binding.profileIcon.visibility =View.GONE
+                    binding.imgBackProfile.visibility =View.VISIBLE
                 }
 
                 R.id.privacyPolicyFragment -> {
@@ -156,6 +157,7 @@ class HomeActivity : AppCompatActivity() {
                         showBell = false
                     )
                     binding.profileIcon.visibility =View.GONE
+                    binding.imgBackProfile.visibility =View.VISIBLE
                 }
 
                 R.id.termsAndConditionFragment -> {
@@ -165,6 +167,7 @@ class HomeActivity : AppCompatActivity() {
                         showBell = false
                     )
                     binding.profileIcon.visibility =View.GONE
+                    binding.imgBackProfile.visibility =View.VISIBLE
                 }
 
                 R.id.appointmentPolicyFragment -> {
@@ -174,6 +177,7 @@ class HomeActivity : AppCompatActivity() {
                         showBell = false
                     )
                     binding.profileIcon.visibility =View.GONE
+                    binding.imgBackProfile.visibility =View.VISIBLE
                 }
                 R.id.refundPolicyFragment -> {
                     setToolbar(
@@ -200,14 +204,17 @@ class HomeActivity : AppCompatActivity() {
                 R.id.scheduleFragment ->{ setToolbar("My Appointments", fab = true)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
+                    updateBottomNavSelection("schedule")
                 }
                 R.id.resourceFragment ->{ setToolbar("Resources", fab = true)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
+                    updateBottomNavSelection("resource")
                 }
                 R.id.yourDoctorFragment ->{ setToolbar("Your Doctors", fab = true)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
+                    updateBottomNavSelection("doctor")
                 }
                 R.id.appointmentBooking ->{ setToolbar("Book Appointment", showBottomNav = false)
                     binding.profileIcon.visibility =View.GONE
@@ -348,66 +355,21 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun updateBottomNavSelection(selected: String) {
-        binding.iconHome.setColorFilter(
-            ContextCompat.getColor(
-                this,
-                if (selected == "home") R.color.blueColor else R.color.greyColor
-            )
-        )
-        binding.textHome.setTextColor(
-            ContextCompat.getColor(
-                this,
-                if (selected == "home") R.color.blueColor else R.color.greyColor
-            )
-        )
+        binding.iconHome.setColorFilter(ContextCompat.getColor(this, if (selected == "home") R.color.blueColor else R.color.greyColor))
+        binding.textHome.setTextColor(ContextCompat.getColor(this, if (selected == "home") R.color.blueColor else R.color.greyColor))
         binding.indicatorHome.visibility = if (selected == "home") View.VISIBLE else View.GONE
 
-        // Schedule
-        binding.iconSchedule.setColorFilter(
-            ContextCompat.getColor(
-                this,
-                if (selected == "schedule") R.color.blueColor else R.color.greyColor
-            )
-        )
-        binding.textSchedule.setTextColor(
-            ContextCompat.getColor(
-                this,
-                if (selected == "schedule") R.color.blueColor else R.color.greyColor
-            )
-        )
-        binding.indicatorSchedule.visibility =
-            if (selected == "schedule") View.VISIBLE else View.GONE
+        binding.iconSchedule.setColorFilter(ContextCompat.getColor(this, if (selected == "schedule") R.color.blueColor else R.color.greyColor))
+        binding.textSchedule.setTextColor(ContextCompat.getColor(this, if (selected == "schedule") R.color.blueColor else R.color.greyColor))
+        binding.indicatorSchedule.visibility = if (selected == "schedule") View.VISIBLE else View.GONE
 
-        // Doctor
-        binding.iconDoctor.setColorFilter(
-            ContextCompat.getColor(
-                this,
-                if (selected == "doctor") R.color.blueColor else R.color.greyColor
-            )
-        )
-        binding.textDoctor.setTextColor(
-            ContextCompat.getColor(
-                this,
-                if (selected == "doctor") R.color.blueColor else R.color.greyColor
-            )
-        )
+        binding.iconDoctor.setColorFilter(ContextCompat.getColor(this, if (selected == "doctor") R.color.blueColor else R.color.greyColor))
+        binding.textDoctor.setTextColor(ContextCompat.getColor(this, if (selected == "doctor") R.color.blueColor else R.color.greyColor))
         binding.indicatorDoctor.visibility = if (selected == "doctor") View.VISIBLE else View.GONE
 
-        // Resource
-        binding.iconResource.setColorFilter(
-            ContextCompat.getColor(
-                this,
-                if (selected == "resource") R.color.blueColor else R.color.greyColor
-            )
-        )
-        binding.textResource.setTextColor(
-            ContextCompat.getColor(
-                this,
-                if (selected == "resource") R.color.blueColor else R.color.greyColor
-            )
-        )
-        binding.indicatorResource.visibility =
-            if (selected == "resource") View.VISIBLE else View.GONE
+        binding.iconResource.setColorFilter(ContextCompat.getColor(this, if (selected == "resource") R.color.blueColor else R.color.greyColor))
+        binding.textResource.setTextColor(ContextCompat.getColor(this, if (selected == "resource") R.color.blueColor else R.color.greyColor))
+        binding.indicatorResource.visibility = if (selected == "resource") View.VISIBLE else View.GONE
     }
 
     private fun setToolbar(
