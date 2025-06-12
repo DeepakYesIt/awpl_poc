@@ -17,6 +17,7 @@ class AppointmentPolicyFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // Inflate binding safely
         _binding = FragmentAppointmentPolicyBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -24,9 +25,11 @@ class AppointmentPolicyFragment : Fragment() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.webView.settings.javaScriptEnabled = true
-        binding.webView.loadUrl("file:///android_asset/appointment_policy.html")
 
+        binding.webView.apply {
+            settings.javaScriptEnabled = true
+            loadUrl("file:///android_asset/appointment_policy.html")
+        }
     }
 
     override fun onDestroyView() {
@@ -34,3 +37,4 @@ class AppointmentPolicyFragment : Fragment() {
         _binding = null
     }
 }
+
