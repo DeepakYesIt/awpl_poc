@@ -3,10 +3,12 @@ package com.bussiness.awpl.fragment.symptomuploadScreen
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -253,6 +255,14 @@ class SymptomUpload : Fragment() {
             }
 
             MediaType.VIDEO -> {
+                val sizeInBytes = getFileSizeFromUri(requireContext(), uri)
+                val sizeInMB = sizeInBytes / (1024f * 1024f)
+
+                if (sizeInMB > 4) {
+                    LoadingUtils.showErrorDialog(requireContext(), "Video size must be less than or equal to 4 MB.")
+                    return
+                }
+
                 if (videoList.size >= 5) {
                     LoadingUtils.showErrorDialog(requireContext(), "Only 5 videos can be uploaded.")
                     return
@@ -303,6 +313,17 @@ class SymptomUpload : Fragment() {
         }
 
     }
+
+    private fun getFileSizeFromUri(context: Context, uri: Uri): Long {
+        return context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+            val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+            if (sizeIndex != -1) {
+                cursor.moveToFirst()
+                cursor.getLong(sizeIndex)
+            } else 0L
+        } ?: 0L
+    }
+
 
     private fun successDialog() {
         val dialog = Dialog(requireContext())

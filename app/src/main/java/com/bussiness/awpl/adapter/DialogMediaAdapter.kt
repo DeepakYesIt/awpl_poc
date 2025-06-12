@@ -1,5 +1,6 @@
 package com.bussiness.awpl.adapter
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -16,10 +17,18 @@ class DialogMediaAdapter(
     inner class FileViewHolder(private val binding: ItemSelectedFileBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("DefaultLocale")
         fun bind(fileUri: Uri) {
             binding.apply {
                 imageText.text = fileUri.lastPathSegment ?: "Unknown File"
-                imageSizeText.text = "5.3MB"  // TODO: Replace with actual file size logic
+                val sizeInBytes = getFileSizeFromUri(binding.root.context, fileUri)
+                val sizeText = if (sizeInBytes >= 1024 * 1024) {
+                    String.format("%.2f MB", sizeInBytes / (1024f * 1024f))
+                } else {
+                    String.format("%.1f KB", sizeInBytes / 1024f)
+                }
+                imageSizeText.text = sizeText
+
 
                 when (type) {
                     "video" -> imageView.setImageResource(R.drawable.video_svg)
@@ -55,4 +64,15 @@ class DialogMediaAdapter(
             notifyItemRangeChanged(position, files.size)
         }
     }
+
+    private fun getFileSizeFromUri(context: android.content.Context, uri: Uri): Long {
+        return context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+            val sizeIndex = cursor.getColumnIndex(android.provider.OpenableColumns.SIZE)
+            if (sizeIndex != -1) {
+                cursor.moveToFirst()
+                cursor.getLong(sizeIndex)
+            } else 0L
+        } ?: 0L
+    }
+
 }
