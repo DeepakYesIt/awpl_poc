@@ -116,6 +116,18 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="missedAppointmentFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="998" />
+                            <option name="y" value="366" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="notificationFragment">
                     <value>
                       <LayoutPositions>

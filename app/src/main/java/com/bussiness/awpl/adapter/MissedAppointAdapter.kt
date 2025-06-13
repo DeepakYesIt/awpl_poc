@@ -13,13 +13,13 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class AppointmentAdapter(
+class MissedAppointAdapter(
     private var appointmentList: MutableList<UpcomingModel>,
     private val onCancelClick: (UpcomingModel) -> Unit,
     private val onRescheduleClick: (UpcomingModel) -> Unit,
     private val onInfoClick: (UpcomingModel, View) -> Unit,
     private val startAppoitmentClick :(UpcomingModel) ->Unit
-    ) : RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder>() {
+) : RecyclerView.Adapter<MissedAppointAdapter.AppointmentViewHolder>() {
 
     inner class AppointmentViewHolder(private val binding: ItemAppointmentBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -28,7 +28,7 @@ class AppointmentAdapter(
                 doctorName.text = appointment.doctorName
                 dateTxt.text = appointment.date
                 timeTxt.text = appointment.time
-              //  doctorImage.setImageResource(appointment.doctorImage)
+                //  doctorImage.setImageResource(appointment.doctorImage)
                 if(isCurrentTimeInRange(appointment.time)){
                     twoBtn.visibility=View.GONE
                     startAppointmentBtn.visibility =View.VISIBLE
@@ -56,6 +56,14 @@ class AppointmentAdapter(
         }
     }
 
+    fun removeAppointment(appointment: UpcomingModel) {
+        val position = appointmentList.indexOf(appointment)
+        if (position != -1) {
+            appointmentList.removeAt(position)
+            notifyItemRemoved(position)
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppointmentViewHolder {
         val binding = ItemAppointmentBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
@@ -67,12 +75,14 @@ class AppointmentAdapter(
         holder.bind(appointmentList[position])
     }
 
+
     override fun getItemCount(): Int = appointmentList.size
 
-     fun updateAdapter(appointmentList: MutableList<UpcomingModel>){
-         this.appointmentList =appointmentList
-         notifyDataSetChanged()
-     }
+    fun updateAdapter(appointmentList: MutableList<UpcomingModel>){
+        this.appointmentList =appointmentList
+        notifyDataSetChanged()
+    }
+
 
     fun isCurrentTimeInRange(timeRange: String): Boolean {
         try {

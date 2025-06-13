@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.compose.ui.graphics.Color
@@ -54,28 +55,6 @@ class ScheduleFragment : Fragment() {
     private var isSelected = false
     private var filter ="all"
 
-    private val appointmentList = listOf(
-        AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM","Scheduled Call Consultations","", R.drawable.doctor_bg_icon),
-        AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM","Symptom Upload Consultations","Thu May 14", R.drawable.doctor_bg_icon),
-        AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM","Symptom Upload Consultations","Thu May 14", R.drawable.doctor_bg_icon),
-        AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM","Symptom Upload Consultations","Thu May 14", R.drawable.doctor_bg_icon),
-        AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM","Scheduled Call Consultations","", R.drawable.doctor_bg_icon),
-        AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM","Symptom Upload Consultations","Thu May 14", R.drawable.doctor_bg_icon),
-    )
-
-    private val appointments = listOf(
-        AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM", "","",R.drawable.doctor_bg_icon),
-        AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM", "","",R.drawable.doctor_bg_icon),
-        AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM", "","",R.drawable.doctor_bg_icon),
-        AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM", "","",R.drawable.doctor_bg_icon),
-        AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM", "","",R.drawable.doctor_bg_icon),
-        AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM", "","",R.drawable.doctor_bg_icon),
-        AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM", "","",R.drawable.doctor_bg_icon),
-        AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM", "","",R.drawable.doctor_bg_icon),
-        AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM", "","",R.drawable.doctor_bg_icon),
-        AppointmentModel("Dr. John Doe", "Thu May 14","10:00 - 10:15 AM", "","",R.drawable.doctor_bg_icon),
-    )
-
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -95,6 +74,13 @@ class ScheduleFragment : Fragment() {
             Toast.makeText(requireContext(),"Download Started",Toast.LENGTH_LONG).show()
         }
         viewModel = ViewModelProvider(this)[MyAppointmentViewModel::class.java]
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.homeFragment)
+            }
+        })
+
         clickListener()
         setUpRecyclerView()
         selectTab(selectedTab)
@@ -529,22 +515,6 @@ class ScheduleFragment : Fragment() {
             show()
         }
     }
-
-    private fun showTemporaryData() {
-        binding.apply {
-            noDataView.visibility = View.VISIBLE
-            recyclerView.visibility = View.GONE
-
-//            lifecycleScope.launch {
-//                delay(3000)
-//                noDataView.visibility = View.GONE
-//                recyclerView.visibility = View.VISIBLE
-//            }
-        }
-    }
-
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()
