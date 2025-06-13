@@ -253,7 +253,7 @@ class HomeActivity : AppCompatActivity() {
                 R.id.basicInfoScreen2,
                 R.id.scheduledCallConsultation2 -> {
                     binding.toolbar.visibility = View.GONE
-                    binding.customBottomNav.visibility = View.GONE
+                       binding.customBottomNav.visibility = View.GONE
                 }
 
                 R.id.videoCallFragment -> {
@@ -274,7 +274,9 @@ class HomeActivity : AppCompatActivity() {
             if(it.hasExtra("fileUrl") && it.hasExtra("date")){
                 fileUrl = intent.getStringExtra("fileUrl").toString()
                 date = intent.getStringExtra("date").toString()
-                downloadReportDialog()
+                if(fileUrl != null && date != null &&fileUrl.isNotEmpty() && date.isNotEmpty()) {
+                    downloadReportDialog()
+                }
             }
             else if(it.hasExtra("doctor_name")&& it.hasExtra("date")) {
                 val dialog = DialogStartAppointment(this,intent.getStringExtra("doctor_name").toString() ,
