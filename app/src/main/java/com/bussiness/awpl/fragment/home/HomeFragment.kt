@@ -58,6 +58,7 @@ class HomeFragment : Fragment() {
     private lateinit var diseaseList : MutableList<DiseaseModel>
     private var appoitmentId :Int =0
     private var startAppointment :Int =0
+    private var startTime :String =""
     private var doctorName :String =""
 
     private val healthJourneyList = listOf(
@@ -92,10 +93,11 @@ class HomeFragment : Fragment() {
 //        }
 
         binding.startAppointmentBtn.setOnClickListener {
-
             if(startAppointment !=0) {
                 lifecycleScope.launch {
+
                     LoadingUtils.showDialog(requireContext(),false)
+
                     homeViewModel.createChannel(startAppointment).collect {
                         when(it){
                             is NetworkResult.Success ->{
@@ -133,22 +135,17 @@ class HomeFragment : Fragment() {
     }
 
     private fun callingCallJoinedApi(startAppointment: Int, intent: Intent) {
-
         lifecycleScope.launch {
             homeViewModel.callJoined(startAppointment).collect{
                 when(it){
                     is NetworkResult.Success ->{
                         LoadingUtils.hideDialog()
-
                         startActivity(intent)
-
                     }
                     is NetworkResult.Error ->{
-
                         LoadingUtils.hideDialog()
                     }
                     else ->{
-
                     }
                 }
             }
@@ -206,10 +203,11 @@ class HomeFragment : Fragment() {
 
         data?.startAppointDetails?.let {
             startAppointment = it.id
-           binding.llTop.visibility = View.VISIBLE
-           binding.stDoctorName.setText(it.doctorName.toString())
+            startTime = it.time
+            binding.llTop.visibility = View.VISIBLE
+            binding.stDoctorName.setText(it.doctorName.toString())
             doctorName = it.doctorName
-           binding.tvDate.setText(it.date)
+            binding.tvDate.setText(it.date)
            binding.tvTime.setText(it.time)
             startCountdown(it.time)
             Log.d("TESTING_URL",AppConstant.Base_URL+ MultipartUtil.ensureStartsWithSlash(it.doctorImage))
@@ -409,6 +407,73 @@ class HomeFragment : Fragment() {
     }
 
 
+//    private fun startCountdown(timeRange: String) {
+//        countdownJob?.cancel()
+//
+//        countdownJob = CoroutineScope(Dispatchers.IO).launch {
+//            try {
+//                val parts = timeRange.trim().split("-")
+//                if (parts.size != 2) {
+//                    showCountdownMessage("Invalid time range")
+//                    return@launch
+//                }
+//
+//                val startTimeRaw = parts[0].trim()              // "08:00"
+//                val endTimePart = parts[1].trim()               // "08:15 AM"
+//                val amPm = endTimePart.takeLast(2).uppercase(Locale.getDefault()) // "AM" or "PM"
+//                val fullStartTime = "$startTimeRaw $amPm"       // "08:00 AM"
+//
+//                val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
+//                val parsedStartTime = try {
+//                    sdf.parse(fullStartTime)
+//                } catch (e: Exception) {
+//                    null
+//                }
+//
+//                if (parsedStartTime == null) {
+//                    showCountdownMessage("Invalid time format")
+//                    return@launch
+//                }
+//
+//                val calendarNow = Calendar.getInstance()
+//                val calendarTarget = Calendar.getInstance().apply {
+//                    time = parsedStartTime
+//                    set(Calendar.YEAR, calendarNow.get(Calendar.YEAR))
+//                    set(Calendar.MONTH, calendarNow.get(Calendar.MONTH))
+//                    set(Calendar.DAY_OF_MONTH, calendarNow.get(Calendar.DAY_OF_MONTH))
+//                    if (before(calendarNow)) {
+//                        add(Calendar.DAY_OF_MONTH, 1)
+//                    }
+//                }
+//
+//                while (true) {
+//                    val now = Calendar.getInstance()
+//                    val millisLeft = calendarTarget.timeInMillis - now.timeInMillis
+//
+//                    if (millisLeft <= 0) {
+//                        withContext(Dispatchers.Main) {
+//                            binding.startAppointmentBtn.text= "Start Appointment"
+//                        }
+//                        break
+//                    }
+//
+//                    val minutes = (millisLeft / 1000) / 60
+//                    val seconds = (millisLeft / 1000) % 60
+//
+//                    withContext(Dispatchers.Main) {
+//                        binding.startAppointmentBtn.text =
+//                            String.format("Start appointment in %02d:%02d min", minutes, seconds)
+//                    }
+//
+//                    delay(1000)
+//                }
+//            } catch (e: Exception) {
+//                Log.e("COUNTDOWN", "Unexpected error: ${e.message}")
+//                showCountdownMessage("Something went wrong")
+//            }
+//        }
+//    }
+
     private fun startCountdown(timeRange: String) {
         countdownJob?.cancel()
 
@@ -420,10 +485,10 @@ class HomeFragment : Fragment() {
                     return@launch
                 }
 
-                val startTimeRaw = parts[0].trim()              // "08:00"
-                val endTimePart = parts[1].trim()               // "08:15 AM"
+                val startTimeRaw = parts[0].trim() // "08:00"
+                val endTimePart = parts[1].trim()  // "08:15 AM"
                 val amPm = endTimePart.takeLast(2).uppercase(Locale.getDefault()) // "AM" or "PM"
-                val fullStartTime = "$startTimeRaw $amPm"       // "08:00 AM"
+                val fullStartTime = "$startTimeRaw $amPm" // "08:00 AM"
 
                 val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
                 val parsedStartTime = try {
@@ -448,13 +513,24 @@ class HomeFragment : Fragment() {
                     }
                 }
 
+                val initialMillisLeft = calendarTarget.timeInMillis - calendarNow.timeInMillis
+
+                if (initialMillisLeft > 10 * 60 * 1000 || initialMillisLeft <= 0) {
+                    // If more than 10 minutes left or already passed, don't show countdown
+                    withContext(Dispatchers.Main) {
+                        binding.startAppointmentBtn.text = "Start Appointment"
+                    }
+                    return@launch
+                }
+
+                // Countdown loop
                 while (true) {
                     val now = Calendar.getInstance()
                     val millisLeft = calendarTarget.timeInMillis - now.timeInMillis
 
                     if (millisLeft <= 0) {
                         withContext(Dispatchers.Main) {
-                            binding.startAppointmentBtn.text= "Start Appointment"
+                            binding.startAppointmentBtn.text = "Start Appointment"
                         }
                         break
                     }
@@ -475,6 +551,8 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
+
 
     private suspend fun showCountdownMessage(message: String) {
         withContext(Dispatchers.Main) {

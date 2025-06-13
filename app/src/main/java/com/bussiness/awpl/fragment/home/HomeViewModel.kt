@@ -63,6 +63,7 @@ class HomeViewModel @Inject constructor(private var repository: AwplRepository):
         }
 
     }
+
     suspend fun createChannel(appointmentId: Int): Flow<NetworkResult<AgoraCallModel>>{
         return repository.createChannel(appointmentId).onEach {
 

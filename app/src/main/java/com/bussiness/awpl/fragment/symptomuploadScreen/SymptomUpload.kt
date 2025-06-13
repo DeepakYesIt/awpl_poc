@@ -54,24 +54,59 @@ class SymptomUpload : Fragment() {
     private lateinit var pdfAdapter: MediaAdapter
     private val imagePickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val uri: Uri? = result.data?.data
+//            if (result.resultCode == Activity.RESULT_OK) {
+//
+//
+//                val uri: Uri? = result.data?.data
+//
+//                uri?.let {
+//                    if(currentType =="image"&& MultipartUtil.isFileLargerThan2048KB(requireContext(),uri)){
+//                       LoadingUtils.showErrorDialog(requireContext(),"Please upload an image that is less than 2 MB in size.")
+//                    }
+//                    else if(currentType =="video" && MultipartUtil.isFileLargerThan5MB(requireContext(),uri)){
+//                        LoadingUtils.showErrorDialog(requireContext(),"Please upload an video that is less than 5 MB in size.")
+//                    }
+//                    else if(currentType == "PDF" && MultipartUtil.isFileLargerThan5MB(requireContext(),uri)){
+//                        LoadingUtils.showErrorDialog(requireContext(),"Please upload an pdf that is less than 5 MB in size.")
+//                    }
+//                    else {
+//                        mediaUploadDialog?.handleSelectedFile(it)
+//                    }
+//                }
+//            }
 
-                uri?.let {
-                    if(currentType =="image"&& MultipartUtil.isFileLargerThan2048KB(requireContext(),uri)){
-                       LoadingUtils.showErrorDialog(requireContext(),"Please upload an image that is less than 2048 KB in size.")
+            if (result.resultCode == Activity.RESULT_OK) {
+                val selectedUris = mutableListOf<Uri>()
+
+                // Check if multiple files are selected (ClipData)
+                val clipData = result.data?.clipData
+                if (clipData != null) {
+                    val count = clipData.itemCount
+                    for (i in 0 until count) {
+                        val uri = clipData.getItemAt(i).uri
+                        selectedUris.add(uri)
                     }
-                    else if(currentType =="video" && MultipartUtil.isFileLargerThan10MB(requireContext(),uri)){
-                        LoadingUtils.showErrorDialog(requireContext(),"Please upload an video that is less than 10240 KB in size.")
+                } else {
+                    // If only one file is selected (single Uri)
+                    result.data?.data?.let { uri ->
+                        selectedUris.add(uri)
                     }
-                    else if(currentType == "PDF" && MultipartUtil.isFileLargerThan5MB(requireContext(),uri)){
-                        LoadingUtils.showErrorDialog(requireContext(),"Please upload an pdf that is less than 5120 KB in size.")
-                    }
-                    else {
-                        mediaUploadDialog?.handleSelectedFile(it)
+                }
+
+                // Now iterate through selectedUris to process the files
+                selectedUris.forEach { uri ->
+                    if (currentType == "image" && MultipartUtil.isFileLargerThan2048KB(requireContext(), uri)) {
+                        LoadingUtils.showErrorDialog(requireContext(), "Please upload an image that is less than 2 MB in size.")
+                    } else if (currentType == "video" && MultipartUtil.isFileLargerThan5MB(requireContext(), uri)) {
+                        LoadingUtils.showErrorDialog(requireContext(), "Please upload a video that is less than 5 MB in size.")
+                    } else if (currentType == "PDF" && MultipartUtil.isFileLargerThan5MB(requireContext(), uri)) {
+                        LoadingUtils.showErrorDialog(requireContext(), "Please upload a PDF that is less than 5 MB in size.")
+                    } else {
+                        mediaUploadDialog?.handleSelectedFile(uri)
                     }
                 }
             }
+
         }
     private var diseaseId :Int = 0
     private var currentType: String = "" // Store type of media selected
@@ -228,7 +263,12 @@ class SymptomUpload : Fragment() {
                     addCategory(Intent.CATEGORY_OPENABLE)
                 }
             }
-            else -> Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI) // Default image
+         //   else -> Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI) // Default image
+          else -> Intent(Intent.ACTION_GET_CONTENT).apply {
+              setType("image/*")
+              putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+              addCategory(Intent.CATEGORY_OPENABLE)
+          }
         }
         imagePickerLauncher.launch(intent)
     }

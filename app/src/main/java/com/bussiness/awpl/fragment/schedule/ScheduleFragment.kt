@@ -169,7 +169,6 @@ class ScheduleFragment : Fragment() {
                   recyclerView.visibility = View.GONE
               }
           }
-
           appointmentAdapter.updateAdapter(viewModel.upcomingList)
       }else {
           lifecycleScope.launch {
@@ -184,7 +183,8 @@ class ScheduleFragment : Fragment() {
                               if (data.size > 0) {
                                   binding.noDataView.visibility = View.GONE
                                   binding.recyclerView.visibility = View.VISIBLE
-                                  appointmentAdapter.updateAdapter(data)
+                                  viewModel.upcomingList = data
+                                  appointmentAdapter.updateAdapter(viewModel.upcomingList)
                               } else {
                                   binding.apply {
                                       noDataView.visibility = View.VISIBLE
