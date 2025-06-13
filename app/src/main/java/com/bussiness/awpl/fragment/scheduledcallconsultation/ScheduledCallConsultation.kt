@@ -72,13 +72,9 @@ class ScheduledCallConsultation : Fragment() {
 
             // Now iterate through selectedUris to process the files
             selectedUris.forEach { uri ->
-                if (currentType == "image" && MultipartUtil.isFileLargerThan2048KB(requireContext(), uri)) {
+                if ( MultipartUtil.isFileLargerThan2048KB(requireContext(), uri)) {
                     LoadingUtils.showErrorDialog(requireContext(), "Please upload an image that is less than 2 MB in size.")
-                } else if (currentType == "video" && MultipartUtil.isFileLargerThan5MB(requireContext(), uri)) {
-                    LoadingUtils.showErrorDialog(requireContext(), "Please upload a video that is less than 5 MB in size.")
-                } else if (currentType == "PDF" && MultipartUtil.isFileLargerThan5MB(requireContext(), uri)) {
-                    LoadingUtils.showErrorDialog(requireContext(), "Please upload a PDF that is less than 5 MB in size.")
-                } else {
+                }  else {
                     mediaUploadDialog?.handleSelectedFile(uri)
                 }
             }
