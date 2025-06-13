@@ -5,6 +5,7 @@
     android:id="@+id/drawerMenuLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     android:background="@color/white">
 
     <ScrollView

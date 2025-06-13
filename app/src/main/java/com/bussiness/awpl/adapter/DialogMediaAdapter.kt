@@ -33,7 +33,7 @@ class DialogMediaAdapter(
                 when (type) {
                     "video" -> imageView.setImageResource(R.drawable.video_svg)
                     "pdf" -> imageView.setImageResource(R.drawable.pdf_ic)
-                    else -> imageView.setImageResource(R.drawable.imageview_icon)
+                    else -> imageView.setImageURI(fileUri)?:(R.drawable.imageview_icon)
                 }
 
                 crossBtn.setOnClickListener {

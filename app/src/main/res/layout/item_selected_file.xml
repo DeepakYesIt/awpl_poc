@@ -21,8 +21,8 @@
         <!-- Image Thumbnail -->
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_32sdp"
+            android:layout_height="@dimen/_28sdp"
             android:src="@drawable/imageview_icon"
             android:layout_marginEnd="@dimen/_10sdp"/>
 

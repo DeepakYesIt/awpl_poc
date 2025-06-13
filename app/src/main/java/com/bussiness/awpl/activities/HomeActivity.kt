@@ -83,6 +83,13 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        window.apply {
+            decorView.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            statusBarColor = Color.TRANSPARENT
+        }
+
         BuildConfig.BASE_URL
         sessionManager = SessionManager(this)
         sessionManager?.applySavedLanguage()
@@ -517,10 +524,6 @@ class HomeActivity : AppCompatActivity() {
             closeDrawer()
         }
 
-        missedAppointment.setOnClickListener {
-            navController.navigate(R.id.missedAppointmentFragment)
-            closeDrawer()
-        }
 
         resources.setOnClickListener {
 

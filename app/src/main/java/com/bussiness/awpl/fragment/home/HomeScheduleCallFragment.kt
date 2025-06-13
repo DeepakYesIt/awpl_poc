@@ -54,14 +54,42 @@ class HomeScheduleCallFragment : Fragment() {
     private var type :String =""
 
     private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val uri: Uri? = result.data?.data
-                uri?.let {
-                    // Show in dialog first
-                    mediaUploadDialog?.handleSelectedFile(it)
+//        if (result.resultCode == Activity.RESULT_OK) {
+//            result.data?.data?.let { uri ->
+//                mediaUploadDialog?.handleSelectedFile(uri)
+//            }
+//        }
+
+        if (result.resultCode == Activity.RESULT_OK) {
+            val selectedUris = mutableListOf<Uri>()
+
+            // Check if multiple files are selected (ClipData)
+            val clipData = result.data?.clipData
+            if (clipData != null) {
+                val count = clipData.itemCount
+                for (i in 0 until count) {
+                    val uri = clipData.getItemAt(i).uri
+                    selectedUris.add(uri)
+                }
+            } else {
+                // If only one file is selected (single Uri)
+                result.data?.data?.let { uri ->
+                    selectedUris.add(uri)
+                }
+            }
+
+            // Now iterate through selectedUris to process the files
+            selectedUris.forEach { uri ->
+                if ( MultipartUtil.isFileLargerThan2048KB(requireContext(), uri)) {
+                    LoadingUtils.showErrorDialog(requireContext(), "Please upload an image that is less than 2 MB in size.")
+                }  else {
+                    mediaUploadDialog?.handleSelectedFile(uri)
                 }
             }
         }
+
+
+    }
 
 
     override fun onCreateView(
@@ -246,7 +274,11 @@ class HomeScheduleCallFragment : Fragment() {
     }
 
     private fun openImagePicker() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            setType("image/*")
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            addCategory(Intent.CATEGORY_OPENABLE)
+        }
         imagePickerLauncher.launch(intent)
     }
 
