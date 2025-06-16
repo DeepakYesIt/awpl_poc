@@ -511,7 +511,7 @@ class ScheduleFragment : Fragment() {
             btnClose.setOnClickListener { dialog.dismiss() }
             btnNo.setOnClickListener { dialog.dismiss() }
             btnYes.setOnClickListener {
-                findNavController().navigate(R.id.appointmentBooking)
+              //  findNavController().navigate(R.id.appointmentBooking)
                 dialog.dismiss()
             }
         }

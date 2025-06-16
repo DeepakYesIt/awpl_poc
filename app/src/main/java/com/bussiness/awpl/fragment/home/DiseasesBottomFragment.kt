@@ -97,12 +97,21 @@ class DiseasesBottomFragment : BottomSheetDialogFragment() {
     }
 
     private fun callingFilterTask(diseaseName: String) {
-       var newList = diseaseFilter.filter {
+
+        var newList = diseaseFilter.filter {
             it.name.startsWith(diseaseName,ignoreCase = true)
+        }
+
+        if(newList.isEmpty()){
+           binding.tvNotFound.visibility =View.VISIBLE
+        }
+        else{
+            binding.tvNotFound.visibility =View.GONE
         }
 
         bottomCardDiseaseAdapter.updateAdapter(newList)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
@@ -166,7 +175,7 @@ class DiseasesBottomFragment : BottomSheetDialogFragment() {
             findNavController().navigate( R.id.doctorConsultationFragment,bundle)
         }
         else{
-             findNavController().navigate( R.id.onlineConsultationFragment,bundle)
+            findNavController().navigate( R.id.onlineConsultationFragment,bundle)
          }
 
     }

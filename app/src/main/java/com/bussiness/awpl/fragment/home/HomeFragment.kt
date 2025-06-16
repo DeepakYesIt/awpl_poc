@@ -1,6 +1,8 @@
 package com.bussiness.awpl.fragment.home
 
 import android.app.Dialog
+import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -100,6 +102,7 @@ class HomeFragment : Fragment() {
         setupRecyclerViews()
         clickListener()
         callingHomeApi()
+        callingHomeDataBackWork()
 
 //        binding.swipeRefreshLayout.setOnRefreshListener {
 //            // Reload data here
@@ -109,30 +112,24 @@ class HomeFragment : Fragment() {
         binding.startAppointmentBtn.setOnClickListener {
             if(startAppointment !=0) {
                 lifecycleScope.launch {
-
-                    LoadingUtils.showDialog(requireContext(),false)
-
+                      LoadingUtils.showDialog(requireContext(),false)
                     homeViewModel.createChannel(startAppointment).collect {
                         when(it){
                             is NetworkResult.Success ->{
                                 it.data?.let {
-                                    val intent =
-                                        Intent(requireContext(), VideoCallActivity::class.java)
+                                    val intent = Intent(requireContext(), VideoCallActivity::class.java)
                                     intent.putExtra(AppConstant.APPID, it.appId)
                                     intent.putExtra(AppConstant.AuthToken, it.token)
                                     intent.putExtra(AppConstant.CHANNEL_NAME, it.channelName)
                                     intent.putExtra(AppConstant.uid, it.uid)
                                     intent.putExtra(AppConstant.DOCTOR, doctorName)
-                                     intent.putExtra(AppConstant.TIME,homeViewModel.startAppoitmentTime)
+                                    intent.putExtra(AppConstant.TIME,homeViewModel.startAppoitmentTime)
                                     callingCallJoinedApi(startAppointment,intent)
                                 }
-
-
                             }
                             is NetworkResult.Error ->{
                                 LoadingUtils.hideDialog()
                                 LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
-
                             }
                             else ->{
 
@@ -142,10 +139,20 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    // callingDiseaseApi()
+
+    }
 
 
-       // callingDiseaseApi()
 
+    private fun callingHomeDataBackWork(){
+        homeViewModel.homeData.observe(viewLifecycleOwner) { data ->
+            if (data != null) {
+                // Update your UI here
+                Log.d("Inside_API","Inside success of Home Fragment")
+                settingDataToUi(data)
+            }
+        }
     }
 
     private fun callingCallJoinedApi(startAppointment: Int, intent: Intent) {
@@ -267,7 +274,6 @@ class HomeFragment : Fragment() {
     private fun tempData(selectedDisease: DiseaseModel) {
 //        val result = if((0..1).random() == 0)"one" else " two"
 
-
         var bundle = Bundle().apply {
             putInt(AppConstant.DISEASE_ID, selectedDisease.id)
         }
@@ -314,13 +320,38 @@ class HomeFragment : Fragment() {
         // Browse Video RecyclerView
         binding.videoRecyclerView.apply {
             browseVideoAdapter = BrowseVideoAdapter(mutableListOf()) { item ->
-               
-            openVideo(item.video_link)
+                if(isYouTubeUrl(item.video_link)){
+                     openYouTubeUrl(requireContext(),item.video_link)
+                }
+                else{
+                   openVideo(item.video_link)
+                }
             }
             adapter = browseVideoAdapter
+
         }
 
     }
+
+    fun openYouTubeUrl(context: Context, url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        intent.setPackage("com.google.android.youtube") // Try YouTube app
+        try {
+            context.startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            // If YouTube app not found, open in browser
+            intent.setPackage(null)
+            context.startActivity(intent)
+        }
+    }
+
+
+    fun isYouTubeUrl(url: String): Boolean {
+        val youtubeRegex = Regex("^(https?://)?(www\\.)?(youtube\\.com|youtu\\.be)/.+$")
+        return youtubeRegex.matches(url.trim())
+    }
+
+
     private fun openVideo(videoUrl :String){
         val intent = Intent(Intent.ACTION_VIEW)
         intent.setDataAndType(Uri.parse(videoUrl), "video/*")
@@ -346,7 +377,6 @@ class HomeFragment : Fragment() {
             }
 
             symptomUploadBtn.setOnClickListener {
-
                 val bundle = Bundle().apply {
                   //  putSerializable(AppConstant.DISEASE_LIST , ArrayList(diseaseList))
                     putString("type","symptom")
@@ -405,7 +435,7 @@ class HomeFragment : Fragment() {
             btnNo.setOnClickListener { dialog.dismiss() }
             btnYes.setOnClickListener {
                 dialog.dismiss()
-                findNavController().navigate(R.id.appointmentBooking)
+              //  findNavController().navigate(R.id.appointmentBooking)
             }
         }
 
@@ -584,6 +614,21 @@ class HomeFragment : Fragment() {
             binding.startAppointmentBtn.text = message
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        // Start periodic fetch when HomeFragment is visible
+        callingHomeApi()
+        homeViewModel.startPeriodicFetch()
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Stop the periodic fetch when fragment is not visible
+        homeViewModel.stopPeriodicFetch()
+    }
+
 
 
 
