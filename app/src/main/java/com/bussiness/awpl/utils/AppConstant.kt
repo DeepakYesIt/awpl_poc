@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 object AppConstant {
+    val PDF: String?="PDF"
     val Chat :String ="chat"
     val DOCTOR: String ="DOCTOR"
     val uid: String? ="uid"

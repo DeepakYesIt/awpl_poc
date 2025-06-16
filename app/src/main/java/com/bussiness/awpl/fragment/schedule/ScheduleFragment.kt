@@ -472,7 +472,6 @@ class ScheduleFragment : Fragment() {
             }
         }
 
-
         // Handle dismiss listener to reset UI
         popupWindow.setOnDismissListener {
             isSelected = false

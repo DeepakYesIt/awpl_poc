@@ -154,7 +154,7 @@ interface ZyvoApi {
     @GET("patientNotifications")
     suspend fun patientNotification() : Response<JsonObject>
 
-    @POST("markAsReadPatientNotification")
+    @GET("markAllAsReadPatientNotifications")
     suspend fun  markAllRead() : Response<JsonObject>
 
     @POST("reschedule_appoitnement")

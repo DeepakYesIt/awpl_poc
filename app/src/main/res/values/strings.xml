@@ -414,4 +414,5 @@
     <string name="done">Done</string>
     <string name="your_appointment_starts_in_n_15_minutes">Your Appointment Starts in\n 15 Minutes!</string>
     <string name="missed_appointment">Missed Appointment</string>
+    <string name="read_privacy_term_condition">I hereby declare that I have read the Privacy Policy and the Terms and Conditions.</string>
 </resources>

@@ -37,6 +37,9 @@
         tools:replace="android:theme"
         tools:targetApi="34">
         <activity
+            android:name=".activities.PdfActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.RescheduleDialogActivity"
             android:exported="true" />
         <activity
@@ -45,8 +48,7 @@
         <activity
             android:name=".activities.DownloadDialogActivity"
             android:exported="true"
-            android:launchMode="singleTask"
-            />
+            android:launchMode="singleTask" />
         <activity
             android:name=".activities.CallActivity"
             android:exported="false" />

@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bussiness.awpl.activities.PdfActivity
 import com.bussiness.awpl.adapter.MyPersecptionAdapter
 import com.bussiness.awpl.databinding.FragmentMyPrescriptionBinding
 import com.bussiness.awpl.model.PrepareData
@@ -72,38 +73,45 @@ class MyPrescriptionFragment : Fragment() {
                 }
             },
             onViewPdf = { pdfLink ->
-                Log.d("TESTING_URL",AppConstant.Base_URL+pdfLink.toString())
+                //Log.d("TESTING_URL",AppConstant.Base_URL+pdfLink.toString())
 
-                try {
-                    if (pdfLink.isBlank()) {
-                        Toast.makeText(context, "Invalid PDF link", Toast.LENGTH_SHORT).show()
-                        return@MyPersecptionAdapter
-                    }
-
-                    val uri = Uri.parse(pdfLink)
-
-                    // Check if it's a web link
-                    if (uri.scheme == "http" || uri.scheme == "https") {
-                        // Always open in browser for remote PDFs
-                        val browserIntent = Intent(Intent.ACTION_VIEW, uri)
-                        browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        context?.startActivity(browserIntent)
-                    } else {
-                        // Try to open local PDF with viewer
-                        val intent = Intent(Intent.ACTION_VIEW)
-                        intent.setDataAndType(uri, "application/pdf")
-                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        if (context?.packageManager?.let { intent.resolveActivity(it) } != null) {
-                            startActivity(intent)
-                        } else {
-                            Toast.makeText(context, "No app found to open PDF", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Toast.makeText(context, "Could not open PDF: ${e.message}", Toast.LENGTH_LONG).show()
+                if(pdfLink != null && pdfLink.isNotEmpty()){
+                    var intent = Intent(requireContext(),PdfActivity::class.java)
+                    Log.d("TESTING_PDF",pdfLink)
+                    intent.putExtra(AppConstant.PDF,pdfLink)
+                    startActivity(intent)
                 }
+
+//                try {
+//                    if (pdfLink.isBlank()) {
+//                        Toast.makeText(context, "Invalid PDF link", Toast.LENGTH_SHORT).show()
+//                        return@MyPersecptionAdapter
+//                    }
+//
+//                    val uri = Uri.parse(pdfLink)
+//
+//                    // Check if it's a web link
+//                    if (uri.scheme == "http" || uri.scheme == "https") {
+//                        // Always open in browser for remote PDFs
+//                        val browserIntent = Intent(Intent.ACTION_VIEW, uri)
+//                        browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                        context?.startActivity(browserIntent)
+//                    } else {
+//                        // Try to open local PDF with viewer
+//                        val intent = Intent(Intent.ACTION_VIEW)
+//                        intent.setDataAndType(uri, "application/pdf")
+//                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+//                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                        if (context?.packageManager?.let { intent.resolveActivity(it) } != null) {
+//                            startActivity(intent)
+//                        } else {
+//                            Toast.makeText(context, "No app found to open PDF", Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+//                } catch (e: Exception) {
+//                    e.printStackTrace()
+//                    Toast.makeText(context, "Could not open PDF: ${e.message}", Toast.LENGTH_LONG).show()
+//                }
             }
         )
 

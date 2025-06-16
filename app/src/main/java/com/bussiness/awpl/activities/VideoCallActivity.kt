@@ -27,6 +27,9 @@ import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.video.VideoCanvas
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 
 class VideoCallActivity : AppCompatActivity() {
@@ -53,6 +56,9 @@ class VideoCallActivity : AppCompatActivity() {
     private var callTimerRunnable: Runnable? = null
     private var frontOpen = true
 
+    private var countdownHandler: Handler? = null
+    private var countdownRunnable: Runnable? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -74,9 +80,15 @@ class VideoCallActivity : AppCompatActivity() {
         startTimeCall = intent.getStringExtra(AppConstant.TIME).toString()
         var doctorTv = findViewById<TextView>(R.id.tv_doctor)
         doctorTv.setText(doctorName)
-        Log.d("TESTING_VIDEO_LOG","appid "+appId)
-        Log.d("TESTING_VIDEO_LOG","appid "+token)
-        Log.d("TESTING_VIDEO_LOG","channelName"+channelName)
+        startElapsedCountdownFromStartTime(startTimeCall)
+        try {
+            Log.d("TESTING_VIDEO_LOG","appid "+appId)
+            Log.d("TESTING_VIDEO_LOG","appid "+token)
+            Log.d("TESTING_VIDEO_LOG","channelName"+channelName)
+            Log.d("TESTING_TIME",startTimeCall.toString())
+        }catch (e:Exception){
+
+        }
 
 
         if (hasPermissions()) {
@@ -91,57 +103,59 @@ class VideoCallActivity : AppCompatActivity() {
 
     }
 
-//    private fun startCallDurationTimer()  {
-//        callStartTime = System.currentTimeMillis()
-//        callTimerHandler = Handler(Looper.getMainLooper())
-//        callTimerRunnable = object : Runnable {
-//            override fun run() {
-//                val elapsedMillis = System.currentTimeMillis() - callStartTime
-//                val seconds = (elapsedMillis / 1000) % 60
-//                val minutes = (elapsedMillis / (1000 * 60)) % 60
-//                val hours = (elapsedMillis / (1000 * 60 * 60))
-//
-//                val timeString = String.format("Call : %02d:%02d:%02d", hours, minutes, seconds)
-//                runOnUiThread {
-//                    findViewById<TextView>(R.id.tv_timer)?.text = timeString
-//                }
-//
-//                callTimerHandler?.postDelayed(this, 1000)
-//            }
-//        }
-//        callTimerHandler?.post(callTimerRunnable!!)
-//    }
-
-
-
-    private fun startCallDurationTimer(startTimeCall: String) {
-        callStartTimeMillis = System.currentTimeMillis()
-
-        callTimerHandler = Handler(Looper.getMainLooper())
-        callTimerRunnable = object : Runnable {
-            override fun run() {
-                val elapsedMillis = System.currentTimeMillis() - callStartTimeMillis
-
-                val minutes = (elapsedMillis / (1000 * 60))
-                val seconds = (elapsedMillis / 1000) % 60
-
-                val timeString = String.format("Call : %02d:%02d", minutes, seconds)
-                findViewById<TextView>(R.id.tv_timer)?.text = timeString
-
-                callTimerHandler?.postDelayed(this, 1000)
-            }
-        }
-        callTimerHandler?.post(callTimerRunnable!!)
-    }
-
     private fun hasPermissions() = PermissionsHelper.hasPermissions(this)
     private fun requestPermissions() = PermissionsHelper.requestPermissions(this)
 
-    private fun stopCallDurationTimer() {
-        callTimerHandler?.removeCallbacks(callTimerRunnable ?: return)
-        callTimerHandler = null
-        callTimerRunnable = null
+
+    private fun startElapsedCountdownFromStartTime(timeRange: String) {
+        val formatter = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
+        formatter.isLenient = false
+        try {
+            val parts = timeRange.trim().split("-")
+            if (parts.size != 2) throw IllegalArgumentException("Invalid time range format")
+            val startTimeStr = parts[0].trim() + " " + parts[1].trim().takeLast(2) // e.g., "06:00 PM"
+            val startTime = formatter.parse(startTimeStr) ?: throw Exception("Invalid start time")
+
+            // Set the start time to today's date
+            val now = Calendar.getInstance()
+            val startCalendar = Calendar.getInstance().apply {
+                time = startTime
+                set(Calendar.YEAR, now.get(Calendar.YEAR))
+                set(Calendar.MONTH, now.get(Calendar.MONTH))
+                set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH))
+            }
+
+            val startTimeMillis = startCalendar.timeInMillis
+
+            countdownHandler = Handler(Looper.getMainLooper())
+            countdownRunnable = object : Runnable {
+                override fun run() {
+                    val elapsedMillis = System.currentTimeMillis() - startTimeMillis
+                    val clampedElapsed = maxOf(0L, elapsedMillis)
+
+                    val minutes = (clampedElapsed / (1000 * 60))
+                    val seconds = (clampedElapsed / 1000) % 60
+
+                    val timeString = String.format("Elapsed: %02d:%02d", minutes, seconds)
+                    Log.d("TESTING_USER_TIME",timeString)
+                    findViewById<TextView>(R.id.tv_timer)?.text = timeString
+
+                    countdownHandler?.postDelayed(this, 1000)
+                }
+            }
+            countdownHandler?.post(countdownRunnable!!)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Invalid time format", Toast.LENGTH_SHORT).show()
+        }
     }
+    private fun stopElapsedCountdown() {
+        countdownHandler?.removeCallbacks(countdownRunnable!!)
+        countdownHandler = null
+        countdownRunnable = null
+    }
+
+
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -172,7 +186,10 @@ class VideoCallActivity : AppCompatActivity() {
                     runOnUiThread {
                         Log.d("TESTING_NIKUNJ", "Joined: $uid")
                         setupRemoteVideo(uid)
-                        startCallDurationTimer(startTimeCall)
+
+                        Log.d("TESTING_TIME",startTimeCall.toString())
+                     //   startCallDurationTimer(startTimeCall)
+                        startElapsedCountdownFromStartTime(startTimeCall)
                     }
                 }
 
@@ -180,7 +197,7 @@ class VideoCallActivity : AppCompatActivity() {
                     runOnUiThread {
                         Log.d("TESTING_NIKUNJ", "offline $uid")
                         removeRemoteVideo()
-                        stopCallDurationTimer()
+
                         agoraEngine.leaveChannel()
                         // Finish the call screen
                         finish()
@@ -303,48 +320,25 @@ class VideoCallActivity : AppCompatActivity() {
     }
 
 
-    // new code
-    private fun setupRemoteVideo(uid: Int) {
-        val container = findViewById<FrameLayout>(R.id.remote_video_view)
-        container.removeAllViews()
-
-        val surfaceView = RtcEngine.CreateRendererView(applicationContext)
-        surfaceView.setZOrderMediaOverlay(true)
-
-        // ✅ Set layout params to preserve aspect ratio
-        val params = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            Gravity.CENTER
-        )
-        surfaceView.layoutParams = params
-        surfaceView.keepScreenOn = true
-
-        container.addView(surfaceView)
-
-        // Setup video canvas
-        val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, uid)
-        agoraEngine?.setupRemoteVideo(videoCanvas)
-    }
 
 
 
 
     //olde code
-//    private fun setupRemoteVideo(uid: Int) {
-//
-//        val container = findViewById<FrameLayout>(R.id.remote_video_view)
-//        container.removeAllViews()
-//
-//        val surfaceView = RtcEngine.CreateRendererView(applicationContext)
-//        surfaceView.setZOrderMediaOverlay(true)  // Optional: only if needed
-//        container.addView(surfaceView)
-//
-//        val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.VIEW_SETUP_MODE_REPLACE, uid)
-//        agoraEngine?.setupRemoteVideo(videoCanvas)
-//        setupLocalVideo()
-//
-//    }
+    private fun setupRemoteVideo(uid: Int) {
+
+        val container = findViewById<FrameLayout>(R.id.remote_video_view)
+        container.removeAllViews()
+
+        val surfaceView = RtcEngine.CreateRendererView(applicationContext)
+        surfaceView.setZOrderMediaOverlay(true)  // Optional: only if needed
+        container.addView(surfaceView)
+
+        val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.VIEW_SETUP_MODE_REPLACE, uid)
+        agoraEngine?.setupRemoteVideo(videoCanvas)
+        setupLocalVideo()
+
+    }
 
     private fun removeRemoteVideo() {
         Log.d("TESTING_VIDEO_CALL","ON REMOVING VIDEO CALL")
@@ -371,6 +365,7 @@ class VideoCallActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         leaveChannel()
+        stopElapsedCountdown()
     }
 
     private fun setupUi() {

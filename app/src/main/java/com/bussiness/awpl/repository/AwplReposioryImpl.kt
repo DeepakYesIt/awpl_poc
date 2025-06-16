@@ -715,8 +715,6 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
                     body()?.let { resp ->
                         if (resp.has("status") && resp.get("status").asBoolean) {
                             var obj = resp.get("message").asString
-
-
                             emit(NetworkResult.Success(obj))
                         } else {
                             emit(NetworkResult.Error(resp.get("message").asString))

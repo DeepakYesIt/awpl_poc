@@ -126,8 +126,11 @@ class SummaryScreen : Fragment() {
     private fun clickListener() {
         binding.apply {
             btnNext.setOnClickListener {
-                callingPaymentApi()
-
+                if(binding.checkboxPrivacy.isChecked){
+                    callingPaymentApi()
+                }else{
+                   LoadingUtils.showErrorDialog(requireContext(),"Please agree to the Privacy Policy and Terms & Conditions")
+                }
             }
             arrowIcon.setOnClickListener {
                 if(edtPromoCode.text.toString().isNotEmpty()){
