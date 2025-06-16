@@ -75,7 +75,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private var isArrowUp = false
     private var notificationPermissionThere = false
-    lateinit var img:de.hdodenhof.circleimageview.CircleImageView
+    private lateinit var img:de.hdodenhof.circleimageview.CircleImageView
     lateinit var notification :SwitchCompat
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -84,11 +84,24 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        window.apply {
-            decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            statusBarColor = Color.TRANSPARENT
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(false)
+            val controller = window.insetsController
+            controller?.setSystemBarsAppearance(
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
+
+        window.statusBarColor = Color.TRANSPARENT
+
+
 
         BuildConfig.BASE_URL
         sessionManager = SessionManager(this)
@@ -211,17 +224,17 @@ class HomeActivity : AppCompatActivity() {
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
                 }
-                R.id.scheduleFragment ->{ setToolbar("My Appointments", fab = true)
+                R.id.scheduleFragment ->{ setToolbar("My Appointments", fab = false)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
                     updateBottomNavSelection("schedule")
                 }
-                R.id.resourceFragment ->{ setToolbar("Resources", fab = true)
+                R.id.resourceFragment ->{ setToolbar("Resources", fab = false)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
                     updateBottomNavSelection("resource")
                 }
-                R.id.yourDoctorFragment ->{ setToolbar("Your Doctors", fab = true)
+                R.id.yourDoctorFragment ->{ setToolbar("Your Doctors", fab = false)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
                     updateBottomNavSelection("doctor")
@@ -311,11 +324,11 @@ class HomeActivity : AppCompatActivity() {
                 Log.d("IntentData", "Old: $doctorName @ $whenTime | New: $newDoctor on $newDate at $newTime")
 
                 // Optional: Show dialog
-                if (doctorName != null && !doctorName.isEmpty()) {
-                    if (whenTime != null && !whenTime.isEmpty()) {
-                        if (newDoctor != null && !newDoctor.isEmpty()) {
-                            if (newDate != null && !newDate.isEmpty()) {
-                                if (newTime != null && !newTime.isEmpty()) {
+                if (!doctorName.isNullOrEmpty()) {
+                    if (!whenTime.isNullOrEmpty()) {
+                        if (!newDoctor.isNullOrEmpty()) {
+                            if (!newDate.isNullOrEmpty()) {
+                                if (!newTime.isNullOrEmpty()) {
                                     DownloadRescheduleAppointment(this, doctorName, whenTime, newDoctor, newDate, newTime).show()
                                 }
                             }

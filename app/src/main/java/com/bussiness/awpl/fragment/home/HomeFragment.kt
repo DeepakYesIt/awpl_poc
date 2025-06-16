@@ -82,7 +82,6 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.appointmentBooking)
         }
 
-
         binding.swipeRefreshLayout.setOnRefreshListener {
             // Call your refresh logic here
             refreshData()
@@ -92,6 +91,7 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun refreshData(){
         callingHomeApi()
     }
@@ -145,6 +145,7 @@ class HomeFragment : Fragment() {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun callingHomeDataBackWork(){
         homeViewModel.homeData.observe(viewLifecycleOwner) { data ->
             if (data != null) {
@@ -333,7 +334,7 @@ class HomeFragment : Fragment() {
 
     }
 
-    fun openYouTubeUrl(context: Context, url: String) {
+    private fun openYouTubeUrl(context: Context, url: String) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         intent.setPackage("com.google.android.youtube") // Try YouTube app
         try {
@@ -615,6 +616,7 @@ class HomeFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
         super.onResume()
         // Start periodic fetch when HomeFragment is visible
