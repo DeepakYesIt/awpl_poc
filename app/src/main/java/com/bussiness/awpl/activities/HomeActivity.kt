@@ -83,6 +83,13 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        window.apply {
+            decorView.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            statusBarColor = Color.TRANSPARENT
+        }
+
         BuildConfig.BASE_URL
         sessionManager = SessionManager(this)
         sessionManager?.applySavedLanguage()
@@ -244,6 +251,10 @@ class HomeActivity : AppCompatActivity() {
                     binding.profileIcon.visibility =View.GONE
                 }
                 R.id.prescription_frgament ->{ setToolbar("My Prescriptions", fab = false)
+                    binding.profileIcon.visibility =View.GONE
+                    binding.imgBackProfile.visibility =View.VISIBLE
+                }
+                R.id.missedAppointmentFragment ->{ setToolbar("Missed Appointments",showBottomNav = false, fab = false)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
                 }
@@ -414,7 +425,11 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setToolbar(
-        title: String, showBottomNav: Boolean = true, showBell: Boolean = true, fab: Boolean = false) {
+        title: String,
+        showBottomNav: Boolean = true,
+        showBell: Boolean = true,
+        fab: Boolean = false
+    ) {
         binding.apply {
             toolbar.visibility = View.VISIBLE
             customBottomNav.visibility = if (showBottomNav) View.VISIBLE else View.GONE
@@ -423,11 +438,18 @@ class HomeActivity : AppCompatActivity() {
             imgBackProfile.setImageResource(R.drawable.back_icon)
 
             imgBackProfile.setOnClickListener {
-                findNavController(R.id.nav_host_fragment_home).navigateUp()
+                val goHomeTitles = listOf("Resources", "Your Doctors", "My Appointments")
+                if (title in goHomeTitles) {
+                    findNavController(R.id.nav_host_fragment_home).navigate(R.id.homeFragment)
+                } else {
+                    findNavController(R.id.nav_host_fragment_home).navigateUp()
+                }
             }
-            chatFab.visibility = if (fab) View.GONE else View.GONE
+
+            chatFab.visibility = if (fab) View.VISIBLE else View.GONE
         }
     }
+
 
 
     private fun navigate(destinationId: Int) {
@@ -446,17 +468,17 @@ class HomeActivity : AppCompatActivity() {
         val hindiLang = navigationView.findViewById<CardView>(R.id.hindiLang)
         val imageView = navigationView.findViewById<ImageView>(R.id.iconLanguage)
         val viewProfile = navigationView.findViewById<TextView>(R.id.viewMyProfile)
-        var perception = navigationView.findViewById<LinearLayout>(R.id.llpreceptions)
-        var doctor = navigationView.findViewById<LinearLayout>(R.id.lldoctor)
-        var resources = navigationView.findViewById<LinearLayout>(R.id.llresources)
-        var forMe = navigationView.findViewById<LinearLayout>(R.id.for_me_ll)
-        var forOther = navigationView.findViewById<LinearLayout>(R.id.ll_for_other)
-        var scheduleLayout = navigationView.findViewById<LinearLayout>(R.id.llschedule)
-        var userName = navigationView.findViewById<TextView>(R.id.tv_user_name)
-        img = navigationView.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.profileIcon)
-        userName.setText(SessionManager(this).getUserName() ?: "")
-        var imgIcon = navigationView.findViewById<ImageView>(R.id.arr_sch)
-        var scheduleMain = navigationView.findViewById<LinearLayout>(R.id.ll_schedule_main)
+        val perception = navigationView.findViewById<LinearLayout>(R.id.llpreceptions)
+        val doctor = navigationView.findViewById<LinearLayout>(R.id.lldoctor)
+        val resources = navigationView.findViewById<LinearLayout>(R.id.llresources)
+        val forMe = navigationView.findViewById<LinearLayout>(R.id.for_me_ll)
+        val forOther = navigationView.findViewById<LinearLayout>(R.id.ll_for_other)
+        val scheduleLayout = navigationView.findViewById<LinearLayout>(R.id.llschedule)
+        val userName = navigationView.findViewById<TextView>(R.id.tv_user_name)
+        img = navigationView.findViewById(R.id.profileIcon)
+        userName.text = SessionManager(this).getUserName() ?: ""
+        val imgIcon = navigationView.findViewById<ImageView>(R.id.arr_sch)
+        val scheduleMain = navigationView.findViewById<LinearLayout>(R.id.ll_schedule_main)
 
         Log.d("TESTING_IMAGE",SessionManager(this).getUserImage())
 
@@ -501,6 +523,7 @@ class HomeActivity : AppCompatActivity() {
             updateBottomNavSelection("doctor")
             closeDrawer()
         }
+
 
         resources.setOnClickListener {
 

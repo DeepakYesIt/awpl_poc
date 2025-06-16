@@ -5,6 +5,7 @@
     android:id="@+id/drawerMenuLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     android:background="@color/white">
 
     <ScrollView
@@ -146,9 +147,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/calendar"
-                android:tint="@color/black"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="12dp"/>
+                android:layout_marginEnd="12dp"
+                app:tint="@color/black" />
 
             <TextView
                 android:id="@+id/txtSchedule"
@@ -287,8 +288,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_perception"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:tint="@color/black"
-                android:layout_marginEnd="12dp"/>
+                android:layout_marginEnd="12dp"
+                app:tint="@color/black" />
 
             <TextView
                 android:id="@+id/preceptions_tv"
@@ -308,6 +309,7 @@
                 app:tint="@color/black" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/doctor"
