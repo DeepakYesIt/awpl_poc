@@ -86,7 +86,7 @@ class HomeScheduleCallFragment : Fragment() {
                     mediaUploadDialog?.handleSelectedFile(uri)
                 }
             }
-        }
+   }
 
 
     }
@@ -124,11 +124,9 @@ class HomeScheduleCallFragment : Fragment() {
                 return
             }
         }
-
         else {
             // Button UI Updates
             currentScreen = "for_me"
-
             binding.apply {
                 forMe.setBackgroundResource(R.drawable.forother_btn)
                 forMe.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))

@@ -143,7 +143,14 @@ class ScheduleFragment : Fragment() {
                 when(it){
                     is NetworkResult.Success -> {
                         LoadingUtils.hideDialog()
-                        it.data?.let { it1 -> cancelledAdapter.updateAdapter(it1) }
+                        Log.d("TESTING_WORK","Size is "+it.data?.size.toString())
+                        it.data?.let { it1 ->
+                            if(it1.size > 0){
+                                binding.noDataView.visibility = View.GONE
+                                binding.recyclerView.visibility = View.VISIBLE
+                            }
+                            cancelledAdapter.updateAdapter(it1)
+                        }
                     }
                     is NetworkResult.Error -> {
                            LoadingUtils.hideDialog()
@@ -280,13 +287,17 @@ class ScheduleFragment : Fragment() {
             mutableListOf(),
             onCancelClick = { appointment -> cancelDialog(appointment) },
             onRescheduleClick = {
+                if(!AppConstant.isTimeMoreThanTwoHoursAhead(it.date, it.time)){
+                    LoadingUtils.showErrorDialog(requireContext(),"You cannot reschedule the appointment less than 2 hours before the booked time.")
 
-                var bundle = Bundle().apply {
-                    putInt(AppConstant.AppoitmentId,it.id)
+                }else {
+                    var bundle = Bundle().apply {
+                        putInt(AppConstant.AppoitmentId, it.id)
+                    }
+                    findNavController().navigate(R.id.reschedule_call, bundle)
                 }
-                findNavController().navigate(R.id.reschedule_call,bundle)
 
-                                },
+          },
             onInfoClick = { _, infoIcon -> showInfoPopup(infoIcon) },
             startAppoitmentClick={ apoitnment -> openVideoCall(apoitnment)}
         )
@@ -341,6 +352,7 @@ class ScheduleFragment : Fragment() {
                             intent.putExtra(AppConstant.CHANNEL_NAME,it.channelName)
                             intent.putExtra(AppConstant.uid,it.uid)
                             intent.putExtra(AppConstant.DOCTOR,model.doctorName)
+                            intent.putExtra(AppConstant.TIME,model.time)
                             //  startActivity(intent)
                           callingCallJoinedApi(model.id,intent)
                         }
@@ -501,7 +513,7 @@ class ScheduleFragment : Fragment() {
             btnClose.setOnClickListener { dialog.dismiss() }
             btnNo.setOnClickListener { dialog.dismiss() }
             btnYes.setOnClickListener {
-                findNavController().navigate(R.id.appointmentBooking)
+              //  findNavController().navigate(R.id.appointmentBooking)
                 dialog.dismiss()
             }
         }

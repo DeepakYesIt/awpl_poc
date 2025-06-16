@@ -40,11 +40,12 @@ import retrofit2.http.Field
 import retrofit2.http.Part
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
 class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRepository{
-
     var TAG = "AWPL_RESP_IMPL";
 
     override suspend fun login(dsCode: String, password: String,fcmToken :String, type:String): Flow<NetworkResult<LoginModel>> = flow{
@@ -392,11 +393,8 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
                 if (isSuccessful) {
                     body()?.let { resp ->
                         if (resp.has("status") && resp.get("status").asBoolean) {
-                            var obj = resp.get("data").asJsonObject
-
+                            val obj = resp.get("data").asJsonObject
                             val model: BookingResponseModel = Gson().fromJson(obj.toString(), BookingResponseModel::class.java)
-
-
                             emit(NetworkResult.Success(model))
                         } else {
                             emit(NetworkResult.Error(resp.get("message").asString))
@@ -405,11 +403,7 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
                 } else {
                     try {
                         val jsonObj = this.errorBody()?.string()?.let { JSONObject(it) }
-                        emit(
-                            NetworkResult.Error(
-                                jsonObj?.getString("message") ?: AppConstant.unKnownError
-                            )
-                        )
+                        emit(NetworkResult.Error(jsonObj?.getString("message") ?: AppConstant.unKnownError))
                     } catch (e: JSONException) {
                         e.printStackTrace()
                         emit(NetworkResult.Error(AppConstant.unKnownError))
@@ -422,23 +416,44 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
         }
     }
 
-    override suspend fun upcomingAppointment(): Flow<NetworkResult<MutableList<UpcomingModel>>> =flow{
+    fun isTimeRangeInPast(dateStr: String, timeRangeStr: String): Boolean {
+        return try {
+            Log.d("TESTING_TIME", "$dateStr $timeRangeStr")
+
+            val dateFormatter = SimpleDateFormat("EEE MMM dd yyyy hh:mm a", Locale.ENGLISH)
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val fullDateStr = "$dateStr $year"
+
+            val endTimeStr = timeRangeStr.split("-")[1].trim() // e.g., "01:30 PM"
+            val fullDateTimeStr = "$fullDateStr $endTimeStr"   // e.g., "Mon Jun 16 2025 01:30 PM"
+
+            val scheduledEndTime = dateFormatter.parse(fullDateTimeStr)
+            val now = Date()
+
+            scheduledEndTime?.before(now) ?: false
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+
+    override suspend fun upcomingAppointment(): Flow<NetworkResult<MutableList<UpcomingModel>>> = flow{
         try {
             api.upcomingAppointment().apply {
                 if (isSuccessful) {
                     body()?.let { resp ->
                         if (resp.has("status") && resp.get("status").asBoolean) {
                             var obj = resp.get("data").asJsonObject
-
                             var appoitmentArr= obj.get("appointmentDetails").asJsonArray
                             var result = mutableListOf<UpcomingModel>()
-                 appoitmentArr.forEach {
-                  val model: UpcomingModel = Gson().fromJson(it.toString(), UpcomingModel::class.java)
-                   result.add(model)
-                 }
-
-
-
+                            appoitmentArr.forEach {
+                             val model: UpcomingModel = Gson().fromJson(it.toString(), UpcomingModel::class.java)
+                             if(!isTimeRangeInPast(model.date,model.time)) {
+                                  result.add(model)
+                             }
+                        }
                             emit(NetworkResult.Success(result))
                         } else {
                             emit(NetworkResult.Error(resp.get("message").asString))
@@ -1207,6 +1222,7 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
             emit(NetworkResult.Error(ErrorHandler.emitError(e)))
         }
     }
+
     override suspend fun callJoined(
         @Field("appointmentId") appointmentId: Int
     ) :Flow<NetworkResult<String>> = flow{

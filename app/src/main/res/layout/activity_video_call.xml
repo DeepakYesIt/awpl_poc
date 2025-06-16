@@ -54,7 +54,12 @@
     <FrameLayout
         android:id="@+id/remote_video_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@android:color/black"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        >
 
 
 

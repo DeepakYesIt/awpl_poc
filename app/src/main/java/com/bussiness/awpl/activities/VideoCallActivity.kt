@@ -10,7 +10,7 @@ import android.view.View
 import android.graphics.Color
 import android.os.Handler
 import android.os.Looper
-import android.widget.Button
+import android.view.Gravity
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
@@ -31,6 +31,7 @@ import io.agora.rtc2.video.VideoCanvas
 
 class VideoCallActivity : AppCompatActivity() {
 
+    private var callStartTimeMillis: Long = 0L
     private lateinit var agoraEngine : RtcEngine
     private var isMuted = false
     private var isCameraOn = true
@@ -45,6 +46,7 @@ class VideoCallActivity : AppCompatActivity() {
     private var isSwitched = false
     private var doctorName :String =""
 
+    private var startTimeCall :String =""
     private var callStartTime: Long = 0L
     var uid :Int =0
     private var callTimerHandler: Handler? = null
@@ -63,12 +65,13 @@ class VideoCallActivity : AppCompatActivity() {
 //        appId = getString(R.string.agora_app_id)
 //        channelName ="nikunj"
 //        token = null
+//
          doctorName = intent.getStringExtra(AppConstant.DOCTOR)?.takeIf { it.isNotBlank() }?:""
          appId = intent.getStringExtra(AppConstant.APPID)?.takeIf { it.isNotBlank() } ?: ""
          token = intent.getStringExtra(AppConstant.AuthToken) ?: ""
          channelName = intent.getStringExtra(AppConstant.CHANNEL_NAME)?.takeIf { it.isNotBlank() } ?: ""
          uid = intent.getIntExtra(AppConstant.uid, 0)
-
+        startTimeCall = intent.getStringExtra(AppConstant.TIME).toString()
         var doctorTv = findViewById<TextView>(R.id.tv_doctor)
         doctorTv.setText(doctorName)
         Log.d("TESTING_VIDEO_LOG","appid "+appId)
@@ -88,27 +91,48 @@ class VideoCallActivity : AppCompatActivity() {
 
     }
 
-    private fun startCallDurationTimer() {
-        callStartTime = System.currentTimeMillis()
+//    private fun startCallDurationTimer()  {
+//        callStartTime = System.currentTimeMillis()
+//        callTimerHandler = Handler(Looper.getMainLooper())
+//        callTimerRunnable = object : Runnable {
+//            override fun run() {
+//                val elapsedMillis = System.currentTimeMillis() - callStartTime
+//                val seconds = (elapsedMillis / 1000) % 60
+//                val minutes = (elapsedMillis / (1000 * 60)) % 60
+//                val hours = (elapsedMillis / (1000 * 60 * 60))
+//
+//                val timeString = String.format("Call : %02d:%02d:%02d", hours, minutes, seconds)
+//                runOnUiThread {
+//                    findViewById<TextView>(R.id.tv_timer)?.text = timeString
+//                }
+//
+//                callTimerHandler?.postDelayed(this, 1000)
+//            }
+//        }
+//        callTimerHandler?.post(callTimerRunnable!!)
+//    }
+
+
+
+    private fun startCallDurationTimer(startTimeCall: String) {
+        callStartTimeMillis = System.currentTimeMillis()
+
         callTimerHandler = Handler(Looper.getMainLooper())
         callTimerRunnable = object : Runnable {
             override fun run() {
-                val elapsedMillis = System.currentTimeMillis() - callStartTime
-                val seconds = (elapsedMillis / 1000) % 60
-                val minutes = (elapsedMillis / (1000 * 60)) % 60
-                val hours = (elapsedMillis / (1000 * 60 * 60))
+                val elapsedMillis = System.currentTimeMillis() - callStartTimeMillis
 
-                val timeString = String.format("Call : %02d:%02d:%02d", hours, minutes, seconds)
-                runOnUiThread {
-                    findViewById<TextView>(R.id.tv_timer)?.text = timeString
-                }
+                val minutes = (elapsedMillis / (1000 * 60))
+                val seconds = (elapsedMillis / 1000) % 60
+
+                val timeString = String.format("Call : %02d:%02d", minutes, seconds)
+                findViewById<TextView>(R.id.tv_timer)?.text = timeString
 
                 callTimerHandler?.postDelayed(this, 1000)
             }
         }
         callTimerHandler?.post(callTimerRunnable!!)
     }
-
 
     private fun hasPermissions() = PermissionsHelper.hasPermissions(this)
     private fun requestPermissions() = PermissionsHelper.requestPermissions(this)
@@ -148,7 +172,7 @@ class VideoCallActivity : AppCompatActivity() {
                     runOnUiThread {
                         Log.d("TESTING_NIKUNJ", "Joined: $uid")
                         setupRemoteVideo(uid)
-                        startCallDurationTimer()
+                        startCallDurationTimer(startTimeCall)
                     }
                 }
 
@@ -209,6 +233,57 @@ class VideoCallActivity : AppCompatActivity() {
         remoteContainer.addView(blankView)
     }
 
+//    private fun setupLocalVideo() {
+//        val container = findViewById<FrameLayout>(R.id.local_video_view)
+//        container.removeAllViews()
+//
+//        val surfaceView = RtcEngine.CreateRendererView(this)
+//        surfaceView.setZOrderMediaOverlay(true)
+//
+//        container.addView(surfaceView, FrameLayout.LayoutParams(
+//            FrameLayout.LayoutParams.MATCH_PARENT,
+//            FrameLayout.LayoutParams.MATCH_PARENT,
+//            Gravity.CENTER
+//        ))
+//
+//        val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, 0)
+//        agoraEngine.setupLocalVideo(videoCanvas)
+//        agoraEngine.startPreview()
+//    }
+//
+//
+//    private fun setupRemoteVideo(uid: Int) {
+//        try {
+//            val container = findViewById<FrameLayout>(R.id.remote_video_view)
+//            container.removeAllViews()
+//
+//            val surfaceView = RtcEngine.CreateRendererView(this).apply {
+//                setZOrderMediaOverlay(true)
+//                layoutParams = FrameLayout.LayoutParams(
+//                    FrameLayout.LayoutParams.MATCH_PARENT,
+//                    FrameLayout.LayoutParams.MATCH_PARENT,
+//                    Gravity.CENTER
+//                )
+//            }
+//
+//            container.addView(surfaceView)
+//
+//            val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.VIEW_SETUP_MODE_REPLACE, uid)
+//            agoraEngine.setupRemoteVideo(videoCanvas)
+//
+//            agoraEngine.setRemoteRenderMode(
+//                uid,
+//                Constants.RENDER_MODE_HIDDEN,
+//                Constants.VIDEO_MIRROR_MODE_AUTO
+//            )
+//
+//            Log.d("AgoraCall", "Remote video setup for UID: $uid")
+//
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            Toast.makeText(this, "Failed to setup remote video: ${e.message}", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
 
     private fun setupLocalVideo() {
@@ -227,20 +302,49 @@ class VideoCallActivity : AppCompatActivity() {
         agoraEngine.startPreview()
     }
 
-    private fun setupRemoteVideo(uid: Int) {
 
+    // new code
+    private fun setupRemoteVideo(uid: Int) {
         val container = findViewById<FrameLayout>(R.id.remote_video_view)
         container.removeAllViews()
 
         val surfaceView = RtcEngine.CreateRendererView(applicationContext)
-        surfaceView.setZOrderMediaOverlay(true)  // Optional: only if needed
+        surfaceView.setZOrderMediaOverlay(true)
+
+        // ✅ Set layout params to preserve aspect ratio
+        val params = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            Gravity.CENTER
+        )
+        surfaceView.layoutParams = params
+        surfaceView.keepScreenOn = true
+
         container.addView(surfaceView)
 
-        val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.VIEW_SETUP_MODE_REPLACE, uid)
+        // Setup video canvas
+        val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, uid)
         agoraEngine?.setupRemoteVideo(videoCanvas)
-        setupLocalVideo()
-
     }
+
+
+
+
+    //olde code
+//    private fun setupRemoteVideo(uid: Int) {
+//
+//        val container = findViewById<FrameLayout>(R.id.remote_video_view)
+//        container.removeAllViews()
+//
+//        val surfaceView = RtcEngine.CreateRendererView(applicationContext)
+//        surfaceView.setZOrderMediaOverlay(true)  // Optional: only if needed
+//        container.addView(surfaceView)
+//
+//        val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.VIEW_SETUP_MODE_REPLACE, uid)
+//        agoraEngine?.setupRemoteVideo(videoCanvas)
+//        setupLocalVideo()
+//
+//    }
 
     private fun removeRemoteVideo() {
         Log.d("TESTING_VIDEO_CALL","ON REMOVING VIDEO CALL")

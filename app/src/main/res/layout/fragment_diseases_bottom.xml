@@ -55,20 +55,20 @@
         android:layout_marginTop="@dimen/_15sdp"
         android:clipToPadding="false"
         android:paddingBottom="@dimen/_10sdp"
+        android:visibility="visible"
         tools:listitem="@layout/item_disease"/>
 
     <TextView
-        android:id="@+id/noDataView"
+        android:id="@+id/tv_not_found"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_data_available"
-        android:textAlignment="center"
-        android:visibility="gone"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:layout_gravity="center"
-        android:textSize="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_13sdp"
+        android:text="Not Found"
+        android:textSize="@dimen/_16sdp"
         android:fontFamily="@font/lato_regular"
         android:textStyle="bold"
-        android:textColor="@color/darkGreyColor"/>
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        />
 
 </LinearLayout>

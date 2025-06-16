@@ -35,7 +35,29 @@ class DiseasesBottomFragment : BottomSheetDialogFragment() {
     private val viewModel: HomeViewModel by viewModels()
     private  var diseaseList: MutableList<DiseaseModel> = mutableListOf()
     private var diseaseFilter :MutableList<DiseaseModel> = mutableListOf()
-
+//    private val diseasesList = listOf(
+//        OrganDeptModel(R.drawable.rectangle, "Kidney Disease"),
+//        OrganDeptModel(R.drawable.rectangle, "Liver Disease"),
+//        OrganDeptModel(R.drawable.rectangle, "Heart Disease"),
+//        OrganDeptModel(R.drawable.rectangle, "Blood Pressure"),
+//        OrganDeptModel(R.drawable.rectangle, "Diabetes"),
+//        OrganDeptModel(R.drawable.rectangle, "Tuberculosis(TB)"),
+//        OrganDeptModel(R.drawable.rectangle, "Typhoid"),
+//        OrganDeptModel(R.drawable.rectangle, "Rheumatoid Arthritis"),
+//        OrganDeptModel(R.drawable.rectangle, "Gynic Disease"),
+//        OrganDeptModel(R.drawable.rectangle, "Allergy"),
+//        OrganDeptModel(R.drawable.rectangle, "Thyroid"),
+//        OrganDeptModel(R.drawable.rectangle, "Gastric"),
+//        OrganDeptModel(R.drawable.rectangle, "Skin Disease"),
+//        OrganDeptModel(R.drawable.rectangle, "Acidity"),
+//        OrganDeptModel(R.drawable.rectangle, "Piles"),
+//        OrganDeptModel(R.drawable.rectangle, "Constipation"),
+//        OrganDeptModel(R.drawable.rectangle, "Cholesterol"),
+//        OrganDeptModel(R.drawable.rectangle, "Stroke"),
+//        OrganDeptModel(R.drawable.rectangle, "Thalassemia"),
+//        OrganDeptModel(R.drawable.rectangle, "Cancer"),
+//        OrganDeptModel(R.drawable.rectangle, "Asthma"),
+//    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
@@ -75,22 +97,23 @@ class DiseasesBottomFragment : BottomSheetDialogFragment() {
     }
 
     private fun callingFilterTask(diseaseName: String) {
-        val newList = diseaseFilter.filter {
-            it.name.startsWith(diseaseName, ignoreCase = true)
+
+        var newList = diseaseFilter.filter {
+            it.name.startsWith(diseaseName,ignoreCase = true)
         }
 
-        if (newList.isNotEmpty()) {
-            binding.noDataView.visibility = View.GONE
-            bottomCardDiseaseAdapter.updateAdapter(newList)
-        } else {
-            binding.noDataView.visibility = View.VISIBLE
-            bottomCardDiseaseAdapter.updateAdapter(emptyList())
+        if(newList.isEmpty()){
+           binding.tvNotFound.visibility =View.VISIBLE
         }
+        else{
+            binding.tvNotFound.visibility =View.GONE
+        }
+
+        bottomCardDiseaseAdapter.updateAdapter(newList)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupRecyclerView()
         clickListener()
     }
@@ -98,6 +121,7 @@ class DiseasesBottomFragment : BottomSheetDialogFragment() {
     private fun setupRecyclerView() {
 
         bottomCardDiseaseAdapter = OrganListAdapter(diseaseList) { selectedDisease ->
+
             tempData(selectedDisease)
         }
 
@@ -151,7 +175,7 @@ class DiseasesBottomFragment : BottomSheetDialogFragment() {
             findNavController().navigate( R.id.doctorConsultationFragment,bundle)
         }
         else{
-             findNavController().navigate( R.id.onlineConsultationFragment,bundle)
+            findNavController().navigate( R.id.onlineConsultationFragment,bundle)
          }
 
     }
