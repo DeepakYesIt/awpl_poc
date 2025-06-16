@@ -58,7 +58,7 @@ class MediaUtils(
                 onBrowseClicked?.invoke()
             }
         }
-        binding.btnSave.setText(buttonName)
+        binding.btnSave.text = buttonName
 
         binding.btnSave.setOnClickListener {
             if (selectedFiles.isNotEmpty()) {

@@ -282,6 +282,7 @@ class HomeScheduleCallFragment : Fragment() {
         imagePickerLauncher.launch(intent)
     }
 
+    @SuppressLint("DefaultLocale")
     private fun addMediaItem(uri: Uri, type: String) {
         if (type.lowercase() != "image") return
 
@@ -290,11 +291,18 @@ class HomeScheduleCallFragment : Fragment() {
             return
         }
 
+        // Check if image already exists in mediaList
+        if (mediaList.any { it.uri == uri }) {
+            Toast.makeText(requireContext(), "This image is already uploaded", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val mediaItem = MediaItem(MediaType.IMAGE, uri)
         imageOnlyAdapter.addImage(mediaItem)
         mediaList.add(mediaItem)
         binding.viewImage.visibility = View.VISIBLE
     }
+
 
 
 

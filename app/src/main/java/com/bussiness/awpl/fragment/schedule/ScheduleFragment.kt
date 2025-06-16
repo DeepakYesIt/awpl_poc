@@ -41,6 +41,8 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.core.graphics.toColorInt
+
 @AndroidEntryPoint
 class ScheduleFragment : Fragment() {
 
@@ -361,9 +363,9 @@ class ScheduleFragment : Fragment() {
 
         binding.scheduleCall1.setOnClickListener {
             binding.scheduleCall1.setBackgroundResource(R.drawable.bg_four_side_corner_inner_white)
-            binding.tv2.setTextColor(android.graphics.Color.parseColor("#858484"))
+            binding.tv2.setTextColor("#858484".toColorInt())
             binding.scheduleCall2.background = null
-            binding.tV1.setTextColor(android.graphics.Color.parseColor("#356598"))
+            binding.tV1.setTextColor("#356598".toColorInt())
             binding.filterBtn.visibility =View.VISIBLE
             completedAdapter.update(true, mutableListOf())
             binding.recyclerView.adapter = completedAdapter

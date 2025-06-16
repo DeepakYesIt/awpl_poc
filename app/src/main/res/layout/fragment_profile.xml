@@ -83,6 +83,7 @@
         android:layout_marginTop="@dimen/_10sdp"
         android:background="#DAEFF9"
         android:text="@string/user_name"
+        android:fontFamily="@font/lato_regular"
         android:enabled="false"
         android:padding="@dimen/_10sdp"
         android:textColor="@color/greyColor"
@@ -110,6 +111,7 @@
         android:text="@string/username_gmail_com"
         android:padding="@dimen/_10sdp"
         android:enabled="false"
+        android:fontFamily="@font/lato_regular"
         android:layout_marginTop="@dimen/_10sdp"
         android:textColor="@color/greyColor"
         app:layout_constraintEnd_toEndOf="parent"
@@ -136,6 +138,7 @@
         android:text="@string/_91_9655415616"
         android:padding="@dimen/_10sdp"
         android:enabled="false"
+        android:fontFamily="@font/lato_regular"
         android:layout_marginTop="@dimen/_10sdp"
         android:textColor="@color/greyColor"
         app:layout_constraintEnd_toEndOf="parent"
@@ -153,7 +156,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Basic Details"
+            android:text="@string/basic_details"
             android:textColor="#356598"
             android:textSize="@dimen/_14sdp"
             android:fontFamily="@font/lato_regular"
@@ -171,17 +174,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
             >
+
             <TextView
                 android:id="@+id/textView10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_20sdp"
                 android:fontFamily="@font/lato_regular"
                 android:text="@string/full_name"
                 android:textColor="@color/darkGreyColor"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/etName"
@@ -190,9 +193,11 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="#DAEFF9"
                 android:hint="@string/name"
+                android:fontFamily="@font/lato_regular"
                 android:padding="@dimen/_10sdp"
                 android:enabled="false"
-                android:textColor="@color/greyColor"
+                android:textSize="@dimen/_13ssp"
+                android:textColor="@color/darkGreyColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView10" />
@@ -215,11 +220,12 @@
                 android:layout_height="60dp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="#DAEFF9"
-                android:hint="26"
-                android:inputType="number"
+                android:hint="@string/_5_ft_6_in"
+                android:textSize="@dimen/_13ssp"
                 android:enabled="false"
+                android:fontFamily="@font/lato_regular"
                 android:padding="@dimen/_10sdp"
-                android:textColor="@color/greyColor"
+                android:textColor="@color/darkGreyColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView11" />
@@ -243,10 +249,12 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="#DAEFF9"
                 android:hint="50"
+                android:fontFamily="@font/lato_regular"
                 android:enabled="false"
                 android:inputType="number"
                 android:padding="@dimen/_10sdp"
-                android:textColor="@color/greyColor"
+                android:textSize="@dimen/_13ssp"
+                android:textColor="@color/darkGreyColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
@@ -335,10 +343,12 @@
                 android:autofillHints=""
                 android:background="#DAEFF9"
                 android:hint="@string/_20"
+                android:fontFamily="@font/lato_regular"
                 android:enabled="false"
+                android:textSize="@dimen/_13ssp"
                 android:inputType="number"
                 android:padding="@dimen/_10sdp"
-                android:textColor="@color/greyColor"
+                android:textColor="@color/darkGreyColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView14" />
@@ -350,8 +360,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
-            android:visibility="visible"
-            >
+            android:visibility="visible">
 
             <RelativeLayout
                 android:id="@+id/rl_edit_profile"
@@ -366,8 +375,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Edit Profile"
+                android:text="@string/edit_profile"
                 android:textColor="@color/white"
+                android:fontFamily="@font/lato_regular"
                 />
 
             </RelativeLayout>
@@ -385,8 +395,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Delete Account"
+                    android:text="@string/delete_account_"
                     android:textColor="@color/white"
+                    android:fontFamily="@font/lato_regular"
                     />
 
             </RelativeLayout>
@@ -413,8 +424,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Save Changes"
+                    android:text="@string/save_changes"
                     android:textColor="@color/white"
+                    android:fontFamily="@font/lato_regular"
                     />
 
             </RelativeLayout>
@@ -432,7 +444,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cancel"
+                    android:text="@string/cancel"
+                    android:fontFamily="@font/lato_regular"
                     android:textColor="#858484"
                     />
 

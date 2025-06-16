@@ -57,4 +57,18 @@
         android:paddingBottom="@dimen/_10sdp"
         tools:listitem="@layout/item_disease"/>
 
+    <TextView
+        android:id="@+id/noDataView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_data_available"
+        android:textAlignment="center"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_gravity="center"
+        android:textSize="@dimen/_15sdp"
+        android:fontFamily="@font/lato_regular"
+        android:textStyle="bold"
+        android:textColor="@color/darkGreyColor"/>
+
 </LinearLayout>

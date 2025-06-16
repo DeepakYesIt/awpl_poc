@@ -176,7 +176,7 @@
     <string name="clock_icon">Clock Icon</string>
     <string name="appointment_date">Appointment Date</string>
     <string name="cancellation_policy">Cancellation Policy:</string>
-    <string name="apointment">Appointments cannot be \n canceled within 2 hours of the\n scheduled time, and payments\n are non-refundable.</string>
+    <string name="apointment">Appointments cannot be \n Cancelled within 2 hours of the\n scheduled time, and payments\n are non-refundable.</string>
     <string name="filters">Filters</string>
     <string name="check_details">Check details</string>
     <string name="download_prescription">Download Prescription</string>
@@ -414,4 +414,11 @@
     <string name="done">Done</string>
     <string name="your_appointment_starts_in_n_15_minutes">Your Appointment Starts in\n 15 Minutes!</string>
     <string name="missed_appointment">Missed Appointment</string>
+    <string name="no_data_available">No Data Available</string>
+    <string name="_26">26</string>
+    <string name="_5_ft_6_in">5 ft 6 in</string>
+    <string name="basic_details">Basic Details</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="delete_account_">Delete Account</string>
+    <string name="save_changes">Save Changes</string>
 </resources>
