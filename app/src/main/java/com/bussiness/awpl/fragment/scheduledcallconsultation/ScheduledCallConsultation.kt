@@ -172,6 +172,11 @@ class ScheduledCallConsultation : Fragment() {
             return
         }
 
+        if (imageOnlyAdapter.getImageList().any { it.uri == uri }) {
+            Toast.makeText(requireContext(), "This image is already uploaded", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val mediaItem = MediaItem(MediaType.IMAGE, uri)
         imageOnlyAdapter.addImage(mediaItem)
         binding.viewImage.visibility = View.VISIBLE
@@ -252,8 +257,11 @@ class ScheduledCallConsultation : Fragment() {
     }
 
     override fun onDestroyView() {
-        binding.imageRecyclerView.adapter = null // Clean-up RecyclerView adapter
+        binding.imageRecyclerView.adapter = null
+        mediaUploadDialog?.dismiss()
+        mediaUploadDialog = null
         _binding = null
         super.onDestroyView()
     }
+
 }

@@ -3,17 +3,16 @@ package com.bussiness.awpl.fragment.symptomuploadScreen
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.OpenableColumns
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -22,10 +21,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
-import com.bussiness.awpl.activities.HomeActivity
-import com.bussiness.awpl.utils.MediaUtils
 import com.bussiness.awpl.adapter.MediaAdapter
-import com.bussiness.awpl.databinding.DialogReportDownloadBinding
 import com.bussiness.awpl.databinding.FragmentSymptomUploadBinding
 import com.bussiness.awpl.databinding.UploadSucessDialogBinding
 import com.bussiness.awpl.model.MediaItem
@@ -33,12 +29,11 @@ import com.bussiness.awpl.model.MediaType
 import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.ErrorMessages
 import com.bussiness.awpl.utils.LoadingUtils
+import com.bussiness.awpl.utils.MediaUtils
 import com.bussiness.awpl.utils.MultipartUtil
 import com.bussiness.awpl.viewmodel.SymptomsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
-import java.util.ArrayList
 
 @AndroidEntryPoint
 class SymptomUpload : Fragment() {
@@ -52,75 +47,37 @@ class SymptomUpload : Fragment() {
     private lateinit var imageAdapter: MediaAdapter
     private lateinit var videoAdapter: MediaAdapter
     private lateinit var pdfAdapter: MediaAdapter
+    private var diseaseId: Int = 0
+    private var currentType: String = ""
+    private lateinit var symptomsViewModel: SymptomsViewModel
+
     private val imagePickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-//            if (result.resultCode == Activity.RESULT_OK) {
-//
-//
-//                val uri: Uri? = result.data?.data
-//
-//                uri?.let {
-//                    if(currentType =="image"&& MultipartUtil.isFileLargerThan2048KB(requireContext(),uri)){
-//                       LoadingUtils.showErrorDialog(requireContext(),"Please upload an image that is less than 2 MB in size.")
-//                    }
-//                    else if(currentType =="video" && MultipartUtil.isFileLargerThan5MB(requireContext(),uri)){
-//                        LoadingUtils.showErrorDialog(requireContext(),"Please upload an video that is less than 5 MB in size.")
-//                    }
-//                    else if(currentType == "PDF" && MultipartUtil.isFileLargerThan5MB(requireContext(),uri)){
-//                        LoadingUtils.showErrorDialog(requireContext(),"Please upload an pdf that is less than 5 MB in size.")
-//                    }
-//                    else {
-//                        mediaUploadDialog?.handleSelectedFile(it)
-//                    }
-//                }
-//            }
-
             if (result.resultCode == Activity.RESULT_OK) {
                 val selectedUris = mutableListOf<Uri>()
-
-                // Check if multiple files are selected (ClipData)
                 val clipData = result.data?.clipData
                 if (clipData != null) {
-                    val count = clipData.itemCount
-                    for (i in 0 until count) {
-                        val uri = clipData.getItemAt(i).uri
-                        selectedUris.add(uri)
+                    for (i in 0 until clipData.itemCount) {
+                        selectedUris.add(clipData.getItemAt(i).uri)
                     }
                 } else {
-                    // If only one file is selected (single Uri)
-                    result.data?.data?.let { uri ->
-                        selectedUris.add(uri)
-                    }
+                    result.data?.data?.let { selectedUris.add(it) }
                 }
 
-                // Now iterate through selectedUris to process the files
                 selectedUris.forEach { uri ->
-                    if (currentType == "image" && MultipartUtil.isFileLargerThan2048KB(requireContext(), uri)) {
-                        LoadingUtils.showErrorDialog(requireContext(), "Please upload an image that is less than 2 MB in size.")
-                    } else if (currentType == "video" && MultipartUtil.isFileLargerThan5MB(requireContext(), uri)) {
-                        LoadingUtils.showErrorDialog(requireContext(), "Please upload a video that is less than 5 MB in size.")
-                    } else if (currentType == "PDF" && MultipartUtil.isFileLargerThan5MB(requireContext(), uri)) {
-                        LoadingUtils.showErrorDialog(requireContext(), "Please upload a PDF that is less than 5 MB in size.")
-                    } else {
-                        mediaUploadDialog?.handleSelectedFile(uri)
-                    }
+                    mediaUploadDialog?.handleSelectedFile(uri)
                 }
             }
-
         }
-    private var diseaseId :Int = 0
-    private var currentType: String = "" // Store type of media selected
-    private lateinit var symptomsViewModel: SymptomsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSymptomUploadBinding.inflate(inflater, container, false)
-
         symptomsViewModel = ViewModelProvider(this)[SymptomsViewModel::class.java]
 
         arguments?.let {
-            if(it.containsKey(AppConstant.DISEASE_ID)){
+            if (it.containsKey(AppConstant.DISEASE_ID)) {
                 diseaseId = it.getInt(AppConstant.DISEASE_ID)
             }
         }
@@ -136,139 +93,82 @@ class SymptomUpload : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun setupRecyclerView() {
-        imageAdapter = MediaAdapter(imageList) { mediaItem ->
-            imageList.remove(mediaItem)
+        imageAdapter = MediaAdapter(imageList) {
+            imageList.remove(it)
             imageAdapter.notifyDataSetChanged()
             binding.viewImage.visibility = if (imageList.isNotEmpty()) View.VISIBLE else View.GONE
         }
 
-        videoAdapter = MediaAdapter(videoList) { mediaItem ->
-            videoList.remove(mediaItem)
+        videoAdapter = MediaAdapter(videoList) {
+            videoList.remove(it)
             videoAdapter.notifyDataSetChanged()
             binding.viewVideo.visibility = if (videoList.isNotEmpty()) View.VISIBLE else View.GONE
         }
 
-        pdfAdapter = MediaAdapter(pdfList) { mediaItem ->
-            pdfList.remove(mediaItem)
+        pdfAdapter = MediaAdapter(pdfList) {
+            pdfList.remove(it)
             pdfAdapter.notifyDataSetChanged()
             binding.ViewPdf.visibility = if (pdfList.isNotEmpty()) View.VISIBLE else View.GONE
         }
 
-        binding.imageRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = imageAdapter
-        }
+        binding.imageRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.imageRecyclerView.adapter = imageAdapter
 
-        binding.videoRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = videoAdapter
-        }
+        binding.videoRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.videoRecyclerView.adapter = videoAdapter
 
-        binding.pdfRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = pdfAdapter
-        }
+        binding.pdfRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.pdfRecyclerView.adapter = pdfAdapter
     }
 
     private fun setupClickListeners() {
         binding.apply {
             btnImage.setOnClickListener { openMediaDialog("image") }
             btnVideos.setOnClickListener { openMediaDialog("video") }
-            btnPDF.setOnClickListener { openMediaDialog("PDF") }
+            btnPDF.setOnClickListener { openMediaDialog("pdf") }
             btnNext.setOnClickListener {
-                if(validations()){
+                if (validations()) {
                     callingSymptomsApi()
                 }
             }
         }
     }
 
-    private fun callingSymptomsApi(){
-        lifecycleScope.launch {
-            LoadingUtils.showDialog(requireContext(),false)
-            var imageListMultiPart = mutableListOf<MultipartBody.Part>()
-            var videoListMultiPart = mutableListOf<MultipartBody.Part>()
-            var pdfListMultiPart = mutableListOf<MultipartBody.Part>()
-
-            imageList.forEach {
-                MultipartUtil.uriToMultipart(requireContext(),it.uri,"uploadImage[]")
-                    ?.let { it1 -> imageListMultiPart.add(it1) }
-            }
-
-            videoList.forEach {
-                MultipartUtil.uriToMultipart(requireContext(),it.uri,"uploadVideo[]")
-                    ?.let { it1 -> videoListMultiPart.add(it1) }
-            }
-
-            pdfList.forEach {
-                MultipartUtil.uriToMultipart(requireContext(),it.uri,"uploadPdf[]")
-                    ?.let { it1 -> pdfListMultiPart.add(it1) }
-            }
-
-         var answer1 =   MultipartUtil.stringToRequestBody(binding.ansNO1.text.toString())
-         var answer2 =   MultipartUtil.stringToRequestBody(binding.ansNo2.text.toString())
-         var answer3 =   MultipartUtil.stringToRequestBody(binding.ansNo3.text.toString())
-         var answer4 =   MultipartUtil.stringToRequestBody(binding.ans4.text.toString())
-         var diseaseId = MultipartUtil.stringToRequestBody(Integer.toString(diseaseId))
-            symptomsViewModel.symptomsUpload(answer1,answer2,answer3,answer4,
-                ArrayList( imageListMultiPart),ArrayList(videoListMultiPart),
-                ArrayList(pdfListMultiPart) ,diseaseId).collect{
-                  when(it){
-                      is NetworkResult.Success ->{
-                          LoadingUtils.hideDialog()
-                          successDialog()
-                      }
-                      is NetworkResult.Error ->{
-                          LoadingUtils.hideDialog()
-                          LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
-                      }
-                      else ->{  }
-                  }
-           }
-        }
-    }
-
-
     private fun openMediaDialog(type: String) {
-        val listSize = when (type) {
+        val listSize = when (type.lowercase()) {
             "image" -> imageList.size
             "video" -> videoList.size
-            "PDF" -> pdfList.size
+            "pdf" -> pdfList.size
             else -> 0
         }
 
-        if (listSize >= 5) {
-            LoadingUtils.showErrorDialog(requireContext(), "You’ve already uploaded 5 $type files.")
+        if (listSize >= MAX_ITEMS) {
+            LoadingUtils.showErrorDialog(requireContext(), "You’ve already uploaded $MAX_ITEMS $type files.")
             return
         }
 
+        if (mediaUploadDialog?.isShowing == true) return
+
         currentType = type
         mediaUploadDialog = MediaUtils(requireContext(), type,
-            onFileSelected = { selectedFiles ->
-                selectedFiles.forEach { addMediaItem(it, type) }
-            },
+            onFileSelected = { selectedFiles -> selectedFiles.forEach { addMediaItem(it, type) } },
             onBrowseClicked = { openImagePicker(type) }
         )
         mediaUploadDialog?.show()
     }
 
-
-
     private fun openImagePicker(type: String) {
-        val intent = when (type) {
+        val intent = when (type.lowercase()) {
             "video" -> Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
-            "PDF" -> {
-                Intent(Intent.ACTION_GET_CONTENT).apply {
-                    setType("application/pdf")
-                    addCategory(Intent.CATEGORY_OPENABLE)
-                }
+            "pdf" -> Intent(Intent.ACTION_GET_CONTENT).apply {
+                setType("application/pdf")
+                addCategory(Intent.CATEGORY_OPENABLE)
             }
-         //   else -> Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI) // Default image
-          else -> Intent(Intent.ACTION_GET_CONTENT).apply {
-              setType("image/*")
-              putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-              addCategory(Intent.CATEGORY_OPENABLE)
-          }
+            else -> Intent(Intent.ACTION_GET_CONTENT).apply {
+                setType("image/*")
+                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                addCategory(Intent.CATEGORY_OPENABLE)
+            }
         }
         imagePickerLauncher.launch(intent)
     }
@@ -281,12 +181,21 @@ class SymptomUpload : Fragment() {
             "pdf" -> MediaType.PDF
             else -> throw IllegalArgumentException("Unknown media type: $type")
         }
+
         val mediaItem = MediaItem(mediaType, uri)
 
         when (mediaType) {
             MediaType.IMAGE -> {
-                if (imageList.size >= 5) {
-                    LoadingUtils.showErrorDialog(requireContext(), "Only 5 images can be uploaded.")
+                if (imageList.size >= MAX_ITEMS) {
+                    LoadingUtils.showErrorDialog(requireContext(), "Only $MAX_ITEMS images can be uploaded.")
+                    return
+                }
+                if (imageList.any { it.uri == uri }) {
+                    showAlreadyUploadedToast("image")
+                    return
+                }
+                if (MultipartUtil.isFileLargerThan2048KB(requireContext(), uri)) {
+                    LoadingUtils.showErrorDialog(requireContext(), "Please upload an image less than 2 MB.")
                     return
                 }
                 imageList.add(mediaItem)
@@ -295,16 +204,16 @@ class SymptomUpload : Fragment() {
             }
 
             MediaType.VIDEO -> {
-                val sizeInBytes = getFileSizeFromUri(requireContext(), uri)
-                val sizeInMB = sizeInBytes / (1024f * 1024f)
-
-                if (sizeInMB > 4) {
-                    LoadingUtils.showErrorDialog(requireContext(), "Video size must be less than or equal to 4 MB.")
+                if (videoList.size >= MAX_ITEMS) {
+                    LoadingUtils.showErrorDialog(requireContext(), "Only $MAX_ITEMS videos can be uploaded.")
                     return
                 }
-
-                if (videoList.size >= 5) {
-                    LoadingUtils.showErrorDialog(requireContext(), "Only 5 videos can be uploaded.")
+                if (videoList.any { it.uri == uri }) {
+                    showAlreadyUploadedToast("video")
+                    return
+                }
+                if (MultipartUtil.isFileLargerThan5MB(requireContext(), uri)) {
+                    LoadingUtils.showErrorDialog(requireContext(), "Please upload a video less than 5 MB.")
                     return
                 }
                 videoList.add(mediaItem)
@@ -313,8 +222,16 @@ class SymptomUpload : Fragment() {
             }
 
             MediaType.PDF -> {
-                if (pdfList.size >= 5) {
-                    LoadingUtils.showErrorDialog(requireContext(), "Only 5 PDFs can be uploaded.")
+                if (pdfList.size >= MAX_ITEMS) {
+                    LoadingUtils.showErrorDialog(requireContext(), "Only $MAX_ITEMS PDFs can be uploaded.")
+                    return
+                }
+                if (pdfList.any { it.uri == uri }) {
+                    showAlreadyUploadedToast("PDF")
+                    return
+                }
+                if (MultipartUtil.isFileLargerThan5MB(requireContext(), uri)) {
+                    LoadingUtils.showErrorDialog(requireContext(), "Please upload a PDF less than 5 MB.")
                     return
                 }
                 pdfList.add(mediaItem)
@@ -324,91 +241,93 @@ class SymptomUpload : Fragment() {
         }
     }
 
+    private fun showAlreadyUploadedToast(type: String) {
+        Toast.makeText(requireContext(), "This $type is already uploaded", Toast.LENGTH_SHORT).show()
+    }
 
-    private fun validations() : Boolean {
+    private fun validations(): Boolean {
         binding.apply {
             var isValid = true
-
-            if(ansNO1.text.toString().isEmpty()){
+            if (ansNO1.text.isNullOrEmpty()) {
                 ansNO1.error = ErrorMessages.ERROR_MANDATORY
                 isValid = false
             }
-
-            if(ansNo2.text.toString().isEmpty()){
+            if (ansNo2.text.isNullOrEmpty()) {
                 ansNo2.error = ErrorMessages.ERROR_MANDATORY
                 isValid = false
             }
-
-            if(ansNo3.text.toString().isEmpty()){
+            if (ansNo3.text.isNullOrEmpty()) {
                 ansNo3.error = ErrorMessages.ERROR_MANDATORY
                 isValid = false
             }
-
-            if(ans4.text.toString().isEmpty()){
+            if (ans4.text.isNullOrEmpty()) {
                 ans4.error = ErrorMessages.ERROR_MANDATORY
                 isValid = false
             }
-
             return isValid
         }
-
     }
 
-    private fun getFileSizeFromUri(context: Context, uri: Uri): Long {
-        return context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
-            val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
-            if (sizeIndex != -1) {
-                cursor.moveToFirst()
-                cursor.getLong(sizeIndex)
-            } else 0L
-        } ?: 0L
-    }
+    private fun callingSymptomsApi() {
+        lifecycleScope.launch {
+            LoadingUtils.showDialog(requireContext(), false)
 
+            val imageParts = imageList.mapNotNull {
+                MultipartUtil.uriToMultipart(requireContext(), it.uri, "uploadImage[]")
+            }
+
+            val videoParts = videoList.mapNotNull {
+                MultipartUtil.uriToMultipart(requireContext(), it.uri, "uploadVideo[]")
+            }
+
+            val pdfParts = pdfList.mapNotNull {
+                MultipartUtil.uriToMultipart(requireContext(), it.uri, "uploadPdf[]")
+            }
+
+            val answer1 = MultipartUtil.stringToRequestBody(binding.ansNO1.text.toString())
+            val answer2 = MultipartUtil.stringToRequestBody(binding.ansNo2.text.toString())
+            val answer3 = MultipartUtil.stringToRequestBody(binding.ansNo3.text.toString())
+            val answer4 = MultipartUtil.stringToRequestBody(binding.ans4.text.toString())
+            val diseaseIdPart = MultipartUtil.stringToRequestBody(diseaseId.toString())
+
+            symptomsViewModel.symptomsUpload(
+                answer1, answer2, answer3, answer4,
+                ArrayList(imageParts), ArrayList(videoParts),
+                ArrayList(pdfParts), diseaseIdPart
+            ).collect {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        LoadingUtils.hideDialog()
+                        successDialog()
+                    }
+
+                    is NetworkResult.Error -> {
+                        LoadingUtils.hideDialog()
+                        LoadingUtils.showErrorDialog(requireContext(), it.message.toString())
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    }
 
     private fun successDialog() {
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        val binding = UploadSucessDialogBinding.inflate(layoutInflater)
-        dialog.setContentView(binding.root)
+        val dialogBinding = UploadSucessDialogBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setCancelable(false)
+
         val displayMetrics = requireContext().resources.displayMetrics
         val screenWidth = displayMetrics.widthPixels
         val marginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, displayMetrics).toInt()
-        val dialogWidth = screenWidth - (2 * marginPx)
+        dialog.window?.setLayout(screenWidth - (2 * marginPx), ViewGroup.LayoutParams.WRAP_CONTENT)
 
-        // Apply width to the dialog window
-        dialog.window?.setLayout(dialogWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
-
-        binding.btnOkay.setOnClickListener {
-            dialog.dismiss()
-             findNavController().navigate(R.id.homeFragment)
-        }
-        dialog.show()
-    }
-
-    private fun downloadReportDialog() {
-        val dialog = Dialog(requireContext())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        val binding = DialogReportDownloadBinding.inflate(layoutInflater)
-        dialog.setContentView(binding.root)
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.setCancelable(false)
-        // Set width with margin
-        val displayMetrics = requireContext().resources.displayMetrics
-        val screenWidth = displayMetrics.widthPixels
-        val marginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, displayMetrics).toInt()
-        val dialogWidth = screenWidth - (2 * marginPx)
-
-        // Apply width to the dialog window
-        dialog.window?.setLayout(dialogWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
-
-        binding.btnOkay.setOnClickListener {
+        dialogBinding.btnOkay.setOnClickListener {
             dialog.dismiss()
             findNavController().navigate(R.id.homeFragment)
-        }
-        binding.btnClose.setOnClickListener {
-            dialog.dismiss()
         }
         dialog.show()
     }
@@ -418,11 +337,11 @@ class SymptomUpload : Fragment() {
         _binding = null
         mediaUploadDialog = null
     }
+
     companion object {
         private const val MAX_ITEMS = 5
     }
-
-
 }
+
 
 

@@ -326,7 +326,30 @@
     <string name="uploaded_thu_10_may">अपलोड किया गया: गुरुवार 10 मई</string>
     <string name="others_prescriptions">अन्य लोगों के नुस्ख़े</string>
 
-   <string name="term_condition_1">
+    <string name="appointment_nrescheduled">नियुक्ति\nपुनः निर्धारित</string>
+    <string name="new_appointment_details">नई नियुक्ति का विवरण:</string>
+    <string name="date">तिथि:</string>
+    <string name="time">समय:</string>
+    <string name="doctor">चिकित्सक:</string>
+    <string name="we_apologize_for_any_inconvenience_and_appreciate_your_understanding_if_you_have_any_concerns_or_need_to_reschedule_please_contact_us_at_support_contact">
+        किसी भी असुविधा के लिए हमें खेद है और आपकी समझ की सराहना करते हैं। यदि आपके कोई प्रश्न हैं या आप पुनः समय निर्धारित करना चाहते हैं, तो कृपया हमसे [Support Contact] पर संपर्क करें।
+    </string>
+    <string name="ok">ठीक है</string>
+    <string name="reminder">अनुस्मारक:</string>
+    <string name="doctor_s_name__">चिकित्सक का नाम:</string>
+    <string name="date_and_time">तिथि और समय:</string>
+    <string name="make_sure_you_re_in_a_quiet_place_ready_for_your_consultation">कृपया सुनिश्चित करें कि आप एक शांत स्थान पर हैं और परामर्श के लिए तैयार हैं।</string>
+    <string name="done">पूर्ण</string>
+    <string name="your_appointment_starts_in_n_15_minutes">आपकी नियुक्ति\n15 मिनट में शुरू होगी!</string>
+    <string name="missed_appointment">चूकी हुई नियुक्ति</string>
+    <string name="no_data_available">कोई डेटा उपलब्ध नहीं</string>
+    <string name="_26">26</string>
+    <string name="_5_ft_6_in">5 फीट 6 इंच</string>
+    <string name="basic_details">मूल विवरण</string>
+    <string name="edit_profile">प्रोफ़ाइल संपादित करें</string>
+    <string name="delete_account_">खाता हटाएं</string>
+    <string name="save_changes">परिवर्तनों को सहेजें</string>
+    <string name="term_condition_1">
     प्रभावी तिथि: [तिथि डालें]
 
     1. परिचय

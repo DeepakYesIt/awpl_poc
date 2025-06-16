@@ -264,16 +264,20 @@ class AppointmentBooking : Fragment() {
             week.forEach { date ->
                 val dateView = layoutInflater.inflate(R.layout.calendar_day, weekLayout, false) as TextView
                 if (date != null) {
-                    // dateView.text = date.dayOfMonth.toString()
                     dateView.text = date.dayOfMonth.toString().padStart(2, '0')
 
-                    dateView.setOnClickListener {
-                        selectedDate = date
-                        Log.d("TESTING_DATE",selectedDate.toString())
-                        selectedDateStr= selectedDate.toString()
-                         bookingViewModel.selectedDateStr = selectedDateStr
-                        updateCalendar()
-                        callingMakeTimeSlot(selectedDate.toString())
+                    // Disable past dates
+                    if (date.isBefore(LocalDate.now())) {
+                        dateView.isEnabled = false
+                        dateView.setTextColor(Color.LTGRAY)
+                    } else {
+                        dateView.setOnClickListener {
+                            selectedDate = date
+                            selectedDateStr = selectedDate.toString()
+                            bookingViewModel.selectedDateStr = selectedDateStr
+                            updateCalendar()
+                            callingMakeTimeSlot(selectedDate.toString())
+                        }
                     }
 
                     when (date) {
@@ -284,17 +288,14 @@ class AppointmentBooking : Fragment() {
                         else -> {
                             dateView.setBackgroundResource(R.drawable.date_bg)
                             dateView.setTextColor(
-                                if (date.month == yearMonth.month) Color.BLACK else Color.GRAY
+                                if (date.isBefore(LocalDate.now())) Color.LTGRAY
+                                else if (date.month == yearMonth.month) Color.BLACK
+                                else Color.GRAY
                             )
                         }
                     }
-
-
-//                    dateView.setTextColor(
-//                        if (date.month == yearMonth.month) Color.BLACK
-//                        else Color.GRAY
-//                    )
                 }
+
                 weekLayout.addView(dateView)
             }
             weeksLayout.addView(weekLayout)
