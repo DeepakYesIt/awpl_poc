@@ -1,5 +1,6 @@
 package com.bussiness.awpl.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -40,7 +41,10 @@ class CancelledAdapter(
                     R.drawable.ic_not_found_img).into(doctorImage)
                 doctorName.text = appointment.doctorName
 
+                Log.d("TESTING_WORK",appointment.doctorName)
+                Log.d("TESTING_WORK",appointment.date)
                 dateAndTime.text = appointment.date
+                txtTime.text = appointment.time
 
                 rescheduleButton.setOnClickListener {
                     onRescheduleClick(appointment)

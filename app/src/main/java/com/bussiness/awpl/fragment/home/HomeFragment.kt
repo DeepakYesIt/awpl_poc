@@ -61,6 +61,7 @@ class HomeFragment : Fragment() {
     private var startTime :String =""
     private var doctorName :String =""
 
+
     private val healthJourneyList = listOf(
         HealthListModel("Begin Your Health\nJourney with a \nFree Consultation!", R.drawable.women_doctor),
         HealthListModel("Bringing Doctors\n to Your Door – \nVirtually.", R.drawable.ic_rename_doctor),
@@ -68,6 +69,7 @@ class HomeFragment : Fragment() {
     )
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -77,7 +79,19 @@ class HomeFragment : Fragment() {
         binding.textView45.setOnClickListener {
             findNavController().navigate(R.id.appointmentBooking)
         }
+
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            // Call your refresh logic here
+            refreshData()
+        }
+
+
         return binding.root
+    }
+
+    fun refreshData(){
+        callingHomeApi()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -109,7 +123,7 @@ class HomeFragment : Fragment() {
                                     intent.putExtra(AppConstant.CHANNEL_NAME, it.channelName)
                                     intent.putExtra(AppConstant.uid, it.uid)
                                     intent.putExtra(AppConstant.DOCTOR, doctorName)
-
+                                     intent.putExtra(AppConstant.TIME,homeViewModel.startAppoitmentTime)
                                     callingCallJoinedApi(startAppointment,intent)
                                 }
 
@@ -129,7 +143,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        setupSwipeToRefresh()
+
        // callingDiseaseApi()
 
     }
@@ -152,11 +166,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupSwipeToRefresh() {
-//        binding.swipeRefreshLayout.setOnRefreshListener {
-//            loadFaqs()
-//        }
-    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun loadFaqs() {
@@ -179,14 +189,18 @@ class HomeFragment : Fragment() {
               homeViewModel.getHomeData().collect{
                   when(it){
                       is NetworkResult.Success ->{
+                          binding.swipeRefreshLayout.isRefreshing = false
                           LoadingUtils.hideDialog()
                           settingDataToUi(it.data)
+
                       }
                       is NetworkResult.Error ->{
+                          binding.swipeRefreshLayout.isRefreshing = false
 
                           LoadingUtils.hideDialog()
                       }
                       else ->{
+                          binding.swipeRefreshLayout.isRefreshing = false
                       }
                   }
               }
@@ -208,7 +222,8 @@ class HomeFragment : Fragment() {
             binding.stDoctorName.setText(it.doctorName.toString())
             doctorName = it.doctorName
             binding.tvDate.setText(it.date)
-           binding.tvTime.setText(it.time)
+            binding.tvTime.setText(it.time)
+            homeViewModel.startAppoitmentTime = it.time
             startCountdown(it.time)
             Log.d("TESTING_URL",AppConstant.Base_URL+ MultipartUtil.ensureStartsWithSlash(it.doctorImage))
            Glide.with(this).load(AppConstant.Base_URL+ MultipartUtil.ensureStartsWithSlash(it.doctorImage)).into(binding.stDoctorImage)
@@ -227,6 +242,8 @@ class HomeFragment : Fragment() {
             binding.cardView4.visibility = View.VISIBLE
             binding.doctorName.setText(it.doctorName)
             binding.tvDateUpCom.setText(it.date)
+            homeViewModel.upcomingDate = it.date
+            homeViewModel.upcomingTime = it.time
             binding.tvTimeUpCom.setText(it.time)
             Log.d("TESTING_URL",AppConstant.Base_URL+ MultipartUtil.ensureStartsWithSlash(it.doctorImage))
             Glide.with(this).load(AppConstant.Base_URL+ MultipartUtil.ensureStartsWithSlash(it.doctorImage)).into(binding.upDoctorImage)
@@ -354,8 +371,12 @@ class HomeFragment : Fragment() {
             }
 
             rescheduleButton.setOnClickListener {
-
-                if(appoitmentId !=0) {
+                Log.d("TESTING_MODEL",homeViewModel.upcomingTime +" "+homeViewModel.upcomingDate +" "+homeViewModel.isTimeMoreThanTwoHoursAhead(homeViewModel.upcomingTime,homeViewModel.upcomingDate))
+                if(!AppConstant.isTimeMoreThanTwoHoursAhead(homeViewModel.upcomingDate, homeViewModel.upcomingTime)){
+                    LoadingUtils.showErrorDialog(requireContext(),"You cannot reschedule the appointment less than 2 hours before the booked time.")
+                    return@setOnClickListener
+                }
+                if(appoitmentId !=0  ) {
                     var bundle = Bundle().apply {
                         putInt(AppConstant.AppoitmentId, appoitmentId)
                     }
@@ -368,6 +389,10 @@ class HomeFragment : Fragment() {
                 cancelDialog()
             }
         }
+    }
+
+    private fun verifyTwoHourBeforeheck(date:String , time :String){
+
     }
 
     private fun cancelDialog() {

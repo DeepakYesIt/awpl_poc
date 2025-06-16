@@ -40,6 +40,8 @@ import retrofit2.http.Field
 import retrofit2.http.Part
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
@@ -422,6 +424,36 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
         }
     }
 
+    fun isTimeRangeInPast(dateStr: String, timeRangeStr: String): Boolean {
+        return try {
+            // Step 1: Parse the given date and start time into a DateTime
+            val dateFormatter = SimpleDateFormat("EEE MMM dd yyyy hh:mm a", Locale.ENGLISH)
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR) // assuming current year
+
+            // Clean date and append year
+            val fullDateStr = "$dateStr $year" // e.g., "Fri Jun 13 2025"
+
+            // Extract the start time from the time range
+            val startTimeStr = timeRangeStr.split("-")[0].trim() + " " + timeRangeStr.takeLast(2) // e.g., "10:45 AM"
+
+            // Combine both into full datetime string
+            val fullDateTimeStr = "$fullDateStr $startTimeStr" // e.g., "Fri Jun 13 2025 10:45 AM"
+
+            // Parse
+            val scheduledTime = dateFormatter.parse(fullDateTimeStr)
+
+            // Compare with current time
+            val now = Date()
+            scheduledTime?.before(now) ?: false
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false // If parsing fails, treat as not in past
+        }
+    }
+
+
+
     override suspend fun upcomingAppointment(): Flow<NetworkResult<MutableList<UpcomingModel>>> =flow{
         try {
             api.upcomingAppointment().apply {
@@ -429,12 +461,13 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
                     body()?.let { resp ->
                         if (resp.has("status") && resp.get("status").asBoolean) {
                             var obj = resp.get("data").asJsonObject
-
                             var appoitmentArr= obj.get("appointmentDetails").asJsonArray
                             var result = mutableListOf<UpcomingModel>()
                  appoitmentArr.forEach {
                   val model: UpcomingModel = Gson().fromJson(it.toString(), UpcomingModel::class.java)
-                   result.add(model)
+                   if(!isTimeRangeInPast(model.date,model.time)) {
+                       result.add(model)
+                   }
                  }
 
 
