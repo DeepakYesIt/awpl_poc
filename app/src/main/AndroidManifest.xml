@@ -62,7 +62,7 @@
             android:name=".activities.HomeActivity"
             android:configChanges="locale|layoutDirection"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.OnBoardActivity"
             android:exported="false" />

@@ -140,6 +140,8 @@ class HomeActivity : AppCompatActivity() {
                         toolbar.visibility = View.VISIBLE
                         customBottomNav.visibility = View.VISIBLE
                         toolbarTitle.text = ""
+//                        toolbarTitle.visibility = View.GONE
+//                        icon.visibility = View.VISIBLE
                         ivBell.visibility = View.VISIBLE
                         imgBackProfile.visibility =View.GONE
                         profileIcon.visibility =View.VISIBLE
@@ -148,17 +150,10 @@ class HomeActivity : AppCompatActivity() {
                         profileIcon.setOnClickListener {
                             updateDrawerContent()
                             drawerLayout.openDrawer(GravityCompat.START)
-
-//                            Glide.with(this@HomeActivity).load(SessionManager(this@HomeActivity).getUserImage()).placeholder(R.drawable.ic_profile_new_opt).into(img)
-//                            if(SessionManager(this@HomeActivity).isNotificationPermissionGranted(this@HomeActivity)){
-//                                Log.d("Testing_notification","YES NOTIFICATION_ENABLE")
-//                                notification.isChecked = true
-//                            }else{
-//                                Log.d("Testing_notification","NO NOTIFICATION_ENABLE")
-//                                notification.isChecked = false
-//                            }
                         }
                         chatFab.visibility = View.GONE
+                        toolbarTitle.visibility = View.GONE
+                        icon.visibility = View.VISIBLE
                     }
                     updateBottomNavSelection("home")
                 }
@@ -460,6 +455,8 @@ class HomeActivity : AppCompatActivity() {
             }
 
             chatFab.visibility = if (fab) View.VISIBLE else View.GONE
+            toolbarTitle.visibility = View.VISIBLE
+            icon.visibility = View.GONE
         }
     }
 
