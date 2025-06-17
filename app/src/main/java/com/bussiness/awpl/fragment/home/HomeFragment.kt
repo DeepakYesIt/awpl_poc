@@ -310,12 +310,8 @@ class HomeFragment : Fragment() {
                        // putSerializable(AppConstant.DISEASE_LIST , ArrayList(diseaseList))
                     }
                     findNavController().navigate(R.id.diseasesBottomFragment,bundle)
-
-
             }
-
             adapter = healthJourneyAdapter
-
         }
 
         // Browse Video RecyclerView

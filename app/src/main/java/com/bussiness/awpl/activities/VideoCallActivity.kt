@@ -38,12 +38,11 @@ class VideoCallActivity : AppCompatActivity() {
     private lateinit var agoraEngine : RtcEngine
     private var isMuted = false
     private var isCameraOn = true
-      private var appId = "40c77d114a684733ae30fcb9fcb0369c"
-   // private var appId = "1c45615e45194910baa3e4cad81a27fa"
+    private var appId = "40c77d114a684733ae30fcb9fcb0369c"
+     // private var appId = "1c45615e45194910baa3e4cad81a27fa"
     private var token: String? = null
     private var channelName = "AWPL_Doctor_Web"
 
-    private var localSurfaceView: SurfaceView? = null
     private var remoteSurfaceView: SurfaceView? = null
     private var remoteUid: Int? = null
     private var isSwitched = false
@@ -244,7 +243,6 @@ class VideoCallActivity : AppCompatActivity() {
     private fun showBlankScreenForUser(){
         val remoteContainer = findViewById<FrameLayout>(R.id.remote_video_view)
         remoteContainer.removeAllViews()
-
         val blankView = View(this)
         blankView.setBackgroundColor(Color.BLACK)
         remoteContainer.addView(blankView)
@@ -318,11 +316,6 @@ class VideoCallActivity : AppCompatActivity() {
         agoraEngine.setupLocalVideo(videoCanvas)
         agoraEngine.startPreview()
     }
-
-
-
-
-
 
     //olde code
     private fun setupRemoteVideo(uid: Int) {

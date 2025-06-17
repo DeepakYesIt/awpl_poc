@@ -127,7 +127,11 @@ class SummaryScreen : Fragment() {
         binding.apply {
             btnNext.setOnClickListener {
                 if(binding.checkboxPrivacy.isChecked){
-                    callingPaymentApi()
+                    if(btnNext.text =="Free"){
+                      congratsDialog()
+                    }else {
+                        callingPaymentApi()
+                    }
                 }else{
                    LoadingUtils.showErrorDialog(requireContext(),"Please agree to the Privacy Policy and Terms & Conditions")
                 }
@@ -213,9 +217,13 @@ class SummaryScreen : Fragment() {
         dialog.setContentView(binding.root)
 
         binding.apply {
-            btnClose.setOnClickListener { dialog.dismiss() }
-            btnNext.setOnClickListener { findNavController().navigate(R.id.paymentScreen)
+            btnClose.setOnClickListener {
                 dialog.dismiss()
+                findNavController().navigate(R.id.homeFragment)
+            }
+            btnNext.setOnClickListener {
+                dialog.dismiss()
+                findNavController().navigate(R.id.homeFragment)
             }
 
             textView36.setPaintFlags(textView36.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)

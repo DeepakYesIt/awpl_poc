@@ -311,6 +311,7 @@
     </androidx.cardview.widget.CardView>
 
 
+
     <androidx.cardview.widget.CardView
         android:id="@+id/doctor"
         android:layout_width="match_parent"
@@ -482,6 +483,50 @@
                 app:tint="@color/black" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+     <androidx.cardview.widget.CardView
+                android:id="@+id/refund_policy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                app:cardCornerRadius="5dp">
+                <LinearLayout
+                    android:id="@+id/ll_refund"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="12dp"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackground">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_perception"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginEnd="12dp"
+                        app:tint="@color/black" />
+
+                    <TextView
+                        android:id="@+id/refund_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/refund_policy1"
+                        android:textSize="@dimen/_14sdp"
+                        android:textColor="@color/black"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_arrow_right"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:visibility="gone"
+                        app:tint="@color/black" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
 
     <!-- Logout -->
     <androidx.cardview.widget.CardView

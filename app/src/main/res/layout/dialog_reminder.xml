@@ -71,6 +71,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView57">
 
         <TextView
+            android:id="@+id/tv_doc_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato_regular"

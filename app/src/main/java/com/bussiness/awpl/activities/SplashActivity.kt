@@ -84,7 +84,7 @@ class SplashActivity : AppCompatActivity() {
 
             }
             if(it.hasExtra("doctor_name") && it.hasExtra("date")){
-                doctorName = intent.getStringExtra("fileUrl").toString()
+                doctorName = intent.getStringExtra("doctor_name").toString()
                 date = intent.getStringExtra("date").toString()
             }
         }
@@ -95,7 +95,6 @@ class SplashActivity : AppCompatActivity() {
         sessionManager.applySavedLanguage()
 
         Handler(Looper.getMainLooper()).postDelayed({
-
             if (sessionManager.isLoggedIn()) {
                 var intent = Intent(this, HomeActivity::class.java)
                 if(fileUrl.isNotEmpty() && date.isNotEmpty()) {
@@ -119,12 +118,9 @@ class SplashActivity : AppCompatActivity() {
 
 
             }
-
             else {
                 startActivity(Intent(this, OnBoardActivity::class.java))
             }
-
-
             finish()
         }, 3000)
 

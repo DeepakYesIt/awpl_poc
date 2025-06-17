@@ -80,6 +80,8 @@ class ScheduleFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 findNavController().navigate(R.id.homeFragment)
+             // calling Reschedule task here
+            //  findNavController().navigate(R.id.reschedule_call)
             }
         })
 
@@ -87,8 +89,49 @@ class ScheduleFragment : Fragment() {
         setUpRecyclerView()
         selectTab(selectedTab)
         callingUpcomingApi()
+        callingHomeDataBackWork()
     }
 
+    private fun callingHomeDataBackWork(){
+        viewModel.homeData.observe(viewLifecycleOwner) { data ->
+            if (data != null) {
+                if (data != null && data.size> 0 && selectedTab ==0) {
+                    Log.d("TESTING_SIZE", "Size of the list is " + data.size.toString())
+                    if (data.size > 0) {
+                        binding.noDataView.visibility = View.GONE
+                        binding.recyclerView.visibility = View.VISIBLE
+                        viewModel.upcomingList = data
+                        appointmentAdapter.updateAdapter(viewModel.upcomingList)
+                    } else {
+                        binding.apply {
+                            noDataView.visibility = View.VISIBLE
+                            recyclerView.visibility = View.GONE
+                        }
+                    }
+                }
+                else {
+                    binding.apply {
+                        noDataView.visibility = View.VISIBLE
+                        recyclerView.visibility = View.GONE
+                    }
+                }
+            }
+        }
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+        // Stop the periodic fetch when fragment is not visible
+        viewModel.stopPeriodicFetch()
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        selectTab(selectedTab)
+        viewModel.startPeriodicFetch()
+    }
     private fun selectTab(index: Int) {
         selectedTab = index
 
@@ -166,20 +209,20 @@ class ScheduleFragment : Fragment() {
     }
 
     private fun callingUpcomingApi(){
-      if(viewModel.upcomingList.size > 0){
-
-          if (viewModel.upcomingList.size > 0) {
-              binding.noDataView.visibility = View.GONE
-              binding.recyclerView.visibility = View.VISIBLE
-              appointmentAdapter.updateAdapter(viewModel.upcomingList)
-          } else {
-              binding.apply {
-                  noDataView.visibility = View.VISIBLE
-                  recyclerView.visibility = View.GONE
-              }
-          }
-          appointmentAdapter.updateAdapter(viewModel.upcomingList)
-      }else {
+//      if(viewModel.upcomingList.size > 0){
+//
+//          if (viewModel.upcomingList.size > 0) {
+//              binding.noDataView.visibility = View.GONE
+//              binding.recyclerView.visibility = View.VISIBLE
+//              appointmentAdapter.updateAdapter(viewModel.upcomingList)
+//          } else {
+//              binding.apply {
+//                  noDataView.visibility = View.VISIBLE
+//                  recyclerView.visibility = View.GONE
+//              }
+//          }
+//          appointmentAdapter.updateAdapter(viewModel.upcomingList)
+//      }else {
           lifecycleScope.launch {
               LoadingUtils.showDialog(requireContext(), false)
               viewModel.upcomingAppoint().collect {
@@ -217,7 +260,7 @@ class ScheduleFragment : Fragment() {
                   }
               }
           }
-      }
+      //}
     }
 
     private fun callingCompletedApi(type:String){

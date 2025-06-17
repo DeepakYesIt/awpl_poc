@@ -3,6 +3,7 @@ package com.bussiness.awpl
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.util.Log
 import android.util.TypedValue
 import android.view.ViewGroup
 import android.view.Window
@@ -35,8 +36,8 @@ class DialogStartAppointment(
 
         // Set data
         binding.dateTimeTxt.text = date
-
-        binding.doctorName.text = doctor_name
+        Log.d("TESTING_NAME",doctor_name+"inside dialog")
+        binding.tvDocName.text ="Doctor Name: "+ doctor_name
         binding.btnYes.setOnClickListener {
             dismiss()
         }

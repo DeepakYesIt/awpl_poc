@@ -35,6 +35,7 @@ class PdfActivity : AppCompatActivity() {
 
        // replace with your actual URL
         if(pdfUrl.isNotEmpty()) {
+
             pdfUrl =AppConstant.Base_URL+ pdfUrl
             val googleDocsUrl = "https://docs.google.com/gview?embedded=true&url=$pdfUrl"
             Log.d("TESTING_PDF",googleDocsUrl)
@@ -42,8 +43,8 @@ class PdfActivity : AppCompatActivity() {
             webView.settings.loadWithOverviewMode = true
             webView.settings.useWideViewPort = true
             webView.webViewClient = WebViewClient()
-
             webView.loadUrl(googleDocsUrl)
+
         }
     }
 }

@@ -81,6 +81,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             else if(type == "start_appoitment"){
                 val doctorName = data["doctor_name"]
                 val date = data["date"]
+                if (doctorName != null) {
+                    Log.d("TESTING_NAME",doctorName)
+                }
                 if (isAppInForeground1()) {
                     MyApp.currentActivity?.let { activity ->
                         activity.runOnUiThread {
@@ -96,7 +99,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     }
                 } else {
 
-                    showNotificationStartAppointment(doctorName ?: "", date ?: "")
+                    if (doctorName != null) {
+                        Log.d("TESTING_NAME",doctorName)
+                        showNotificationStartAppointment(doctorName , date ?: "")
+                    } else {
+
+                    }
                 }
             }
             else if(type == "reschedule"){
@@ -146,6 +154,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val intent = Intent(this, DialogStartApointmentActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("open_dialog", true)
+            Log.d("TESTING_NAME",doctorName)
             putExtra("doctor_name", doctorName)
             putExtra("date", date)
         }

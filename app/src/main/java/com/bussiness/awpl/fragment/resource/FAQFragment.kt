@@ -76,13 +76,25 @@ class FAQFragment : Fragment() {
         filteredList.clear()
         if (lowerQuery.isEmpty()) {
             filteredList.addAll(faqList)
+            if(filteredList.size ==0){
+                binding.tvNoDataView.visibility =View.VISIBLE
+            }else{
+                binding.tvNoDataView.visibility =View.GONE
+            }
             faqAdapter.updateAdapter(filteredList)
         } else {
             filteredList.addAll(
                 faqList.filter {
+
                     it.question.lowercase().contains(lowerQuery) || it.answer.lowercase().contains(lowerQuery)
                 }
             )
+
+            if(filteredList.size ==0){
+                binding.tvNoDataView.visibility =View.VISIBLE
+            }else{
+                binding.tvNoDataView.visibility =View.GONE
+            }
             faqAdapter.updateAdapter(filteredList)
         }
 
@@ -91,7 +103,6 @@ class FAQFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Setup FAQ RecyclerView
         val faqList = listOf(
             FAQItem("Lorem ipsum dolor sit amet?", "Lorem ipsum dolor sit amet, consectetur adipiscing elit."),
             FAQItem("Lorem ipsum dolor sit amet?", "Lorem ipsum dolor sit amet, consectetur adipiscing elit."),

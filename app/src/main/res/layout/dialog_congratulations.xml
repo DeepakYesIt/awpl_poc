@@ -80,6 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20sdp"
             android:text="₹449 "
+            android:visibility="gone"
             android:textColor="@color/black"
             android:textSize="16sp"
         />
@@ -89,7 +90,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_21sdp"
-            android:text="| Free"
+            android:text="Free"
             android:textColor="#199FD9"
             android:textSize="20sp"
 

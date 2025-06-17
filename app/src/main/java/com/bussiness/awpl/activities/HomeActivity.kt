@@ -203,11 +203,7 @@ class HomeActivity : AppCompatActivity() {
                     binding.imgBackProfile.visibility =View.VISIBLE
                 }
                 R.id.refundPolicyFragment -> {
-                    setToolbar(
-                        "Refund Policy",
-                        showBottomNav = false,
-                        showBell = false
-                    )
+                    setToolbar("Refund Policy", showBottomNav = false, showBell = false)
                     binding.profileIcon.visibility =View.GONE
                 }
 
@@ -303,6 +299,7 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
             else if(it.hasExtra("doctor_name")&& it.hasExtra("date")) {
+                Log.d("TESTING_NAME","inside activity "+intent.getStringExtra("doctor_name").toString())
                 val dialog = DialogStartAppointment(this,intent.getStringExtra("doctor_name").toString() ,
                     intent.getStringExtra("date").toString())
                 dialog.show()
@@ -488,6 +485,7 @@ class HomeActivity : AppCompatActivity() {
         val forOther = navigationView.findViewById<LinearLayout>(R.id.ll_for_other)
         val scheduleLayout = navigationView.findViewById<LinearLayout>(R.id.llschedule)
         val userName = navigationView.findViewById<TextView>(R.id.tv_user_name)
+        val refundPolicy = navigationView.findViewById<LinearLayout>(R.id.ll_refund)
         img = navigationView.findViewById(R.id.profileIcon)
         userName.text = SessionManager(this).getUserName() ?: ""
         val imgIcon = navigationView.findViewById<ImageView>(R.id.arr_sch)
@@ -504,6 +502,10 @@ class HomeActivity : AppCompatActivity() {
         }
         Glide.with(this).load(SessionManager(this).getUserImage()).placeholder(R.drawable.ic_profile_new_opt).into(img)
 
+        refundPolicy.setOnClickListener {
+            navController.navigate(R.id.refundPolicyFragment)
+            closeDrawer()
+        }
         scheduleLayout.setOnClickListener {
             if (scheduleMain.isVisible) {
                 scheduleMain.visibility = View.GONE

@@ -1,5 +1,7 @@
 package com.bussiness.awpl.fragment.resource
 
+import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -49,11 +51,38 @@ class VideoGalleryFragment : Fragment() {
         setupRecyclerView()
     }
 
+
+    private fun openYouTubeUrl(context: Context, url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        intent.setPackage("com.google.android.youtube") // Try YouTube app
+        try {
+            context.startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            // If YouTube app not found, open in browser
+            intent.setPackage(null)
+            context.startActivity(intent)
+        }
+    }
+
+
+    fun isYouTubeUrl(url: String): Boolean {
+        val youtubeRegex = Regex("^(https?://)?(www\\.)?(youtube\\.com|youtu\\.be)/.+$")
+        return youtubeRegex.matches(url.trim())
+    }
+
+
+
     private fun setupRecyclerView() {
         binding.videoGalleryRecyclerView.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             videoGalleryAdapter = VideoGalleryAdapter(mutableListOf()) { item ->
-                openVideo(item.video_link)
+
+                if(isYouTubeUrl(item.video_link)){
+                    openYouTubeUrl(requireContext(),item.video_link)
+                }
+                else{
+                    openVideo(item.video_link)
+                }
             }
             adapter = videoGalleryAdapter
         }
