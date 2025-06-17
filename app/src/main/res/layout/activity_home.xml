@@ -22,55 +22,85 @@
             android:background="@color/white"
             android:elevation="4dp"
             android:layout_marginTop="@dimen/_10sdp"
-
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <!-- Bell Icon -->
-            <ImageView
-                android:id="@+id/ivBell"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="15dp"
-                android:src="@drawable/notification_icon"
-                android:contentDescription="@string/notifications" />
+            <!-- Inner layout for positioning -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <!-- Title -->
-            <TextView
-                android:id="@+id/toolbarTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text=""
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:fontFamily="@font/lato_regular"
-                android:textColor="@color/darkGreyColor" />
+                <!-- Back Icon -->
+                <ImageView
+                    android:id="@+id/imgBackProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/profile"
+                    android:src="@drawable/back_icon"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Back/Profile Icon -->
-            <ImageView
-                android:id="@+id/imgBackProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:visibility="visible"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:src="@drawable/back_icon"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/profile" />
+                <!-- Profile Icon -->
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profileIcon"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:src="@drawable/ic_profile_icon_new"
+                    android:visibility="gone"
+                    app:civ_border_color="#FF000000"
+                    app:civ_border_width="1dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profileIcon"
-                android:layout_width="@dimen/_42sdp"
-                android:layout_height="@dimen/_42sdp"
-                android:src="@drawable/ic_profile_icon_new"
-                app:civ_border_width="1dp"
-                app:civ_border_color="#FF000000"
-                android:visibility="gone"/>
+                <!-- Bell Icon -->
+                <ImageView
+                    android:id="@+id/ivBell"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/notification_icon"
+                    android:contentDescription="@string/notifications"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <!-- Centered Title -->
+                <TextView
+                    android:id="@+id/toolbarTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/lato_regular"
+                    android:textColor="@color/darkGreyColor"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <!-- Centered App Logo -->
+                <ImageView
+                    android:id="@+id/icon"
+                    android:layout_width="@dimen/_140sdp"
+                    android:layout_height="@dimen/_60sdp"
+                    android:src="@drawable/app_logo"
+                    android:visibility=""
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.appcompat.widget.Toolbar>
+
 
         <!-- Navigation Host Fragment -->
         <androidx.fragment.app.FragmentContainerView
@@ -99,6 +129,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="gone"
                 android:src="@drawable/fab"/>
         </androidx.cardview.widget.CardView>
 

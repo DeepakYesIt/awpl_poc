@@ -23,6 +23,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.NumberPicker
 import android.widget.TextView
 import android.widget.Toast
@@ -47,6 +48,7 @@ import com.bussiness.awpl.R
 import com.bussiness.awpl.base.CommonUtils
 import com.bussiness.awpl.databinding.DialogCancelAppointmentBinding
 import com.bussiness.awpl.databinding.DialogConfirmAppointmentBinding
+import com.bussiness.awpl.databinding.DialogFullImageBinding
 import com.bussiness.awpl.databinding.DialogLogoutBinding
 import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.ErrorMessages
@@ -77,6 +79,8 @@ class ProfileFragment : Fragment() {
     private val IMAGE_URI_KEY = "profile_image_uri"
     private var imageProfileMultiPart :MultipartBody.Part? = null
     private var selectedImageUri: Uri? = null
+    private var originalProfileData: MyprofileModel? = null
+
 
     private val viewModel: MyProfileViewModel by lazy {
         ViewModelProvider(this)[MyProfileViewModel::class.java]
@@ -163,7 +167,8 @@ class ProfileFragment : Fragment() {
     }
 
     private fun settingDataToUi(data: MyprofileModel) {
-             binding.apply {
+        originalProfileData = data
+        binding.apply {
                  data.name?.let {
                      etFullName.text =data.name.toString()
                      etName.setText(data.name)
@@ -271,9 +276,62 @@ class ProfileFragment : Fragment() {
                     callingProfileSaveApi()
                 }
             }
+            binding.rlCancel.setOnClickListener {
+                binding.llEditDelete.visibility = View.VISIBLE
+                binding.llSaveCancel.visibility = View.GONE
+                disableAllEdlitText()
+
+                // Restore original data
+                originalProfileData?.let { data ->
+                    settingDataToUi(data)
+                }
+            }
+            profileImage.setOnClickListener {
+                showFullImageDialog()
+            }
+
 
         }
     }
+
+    private fun showFullImageDialog() {
+        val dialog = Dialog(requireContext())
+        val binding = DialogFullImageBinding.inflate(layoutInflater)
+        dialog.setContentView(binding.root)
+
+        // Load image
+        val imageUrl = AppConstant.Base_URL + originalProfileData?.profile_path?.let { ensureStartsWithSlash(it) }
+        Glide.with(requireContext())
+            .load(imageUrl)
+            .placeholder(R.drawable.ic_not_found_img)
+            .into(binding.fullImageView)
+
+        // Dismiss dialog when image is tapped
+        binding.fullImageView.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // Apply dialog window styles
+        dialog.apply {
+            setCancelable(true) // Set only once
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+            val displayMetrics = context.resources.displayMetrics
+            val screenWidth = displayMetrics.widthPixels
+            val marginPx = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 32f, displayMetrics
+            ).toInt()
+
+            window?.setLayout(
+                screenWidth - (2 * marginPx),
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+
+            show()
+        }
+    }
+
+
 
     private fun validateFields(): Boolean {
         binding.apply {
@@ -357,10 +415,6 @@ class ProfileFragment : Fragment() {
         }
 
     }
-
-
-
-
 
     private fun enableAllEdlitText(){
         binding.apply {
@@ -482,41 +536,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun openGallery() {
-//        when {
-//            Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE -> { // Android 14+
-//                if (ContextCompat.checkSelfPermission(
-//                        requireContext(),
-//                        Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
-//                    ) == PackageManager.PERMISSION_GRANTED
-//                ) {
-//                    galleryLauncher.launch("image/*")
-//                } else {
-//                    requestPermissions(arrayOf(Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED), STORAGE_PERMISSION_REQUEST_CODE)
-//                }
-//            }
-//            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> { // Android 13
-//                if (ContextCompat.checkSelfPermission(
-//                        requireContext(),
-//                        Manifest.permission.READ_MEDIA_IMAGES
-//                    ) == PackageManager.PERMISSION_GRANTED
-//                ) {
-//                    galleryLauncher.launch("image/*")
-//                } else {
-//                    requestPermissions(arrayOf(Manifest.permission.READ_MEDIA_IMAGES), STORAGE_PERMISSION_REQUEST_CODE)
-//                }
-//            }
-//            else -> { // Android 12 and below
-//                if (ContextCompat.checkSelfPermission(
-//                        requireContext(),
-//                        Manifest.permission.READ_EXTERNAL_STORAGE
-//                    ) == PackageManager.PERMISSION_GRANTED
-//                ) {
-//                    galleryLauncher.launch("image/*")
-//                } else {
-//                    requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), STORAGE_PERMISSION_REQUEST_CODE)
-//                }
-//            }
-//        }
+//
     }
 
     private fun openCamera() {
