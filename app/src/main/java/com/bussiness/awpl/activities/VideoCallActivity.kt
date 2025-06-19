@@ -136,6 +136,11 @@ class VideoCallActivity : AppCompatActivity() {
                     val seconds = (clampedElapsed / 1000) % 60
 
                     val timeString = String.format("Elapsed: %02d:%02d", minutes, seconds)
+                    if(timeString == "Elapsed: 15:00"){
+                        Toast.makeText(this@VideoCallActivity,
+                            "Your appointment time is over,will be disconnected automatically after 5 minutes.",
+                            Toast.LENGTH_LONG).show()
+                    }
                     Log.d("TESTING_USER_TIME",timeString)
                     findViewById<TextView>(R.id.tv_timer)?.text = timeString
 
