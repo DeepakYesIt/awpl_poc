@@ -116,13 +116,13 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="missedAppointmentFragment">
+                  <entry key="incompleteAppointmentFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="998" />
-                            <option name="y" value="366" />
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>

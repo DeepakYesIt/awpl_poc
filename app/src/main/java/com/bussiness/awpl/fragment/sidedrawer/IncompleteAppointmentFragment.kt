@@ -1,23 +1,32 @@
 package com.bussiness.awpl.fragment.sidedrawer
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
-import com.bussiness.awpl.adapter.CancelledAdapter
+import com.bussiness.awpl.adapter.IncompleteAppointAdapter
 import com.bussiness.awpl.databinding.FragmentIncompleteAppointmentBinding
-import com.bussiness.awpl.model.CancelledAppointment
 import com.bussiness.awpl.utils.AppConstant
+import com.bussiness.awpl.utils.LoadingUtils
+import com.bussiness.awpl.viewmodel.MyAppointmentViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class IncompleteAppointmentFragment : Fragment() {
 
     private var _binding: FragmentIncompleteAppointmentBinding? = null
     private val binding get() = _binding!!
-    private lateinit var cancelledAdapter: CancelledAdapter
+    private lateinit var incompleteAdapter: IncompleteAppointAdapter
+    private lateinit var viewModel: MyAppointmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,44 +38,61 @@ class IncompleteAppointmentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel = ViewModelProvider(this)[MyAppointmentViewModel::class.java]
         setUpRecyclerView()
-        cancelledAdapter.updateAdapter(getDummyAppointments()) // update with static or API data
+        incompleteAppointmentApiCall()
     }
 
     private fun setUpRecyclerView() {
-        cancelledAdapter = CancelledAdapter(mutableListOf()) { appointment ->
+        incompleteAdapter = IncompleteAppointAdapter(mutableListOf()) { appointment ->
             val bundle = Bundle().apply {
                 putInt(AppConstant.AppoitmentId, appointment.id)
             }
-//            findNavController().navigate(R.id.reschedule_call, bundle)
+            findNavController().navigate(R.id.reschedule_call, bundle)
         }
 
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = cancelledAdapter
+            adapter = incompleteAdapter
         }
     }
 
-    private fun getDummyAppointments(): List<CancelledAppointment> {
-        return listOf(
-            CancelledAppointment(
-                id = 1,
-                doctorName = "Dr. Anjali Sharma",
-                doctorImage = "/images/anjali.jpg",
-                date = "2025-06-20",
-                time = "11:00 AM",
-                patient_id = 1
-            ),
-            CancelledAppointment(
-                id = 2,
-                doctorName = "Dr. Rajeev Singh",
-                doctorImage = "/images/rajeev.jpg",
-                date = "2025-06-22",
-                time = "03:30 PM",
-                patient_id = 2
-            )
-        )
+
+    private fun incompleteAppointmentApiCall() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            LoadingUtils.showDialog(requireContext(), false)
+            viewModel.incompleteAppointment().collect { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+                        LoadingUtils.hideDialog()
+                        val appointmentList = result.data ?: emptyList()
+                        Log.d("TESTING_WORK", "Size is ${appointmentList.size}")
+
+                        if (appointmentList.isNotEmpty()) {
+                            binding.noDataView.visibility = View.GONE
+                            binding.recyclerView.visibility = View.VISIBLE
+                        } else {
+                            binding.noDataView.visibility = View.VISIBLE
+                            binding.recyclerView.visibility = View.GONE
+                        }
+
+                        incompleteAdapter.updateAdapter(appointmentList)
+                    }
+
+                    is NetworkResult.Error -> {
+                        LoadingUtils.hideDialog()
+                        LoadingUtils.showErrorDialog(requireContext(), result.message ?: "Unknown error")
+                    }
+
+                    else -> {
+                        // Handle Loading or Idle state if needed
+                    }
+                }
+            }
+        }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

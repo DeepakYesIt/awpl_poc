@@ -12,6 +12,7 @@ import com.bussiness.awpl.model.CompletedAppointmentModel
 import com.bussiness.awpl.model.CompletedScheduleCallModel
 import com.bussiness.awpl.model.CompletedSymptomsModel
 import com.bussiness.awpl.model.HomeModel
+import com.bussiness.awpl.model.IncompleteAppoint
 import com.bussiness.awpl.model.LoginModel
 import com.bussiness.awpl.model.UpcomingModel
 import com.bussiness.awpl.repository.AwplRepository
@@ -35,6 +36,7 @@ class MyAppointmentViewModel @Inject constructor(private var repository: AwplRep
 
     var upcomingList = mutableListOf<UpcomingModel>()
     private var cancelList = mutableListOf<CancelledAppointment>()
+    private var incompleteAppointmentList = mutableListOf<IncompleteAppoint>()
     private val _homeData = MutableLiveData<MutableList<UpcomingModel>?>()
 
     val homeData: LiveData<MutableList<UpcomingModel>?> = _homeData
@@ -142,6 +144,14 @@ class MyAppointmentViewModel @Inject constructor(private var repository: AwplRep
     suspend fun completedSymptomsUpload() :  Flow<NetworkResult<MutableList<CompletedSymptomsModel>>>{
         return repository.completedSymptomsUpload().onEach {
 
+        }
+    }
+
+    suspend fun incompleteAppointment(): Flow<NetworkResult<MutableList<IncompleteAppoint>>> {
+        return repository.incompleteAppointment().onEach {
+            it.data?.let {
+                incompleteAppointmentList.addAll(it)
+            }
         }
     }
 

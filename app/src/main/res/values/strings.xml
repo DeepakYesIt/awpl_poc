@@ -432,5 +432,6 @@
     <string name="health_journey_title_2">Bringing Doctors\n to Your Door – \nVirtually.</string>
     <string name="health_journey_title_3">Upload Symptoms \nfor Minor Issues \nand Major Concerns</string>
     <string name="incomplete_appointment">Incomplete Appointment</string>
+    <string name="you_have_nt_any_incomplete_appointments">You haven’t any \nIncomplete appointments yet</string>
 
 </resources>
