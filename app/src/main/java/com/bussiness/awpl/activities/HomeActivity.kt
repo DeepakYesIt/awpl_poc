@@ -227,7 +227,7 @@ class HomeActivity : AppCompatActivity() {
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
                 }
-                R.id.missedAppointmentFragment ->{ setToolbar("Missed Appointments",showBottomNav = false, fab = false)
+                R.id.incompleteAppointmentFragment ->{ setToolbar("Incomplete Appointment",showBottomNav = false, fab = false)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
                 }
@@ -440,6 +440,7 @@ class HomeActivity : AppCompatActivity() {
         val userName = navigationView.findViewById<TextView>(R.id.tv_user_name)
         val refundPolicy = navigationView.findViewById<LinearLayout>(R.id.ll_refund)
         img = navigationView.findViewById(R.id.profileIcon)
+        val incompleteAppointment = navigationView.findViewById<LinearLayout>(R.id.llIncomplete)
         userName.text = SessionManager(this).getUserName() ?: ""
         val imgIcon = navigationView.findViewById<ImageView>(R.id.arr_sch)
         val scheduleMain = navigationView.findViewById<LinearLayout>(R.id.ll_schedule_main)
@@ -495,6 +496,11 @@ class HomeActivity : AppCompatActivity() {
 
             navController.navigate(R.id.resourceFragment)
             updateBottomNavSelection("resource")
+            closeDrawer()
+        }
+
+        incompleteAppointment.setOnClickListener {
+            navController.navigate(R.id.incompleteAppointmentFragment)
             closeDrawer()
         }
 

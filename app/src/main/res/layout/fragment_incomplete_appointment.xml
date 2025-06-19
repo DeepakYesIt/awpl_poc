@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/parent_bg"
     android:paddingTop="@dimen/_5sdp"
-    tools:context=".fragment.sidedrawer.MissedAppointmentFragment">
+    tools:context=".fragment.sidedrawer.IncompleteAppointmentFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

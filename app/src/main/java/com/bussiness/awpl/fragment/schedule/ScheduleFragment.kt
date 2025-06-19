@@ -317,9 +317,6 @@ class ScheduleFragment : Fragment() {
                 if(chatId != null){
                     findNavController().navigate(R.id.doctorChatFragment,bundle)
                 }
-
-
-
             },
             onDownloadPrescriptionClick = { appointment ->
                 // Handle download prescription button click
