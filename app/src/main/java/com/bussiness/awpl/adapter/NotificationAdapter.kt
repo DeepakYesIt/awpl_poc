@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bussiness.awpl.R
 import com.bussiness.awpl.databinding.ItemDateHeaderBinding
 import com.bussiness.awpl.databinding.ItemNotificationBinding
 import com.bussiness.awpl.model.NotificationModel
@@ -67,6 +68,17 @@ class NotificationAdapter(private var notifications: List<PatinetNotification>) 
             binding.tvNotificationDescription.text = notification.description
             binding.tvTime.text = notification.time
 
+            when (notification.title) {
+                "Appointment Success" -> {
+                    binding.ivNotificationIcon.setImageResource(R.drawable.calendar_tick)
+                }
+                "Appointment Cancelled" -> {
+                    binding.ivNotificationIcon.setImageResource(R.drawable.calendar_cancel_ic)
+                }
+                "Appointment Rescheduled" -> {
+                    binding.ivNotificationIcon.setImageResource(R.drawable.calendar_edit)
+                }
+            }
         }
     }
 
