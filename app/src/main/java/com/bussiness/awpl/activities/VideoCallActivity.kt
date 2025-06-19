@@ -253,73 +253,20 @@ class VideoCallActivity : AppCompatActivity() {
         remoteContainer.addView(blankView)
     }
 
-//    private fun setupLocalVideo() {
-//        val container = findViewById<FrameLayout>(R.id.local_video_view)
-//        container.removeAllViews()
-//
-//        val surfaceView = RtcEngine.CreateRendererView(this)
-//        surfaceView.setZOrderMediaOverlay(true)
-//
-//        container.addView(surfaceView, FrameLayout.LayoutParams(
-//            FrameLayout.LayoutParams.MATCH_PARENT,
-//            FrameLayout.LayoutParams.MATCH_PARENT,
-//            Gravity.CENTER
-//        ))
-//
-//        val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, 0)
-//        agoraEngine.setupLocalVideo(videoCanvas)
-//        agoraEngine.startPreview()
-//    }
-//
-//
-//    private fun setupRemoteVideo(uid: Int) {
-//        try {
-//            val container = findViewById<FrameLayout>(R.id.remote_video_view)
-//            container.removeAllViews()
-//
-//            val surfaceView = RtcEngine.CreateRendererView(this).apply {
-//                setZOrderMediaOverlay(true)
-//                layoutParams = FrameLayout.LayoutParams(
-//                    FrameLayout.LayoutParams.MATCH_PARENT,
-//                    FrameLayout.LayoutParams.MATCH_PARENT,
-//                    Gravity.CENTER
-//                )
-//            }
-//
-//            container.addView(surfaceView)
-//
-//            val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.VIEW_SETUP_MODE_REPLACE, uid)
-//            agoraEngine.setupRemoteVideo(videoCanvas)
-//
-//            agoraEngine.setRemoteRenderMode(
-//                uid,
-//                Constants.RENDER_MODE_HIDDEN,
-//                Constants.VIDEO_MIRROR_MODE_AUTO
-//            )
-//
-//            Log.d("AgoraCall", "Remote video setup for UID: $uid")
-//
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            Toast.makeText(this, "Failed to setup remote video: ${e.message}", Toast.LENGTH_SHORT).show()
-//        }
-//    }
-
-
     private fun setupLocalVideo() {
+
         val container = findViewById<FrameLayout>(R.id.local_video_view)
-        // Step 1: Create SurfaceView
+
         val surfaceView = SurfaceView(this).apply {
             setZOrderMediaOverlay(true) // important for local video overlay
         }
 
-        // Step 2: Add it to your layout
         container.addView(surfaceView)
 
-        // Step 3: Set it in Agora
         val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.VIEW_SETUP_MODE_REPLACE, 0)
         agoraEngine.setupLocalVideo(videoCanvas)
         agoraEngine.startPreview()
+
     }
 
     //olde code
