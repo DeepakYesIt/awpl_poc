@@ -349,6 +349,11 @@
     <string name="edit_profile">प्रोफ़ाइल संपादित करें</string>
     <string name="delete_account_">खाता हटाएं</string>
     <string name="save_changes">परिवर्तनों को सहेजें</string>
+    <string name="not_found">नहीं मिला</string>
+    <string name="health_journey_title_1">एक नि:शुल्क परामर्श के साथ\nअपने स्वास्थ्य यात्रा की शुरुआत करें!</string>
+    <string name="health_journey_title_2">डॉक्टरों को आपके दरवाजे तक\nलाना – वर्चुअली।</string>
+    <string name="health_journey_title_3">छोटे मुद्दों और बड़ी चिंताओं के लिए\nलक्षण अपलोड करें</string>
+
     <string name="term_condition_1">
     प्रभावी तिथि: [तिथि डालें]
 

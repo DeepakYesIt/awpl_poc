@@ -66,7 +66,6 @@ import java.util.UUID
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
-
     private var fileUrl :String =""
     private var date :String =""
     private lateinit var binding: ActivityHomeBinding
@@ -98,10 +97,7 @@ class HomeActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
                         View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
-
-        window.statusBarColor = Color.TRANSPARENT
-
-
+        window.statusBarColor = Color.WHITE
 
         BuildConfig.BASE_URL
         sessionManager = SessionManager(this)
@@ -112,8 +108,6 @@ class HomeActivity : AppCompatActivity() {
 
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_home) as NavHostFragment
         navController = navHostFragment.navController
-
-//        binding.customBottomNav.setupWithNavController(navController)
 
         binding.chatFab.visibility =View.GONE
         binding.ivBell.setOnClickListener { navigate(R.id.notificationFragment) }
@@ -140,8 +134,6 @@ class HomeActivity : AppCompatActivity() {
                         toolbar.visibility = View.VISIBLE
                         customBottomNav.visibility = View.VISIBLE
                         toolbarTitle.text = ""
-//                        toolbarTitle.visibility = View.GONE
-//                        icon.visibility = View.VISIBLE
                         ivBell.visibility = View.VISIBLE
                         imgBackProfile.visibility =View.GONE
                         profileIcon.visibility =View.VISIBLE
@@ -157,43 +149,23 @@ class HomeActivity : AppCompatActivity() {
                     }
                     updateBottomNavSelection("home")
                 }
-
                 R.id.notificationFragment -> {
-                    setToolbar(
-                        "Notifications",
-                        showBottomNav = false,
-                        showBell = false
-                    )
+                    setToolbar("Notifications", showBottomNav = false, showBell = false)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
                 }
-
                 R.id.privacyPolicyFragment -> {
-                    setToolbar(
-                        "Privacy Policy",
-                        showBottomNav = false,
-                        showBell = false
-                    )
+                    setToolbar("Privacy Policy", showBottomNav = false, showBell = false)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
                 }
-
                 R.id.termsAndConditionFragment -> {
-                    setToolbar(
-                        "Terms & Conditions",
-                        showBottomNav = false,
-                        showBell = false
-                    )
+                    setToolbar("Terms & Conditions", showBottomNav = false, showBell = false)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
                 }
-
                 R.id.appointmentPolicyFragment -> {
-                    setToolbar(
-                        "Appointment Policy",
-                        showBottomNav = false,
-                        showBell = false
-                    )
+                    setToolbar("Appointment Policy", showBottomNav = false, showBell = false)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
                 }
@@ -201,11 +173,9 @@ class HomeActivity : AppCompatActivity() {
                     setToolbar("Refund Policy", showBottomNav = false, showBell = false)
                     binding.profileIcon.visibility =View.GONE
                 }
-
-                R.id.profileFragment ->{ setToolbar("My Profile")
+                R.id.profileFragment ->{ setToolbar("My Profile",showBottomNav = false)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
-
                 }
                 R.id.videoGalleryFragment ->{ setToolbar("Video Gallery", showBottomNav = false)
                     binding.profileIcon.visibility =View.GONE
@@ -250,7 +220,6 @@ class HomeActivity : AppCompatActivity() {
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.GONE
                 }
-
                 R.id.doctorChatFragment ->{ setToolbar("My Appointments", showBottomNav = false)
                     binding.profileIcon.visibility =View.GONE
                 }
@@ -270,13 +239,11 @@ class HomeActivity : AppCompatActivity() {
                     binding.toolbar.visibility = View.GONE
                        binding.customBottomNav.visibility = View.GONE
                 }
-
                 R.id.videoCallFragment -> {
                     binding.toolbar.visibility = View.GONE
                     binding.customBottomNav.visibility = View.GONE
                     binding.chatFab.visibility = View.GONE
                 }
-
                 else -> {
                     binding.toolbar.visibility = View.VISIBLE
                     binding.customBottomNav.visibility = View.VISIBLE
@@ -328,14 +295,8 @@ class HomeActivity : AppCompatActivity() {
                     }
                 }
             }
-
-
         }
-
-
-
     }
-
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun downloadReportDialog() {
@@ -375,13 +336,11 @@ class HomeActivity : AppCompatActivity() {
         val nameTv = navigationView.findViewById<TextView>(R.id.tv_user_name)
         val notification = navigationView.findViewById<SwitchCompat>(R.id.switchNotification)
 
-
         nameTv.text = SessionManager(this).getUserName()?:""
         Glide.with(this)
             .load(SessionManager(this).getUserImage())
             .placeholder(R.drawable.ic_profile_new_opt)
             .into(img)
-
         notification.isChecked = SessionManager(this).isNotificationPermissionGranted(this)
     }
 
@@ -402,7 +361,6 @@ class HomeActivity : AppCompatActivity() {
                 navController.navigate(R.id.yourDoctorFragment)
                 updateBottomNavSelection("doctor")
             }
-
         }
 
         binding.resourceFragment.setOnClickListener {
@@ -456,8 +414,6 @@ class HomeActivity : AppCompatActivity() {
             icon.visibility = View.GONE
         }
     }
-
-
 
     private fun navigate(destinationId: Int) {
         findNavController(R.id.nav_host_fragment_home).navigate(destinationId)
@@ -513,7 +469,6 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-
         forMe.setOnClickListener {
             val bundle =Bundle().apply {
                 putString("type",AppConstant.FOR_ME)
@@ -535,7 +490,6 @@ class HomeActivity : AppCompatActivity() {
             updateBottomNavSelection("doctor")
             closeDrawer()
         }
-
 
         resources.setOnClickListener {
 
@@ -631,8 +585,6 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-
-
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
@@ -642,7 +594,6 @@ class HomeActivity : AppCompatActivity() {
                     showDeniedDialog()
                 }
             }
-
         }
 
     private fun askNotificationPermissionForCall() {
@@ -667,6 +618,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun showCallRationaleDialog() {
         AlertDialog.Builder(this)
             .setTitle("Allow Notifications for Video Calls")
@@ -691,6 +643,4 @@ class HomeActivity : AppCompatActivity() {
             .setNegativeButton("Cancel", null)
             .show()
     }
-
-
 }

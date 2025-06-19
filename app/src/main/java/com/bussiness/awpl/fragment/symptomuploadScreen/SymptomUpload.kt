@@ -272,17 +272,9 @@ class SymptomUpload : Fragment() {
         lifecycleScope.launch {
             LoadingUtils.showDialog(requireContext(), false)
 
-            val imageParts = imageList.mapNotNull {
-                MultipartUtil.uriToMultipart(requireContext(), it.uri, "uploadImage[]")
-            }
-
-            val videoParts = videoList.mapNotNull {
-                MultipartUtil.uriToMultipart(requireContext(), it.uri, "uploadVideo[]")
-            }
-
-            val pdfParts = pdfList.mapNotNull {
-                MultipartUtil.uriToMultipart(requireContext(), it.uri, "uploadPdf[]")
-            }
+            val imageParts = imageList.mapNotNull { MultipartUtil.uriToMultipart(requireContext(), it.uri, "uploadImage[]") }
+            val videoParts = videoList.mapNotNull { MultipartUtil.uriToMultipart(requireContext(), it.uri, "uploadVideo[]") }
+            val pdfParts = pdfList.mapNotNull { MultipartUtil.uriToMultipart(requireContext(), it.uri, "uploadPdf[]") }
 
             val answer1 = MultipartUtil.stringToRequestBody(binding.ansNO1.text.toString())
             val answer2 = MultipartUtil.stringToRequestBody(binding.ansNo2.text.toString())

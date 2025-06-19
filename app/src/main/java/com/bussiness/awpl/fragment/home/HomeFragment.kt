@@ -64,12 +64,13 @@ class HomeFragment : Fragment() {
     private var doctorName :String =""
 
 
-    private val healthJourneyList = listOf(
-        HealthListModel("Begin Your Health\nJourney with a \nFree Consultation!", R.drawable.women_doctor),
-        HealthListModel("Bringing Doctors\n to Your Door – \nVirtually.", R.drawable.ic_rename_doctor),
-        HealthListModel("Upload Symptoms \nfor Minor Issues \nand Major Concerns", R.drawable.ic_little_girl)
-    )
-
+    private val healthJourneyList by lazy {
+        listOf(
+            HealthListModel(getString(R.string.health_journey_title_1), R.drawable.women_doctor),
+            HealthListModel(getString(R.string.health_journey_title_2), R.drawable.ic_rename_doctor),
+            HealthListModel(getString(R.string.health_journey_title_3), R.drawable.ic_little_girl)
+        )
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -86,8 +87,6 @@ class HomeFragment : Fragment() {
             // Call your refresh logic here
             refreshData()
         }
-
-
         return binding.root
     }
 
@@ -143,8 +142,6 @@ class HomeFragment : Fragment() {
 
     }
 
-
-
     @RequiresApi(Build.VERSION_CODES.O)
     private fun callingHomeDataBackWork(){
         homeViewModel.homeData.observe(viewLifecycleOwner) { data ->
@@ -173,8 +170,6 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun loadFaqs() {
@@ -214,7 +209,6 @@ class HomeFragment : Fragment() {
               }
         }
     }
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun settingDataToUi(data: HomeModel?) {
@@ -285,7 +279,6 @@ class HomeFragment : Fragment() {
         else{
             findNavController().navigate( R.id.onlineConsultationFragment,bundle)
         }
-
     }
 
     private fun setupRecyclerViews() {
@@ -327,7 +320,6 @@ class HomeFragment : Fragment() {
             adapter = browseVideoAdapter
 
         }
-
     }
 
     private fun openYouTubeUrl(context: Context, url: String) {
@@ -342,12 +334,10 @@ class HomeFragment : Fragment() {
         }
     }
 
-
     fun isYouTubeUrl(url: String): Boolean {
         val youtubeRegex = Regex("^(https?://)?(www\\.)?(youtube\\.com|youtu\\.be)/.+$")
         return youtubeRegex.matches(url.trim())
     }
-
 
     private fun openVideo(videoUrl :String){
         val intent = Intent(Intent.ACTION_VIEW)
@@ -356,6 +346,7 @@ class HomeFragment : Fragment() {
         startActivity(intent)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun clickListener() {
         binding.apply {
 
@@ -410,7 +401,6 @@ class HomeFragment : Fragment() {
                     findNavController().navigate(R.id.reschedule_call,bundle)
                 }
             }
-
 
             cancelBtn.setOnClickListener{
                 cancelDialog()
@@ -604,8 +594,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-
-
     private suspend fun showCountdownMessage(message: String) {
         withContext(Dispatchers.Main) {
             binding.startAppointmentBtn.text = message
@@ -626,28 +614,4 @@ class HomeFragment : Fragment() {
         // Stop the periodic fetch when fragment is not visible
         homeViewModel.stopPeriodicFetch()
     }
-
-
-
-
 }
-
-
-//
-//private fun callingDiseaseApi(){
-//    lifecycleScope.launch(Dispatchers.IO) {
-//        viewModel.getDiseaseList().collect { result ->
-//            when (result) {
-//                is NetworkResult.Success -> {
-//                    result.data?.let { DiseaseStore.setDiseases(it) }
-//                }
-//                is NetworkResult.Error -> {
-//
-//                }
-//                else -> {
-//
-//                }
-//            }
-//        }
-//    }
-//}
