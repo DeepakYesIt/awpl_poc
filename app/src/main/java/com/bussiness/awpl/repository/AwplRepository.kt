@@ -11,6 +11,7 @@ import com.bussiness.awpl.model.CompletedSymptomsModel
 import com.bussiness.awpl.model.DoctorModel
 import com.bussiness.awpl.model.FAQItem
 import com.bussiness.awpl.model.HomeModel
+import com.bussiness.awpl.model.IncompleteAppoint
 import com.bussiness.awpl.model.LoginModel
 import com.bussiness.awpl.model.PatinetNotification
 import com.bussiness.awpl.model.PayuPaymentModel
@@ -127,6 +128,8 @@ interface AwplRepository {
 
 
     suspend fun cancelAppointment() : Flow<NetworkResult<MutableList<CancelledAppointment>>>
+
+    suspend fun incompleteAppointment() : Flow<NetworkResult<MutableList<IncompleteAppoint>>>
 
     suspend fun patientNotification() : Flow<NetworkResult<MutableList<PatinetNotification>>>
 

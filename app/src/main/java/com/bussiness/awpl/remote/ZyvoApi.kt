@@ -151,6 +151,9 @@ interface ZyvoApi {
     @POST("cancelledAppointment")
     suspend fun cancelAppointment() : Response<JsonObject>
 
+    @POST("incompleteAppointment")
+    suspend fun incompleteAppointment() : Response<JsonObject>
+
     @GET("patientNotifications")
     suspend fun patientNotification() : Response<JsonObject>
 

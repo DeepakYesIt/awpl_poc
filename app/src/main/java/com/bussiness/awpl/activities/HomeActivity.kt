@@ -227,7 +227,11 @@ class HomeActivity : AppCompatActivity() {
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
                 }
-                R.id.incompleteAppointmentFragment ->{ setToolbar("Incomplete Appointment",showBottomNav = false, fab = false)
+                R.id.reschedule_call ->{ setToolbar("Reschedule Appointment", fab = false, showBottomNav = false, showBell = false)
+                    binding.profileIcon.visibility =View.GONE
+                    binding.imgBackProfile.visibility =View.VISIBLE
+                }
+                R.id.incompleteAppointmentFragment ->{ setToolbar("Incomplete Appointment",showBottomNav = false, fab = false, showBell = false)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
                 }
@@ -408,7 +412,6 @@ class HomeActivity : AppCompatActivity() {
                     findNavController(R.id.nav_host_fragment_home).navigateUp()
                 }
             }
-
             chatFab.visibility = if (fab) View.VISIBLE else View.GONE
             toolbarTitle.visibility = View.VISIBLE
             icon.visibility = View.GONE
