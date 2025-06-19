@@ -5,7 +5,6 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" /> <!-- Permissions -->
-
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -37,6 +36,9 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:theme"
         tools:targetApi="34">
+        <activity
+            android:name=".activities.VideoCallActivity1"
+            android:exported="false" />
         <activity
             android:name=".activities.PdfActivity"
             android:exported="false" />
