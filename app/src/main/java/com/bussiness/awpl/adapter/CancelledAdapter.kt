@@ -57,6 +57,4 @@ class CancelledAdapter(
         this.appointmentList = appointmentList
         notifyDataSetChanged()
     }
-
-
 }

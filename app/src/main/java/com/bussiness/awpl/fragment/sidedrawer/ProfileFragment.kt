@@ -81,7 +81,6 @@ class ProfileFragment : Fragment() {
     private var selectedImageUri: Uri? = null
     private var originalProfileData: MyprofileModel? = null
 
-
     private val viewModel: MyProfileViewModel by lazy {
         ViewModelProvider(this)[MyProfileViewModel::class.java]
     }
@@ -107,15 +106,12 @@ class ProfileFragment : Fragment() {
                 val imageUri = saveBitmapToInternalStorage(it) // Save bitmap & get URI
                 Glide.with(requireContext()).load(imageUri).into(binding.profileImage)
 
-
                 Log.d("TESTING_MULTIPART","URI IS:- "+imageUri)
                 imageProfileMultiPart = uriToMultipart(requireContext(),imageUri,"profileImage")
                 Log.d("TESTING_MULTIPART", imageProfileMultiPart.toString())
             }
         }
     }
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -124,7 +120,6 @@ class ProfileFragment : Fragment() {
         callingProfileApi()
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -138,10 +133,7 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
-        binding.etHeight.setOnClickListener {
-            showHeightPickerDialog()
-        }
-
+        binding.etHeight.setOnClickListener { showHeightPickerDialog() }
         clickListener()
     }
 
@@ -210,7 +202,7 @@ class ProfileFragment : Fragment() {
              }
        }
 
-    fun ensureStartsWithSlash(path: String): String {
+    private fun ensureStartsWithSlash(path: String): String {
         return if (path.startsWith("/")) path else "/$path"
     }
 
@@ -241,7 +233,7 @@ class ProfileFragment : Fragment() {
             .setPositiveButton("OK") { _, _ ->
                 val selectedFeet = feetPicker.value
                 val selectedInches = inchPicker.value
-                binding.etHeight.setText("$selectedFeet ft $selectedInches in")
+                binding.etHeight.text = "$selectedFeet ft $selectedInches in"
             }
             .setNegativeButton("Cancel", null)
             .create()
@@ -289,8 +281,6 @@ class ProfileFragment : Fragment() {
             profileImage.setOnClickListener {
                 showFullImageDialog()
             }
-
-
         }
     }
 
@@ -318,20 +308,11 @@ class ProfileFragment : Fragment() {
 
             val displayMetrics = context.resources.displayMetrics
             val screenWidth = displayMetrics.widthPixels
-            val marginPx = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 32f, displayMetrics
-            ).toInt()
-
-            window?.setLayout(
-                screenWidth - (2 * marginPx),
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-
+            val marginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32f, displayMetrics).toInt()
+            window?.setLayout(screenWidth - (2 * marginPx), ViewGroup.LayoutParams.WRAP_CONTENT)
             show()
         }
     }
-
-
 
     private fun validateFields(): Boolean {
         binding.apply {
@@ -366,9 +347,7 @@ class ProfileFragment : Fragment() {
                 txtOthers.requestFocus()
                 return false
             }
-
             return isValid
-
         }
     }
 
@@ -413,7 +392,6 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
-
     }
 
     private fun enableAllEdlitText(){
@@ -425,6 +403,7 @@ class ProfileFragment : Fragment() {
             editIcon.visibility = View.VISIBLE
         }
     }
+
     private fun disableAllEdlitText(){
         binding.apply {
             etName.isEnabled = false
@@ -434,7 +413,6 @@ class ProfileFragment : Fragment() {
             editIcon.visibility = View.GONE
         }
     }
-
 
     @SuppressLint("SetTextI18n")
     private fun dialogDeleteAccount() {
@@ -576,7 +554,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-
     private fun saveBitmapToInternalStorage(bitmap: Bitmap): Uri {
         val file = File(requireContext().filesDir, "profile_image.jpg")
         FileOutputStream(file).use { out ->
@@ -598,7 +575,7 @@ class ProfileFragment : Fragment() {
                 }
             } else {
                 // Show message if permission is denied
-                android.widget.Toast.makeText(requireContext(), "Permission Denied!", android.widget.Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Permission Denied!", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -613,8 +590,7 @@ class ProfileFragment : Fragment() {
         private const val STORAGE_PERMISSION_REQUEST_CODE = 1002
     }
 
-
-    fun uriToMultipart(
+    private fun uriToMultipart(
         context: Context,
         uri: Uri,
         partName: String = "file"
@@ -655,6 +631,4 @@ class ProfileFragment : Fragment() {
         }
         return name
     }
-
-
 }

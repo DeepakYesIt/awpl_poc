@@ -102,9 +102,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:tint="@color/black"
                 android:src="@drawable/profile_notification"
-                android:layout_marginEnd="12dp"/>
+                android:layout_marginEnd="12dp"
+                app:tint="@color/black" />
 
             <TextView
                 android:id="@+id/notification_background"
@@ -266,7 +266,6 @@
 
     </LinearLayout>
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/preceptions"
         android:layout_width="match_parent"
@@ -310,7 +309,48 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/incompleteAppointment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                app:cardCornerRadius="5dp">
+                <LinearLayout
+                    android:id="@+id/llIncomplete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="12dp"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackground">
 
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_perception"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginEnd="12dp"
+                        app:tint="@color/black" />
+
+                    <TextView
+                        android:id="@+id/incomplete_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/incomplete_appointment"
+                        android:textSize="@dimen/_14sdp"
+                        android:textColor="@color/black"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_arrow_right"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:visibility="gone"
+                        app:tint="@color/black" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/doctor"
@@ -333,8 +373,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/yourdoctor"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:tint="@color/black"
-                android:layout_marginEnd="12dp"/>
+                android:layout_marginEnd="12dp"
+                app:tint="@color/black" />
 
             <TextView
                 android:id="@+id/doctor_tv"
@@ -376,8 +416,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/resource"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:tint="@color/black"
-                android:layout_marginEnd="12dp"/>
+                android:layout_marginEnd="12dp"
+                app:tint="@color/black" />
 
             <TextView
                 android:id="@+id/resources_tv"
@@ -420,8 +460,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_privacy_policy_new"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:tint="@color/black"
-                android:layout_marginEnd="12dp"/>
+                android:layout_marginEnd="12dp"
+                app:tint="@color/black" />
 
             <TextView
                 android:id="@+id/txtPrivacyPolicy"
@@ -550,8 +590,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/loggout_ic"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:tint="@color/black"
-                android:layout_marginEnd="12dp"/>
+                android:layout_marginEnd="12dp"
+                app:tint="@color/black" />
 
             <TextView
                 android:layout_width="0dp"

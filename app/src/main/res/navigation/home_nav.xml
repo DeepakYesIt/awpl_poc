@@ -136,8 +136,8 @@
         android:label="reschedule_call"
         />
     <fragment
-        android:id="@+id/missedAppointmentFragment"
-        android:name="com.bussiness.awpl.fragment.sidedrawer.MissedAppointmentFragment"
-        android:label="fragment_missed_appointment"
-        tools:layout="@layout/fragment_missed_appointment" />
+        android:id="@+id/incompleteAppointmentFragment"
+        android:name="com.bussiness.awpl.fragment.sidedrawer.IncompleteAppointmentFragment"
+        android:label="fragment_incomplete_appointment"
+        tools:layout="@layout/fragment_incomplete_appointment" />
 </navigation>

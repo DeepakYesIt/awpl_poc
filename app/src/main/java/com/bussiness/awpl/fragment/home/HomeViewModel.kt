@@ -1,7 +1,9 @@
 package com.bussiness.awpl.fragment.home
 
+import android.os.Build
 import android.os.CountDownTimer
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -92,6 +94,7 @@ class HomeViewModel @Inject constructor(private var repository: AwplRepository):
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun isTimeMoreThanTwoHoursAhead(dateStr: String, timeRange: String): Boolean {
         return try {
             val formatter = DateTimeFormatter.ofPattern("EEE MMM dd yyyy h:mm a", Locale.ENGLISH)
