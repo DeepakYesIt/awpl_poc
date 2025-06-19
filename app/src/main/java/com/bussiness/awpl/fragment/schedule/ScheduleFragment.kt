@@ -63,6 +63,7 @@ class ScheduleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentScheduleBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -76,7 +77,7 @@ class ScheduleFragment : Fragment() {
             Toast.makeText(requireContext(),"Download Started",Toast.LENGTH_LONG).show()
         }
         viewModel = ViewModelProvider(this)[MyAppointmentViewModel::class.java]
-
+        viewModel.startPeriodicFetch()
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 findNavController().navigate(R.id.homeFragment)
@@ -90,6 +91,7 @@ class ScheduleFragment : Fragment() {
         selectTab(selectedTab)
         callingUpcomingApi()
         callingHomeDataBackWork()
+
     }
 
     private fun callingHomeDataBackWork(){
@@ -132,6 +134,7 @@ class ScheduleFragment : Fragment() {
         selectTab(selectedTab)
         viewModel.startPeriodicFetch()
     }
+
     private fun selectTab(index: Int) {
         selectedTab = index
 
@@ -190,9 +193,15 @@ class ScheduleFragment : Fragment() {
                         it.data?.let { it1 ->
                             if(it1.size > 0){
                                 binding.noDataView.visibility = View.GONE
+
                                 binding.recyclerView.visibility = View.VISIBLE
+                                cancelledAdapter.updateAdapter(it1)
+                            }else{
+                                binding.noDataView.visibility = View.VISIBLE
+                               binding.textView48.setText(getString(R.string.cancel_appointment))
+                                binding.recyclerView.visibility = View.GONE
                             }
-                            cancelledAdapter.updateAdapter(it1)
+
                         }
                     }
                     is NetworkResult.Error -> {
@@ -240,6 +249,7 @@ class ScheduleFragment : Fragment() {
                               } else {
                                   binding.apply {
                                       noDataView.visibility = View.VISIBLE
+                                      textView48.setText(getString(R.string.you_haven_t_booked_any_n_appointments_yet))
                                       recyclerView.visibility = View.GONE
                                   }
                               }
@@ -275,11 +285,13 @@ class ScheduleFragment : Fragment() {
                             Log.d("TESTING_SIZE","Size of the list is "+data.size.toString())
                             if(data.size > 0) {
                                 binding.noDataView.visibility = View.GONE
+                                binding.textView48.setText(getString(R.string.complete_appoitment))
                                 binding.recyclerView.visibility = View.VISIBLE
                                 completedAdapter.updateAdapter(data)
                             }else{
                                 binding.apply {
                                     noDataView.visibility = View.VISIBLE
+                                    binding.textView48.setText(getString(R.string.complete_appoitment))
                                     recyclerView.visibility = View.GONE
                                 }
                             }

@@ -1,5 +1,6 @@
 package com.bussiness.awpl.activities
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,9 +9,13 @@ import android.util.Log
 import android.view.SurfaceView
 import android.view.View
 import android.graphics.Color
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import android.os.Handler
 import android.os.Looper
+import android.util.DisplayMetrics
 import android.view.Gravity
+import android.view.SurfaceHolder
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
@@ -46,7 +51,7 @@ class VideoCallActivity : AppCompatActivity() {
     private var remoteSurfaceView: SurfaceView? = null
     private var remoteUid: Int? = null
     private var isSwitched = false
-    private var doctorName :String =""
+    private var doctorName :String = ""
 
     private var startTimeCall :String =""
     private var callStartTime: Long = 0L
@@ -67,6 +72,8 @@ class VideoCallActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+
 //        appId = getString(R.string.agora_app_id)
 //        channelName ="nikunj"
 //        token = null
@@ -93,6 +100,7 @@ class VideoCallActivity : AppCompatActivity() {
         if (hasPermissions()) {
             Log.d("TESTING_NIKUNJ", "Inside oncreate")
             initAgora()
+
         }
         else {
             requestPermissions()
@@ -189,6 +197,7 @@ class VideoCallActivity : AppCompatActivity() {
                 override fun onUserJoined(uid: Int, elapsed: Int) {
                     runOnUiThread {
                         Log.d("TESTING_NIKUNJ", "Joined: $uid")
+
                         setupRemoteVideo(uid)
 
                         Log.d("TESTING_TIME",startTimeCall.toString())
@@ -229,15 +238,11 @@ class VideoCallActivity : AppCompatActivity() {
                         }
                     }
                 }
-
                 override fun onError(err: Int) {
                     super.onError(err)
                     Log.d("TESTING_NIKUNJ", "Inside Error" +err)
                 }
-
-
             })
-
             setupLocalVideo()
             joinChannel()
         } catch (e: Exception) {
@@ -254,19 +259,19 @@ class VideoCallActivity : AppCompatActivity() {
     }
 
     private fun setupLocalVideo() {
-
         val container = findViewById<FrameLayout>(R.id.local_video_view)
-
         val surfaceView = SurfaceView(this).apply {
             setZOrderMediaOverlay(true) // important for local video overlay
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            )
         }
-
+        container.removeAllViews()
         container.addView(surfaceView)
-
-        val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.VIEW_SETUP_MODE_REPLACE, 0)
+        val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN , 0)
         agoraEngine.setupLocalVideo(videoCanvas)
         agoraEngine.startPreview()
-
     }
 
     //olde code
@@ -279,7 +284,7 @@ class VideoCallActivity : AppCompatActivity() {
         surfaceView.setZOrderMediaOverlay(true)  // Optional: only if needed
         container.addView(surfaceView)
 
-        val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.VIEW_SETUP_MODE_REPLACE, uid)
+        val videoCanvas = VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, uid)
         agoraEngine?.setupRemoteVideo(videoCanvas)
         setupLocalVideo()
 
@@ -289,6 +294,7 @@ class VideoCallActivity : AppCompatActivity() {
         Log.d("TESTING_VIDEO_CALL","ON REMOVING VIDEO CALL")
         findViewById<FrameLayout>(R.id.remote_video_view).removeAllViews()
     }
+
 
     private fun joinChannel() {
 

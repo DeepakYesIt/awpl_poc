@@ -225,7 +225,6 @@ class SummaryScreen : Fragment() {
                 dialog.dismiss()
                 findNavController().navigate(R.id.homeFragment)
             }
-
             textView36.setPaintFlags(textView36.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
         }
 

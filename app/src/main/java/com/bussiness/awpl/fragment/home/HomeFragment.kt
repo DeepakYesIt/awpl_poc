@@ -155,7 +155,7 @@ class HomeFragment : Fragment() {
 
     private fun callingCallJoinedApi(startAppointment: Int, intent: Intent) {
         lifecycleScope.launch {
-            homeViewModel.callJoined(startAppointment).collect{
+            homeViewModel.callJoined(startAppointment).collect  {
                 when(it){
                     is NetworkResult.Success ->{
                         LoadingUtils.hideDialog()

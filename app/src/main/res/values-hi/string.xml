@@ -331,6 +331,8 @@
     <string name="date">तिथि:</string>
     <string name="time">समय:</string>
     <string name="doctor">चिकित्सक:</string>
+    <string name="cancel_appoitnment">"आपने अभी तक कोई अपॉइंटमेंट रद्द नहीं किया है"</string>
+    <string name="complete_appoitment">"आपके पास अभी तक कोई पूर्ण अपॉइंटमेंट नहीं है"</string>
     <string name="we_apologize_for_any_inconvenience_and_appreciate_your_understanding_if_you_have_any_concerns_or_need_to_reschedule_please_contact_us_at_support_contact">
         किसी भी असुविधा के लिए हमें खेद है और आपकी समझ की सराहना करते हैं। यदि आपके कोई प्रश्न हैं या आप पुनः समय निर्धारित करना चाहते हैं, तो कृपया हमसे [Support Contact] पर संपर्क करें।
     </string>

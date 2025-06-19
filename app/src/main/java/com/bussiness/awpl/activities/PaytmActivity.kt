@@ -107,6 +107,7 @@ class PaytmActivity : AppCompatActivity() {
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+                onBackPressed()
                 // Do nothing to block the back press
                 // Optional: Show a Toast or dialog
                 // Toast.makeText(this@YourActivity, "Back press disabled", Toast.LENGTH_SHORT).show()

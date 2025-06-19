@@ -164,6 +164,8 @@
     <string name="completed">Completed</string>
     <string name="cancelled">Cancelled</string>
     <string name="you_haven_t_booked_any_n_appointments_yet">You haven’t booked any\n appointments yet</string>
+    <string name="cancel_appoitnment">"You haven’t cancelled any appointments yet"</string>
+    <string name ="complete_appoitment">You haven’t any completed appointments yet</string>
     <string name="stay_by_looking_for_consulation_with_doctors_n_and_book_appointments">Stay by looking for consultation with doctors\n and book appointments</string>
     <string name="how_can_we_help_you">How can we help you?</string>
     <string name="enter_your_keyword">Enter your keyword</string>
