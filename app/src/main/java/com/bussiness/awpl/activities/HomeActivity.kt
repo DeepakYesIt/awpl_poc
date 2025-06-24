@@ -20,6 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowInsetsController
+import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -39,6 +40,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -77,6 +79,9 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var img:de.hdodenhof.circleimageview.CircleImageView
     lateinit var notification :SwitchCompat
 
+    private lateinit var homeViewModel: HomeViewModel
+
+
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,7 +95,8 @@ class HomeActivity : AppCompatActivity() {
                 WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
                 WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
             )
-        } else {
+        }
+        else {
             @Suppress("DEPRECATION")
             window.decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
@@ -98,6 +104,7 @@ class HomeActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
         window.statusBarColor = Color.WHITE
+        homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
         BuildConfig.BASE_URL
         sessionManager = SessionManager(this)
@@ -111,6 +118,7 @@ class HomeActivity : AppCompatActivity() {
 
         binding.chatFab.visibility =View.GONE
         binding.ivBell.setOnClickListener { navigate(R.id.notificationFragment) }
+        binding.ivBellRing.setOnClickListener { navigate(R.id.notificationFragment) }
 
         val fragmentToLoad = intent.getStringExtra("LOAD_HOME_FRAGMENT")
         if (fragmentToLoad == "HomeFragment") {
@@ -153,6 +161,8 @@ class HomeActivity : AppCompatActivity() {
                     setToolbar("Notifications", showBottomNav = false, showBell = false)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
+                    binding.ivBellRing.visibility =View.GONE
+                    binding.ivBell.visibility =View.VISIBLE
                 }
                 R.id.privacyPolicyFragment -> {
                     setToolbar("Privacy Policy", showBottomNav = false, showBell = false)
@@ -256,6 +266,18 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
+
+        homeViewModel.notificationStatus.observe(this){
+           if(it){
+               binding.ivBellRing.visibility =View.VISIBLE
+               binding.ivBell.visibility =View.GONE
+           }else{
+               binding.ivBell.visibility =View.VISIBLE
+               binding.ivBellRing.visibility =View.GONE
+           }
+
+        }
+
         intent?.let {
             if(it.hasExtra("fileUrl") && it.hasExtra("date")){
                 fileUrl = intent.getStringExtra("fileUrl").toString()
@@ -300,6 +322,8 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         }
+
+
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -416,6 +440,13 @@ class HomeActivity : AppCompatActivity() {
             toolbarTitle.visibility = View.VISIBLE
             icon.visibility = View.GONE
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
     }
 
     private fun navigate(destinationId: Int) {

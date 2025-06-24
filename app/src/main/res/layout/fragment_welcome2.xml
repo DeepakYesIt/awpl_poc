@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/lang_btn_bg"
         android:fontFamily="@font/lato_regular"
-        android:text="@string/english"
+        android:text="English"
         android:layout_marginTop="@dimen/_50sdp"
         android:textAllCaps="false"
         android:textColor="@color/white"

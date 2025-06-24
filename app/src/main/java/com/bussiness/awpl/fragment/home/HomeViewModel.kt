@@ -45,6 +45,7 @@ class HomeViewModel @Inject constructor(private var repository: AwplRepository):
     val homeData: LiveData<HomeModel?> = _homeData
 
     private var timerJob: Job? = null
+    val notificationStatus = MutableLiveData<Boolean>()
 
     fun startPeriodicFetch() {
         timerJob?.cancel()
@@ -76,6 +77,9 @@ class HomeViewModel @Inject constructor(private var repository: AwplRepository):
                 when (result) {
                     is NetworkResult.Success -> {
                         Log.d("Inside_API","inside success of View Model")
+                        result.data.let{
+                            notificationStatus.postValue( it?.notification_present)
+                        }
                         _homeData.postValue(result.data)
                     }
                     is NetworkResult.Error -> {
@@ -163,9 +167,24 @@ class HomeViewModel @Inject constructor(private var repository: AwplRepository):
     }
 
     suspend fun getHomeData(): Flow<NetworkResult<HomeModel>>{
-        return repository.getHomeData().onEach {
-
+        return repository.getHomeData().onEach { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    Log.d("Inside_API","inside success of View Model")
+                    result.data.let{
+                        notificationStatus.postValue( it?.notification_present)
+                    }
+                    _homeData.postValue(result.data)
+                }
+                is NetworkResult.Error -> {
+                    // Handle error, show toast/message or update LiveData
+                }
+                is NetworkResult.Loading -> {
+                    // Optional: Show loader
+                }
+            }
         }
+
 
     }
 

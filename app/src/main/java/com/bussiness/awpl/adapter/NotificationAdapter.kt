@@ -53,23 +53,27 @@ class NotificationAdapter(private var notifications: List<PatinetNotification>,v
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
         if (holder is DateHeaderViewHolder) {
             holder.bind(notifications[position].date) // Fixed `items` reference
-        } else if (holder is NotificationViewHolder) {
+        }
+        else if (holder is NotificationViewHolder) {
             holder.bind(notifications[position]) // Fixed `items` reference
         }
+
     }
 
     override fun getItemCount(): Int = notifications.size
 
     // ViewHolder for Notification Item
-    inner class NotificationViewHolder(private val binding: ItemNotificationBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class NotificationViewHolder(private val binding: ItemNotificationBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(notification: PatinetNotification) {
-            binding.tvNotificationTitle.text = notification.title
-            binding.tvNotificationDescription.text = notification.description
-            binding.tvTime.text = notification.time
 
+            binding.tvNotificationTitle.text = notification.title
+
+            binding.tvNotificationDescription.text = notification.description
+
+            binding.tvTime.text = notification.time
 
             binding.rootLayout.setOnClickListener {
                 onClickRead(notification.id)
@@ -77,6 +81,9 @@ class NotificationAdapter(private var notifications: List<PatinetNotification>,v
 
             if(notification.readStatus =="read"){
                 binding.rootLayout.setBackgroundColor(Color.parseColor("#FFFFFF"))
+            }
+            else{
+                binding.rootLayout.setBackgroundResource(R.drawable.bg_four_side_corner_grey)
             }
 
             when (notification.title) {

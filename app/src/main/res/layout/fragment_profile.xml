@@ -250,6 +250,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="#DAEFF9"
                 android:hint="50"
+                android:maxLength="3"
                 android:fontFamily="@font/lato_regular"
                 android:enabled="false"
                 android:inputType="number"

@@ -344,7 +344,7 @@ class ProfileFragment : Fragment() {
             }
 
             if(!isValidName(etName.text.toString())){
-                etName.error = "Please Enter a Valid Name"
+                etName.error = "Please enter a valid name. It should only contain letters and spaces — no numbers or special characters"
                 etName.requestFocus()
                 return false
             }

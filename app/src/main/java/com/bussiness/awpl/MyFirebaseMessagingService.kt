@@ -53,7 +53,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
             if (type != null) {
                 Log.d("testing_notification",type)
-            }else{
+            }
+            else{
                 Log.d("testing_notification","Notificition is null")
             }
             if(type == "download_prescription"){
@@ -81,22 +82,31 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             else if(type == "start_appoitment"){
                 val doctorName = data["doctor_name"]
                 val date = data["date"]
+
+                Log.d("TESTING_PUSH_DATA", doctorName+" "+date)
                 if (doctorName != null) {
                     Log.d("TESTING_NAME",doctorName)
                 }
-                if (isAppInForeground1()) {
+                if (isAppInForeground()) {
                     MyApp.currentActivity?.let { activity ->
                         activity.runOnUiThread {
-                            val dialog =
-                                doctorName?.let { it1 ->
+                            doctorName?.let { it1 ->
                                     if (date != null) {
                                         DialogStartAppointment(activity,
                                             it1, date)
                                     }
                                 }
 
+
                         }
+
                     }
+                    if (doctorName != null) {
+                        showNotificationStartAppointment(doctorName , date ?: "")
+                    } else {
+
+                    }
+
                 } else {
 
                     if (doctorName != null) {
@@ -139,11 +149,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
                         }
                     }
+                    showNotificationReschedule(originalDoctor ?: "", originalWhen ?: "", newDoctor ?: "", newDate ?: "", newTime ?: "")
                 }
                 else {
                     showNotificationReschedule(originalDoctor ?: "", originalWhen ?: "", newDoctor ?: "", newDate ?: "", newTime ?: "")
                 }
-            } else {
+            }
+            else {
 
             }
         }
@@ -223,9 +235,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                         dialog.show()
                     }
                 }
-            } else {
+                showDownloadNotification(title, message, fileUrl, date)
+            }
+            else {
                 Log.d("testing_notification","I am inside the download notification")
-
                 showDownloadNotification(title, message, fileUrl, date)
             }
         }
@@ -293,7 +306,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         return false
     }
 
-    private fun showNotificationReschedule(originalDoctor: String, oldDateTime: String, newDoctor: String, newDate: String, newTime: String) {
+    private fun showNotificationReschedule(originalDoctor: String,
+                                           oldDateTime: String,
+                                           newDoctor: String,
+                                           newDate: String,
+                                           newTime: String) {
         val intent = Intent(this, RescheduleDialogActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("open_reschedule", true)
@@ -329,8 +346,5 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         manager.notify(200, notification)
     }
-
-
-
 
 }

@@ -178,7 +178,7 @@
     <string name="clock_icon">Clock Icon</string>
     <string name="appointment_date">Appointment Date</string>
     <string name="cancellation_policy">Cancellation Policy:</string>
-    <string name="apointment">Appointments cannot be \n Cancelled within 2 hours of the\n scheduled time, and payments\n are non-refundable.</string>
+    <string name="apointment">Appointments cannot be \n cancelled within 2 hours of the\n scheduled time, and payments\n are non-refundable.</string>
     <string name="filters">Filters</string>
     <string name="check_details">Check details</string>
     <string name="download_prescription">Download Prescription</string>
