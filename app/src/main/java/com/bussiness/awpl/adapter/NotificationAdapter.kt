@@ -1,5 +1,6 @@
 package com.bussiness.awpl.adapter
 
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,12 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bussiness.awpl.R
 import com.bussiness.awpl.databinding.ItemDateHeaderBinding
 import com.bussiness.awpl.databinding.ItemNotificationBinding
+import com.bussiness.awpl.model.IncompleteAppoint
 import com.bussiness.awpl.model.NotificationModel
 import com.bussiness.awpl.model.PatinetNotification
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NotificationAdapter(private var notifications: List<PatinetNotification>) :
+class NotificationAdapter(private var notifications: List<PatinetNotification>,var onClickRead :(id:String) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -67,6 +69,15 @@ class NotificationAdapter(private var notifications: List<PatinetNotification>) 
             binding.tvNotificationTitle.text = notification.title
             binding.tvNotificationDescription.text = notification.description
             binding.tvTime.text = notification.time
+
+
+            binding.rootLayout.setOnClickListener {
+                onClickRead(notification.id)
+            }
+
+            if(notification.readStatus =="read"){
+                binding.rootLayout.setBackgroundColor(Color.parseColor("#FFFFFF"))
+            }
 
             when (notification.title) {
                 "Appointment Success" -> {

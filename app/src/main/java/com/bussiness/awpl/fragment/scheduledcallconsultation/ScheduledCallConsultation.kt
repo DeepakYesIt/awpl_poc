@@ -196,8 +196,8 @@ class ScheduledCallConsultation : Fragment() {
             val diseaseBody = MultipartUtil.stringToRequestBody(diseaseId.toString())
 
             val multipartList = mutableListOf<MultipartBody.Part>()
-            imageOnlyAdapter.getImageList().forEach { item ->
-                MultipartUtil.uriToMultipart(requireContext(), item.uri)?.let { part ->
+            imageOnlyAdapter.getImageList().forEach {
+                item -> MultipartUtil.uriToMultipart(requireContext(), item.uri,"uploadImage[]")?.let { part ->
                     multipartList.add(part)
                 }
             }

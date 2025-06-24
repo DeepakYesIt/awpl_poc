@@ -26,11 +26,11 @@ import java.util.TimeZone
 
 @AndroidEntryPoint
 class NotificationFragment : Fragment() {
-
     private var _binding: FragmentNotificationBinding? = null
     private val binding get() = _binding!!
     private lateinit var notificationAdapter: NotificationAdapter
     private lateinit var notificationViewModel: NotificationViewModel
+    private var notificationList = mutableListOf<PatinetNotification>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,7 +57,9 @@ class NotificationFragment : Fragment() {
                 when(it){
                     is NetworkResult.Success ->{
                         LoadingUtils.hideDialog()
-                      LoadingUtils.showSuccessDialog(requireContext(),it.data.toString())
+                        notificationList.forEach { it.readStatus = "read" }
+                        notificationAdapter.updateAdapter(notificationList)
+                        LoadingUtils.showSuccessDialog(requireContext(),it.data.toString())
                     }
                     is NetworkResult.Error ->{
                         LoadingUtils.hideDialog()
@@ -102,6 +104,7 @@ class NotificationFragment : Fragment() {
                         }else{
                             binding.tvNoData.visibility = View.GONE
                         }
+                        notificationList = newList
                         notificationAdapter.updateAdapter(newList)
                     }
                     is NetworkResult.Error ->{
@@ -137,6 +140,7 @@ class NotificationFragment : Fragment() {
 
 
     private fun setupRecyclerView() {
+
 //        val notifications = listOf(
 //            NotificationModel("Appointment Success", "You have successfully booked an appointment with Dr. Emily Walker.", "1h", R.drawable.calendar_tick, "2025-03-25"),
 //            NotificationModel("Appointment Cancelled", "You have successfully cancelled your appointment with Dr. David Patel.", "2h", R.drawable.calendar_cancel_ic, "2025-03-25"),
@@ -146,7 +150,28 @@ class NotificationFragment : Fragment() {
 //        )
 
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        notificationAdapter = NotificationAdapter(mutableListOf())
+        notificationAdapter = NotificationAdapter(mutableListOf()){ id->
+            lifecycleScope.launch {
+                notificationViewModel.markNotificationRead(id).collect {
+                       when(it){
+                           is NetworkResult.Success ->{
+                               val index = notificationList.indexOfFirst { it.id == id }
+                               if (index != -1) {
+                                   val patientNotification = notificationList[index].copy(readStatus = "read")
+                                   notificationList[index] = patientNotification
+                                   notificationAdapter.updateAdapter(notificationList)
+                               }
+                           }
+                           is NetworkResult.Error ->{
+
+                           }
+                           else ->{
+
+                           }
+                       }
+                }
+            }
+        }
         binding.recyclerView.adapter = notificationAdapter
     }
 

@@ -1,8 +1,11 @@
 package com.bussiness.awpl.fragment.basicdetailscreen
 
-import android.app.AlertDialog
-import android.content.Intent
+
 import android.graphics.Color
+import androidx.appcompat.app.AlertDialog
+
+import android.content.Intent
+
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
@@ -48,6 +51,7 @@ class BasicInfoScreen : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentBasicInfoScreenBinding.inflate(inflater, container, false)
 
+        Log.d("TESTING_BASIC","HERE INSIDE THE BASIC INFO SCREEN")
         // Get arguments from bundle
         type = arguments?.getString("TYPE")
         arguments?.let {
@@ -105,7 +109,6 @@ class BasicInfoScreen : Fragment() {
                         putString(AppConstant.Weight,binding.etweight.text.toString())
                         putInt(AppConstant.DISEASE_ID,diseaseId)
                         putString(AppConstant.NAME,binding.etName.text.toString())
-
                         putString(AppConstant.Gender, selectedGender)
                     }
 
@@ -176,7 +179,7 @@ class BasicInfoScreen : Fragment() {
         feetPicker.value = feetMatch ?: 5
         inchPicker.value = inchMatch ?: 6
 
-       val dialog = AlertDialog.Builder(requireContext())
+       val builder = AlertDialog.Builder(requireContext())
             .setTitle("Select Height")
             .setView(dialogView)
             .setPositiveButton("OK") { _, _ ->
@@ -185,8 +188,14 @@ class BasicInfoScreen : Fragment() {
                 binding.etHeight.setText("$selectedFeet ft $selectedInches in")
             }
             .setNegativeButton("Cancel", null)
-            .create()
-            .show()
+
+        var dialog = builder.create()
+
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(Color.parseColor("#FFC107"))
+        }
+
+        dialog.show()
 
     }
 
@@ -205,6 +214,11 @@ class BasicInfoScreen : Fragment() {
         }
     }
 
+    fun isValidName(name: String): Boolean {
+        val namePattern = "^[A-Za-z]+( [A-Za-z]+)*$"
+        return name.matches(Regex(namePattern))
+    }
+
     private fun validateFields(): Boolean {
         binding.apply {
             var isValid = true
@@ -214,6 +228,13 @@ class BasicInfoScreen : Fragment() {
                 etName.requestFocus()
                 return  false
             }
+
+            if(!isValidName(etName.text.toString())){
+                etName.error = "Please Enter a Valid Name"
+                etName.requestFocus()
+                return  false
+            }
+
             if (etHeight.text.toString().isEmpty()) {
                LoadingUtils.showErrorDialog(requireContext(),"Height selection is required")
                 return false
@@ -228,11 +249,12 @@ class BasicInfoScreen : Fragment() {
                 etAge.requestFocus()
                return false
             }
-            if(etAge.text.toString().toInt() <=12){
-                etAge.error ="Age Should be more than 12 years"
+            if(etAge.text.toString().toInt() <12 || etAge.text.toString().toInt() > 120){
+                etAge.error ="Age should be more than 11 years and less than 120 years."
                 etAge.requestFocus()
                 return false
             }
+
 
             val selectedGender = listOf(txtMale, txtFemale, txtOthers).any {
                 it.currentTextColor == "#FFFFFF".toColorInt()

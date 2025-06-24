@@ -470,7 +470,14 @@ class ScheduleFragment : Fragment() {
                     is NetworkResult.Success -> {
                         LoadingUtils.hideDialog()
                         Log.d("TESTING_SIZE_ANDROID",it.data?.size.toString())
-                        it.data?.let { it1 -> completedSymptomsAdapter.updateAdapter(it1) }
+                        if(it.data?.size?:0 > 0){
+                            it.data?.let { it1 -> completedSymptomsAdapter.updateAdapter(it1) }
+                            binding.noDataView.visibility =View.GONE
+                            binding.recyclerView.visibility =View.VISIBLE
+                        }else{
+                            binding.noDataView.visibility =View.VISIBLE
+                            binding.recyclerView.visibility =View.GONE
+                        }
                     }
                     is NetworkResult.Error ->{
                         LoadingUtils.hideDialog()

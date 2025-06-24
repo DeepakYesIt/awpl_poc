@@ -208,4 +208,10 @@ interface ZyvoApi {
         @Field("appointmentId") appointmentId: Int
     ) : Response<JsonObject>
 
+    @POST("markAsReadPatientNotification")
+    @FormUrlEncoded
+    suspend fun markAsReadPatientNotification(
+        @Field("id") id :String
+    ) : Response<JsonObject>
+
 }

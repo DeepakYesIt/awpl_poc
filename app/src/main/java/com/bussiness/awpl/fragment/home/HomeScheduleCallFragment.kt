@@ -216,7 +216,7 @@ class HomeScheduleCallFragment : Fragment() {
             var disease = MultipartUtil.stringToRequestBody(diseaseId.toString())
             var imgList = mutableListOf<MultipartBody.Part>()
             mediaList.forEach {
-                MultipartUtil.uriToMultipart(requireContext(),it.uri)
+                MultipartUtil.uriToMultipart(requireContext(),it.uri,"uploadImage[]")
                     ?.let { it1 -> imgList.add(it1) }
             }
             Log.d("CHECKING_DISEASE_ID","Disease Id is working here is "+diseaseId.toString())
@@ -233,9 +233,7 @@ class HomeScheduleCallFragment : Fragment() {
                             bundle.putString(AppConstant.ID,it.data)
                             findNavController().navigate(R.id.appointmentBooking,bundle)
                         }
-
                     }
-
                     is NetworkResult.Error ->{
                         LoadingUtils.hideDialog()
                         LoadingUtils.showErrorDialog(requireContext(),it.message.toString())

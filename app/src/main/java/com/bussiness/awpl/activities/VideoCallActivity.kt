@@ -16,6 +16,7 @@ import android.os.Looper
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.SurfaceHolder
+import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
@@ -28,6 +29,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.bussiness.awpl.PermissionsHelper
 import com.bussiness.awpl.R
 import com.bussiness.awpl.utils.AppConstant
+import com.bussiness.awpl.utils.LoadingUtils
 import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
@@ -74,6 +76,14 @@ class VideoCallActivity : AppCompatActivity() {
         }
 
 
+        window.addFlags(
+              WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                    WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
+                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+        )
+
+
 //        appId = getString(R.string.agora_app_id)
 //        channelName ="nikunj"
 //        token = null
@@ -113,6 +123,7 @@ class VideoCallActivity : AppCompatActivity() {
     private fun hasPermissions() = PermissionsHelper.hasPermissions(this)
     private fun requestPermissions() = PermissionsHelper.requestPermissions(this)
 
+    private var toastShown = false
 
     private fun startElapsedCountdownFromStartTime(timeRange: String) {
         val formatter = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
@@ -125,6 +136,7 @@ class VideoCallActivity : AppCompatActivity() {
 
             // Set the start time to today's date
             val now = Calendar.getInstance()
+
             val startCalendar = Calendar.getInstance().apply {
                 time = startTime
                 set(Calendar.YEAR, now.get(Calendar.YEAR))
@@ -139,16 +151,15 @@ class VideoCallActivity : AppCompatActivity() {
                 override fun run() {
                     val elapsedMillis = System.currentTimeMillis() - startTimeMillis
                     val clampedElapsed = maxOf(0L, elapsedMillis)
-
                     val minutes = (clampedElapsed / (1000 * 60))
                     val seconds = (clampedElapsed / 1000) % 60
-
                     val timeString = String.format("Elapsed: %02d:%02d", minutes, seconds)
-                    if(timeString == "Elapsed: 15:00"){
-                        Toast.makeText(this@VideoCallActivity,
-                            "Your appointment time is over,will be disconnected automatically after 5 minutes.",
-                            Toast.LENGTH_LONG).show()
+
+                    if (minutes == 15L && seconds == 0L && !toastShown) {
+                        toastShown = true
+                        LoadingUtils.showErrorDialog(this@VideoCallActivity,"\"Your appointment time is over, will be disconnected automatically after 5 minutes.")
                     }
+
                     Log.d("TESTING_USER_TIME",timeString)
                     findViewById<TextView>(R.id.tv_timer)?.text = timeString
 
@@ -156,6 +167,7 @@ class VideoCallActivity : AppCompatActivity() {
                 }
             }
             countdownHandler?.post(countdownRunnable!!)
+
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(this, "Invalid time format", Toast.LENGTH_SHORT).show()

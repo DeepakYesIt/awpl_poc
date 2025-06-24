@@ -104,6 +104,7 @@ class ProfileFragment : Fragment() {
             val bitmap = result.data?.extras?.get("data") as? Bitmap
             bitmap?.let {
                 val imageUri = saveBitmapToInternalStorage(it) // Save bitmap & get URI
+                selectedImageUri = imageUri
                 Glide.with(requireContext()).load(imageUri).into(binding.profileImage)
 
                 Log.d("TESTING_MULTIPART","URI IS:- "+imageUri)
@@ -165,6 +166,9 @@ class ProfileFragment : Fragment() {
                      etFullName.text =data.name.toString()
                      etName.setText(data.name)
                  }
+            data.ds_code?.let {
+                textView39.text ="DsCode: ${it}"
+            }
                  data.email?.let {
                      etEmail.text = it
                  }
@@ -227,17 +231,23 @@ class ProfileFragment : Fragment() {
         feetPicker.value = feetMatch ?: 5
         inchPicker.value = inchMatch ?: 6
 
-        AlertDialog.Builder(requireContext())
+        val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext())
             .setTitle("Select Height")
             .setView(dialogView)
             .setPositiveButton("OK") { _, _ ->
                 val selectedFeet = feetPicker.value
                 val selectedInches = inchPicker.value
-                binding.etHeight.text = "$selectedFeet ft $selectedInches in"
+                binding.etHeight.setText("$selectedFeet ft $selectedInches in")
             }
             .setNegativeButton("Cancel", null)
-            .create()
-            .show()
+
+        var dialog = builder.create()
+
+        dialog.setOnShowListener {
+            dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE)?.setTextColor(Color.parseColor("#FFC107"))
+        }
+
+        dialog.show()
     }
 
     private fun updateSelection(selected: TextView, allTextViews: List<TextView>) {
@@ -291,10 +301,15 @@ class ProfileFragment : Fragment() {
 
         // Load image
         val imageUrl = AppConstant.Base_URL + originalProfileData?.profile_path?.let { ensureStartsWithSlash(it) }
-        Glide.with(requireContext())
-            .load(imageUrl)
-            .placeholder(R.drawable.ic_not_found_img)
-            .into(binding.fullImageView)
+        if(selectedImageUri != null){
+            binding.fullImageView.setImageURI(selectedImageUri)
+        }else{
+            Glide.with(requireContext())
+                .load(imageUrl)
+                .placeholder(R.drawable.ic_not_found_img)
+                .into(binding.fullImageView)
+        }
+
 
         // Dismiss dialog when image is tapped
         binding.fullImageView.setOnClickListener {
@@ -313,6 +328,10 @@ class ProfileFragment : Fragment() {
             show()
         }
     }
+    fun isValidName(name: String): Boolean {
+        val namePattern = "^[A-Za-z]+( [A-Za-z]+)*$"
+        return name.matches(Regex(namePattern))
+    }
 
     private fun validateFields(): Boolean {
         binding.apply {
@@ -323,6 +342,13 @@ class ProfileFragment : Fragment() {
                 etName.requestFocus()
                 return  false
             }
+
+            if(!isValidName(etName.text.toString())){
+                etName.error = "Please Enter a Valid Name"
+                etName.requestFocus()
+                return false
+            }
+
             if (etHeight.text.toString().isEmpty()) {
                 LoadingUtils.showErrorDialog(requireContext(),"Height selection is required")
                 return false
@@ -334,6 +360,12 @@ class ProfileFragment : Fragment() {
             }
             if (etAge.text.toString().isEmpty()) {
                 etAge.error = ErrorMessages.ERROR_AGE
+                etAge.requestFocus()
+                return false
+            }
+
+            if(Integer.parseInt(etAge.text.toString()) <12 || Integer.parseInt(etAge.text.toString()) >120){
+                etAge.error = "Age should be greater than 11 years and less than 120 years"
                 etAge.requestFocus()
                 return false
             }

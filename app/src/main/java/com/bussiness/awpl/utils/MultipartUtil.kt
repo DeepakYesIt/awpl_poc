@@ -94,17 +94,19 @@ class MultipartUtil {
         }
 
         fun isFileLargerThan5MB(context: Context, uri: Uri): Boolean {
-            val cursor = context.contentResolver.query(uri, null, null, null, null)
+            val cursor = context.contentResolver.query(uri, arrayOf(OpenableColumns.SIZE), null, null, null)
             cursor?.use {
-                val sizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
-                if (sizeIndex != -1 && it.moveToFirst()) {
-                    val sizeInBytes = it.getLong(sizeIndex)
-                    return sizeInBytes > 5120 * 1024 // 5 MB in bytes
+                if (it.moveToFirst()) {
+                    val sizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
+                    if (sizeIndex != -1) {
+                        val sizeInBytes = it.getLong(sizeIndex)
+                        val fiveMBInBytes = 5L * 1024 * 1024 // 5 MB
+                        return sizeInBytes > fiveMBInBytes
+                    }
                 }
             }
-            return false // File size couldn't be determined
+            return false // File size couldn't be determined or not larger than 5 MB
         }
-
 
     }
 }

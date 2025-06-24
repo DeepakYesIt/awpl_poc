@@ -43,10 +43,10 @@ class ChatRepository(
 //            }
 //
 //        awaitClose { subscription.remove() }
+
         var cc = chatId
         var arr = cc?.split("_")
-      var   currentUserId  = arr?.get(2) ?: "0"
-
+        var currentUserId  = arr?.get(2) ?: "0"
         val subscription = firestore.collection("chats")
             .document(chatId)
             .collection("messages")

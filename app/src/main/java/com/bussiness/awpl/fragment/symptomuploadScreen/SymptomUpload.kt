@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -60,7 +61,8 @@ class SymptomUpload : Fragment() {
                     for (i in 0 until clipData.itemCount) {
                         selectedUris.add(clipData.getItemAt(i).uri)
                     }
-                } else {
+                }
+                else {
                     result.data?.data?.let { selectedUris.add(it) }
                 }
 
@@ -186,11 +188,13 @@ class SymptomUpload : Fragment() {
 
         when (mediaType) {
             MediaType.IMAGE -> {
+                Log.d("TESTING_IMAGE","Inside Image List")
                 if (imageList.size >= MAX_ITEMS) {
                     LoadingUtils.showErrorDialog(requireContext(), "Only $MAX_ITEMS images can be uploaded.")
                     return
                 }
                 if (imageList.any { it.uri == uri }) {
+                    Log.d("TESTING_IMAGE","Image List has already contain it")
                     showAlreadyUploadedToast("image")
                     return
                 }

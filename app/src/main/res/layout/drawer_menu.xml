@@ -683,7 +683,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/english"
+                    android:text="English"
                     android:textSize="16sp"
                     android:layout_marginStart="@dimen/_15sdp"
                     android:textColor="@color/black"/>
@@ -696,8 +696,10 @@
             android:id="@+id/hindiLang"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
+            android:layout_marginHorizontal="2dp"
             android:background="#96C9E0"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="@dimen/_10sdp"
             android:visibility="gone"
             app:cardCornerRadius="5dp">
             <LinearLayout
@@ -715,7 +717,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="@dimen/_15sdp"
-                    android:text="@string/hindi"
+                    android:text="हिंदी"
                     android:textSize="16sp"
                     android:textColor="@color/black"/>
 

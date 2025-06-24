@@ -37,6 +37,9 @@
         tools:replace="android:theme"
         tools:targetApi="34">
         <activity
+            android:name=".activities.BasicInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.VideoCallActivity1"
             android:exported="false" />
         <activity

@@ -14,18 +14,21 @@ import javax.inject.Inject
 class NotificationViewModel @Inject constructor(private var repository: AwplRepository): ViewModel() {
 
     suspend fun patientNotification(): Flow<NetworkResult<MutableList<PatinetNotification>>>{
-
         return repository.patientNotification().onEach {
-
         }
-
     }
 
     suspend fun markAllRead(): Flow<NetworkResult<String>>{
         return repository.markAllRead().onEach {
+        }
+    }
+
+    suspend fun markNotificationRead(id:String):Flow<NetworkResult<String>>{
+        return repository.markAsReadPatientNotification(id).onEach {
 
         }
     }
+
 
 
 }

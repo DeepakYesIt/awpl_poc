@@ -5,7 +5,7 @@ data class MyprofileModel(
     val basic_info: Int,
     val contact_no: String?,
     val created_at: String?,
-    val ds_code: Int,
+    val ds_code: String,
     val email: String?,
     val fcm_token: String?,
     val gender: String?,

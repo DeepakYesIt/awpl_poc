@@ -119,12 +119,12 @@ class LoginFragment : Fragment() {
                         if(data?.basic_information ==0) {
                             findNavController().navigate(R.id.basicInfoScreen)
                             sessionManager.saveLoginState(true)
-                            requireActivity().finish()
+
                         }
                         else{
                             val intent = Intent(requireContext(),HomeActivity::class.java)
                             startActivity(intent)
-                            requireActivity().finish()
+
                         }
 
                     }

@@ -172,5 +172,8 @@ interface AwplRepository {
         @Field("appointmentId") appointmentId: Int
     ) :Flow<NetworkResult<String>>
 
+    suspend fun markAsReadPatientNotification(
+        @Field("id") id :String
+    ) : Flow<NetworkResult<String>>
 
 }

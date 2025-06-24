@@ -17,19 +17,24 @@
         <!-- Toolbar -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="56dp"
             android:background="@color/white"
             android:elevation="4dp"
             android:layout_marginTop="@dimen/_10sdp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            >
 
             <!-- Inner layout for positioning -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                >
 
                 <!-- Back Icon -->
                 <ImageView
@@ -43,6 +48,7 @@
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="@dimen/_8sdp"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <!-- Profile Icon -->
@@ -54,6 +60,7 @@
                     android:visibility="gone"
                     app:civ_border_color="#FF000000"
                     app:civ_border_width="1dp"
+                    android:layout_marginStart="@dimen/_8sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -88,10 +95,11 @@
                 <!-- Centered App Logo -->
                 <ImageView
                     android:id="@+id/icon"
-                    android:layout_width="@dimen/_140sdp"
+                    android:layout_width="@dimen/_120sdp"
                     android:layout_height="@dimen/_60sdp"
                     android:src="@drawable/app_logo"
-                    android:visibility="gone"
+                    android:visibility="visible"
+                    android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

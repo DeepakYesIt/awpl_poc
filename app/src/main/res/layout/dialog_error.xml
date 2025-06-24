@@ -60,7 +60,7 @@
         android:textAlignment="center"
         android:textColor="#636363"
         android:textSize="@dimen/_10sdp"
-
+        android:layout_marginHorizontal="@dimen/_5sdp"
         android:layout_marginTop="@dimen/_25sdp"
         android:text="Your password has been changed \nsuccessfully."
         app:layout_constraintStart_toStartOf="parent"
