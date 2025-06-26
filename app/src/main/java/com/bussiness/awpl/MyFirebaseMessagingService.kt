@@ -92,8 +92,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                         activity.runOnUiThread {
                             doctorName?.let { it1 ->
                                     if (date != null) {
-                                        DialogStartAppointment(activity,
+                                       var dialog = DialogStartAppointment(activity,
                                             it1, date)
+                                        dialog.show()
                                     }
                                 }
 
@@ -107,7 +108,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
                     }
 
-                } else {
+                }
+                else {
 
                     if (doctorName != null) {
                         Log.d("TESTING_NAME",doctorName)

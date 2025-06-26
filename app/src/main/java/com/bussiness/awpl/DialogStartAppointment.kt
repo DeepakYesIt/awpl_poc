@@ -37,7 +37,9 @@ class DialogStartAppointment(
         // Set data
         binding.dateTimeTxt.text = date
         Log.d("TESTING_NAME",doctor_name+"inside dialog")
+
         binding.tvDocName.text ="Doctor Name: "+ doctor_name
+
         binding.btnYes.setOnClickListener {
             dismiss()
         }
@@ -45,6 +47,7 @@ class DialogStartAppointment(
         binding.btnClose.setOnClickListener {
             dismiss()
         }
+
     }
 
 }

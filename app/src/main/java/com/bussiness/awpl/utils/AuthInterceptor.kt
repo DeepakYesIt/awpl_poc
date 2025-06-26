@@ -3,8 +3,10 @@ package com.bussiness.awpl.utils
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.bussiness.awpl.MyApp
 
 import com.bussiness.awpl.activities.SplashActivity
+import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
@@ -34,12 +36,14 @@ class AuthInterceptor @Inject constructor(
     }
 
     private fun handleTokenExpiration(sessionManager: SessionManager) {
+
         // Clear session
-       // sessionManager.logOut()
-          // Redirect to login screen
-        var intent  = Intent(context, SplashActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        context.startActivity(intent)
+        // sessionManager.logOut()
+        // Redirect to login screen
+             var intent  = Intent(context, SplashActivity::class.java)
+             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+             sessionManager.clearSession()
+             context.startActivity(intent)
     }
 
 }

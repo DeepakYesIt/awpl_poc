@@ -1,12 +1,23 @@
 package com.bussiness.awpl.fragment.login_screen
 
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -20,6 +31,7 @@ import com.bussiness.awpl.databinding.FragmentWelcome3Binding
 import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.ErrorMessages
 import com.bussiness.awpl.utils.LoadingUtils
+import com.bussiness.awpl.utils.LoadingUtils.Companion.ensurePeriod
 
 import com.bussiness.awpl.utils.MultipartUtil
 import com.bussiness.awpl.utils.SessionManager
@@ -130,7 +142,8 @@ class LoginFragment : Fragment() {
                     }
                     is NetworkResult.Error ->{
                         LoadingUtils.hideDialog()
-                        LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
+
+                        showErrorDialog(requireContext(),it.message.toString())
 
                     }
                     else ->{
@@ -138,6 +151,75 @@ class LoginFragment : Fragment() {
                 }
             }
         }
+    }
+
+
+    fun showErrorDialog(context: Context?, text: String) {
+
+        // Inflate the custom layout
+        val inflater = LayoutInflater.from(context)
+        val dialogView = inflater.inflate(R.layout.dialog_error, null)
+
+        // Find views
+        val errorMessage = dialogView.findViewById<TextView>(R.id.text)
+        //  val errorIcon = dialogView.findViewById<ImageView>(R.id.errorIcon)
+        val okButton = dialogView.findViewById<TextView>(R.id.textOkayButton)
+        val cancelBtn = dialogView.findViewById<ImageView>(R.id.imageCross)
+
+        // Set the error message
+        errorMessage.text = ensurePeriod(text)
+
+        // Create the dialog
+        val dialog = AlertDialog.Builder(context)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+
+
+
+        cancelBtn.setOnClickListener {
+            dialog?.dismiss()
+        }
+
+        // Set button click listener
+        okButton.setOnClickListener {
+            dialog?.dismiss()
+        }
+
+        // Show the dialog
+        if (context == null) return
+        if(text.contains("awplconnect@asclepiuswellness.co.in") == true){
+            var index = text.indexOf(":")
+            var substr = text.substring(0,index+1) +"\n"+ text.substring(index+1 ,text.length)
+            val email = "awplconnect@asclepiuswellness.co.in"
+            val spannable = SpannableString(substr)
+
+            val startIndex = substr.indexOf(email)
+            val endIndex = startIndex + email.length
+
+            val clickableSpan = object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    val intent = Intent(Intent.ACTION_SENDTO).apply {
+                        data = Uri.parse("mailto:$email")
+                    }
+                    widget.context.startActivity(intent)
+                }
+
+                override fun updateDrawState(ds: TextPaint) {
+                    super.updateDrawState(ds)
+                    ds.color = Color.BLUE   // Set link color
+                    ds.isUnderlineText = true // Optional: remove underline
+                }
+            }
+
+            spannable.setSpan(clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            errorMessage.text = spannable
+            errorMessage.movementMethod = LinkMovementMethod.getInstance()
+            errorMessage.highlightColor = Color.TRANSPARENT
+        }
+        dialog?.show()
     }
 
     private fun validations(): Boolean {

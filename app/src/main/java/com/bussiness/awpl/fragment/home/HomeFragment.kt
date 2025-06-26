@@ -614,4 +614,5 @@ class HomeFragment : Fragment() {
         // Stop the periodic fetch when fragment is not visible
         homeViewModel.stopPeriodicFetch()
     }
+
 }

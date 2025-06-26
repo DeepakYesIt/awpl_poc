@@ -328,7 +328,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_perception"
+                        android:src="@drawable/ic_missed_new"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:layout_marginEnd="12dp"
                         app:tint="@color/black" />
@@ -524,7 +524,7 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-     <androidx.cardview.widget.CardView
+        <androidx.cardview.widget.CardView
                 android:id="@+id/refund_policy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -543,7 +543,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_perception"
+                        android:src="@drawable/ic_refund_new"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:layout_marginEnd="12dp"
                         app:tint="@color/black" />

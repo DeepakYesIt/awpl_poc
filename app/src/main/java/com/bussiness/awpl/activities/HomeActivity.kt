@@ -55,6 +55,7 @@ import com.bussiness.awpl.R
 import com.bussiness.awpl.base.CommonUtils
 import com.bussiness.awpl.databinding.ActivityHomeBinding
 import com.bussiness.awpl.databinding.DialogReportDownloadBinding
+import com.bussiness.awpl.fragment.home.HomeFragment
 import com.bussiness.awpl.fragment.home.HomeViewModel
 import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.DownloadWorker
@@ -683,4 +684,27 @@ class HomeActivity : AppCompatActivity() {
             .setNegativeButton("Cancel", null)
             .show()
     }
+
+    override fun onBackPressed() {
+
+
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_home) as? NavHostFragment
+        val currentFragment = navHostFragment?.childFragmentManager?.primaryNavigationFragment
+
+        Log.d("CURRENT_FRAGMENT", "Current Fragment: ${currentFragment?.javaClass?.simpleName}")
+        Log.d("TESTING_ANDROID_BACK", "Current Fragment: ${currentFragment?.javaClass?.simpleName}")
+        Log.d("TESTING_ANDROID_BACK","THIS IS A BACK WORK")
+
+        if (currentFragment is HomeFragment) {
+            Log.d("TESTING_ANDROID_BACK","THIS IS A BACK WORK INSIDE 1")
+
+            finishAffinity() // Exit the app if on HomeFragment
+        } else {
+            Log.d("TESTING_ANDROID_BACK","THIS IS A BACK WORK INSIDE 2")
+
+
+            super.onBackPressed() // Go back as usual
+        }
+    }
+
 }

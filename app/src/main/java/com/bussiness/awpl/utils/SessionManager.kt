@@ -93,6 +93,7 @@ class SessionManager(private val context: Context) {
     fun clearSession() {
         preferences.edit {
             clear()
+            apply() // this is optional; the extension applies automatically
         }
     }
 

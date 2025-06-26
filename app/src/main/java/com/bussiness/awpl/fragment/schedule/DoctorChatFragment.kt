@@ -88,14 +88,10 @@ class DoctorChatFragment : Fragment() {
    }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentDoctorChatBinding.inflate(inflater, container, false)
 
         chatViewModel =ViewModelProvider(this)[ChatViewModel::class.java]
-
 
         arguments?.let {
             if(it.containsKey(AppConstant.Chat) && it.getString(AppConstant.Chat) != null){
@@ -167,21 +163,89 @@ class DoctorChatFragment : Fragment() {
         }
     }
 
+
+    fun isDate7DaysOld(input: String): Boolean {
+        try {
+            // Normalize input: remove commas and trim spaces
+            val cleanInput = input.trim().replace(",", "")
+            // cleanInput becomes "Tue Jun 17"
+
+            // Extract the date part (MMM dd)
+            val parts = cleanInput.split(" ")
+            if (parts.size < 3) return false
+
+            val month = parts[1]
+            val day = parts[2]
+            val year = Calendar.getInstance().get(Calendar.YEAR)
+
+            // Create a new date string with year: e.g., "Jun 17 2025"
+            val dateString = "$month $day $year"
+
+            val formatter = SimpleDateFormat("MMM dd yyyy", Locale.ENGLISH)
+            formatter.isLenient = false
+            val parsedDate = formatter.parse(dateString) ?: return false
+
+            // Set both dates to midnight (ignore time)
+            val parsedCalendar = Calendar.getInstance().apply {
+                time = parsedDate
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }
+
+            val today = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }
+
+            // If parsed date is in future (e.g., Dec 31 and today is Jan 1), assume previous year
+            if (parsedCalendar.after(today)) {
+                parsedCalendar.add(Calendar.YEAR, -1)
+            }
+
+            // Check difference in days
+            val diffMillis = today.timeInMillis - parsedCalendar.timeInMillis
+            val diffDays = diffMillis / (1000 * 60 * 60 * 24)
+
+            return diffDays >= 7
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        }
+    }
+
     private fun settingDataToUi(data: ChatAppotmentDetails?) {
         data?.let {
+
             binding.doctorName.setText(data.doctor_name.toString())
+
             data.doctor_profile_path?.let {
                 Glide.with(requireContext()).load(AppConstant.Base_URL+it).into(binding.doctorImage)
             }
+
             it.date?.let {
                 binding.dateTxt.setText(it)
+                Log.d("TESTING_DATE",it +" "+isDate7DaysOld(it))
+                if(isDate7DaysOld(it)){
+                    binding.messageInputLayout.visibility =View.GONE
+                }
+                else{
+                    binding.messageEditText.visibility =View.VISIBLE
+                }
             }
+
             it.time?.let {
                 binding.timeTxt.setText(it)
             }
+
             it.prescription?.let {
                 pdfUrl = AppConstant.Base_URL+ it
             }
+
             it.doctor_profile_path?.let {
                 chatAdapter.receiverImageUrl = AppConstant.Base_URL+ it
                 Log.d("PROFILE_IAMGE",AppConstant.Base_URL+ it)
@@ -194,7 +258,6 @@ class DoctorChatFragment : Fragment() {
 
         }
     }
-
 
     fun groupMessagesByDate(messages: List<ChatMessage>): List<ChatItem> {
         val grouped = messages.sortedBy { it.timestamp }
@@ -336,9 +399,5 @@ class DoctorChatFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
-
-
 
 }

@@ -10,6 +10,7 @@ import com.bussiness.awpl.R
 import com.bussiness.awpl.databinding.ItemCancelledBinding
 import com.bussiness.awpl.model.IncompleteAppoint
 import com.bussiness.awpl.utils.AppConstant
+import com.bussiness.awpl.utils.LoadingUtils
 
 class IncompleteAppointAdapter(
     private var appointmentList: List<IncompleteAppoint>,
@@ -24,10 +25,8 @@ class IncompleteAppointAdapter(
     }
 
     override fun onBindViewHolder(holder: CancelledViewHolder, position: Int) {
-
         val appointment = appointmentList[position]
         holder.bind(appointment)
-
     }
 
     override fun getItemCount(): Int = appointmentList.size
@@ -47,7 +46,12 @@ class IncompleteAppointAdapter(
                 txtTime.text = appointment.time
 
                 rescheduleButton.setOnClickListener {
-                    onRescheduleClick(appointment)
+                    if(appointment.can_reschedule){
+                        onRescheduleClick(appointment)
+                    }else{
+                        LoadingUtils.showErrorDialog(binding.root.context , "You have reached the maximum limit for rescheduling this appointment. You can no longer rebook it.")
+                    }
+
                 }
             }
         }

@@ -2,6 +2,7 @@ package com.bussiness.awpl
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.os.Bundle
 import com.bussiness.awpl.utils.SessionManager
 import com.google.firebase.FirebaseApp
@@ -12,11 +13,18 @@ class MyApp : Application() {
 
     companion object {
         var currentActivity: Activity? = null
+        private lateinit var instance: MyApp
+
+        fun getAppContext(): Context = instance.applicationContext
     }
+
+
 
     override fun onCreate() {
         super.onCreate()
+        instance = this
         FirebaseApp.initializeApp(this)
+
         val sessionManager = SessionManager(applicationContext)
         sessionManager.applySavedLanguage()
         FirebaseApp.initializeApp(this)
@@ -38,8 +46,10 @@ class MyApp : Application() {
             override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
             override fun onActivityDestroyed(activity: Activity) {}
         })
+
     }
-    }
+
+}
 
 
 

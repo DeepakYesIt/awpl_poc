@@ -3,6 +3,7 @@ package com.bussiness.awpl.adapter
 import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -40,7 +41,7 @@ class CancelledAdapter(
                 Glide.with(binding.root).load(AppConstant.Base_URL+appointment.doctorImage).placeholder(
                     R.drawable.ic_not_found_img).into(doctorImage)
                 doctorName.text = appointment.doctorName
-
+                rescheduleButton.visibility = View.GONE
                 Log.d("TESTING_WORK",appointment.doctorName)
                 Log.d("TESTING_WORK",appointment.date)
                 dateAndTime.text = appointment.date

@@ -95,6 +95,7 @@ class SplashActivity : AppCompatActivity() {
         sessionManager.applySavedLanguage()
 
         Handler(Looper.getMainLooper()).postDelayed({
+            Log.d("TESTING_SESSION"," "+sessionManager.isLoggedIn())
             if (sessionManager.isLoggedIn()) {
                 var intent = Intent(this, HomeActivity::class.java)
                 if(fileUrl.isNotEmpty() && date.isNotEmpty()) {
