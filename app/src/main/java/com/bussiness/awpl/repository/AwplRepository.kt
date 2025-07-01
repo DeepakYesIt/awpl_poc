@@ -1,5 +1,6 @@
 package com.bussiness.awpl.repository
 
+import android.net.Network
 import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.model.AgoraCallModel
 import com.bussiness.awpl.model.BookingResponseModel
@@ -176,4 +177,8 @@ interface AwplRepository {
         @Field("id") id :String
     ) : Flow<NetworkResult<String>>
 
+    suspend fun saveChat(
+        @Field("appointment_id") appointmentId: Int,
+        @Field("message") message :String
+    ) :Flow<NetworkResult<String>>
 }

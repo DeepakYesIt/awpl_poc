@@ -131,6 +131,18 @@
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
 
+        <TextView
+            android:id="@+id/tv_dummt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato_regular"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ans4"
+            android:text="@string/why_media"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/_10sdp"
+            />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -141,7 +153,7 @@
         android:weightSum="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ans4">
+        app:layout_constraintTop_toBottomOf="@+id/tv_dummt">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnImage"

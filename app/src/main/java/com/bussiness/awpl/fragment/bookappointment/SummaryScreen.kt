@@ -50,7 +50,6 @@ class SummaryScreen : Fragment() {
     private lateinit var adapter : SummaryAdapter
     private  var appointmentId :Int =0
     private var paymentAmount :String =""
-
     private lateinit var summaryViewModel : SummaryViewModel
 
     var date :String =""
@@ -155,7 +154,6 @@ class SummaryScreen : Fragment() {
                     generateTransactionId(summaryViewModel.appoitmentId.toString()),paymentAmount,"medical_prescription",
                     SessionManager(requireContext()).getUserName(),SessionManager(requireContext()).getUserEmail(),""
                 ).collect{
-
                     when(it){
                         is NetworkResult.Success ->{
                             LoadingUtils.hideDialog()
@@ -190,6 +188,7 @@ class SummaryScreen : Fragment() {
                             paymentAmount = it.toString()
                             val value = "₹ $it"
                             binding.textFree.text = value
+                            binding.btnNext.text = "₹ "+ it + " |"+ " (Pay and Consult)"
                         }
                         it.data?.original_amount?.let {
                             val value = "₹ $it"
@@ -242,6 +241,12 @@ class SummaryScreen : Fragment() {
 
     }
 
+    fun formatDateLegacy(input: String): String {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val date = inputFormat.parse(input)
+        return outputFormat.format(date!!)
+    }
 
     private fun confirmDialog(){
         val dialog = Dialog(requireContext())
@@ -257,8 +262,11 @@ class SummaryScreen : Fragment() {
                 dialog.dismiss()
                 findNavController().navigate(R.id.homeFragment)
             }
+            Log.d("TESTING_DATE","${summaryViewModel.date}" )
 
-            description2.text = "Your appointment is confirmed for ${summaryViewModel.date} at ${summaryViewModel.time}."
+            var changedDate = formatDateLegacy(summaryViewModel.date)
+
+            description2.text = "Your appointment is confirmed for ${changedDate} at ${summaryViewModel.time}."
         }
 
         //    binding.textView36.paintFlags = binding.textView36.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG

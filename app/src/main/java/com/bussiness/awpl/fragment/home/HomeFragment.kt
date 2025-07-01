@@ -110,7 +110,7 @@ class HomeFragment : Fragment() {
 
         binding.startAppointmentBtn.setOnClickListener {
             if(startAppointment !=0) {
-                lifecycleScope.launch {
+                viewLifecycleOwner.lifecycleScope.launch {
                       LoadingUtils.showDialog(requireContext(),false)
                     homeViewModel.createChannel(startAppointment).collect {
                         when(it){
@@ -154,7 +154,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun callingCallJoinedApi(startAppointment: Int, intent: Intent) {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch{
             homeViewModel.callJoined(startAppointment).collect  {
                 when(it){
                     is NetworkResult.Success ->{
@@ -188,7 +188,7 @@ class HomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun callingHomeApi(){
        LoadingUtils.showDialog(requireActivity(),false)
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
               homeViewModel.getHomeData().collect{
                   when(it){
                       is NetworkResult.Success ->{
@@ -609,6 +609,10 @@ class HomeFragment : Fragment() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
     override fun onPause() {
         super.onPause()
         // Stop the periodic fetch when fragment is not visible

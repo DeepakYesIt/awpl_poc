@@ -62,6 +62,7 @@ class DoctorChatFragment : Fragment() {
     var receiverId ="11"
     var chatId ="105_11_12"
     var hashMap =HashMap<Uri,Boolean>()
+    private var firstTime :Boolean = true
 
     private lateinit var chatViewModel: ChatViewModel
 
@@ -105,7 +106,7 @@ class DoctorChatFragment : Fragment() {
             }
             chatAdapter = ChatAdapter(mutableListOf(),currentUserId)
             binding.chatRecyclerView.layoutManager =LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
-            binding.chatRecyclerView.adapter =chatAdapter
+
 
             if(it.containsKey(AppConstant.AppoitmentId)){
                 appoitnmentId = it.getInt(AppConstant.AppoitmentId)
@@ -162,7 +163,6 @@ class DoctorChatFragment : Fragment() {
             }
         }
     }
-
 
     fun isDate7DaysOld(input: String): Boolean {
         try {
@@ -224,6 +224,7 @@ class DoctorChatFragment : Fragment() {
             binding.doctorName.setText(data.doctor_name.toString())
 
             data.doctor_profile_path?.let {
+
                 Glide.with(requireContext()).load(AppConstant.Base_URL+it).into(binding.doctorImage)
             }
 
@@ -255,7 +256,7 @@ class DoctorChatFragment : Fragment() {
                 chatAdapter.senderImageUrl = AppConstant.Base_URL+it
                 Log.d("PROFILE_IAMGE",AppConstant.Base_URL+ it)
             }
-
+            binding.chatRecyclerView.adapter =chatAdapter
         }
     }
 
@@ -340,14 +341,28 @@ class DoctorChatFragment : Fragment() {
                 if(messageEditText.text.length ==0){
                     return@setOnClickListener
                 }
+
                 chatViewModel.sendTextMessage(messageEditText.text.toString())
                 messageEditText.setText("")
-                val message = ChatMessage(
+                if(firstTime){
+                    firstTime = false
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        chattingViewModel.saveChat(appoitnmentId, messageEditText.text.toString())
+                            .collect {
+                               when(it){
+                                   is NetworkResult.Success ->{
 
-                    senderId = currentUserId,
-                    receiverId = receiverId,
-                    message = messageEditText.text.toString()
-                )
+                                   }
+                                   is NetworkResult.Error ->{
+
+                                   }
+                                   else ->{
+
+                                   }
+                               }
+                            }
+                    }
+                }
             }
         }
 

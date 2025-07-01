@@ -65,6 +65,8 @@ class VideoCallActivity : AppCompatActivity() {
     private var countdownHandler: Handler? = null
     private var countdownRunnable: Runnable? = null
 
+    private var otherUserJoined : Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -157,12 +159,24 @@ class VideoCallActivity : AppCompatActivity() {
 
                     if (minutes == 15L && seconds == 0L && !toastShown) {
                         toastShown = true
-                        LoadingUtils.showErrorDialog(this@VideoCallActivity,"\"Your appointment time is over, will be disconnected automatically after 5 minutes.")
+                        if(!otherUserJoined){
+                            agoraEngine.leaveChannel()
+                            finish()
+                        }else {
+//                            LoadingUtils.showErrorDialog(
+//                                this@VideoCallActivity,
+//                                "\"Your appointment time is over, will be disconnected automatically after 5 minutes."
+//                            )
+                        }
+                    }
+
+                    if(minutes == 20L){
+                        agoraEngine.leaveChannel()
+                        finish()
                     }
 
                     Log.d("TESTING_USER_TIME",timeString)
                     findViewById<TextView>(R.id.tv_timer)?.text = timeString
-
                     countdownHandler?.postDelayed(this, 1000)
                 }
             }
@@ -178,8 +192,6 @@ class VideoCallActivity : AppCompatActivity() {
         countdownHandler = null
         countdownRunnable = null
     }
-
-
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -209,11 +221,12 @@ class VideoCallActivity : AppCompatActivity() {
                 override fun onUserJoined(uid: Int, elapsed: Int) {
                     runOnUiThread {
                         Log.d("TESTING_NIKUNJ", "Joined: $uid")
-
                         setupRemoteVideo(uid)
-
                         Log.d("TESTING_TIME",startTimeCall.toString())
-                     //   startCallDurationTimer(startTimeCall)
+                        //   startCallDurationTimer(startTimeCall)
+
+                        otherUserJoined = true
+
                         startElapsedCountdownFromStartTime(startTimeCall)
                     }
                 }
@@ -333,7 +346,7 @@ class VideoCallActivity : AppCompatActivity() {
 
     private fun setupUi() {
 
-        var hideView = findViewById<FrameLayout>(R.id.local_video_view1)
+        var hideView = findViewById<FrameLayout>(R.id.hide_local_video_view)
 
         var imgBtn = findViewById<ImageView>(R.id.btn_mute)
         findViewById<ImageView>(R.id.btn_mute).setOnClickListener {
@@ -357,10 +370,13 @@ class VideoCallActivity : AppCompatActivity() {
                 switchCamera.setImageResource(R.drawable.ic_video_mute)
                 fmLay.visibility =View.GONE
                 switchCameraToBackFront.visibility = View.GONE
-            }else{
+                hideView.visibility =View.VISIBLE
+            }
+            else{
                 switchCamera.setImageResource(R.drawable.ic_video)
                 fmLay.visibility = View.VISIBLE
                 switchCameraToBackFront.visibility = View.VISIBLE
+                hideView.visibility =View.GONE
             }
         }
 

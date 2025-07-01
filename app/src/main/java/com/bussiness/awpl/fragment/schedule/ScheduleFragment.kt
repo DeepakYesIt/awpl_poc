@@ -183,7 +183,7 @@ class ScheduleFragment : Fragment() {
 
 
     private fun cancelApiCall(){
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             LoadingUtils.showDialog(requireContext(),false)
             viewModel.cancelAppointment().collect{
                 when(it){
@@ -232,7 +232,7 @@ class ScheduleFragment : Fragment() {
 //          }
 //          appointmentAdapter.updateAdapter(viewModel.upcomingList)
 //      }else {
-          lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
               LoadingUtils.showDialog(requireContext(), false)
               viewModel.upcomingAppoint().collect {
                   when (it) {
@@ -274,7 +274,7 @@ class ScheduleFragment : Fragment() {
     }
 
     private fun callingCompletedApi(type:String){
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             LoadingUtils.showDialog(requireContext(),false)
             viewModel.completedAppointment(type).collect{
                 when(it){
@@ -372,7 +372,7 @@ class ScheduleFragment : Fragment() {
 
     private fun callingCallJoinedApi(startAppointment: Int, intent: Intent) {
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.callJoined(startAppointment).collect{
                 when(it){
                     is NetworkResult.Success ->{
@@ -392,7 +392,7 @@ class ScheduleFragment : Fragment() {
     }
 
     private fun openVideoCall(model :UpcomingModel){
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch{
             LoadingUtils.showDialog(requireContext(),false)
             viewModel.createChannel(model.id).collect {
                 when(it){
@@ -445,7 +445,6 @@ class ScheduleFragment : Fragment() {
             binding.tv2.setTextColor(android.graphics.Color.parseColor("#356598"))
             completedAdapter.update(false, mutableListOf())
             completedSymptomsUpload()
-
         }
 
         binding.apply {
@@ -482,10 +481,8 @@ class ScheduleFragment : Fragment() {
                     is NetworkResult.Error ->{
                         LoadingUtils.hideDialog()
                         LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
-
                     }
                     else ->{
-
                     }
                 }
             }

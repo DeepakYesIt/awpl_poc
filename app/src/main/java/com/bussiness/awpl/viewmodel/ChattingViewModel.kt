@@ -19,5 +19,14 @@ class ChattingViewModel  @Inject constructor(private var repository: AwplReposit
           }
     }
 
+    suspend fun saveChat(
+        appointmentId: Int,
+        message: String
+    ): Flow<NetworkResult<String>> {
+        return repository.saveChat(appointmentId,message).onEach {
+
+        }
+    }
+
 
 }

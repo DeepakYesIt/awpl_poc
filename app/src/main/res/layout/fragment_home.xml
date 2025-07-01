@@ -24,6 +24,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/parent_bg"
                 android:orientation="vertical"
+
                 android:padding="@dimen/_6sdp">
                 <View
                     android:id="@+id/view"

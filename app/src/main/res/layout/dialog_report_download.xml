@@ -52,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
-        android:text="@string/for_symptom_upload_consultations"
+        android:text="For Your Consultation"
         android:textAlignment="center"
         android:textColor="#6B7280"
         android:layout_gravity="center"

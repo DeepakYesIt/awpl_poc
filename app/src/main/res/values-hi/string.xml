@@ -7,6 +7,12 @@
     <string name="begin_your_health_journey_with_a_free_consultation">
     अपनी स्वास्थ्य यात्रा को एक मुफ्त परामर्श के साथ शुरू करें!
     </string>
+
+    <string name="why_media">
+        सहायक मीडिया साझा करने से डॉक्टर दूर से उन लक्षणों का मूल्यांकन कर सकते हैं जो केवल पाठ से स्पष्ट नहीं होते।
+    </string>
+
+
     <string name="next">अगला</string>
     <string name="english">अंग्रेज़ी</string>
     <string name="choose_your_language">अपनी भाषा चुनें</string>
@@ -268,6 +274,7 @@
     <string name="brain">मस्तिष्क</string>
     <string name="schedule_appoint">अपॉइंटमेंट निर्धारित करें</string>
     <string name="my_perception">मेरी प्रिस्क्रिप्शन</string>
+    <string name="perception_home">प्रिस्क्रिप्शन</string>
     <!-- Health Journey List -->
     <string name="health_journey_1">अपनी स्वास्थ्य यात्रा शुरू करें\nएक मुफ्त परामर्श के साथ!</string>
     <string name="health_journey_2">डॉक्टरों को आपके दरवाजे तक लाएं\n- आभासी रूप से।</string>

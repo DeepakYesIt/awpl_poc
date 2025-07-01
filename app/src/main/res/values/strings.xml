@@ -131,7 +131,7 @@
     <string name="_10_00_10_15_am">10:00 – 10:15 AM</string>
     <string name="cancel">Cancel</string>
     <string name="reschedule">Reschedule</string>
-    <string name="connect_with_the_right_doctor_n_for_your_health_needs">Connect with the right doctor\n for your health needs.</string>
+    <string name="connect_with_the_right_doctor_n_for_your_health_needs">Connect with the right doctor\nfor your health needs.</string>
     <string name="heart">Heart</string>
     <string name="fast_free_reliable_medical_support"><![CDATA[Fast & Reliable Medical Support]]></string>
     <string name="browse_videos">Browse Videos</string>
@@ -395,6 +395,7 @@
     <string name="striked_price"><![CDATA[<s>₹ 99.00</s>]]></string>
     <string name="schedule_appoint">Schedule Appointment</string>
     <string name="my_perception">My Prescriptions</string>
+    <string name="perception_home">Prescriptions</string>
     <string name="others_prescriptions">Others Prescriptions</string>
     <!--    <string name="agora_app_id">1c45615e45194910baa3e4cad81a27fa</string>  -->
 
@@ -431,7 +432,8 @@
     <string name="health_journey_title_1">Begin Your Health\nJourney with a \nFree Consultation!</string>
     <string name="health_journey_title_2">Bringing Doctors\n to Your Door – \nVirtually.</string>
     <string name="health_journey_title_3">Upload Symptoms \nfor Minor Issues \nand Major Concerns</string>
-    <string name="incomplete_appointment">Incomplete Appointment</string>
+    <string name="incomplete_appointment">Missed Appointment</string>
     <string name="you_have_nt_any_incomplete_appointments">You haven’t any \nIncomplete appointments yet</string>
+    <string name="why_media">Providing supporting media helps doctors remotely evaluate symptoms that may not be clear through text alone.</string>
 
 </resources>

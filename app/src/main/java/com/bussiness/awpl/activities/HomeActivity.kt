@@ -69,6 +69,7 @@ import java.util.UUID
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
+
     private var fileUrl :String =""
     private var date :String =""
     private lateinit var binding: ActivityHomeBinding
@@ -79,7 +80,6 @@ class HomeActivity : AppCompatActivity() {
     private var notificationPermissionThere = false
     private lateinit var img:de.hdodenhof.circleimageview.CircleImageView
     lateinit var notification :SwitchCompat
-
     private lateinit var homeViewModel: HomeViewModel
 
 
@@ -88,7 +88,6 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.setDecorFitsSystemWindows(false)
             val controller = window.insetsController
@@ -99,43 +98,32 @@ class HomeActivity : AppCompatActivity() {
         }
         else {
             @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
         window.statusBarColor = Color.WHITE
         homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-
         BuildConfig.BASE_URL
         sessionManager = SessionManager(this)
         sessionManager?.applySavedLanguage()
-
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_home) as NavHostFragment
         navController = navHostFragment.navController
-
         binding.chatFab.visibility =View.GONE
         binding.ivBell.setOnClickListener { navigate(R.id.notificationFragment) }
         binding.ivBellRing.setOnClickListener { navigate(R.id.notificationFragment) }
-
         val fragmentToLoad = intent.getStringExtra("LOAD_HOME_FRAGMENT")
         if (fragmentToLoad == "HomeFragment") {
             navController.navigate(R.id.homeFragment)
         }
-
         val fragmentToLoadNotification = intent.getStringExtra("LOAD_FRAGMENT")
         if (fragmentToLoadNotification == "notification") {
             navController.navigate(R.id.notificationFragment)
         }
-
         setupBottomNav()
         setUpDrawer()
         askNotificationPermissionForCall()
         updateBottomNavSelection("home")
-
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.homeFragment -> {
@@ -206,10 +194,11 @@ class HomeActivity : AppCompatActivity() {
                     binding.imgBackProfile.visibility =View.VISIBLE
                     updateBottomNavSelection("resource")
                 }
-                R.id.yourDoctorFragment ->{ setToolbar("Your Doctors", fab = false)
+                R.id.yourDoctorFragment ->{
+                    setToolbar("Your Doctors", fab = false, showBottomNav = false)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
-                    updateBottomNavSelection("doctor")
+                  //  updateBottomNavSelection("doctor")
                 }
                 R.id.appointmentBooking ->{ setToolbar("Book Appointment", showBottomNav = false)
                     binding.profileIcon.visibility =View.GONE
@@ -237,12 +226,17 @@ class HomeActivity : AppCompatActivity() {
                 R.id.prescription_frgament ->{ setToolbar("My Prescriptions", fab = false)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
+                    updateBottomNavSelection("doctor")
                 }
-                R.id.reschedule_call ->{ setToolbar("Reschedule Appointment", fab = false, showBottomNav = false, showBell = false)
+                R.id.reschedule_call ->{
+                    setToolbar("Reschedule Appointment", fab = false, showBottomNav = false, showBell = false)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
                 }
-                R.id.incompleteAppointmentFragment ->{ setToolbar("Incomplete Appointment",showBottomNav = false, fab = false, showBell = false)
+                R.id.incompleteAppointmentFragment -> { setToolbar("Missed Appointment",
+                    showBottomNav = false,
+                    fab = false,
+                    showBell = false)
                     binding.profileIcon.visibility =View.GONE
                     binding.imgBackProfile.visibility =View.VISIBLE
                 }
@@ -266,8 +260,6 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         }
-
-
         homeViewModel.notificationStatus.observe(this){
            if(it){
                binding.ivBellRing.visibility =View.VISIBLE
@@ -278,7 +270,6 @@ class HomeActivity : AppCompatActivity() {
            }
 
         }
-
         intent?.let {
             if(it.hasExtra("fileUrl") && it.hasExtra("date")){
                 fileUrl = intent.getStringExtra("fileUrl").toString()
@@ -323,8 +314,6 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         }
-
-
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -374,28 +363,39 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNav() {
+
         binding.homeFragment.setOnClickListener {
-            navController.navigate(R.id.homeFragment)
-            updateBottomNavSelection("home")
+            val destinationId = R.id.homeFragment
+            if(destinationId != navController.currentDestination?.id) {
+                navController.navigate(R.id.homeFragment)
+                updateBottomNavSelection("home")
+            }
         }
 
         binding.scheduleFragment.setOnClickListener {
-            navController.navigate(R.id.scheduleFragment)
-            updateBottomNavSelection("schedule")
+            val destinationId = R.id.scheduleFragment
+            if(destinationId != navController.currentDestination?.id) {
+                navController.navigate(R.id.scheduleFragment)
+                updateBottomNavSelection("schedule")
+            }
         }
 
         binding.yourDoctorFragment.setOnClickListener {
-            val destinationId = R.id.yourDoctorFragment
+            val destinationId = R.id.prescription_frgament
             if(destinationId != navController.currentDestination?.id) {
-                navController.navigate(R.id.yourDoctorFragment)
+                navController.navigate(R.id.prescription_frgament)
                 updateBottomNavSelection("doctor")
             }
         }
 
         binding.resourceFragment.setOnClickListener {
-            navController.navigate(R.id.resourceFragment)
-            updateBottomNavSelection("resource")
+            val destinationId = R.id.resourceFragment
+            if(destinationId != navController.currentDestination?.id) {
+                navController.navigate(R.id.resourceFragment)
+                updateBottomNavSelection("resource")
+            }
         }
+
     }
 
     private fun updateBottomNavSelection(selected: String) {
@@ -523,12 +523,11 @@ class HomeActivity : AppCompatActivity() {
 
         doctor.setOnClickListener {
             navController.navigate(R.id.yourDoctorFragment)
-            updateBottomNavSelection("doctor")
+         //   updateBottomNavSelection("doctor")
             closeDrawer()
         }
 
         resources.setOnClickListener {
-
             navController.navigate(R.id.resourceFragment)
             updateBottomNavSelection("resource")
             closeDrawer()

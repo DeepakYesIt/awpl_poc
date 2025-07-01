@@ -135,7 +135,7 @@ class MyPrescriptionFragment : Fragment() {
     }
 
     private fun callingMyPrescriptionApi(type:String){
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             try {
                 LoadingUtils.showDialog(requireContext(),false)
                 viewModel.myPrescription(type).collect{
@@ -150,9 +150,11 @@ class MyPrescriptionFragment : Fragment() {
                                     Log.d("TESTING_AWPL_DATA",it.time.toString())
                                 }
 
-//                                if(data.size ==0){
-//                                    binding.tvNoDataPres.visibility =View.VISIBLE
-//                                }
+                                if(data.size ==0){
+                                    binding.tvNoDataPres.visibility =View.VISIBLE
+                                }else{
+                                    binding.tvNoDataPres.visibility =View.GONE
+                                }
                                 adapter.updateAdapter(data)
                             }else{
                                 binding.tvNoDataPres.visibility =View.VISIBLE
@@ -174,9 +176,6 @@ class MyPrescriptionFragment : Fragment() {
         }
 
     }
-
-
-
 
     private fun filterPopUp(anchorView: View) {
         val popupView = LayoutInflater.from(requireContext()).inflate(R.layout.item_filter_my_prescription, null)

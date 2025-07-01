@@ -214,4 +214,14 @@ interface ZyvoApi {
         @Field("id") id :String
     ) : Response<JsonObject>
 
+
+    @POST("saveChat")
+    @FormUrlEncoded
+    suspend fun saveChat(
+        @Field("appointment_id") appointmentId: Int,
+        @Field("message") message :String
+    ) : Response<JsonObject>
+
+
+
 }
