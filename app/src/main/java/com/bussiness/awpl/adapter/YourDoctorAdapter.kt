@@ -19,7 +19,7 @@ class YourDoctorAdapter(private var summaryList: MutableList<DoctorModel>) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(summaryModel: DoctorModel) {
-            binding.doctorName.text = summaryModel.doctorName
+            binding.doctorName.text = "Dr. "+summaryModel.doctorName
             binding.doctorExperience.text = "Experience: ${summaryModel.experience_yrs}"
             summaryModel.doctorImage?.let {
                 Glide.with(binding.root.context)

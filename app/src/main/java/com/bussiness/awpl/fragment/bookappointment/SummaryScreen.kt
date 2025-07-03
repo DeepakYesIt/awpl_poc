@@ -186,9 +186,18 @@ class SummaryScreen : Fragment() {
                         binding.promoValidate.visibility = View.VISIBLE
                         it.data?.final_amount?.let {
                             paymentAmount = it.toString()
-                            val value = "₹ $it"
-                            binding.textFree.text = value
-                            binding.btnNext.text = "₹ "+ it + " |"+ " (Pay and Consult)"
+                            if(paymentAmount =="0"){
+                                binding.btnNext.visibility =View.GONE
+                                LoadingUtils.showSuccessDialog(requireContext(),"Your promo code has been applied successfully. You don't need to pay anything for this appointment."){
+                                    findNavController().navigate(R.id.homeFragment)
+                                }
+
+                            }
+                            else {
+                                val value = "₹ $it"
+                                binding.textFree.text = value
+                                binding.btnNext.text = "₹ " + it + " |" + " (Pay and Consult)"
+                            }
                         }
                         it.data?.original_amount?.let {
                             val value = "₹ $it"
@@ -242,10 +251,13 @@ class SummaryScreen : Fragment() {
     }
 
     fun formatDateLegacy(input: String): String {
+
         val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+
         val date = inputFormat.parse(input)
-        return outputFormat.format(date!!)
+        val outputDateStr = outputFormat.format(date)
+        return outputDateStr
     }
 
     private fun confirmDialog(){
@@ -266,7 +278,7 @@ class SummaryScreen : Fragment() {
 
             var changedDate = formatDateLegacy(summaryViewModel.date)
 
-            description2.text = "Your appointment is confirmed for ${changedDate} at ${summaryViewModel.time}."
+            description2.text = "Your appointment is confirmed for \n${changedDate} at ${summaryViewModel.time}."
         }
 
         //    binding.textView36.paintFlags = binding.textView36.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG

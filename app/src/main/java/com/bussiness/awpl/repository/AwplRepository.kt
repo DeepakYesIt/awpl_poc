@@ -181,4 +181,6 @@ interface AwplRepository {
         @Field("appointment_id") appointmentId: Int,
         @Field("message") message :String
     ) :Flow<NetworkResult<String>>
+
+    suspend fun deleteAccount() : Flow<NetworkResult<String>>
 }

@@ -19,6 +19,20 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+//        ndk {
+//            abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+//        }
+
+    }
+
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("armeabi-v7a", "arm64-v8a")
+            isUniversalApk = false
+        }
     }
 
     buildTypes {
@@ -98,6 +112,7 @@ dependencies {
 
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("io.agora.rtc:full-sdk:4.2.1")
+
     implementation("in.payu:payu-checkout-pro:2.8.0")
     //firebase
     implementation("com.google.firebase:firebase-messaging:23.2.1")

@@ -31,4 +31,13 @@ class MyProfileViewModel @Inject constructor(private var repository: AwplReposit
 
         }
     }
+
+
+    suspend fun deleteAccount(): Flow<NetworkResult<String>>{
+        return repository.deleteAccount().onEach {
+
+        }
+    }
+
+
 }

@@ -124,6 +124,9 @@ class FAQFragment : Fragment() {
         val searchEditText = binding.searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
         searchEditText.setHintTextColor(Color.GRAY) // You can use ContextCompat.getColor(...) too
         searchEditText.setTextColor(Color.BLACK) // Just in case text also invisible
+        searchEditText.setBackgroundColor(Color.TRANSPARENT)
+        searchEditText.background = null
+
         callingFaqApi()
     }
 

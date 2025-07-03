@@ -655,6 +655,7 @@
         android:orientation="vertical"
         android:layout_marginTop="@dimen/_5sdp"
         android:layout_marginHorizontal="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_7sdp"
         android:background="@android:color/transparent">
 
         <androidx.cardview.widget.CardView
@@ -664,7 +665,8 @@
             android:layout_margin="2dp"
             android:background="#96C9E0"
             android:visibility="gone"
-            app:cardCornerRadius="5dp">
+            app:cardCornerRadius="5dp"
+            >
             <LinearLayout
                 android:id="@+id/llEnglishLang"
                 android:layout_width="match_parent"

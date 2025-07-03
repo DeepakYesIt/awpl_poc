@@ -93,7 +93,7 @@ class ChatViewModel @Inject constructor() : ViewModel() {
         repo.sendMessage(chatId, message)
     }
 
-    fun sendImage(uri: Uri) {
+    fun sendImage(uri: Uri){
         viewModelScope.launch {
 
             val url = repo.uploadImage(uri)
@@ -104,7 +104,9 @@ class ChatViewModel @Inject constructor() : ViewModel() {
                 message = url
             )
 
+
             repo.sendMessage(chatId, message)
+
         }
 
     }

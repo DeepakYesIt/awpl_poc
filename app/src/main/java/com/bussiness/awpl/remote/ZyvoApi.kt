@@ -223,5 +223,10 @@ interface ZyvoApi {
     ) : Response<JsonObject>
 
 
+    @POST("deleteAccount")
+    @FormUrlEncoded
+    suspend fun deleteAccount() :Response<JsonObject>
+
+
 
 }

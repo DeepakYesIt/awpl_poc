@@ -165,60 +165,82 @@ class DoctorChatFragment : Fragment() {
     }
 
     fun isDate7DaysOld(input: String): Boolean {
-        try {
-            // Normalize input: remove commas and trim spaces
-            val cleanInput = input.trim().replace(",", "")
-            // cleanInput becomes "Tue Jun 17"
+//        try {
+//            // Normalize input: remove commas and trim spaces
+//            val cleanInput = input.trim().replace(",", "")
+//            // cleanInput becomes "Tue Jun 17"
+//
+//            // Extract the date part (MMM dd)
+//            val parts = cleanInput.split(" ")
+//            if (parts.size < 3) return false
+//
+//            val month = parts[1]
+//            val day = parts[2]
+//            val year = Calendar.getInstance().get(Calendar.YEAR)
+//
+//            // Create a new date string with year: e.g., "Jun 17 2025"
+//            val dateString = "$month $day $year"
+//
+//            val formatter = SimpleDateFormat("MMM dd yyyy", Locale.ENGLISH)
+//            formatter.isLenient = false
+//            val parsedDate = formatter.parse(dateString) ?: return false
+//
+//            // Set both dates to midnight (ignore time)
+//            val parsedCalendar = Calendar.getInstance().apply {
+//                time = parsedDate
+//                set(Calendar.HOUR_OF_DAY, 0)
+//                set(Calendar.MINUTE, 0)
+//                set(Calendar.SECOND, 0)
+//                set(Calendar.MILLISECOND, 0)
+//            }
+//
+//            val today = Calendar.getInstance().apply {
+//                set(Calendar.HOUR_OF_DAY, 0)
+//                set(Calendar.MINUTE, 0)
+//                set(Calendar.SECOND, 0)
+//                set(Calendar.MILLISECOND, 0)
+//            }
+//
+//            // If parsed date is in future (e.g., Dec 31 and today is Jan 1), assume previous year
+//            if (parsedCalendar.after(today)) {
+//                parsedCalendar.add(Calendar.YEAR, -1)
+//            }
+//
+//            // Check difference in days
+//            val diffMillis = today.timeInMillis - parsedCalendar.timeInMillis
+//            val diffDays = diffMillis / (1000 * 60 * 60 * 24)
+//
+//            return diffDays >= 7
+//
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            return false
+//        }
 
-            // Extract the date part (MMM dd)
-            val parts = cleanInput.split(" ")
-            if (parts.size < 3) return false
+        val dateFormat = SimpleDateFormat("dd MMM yy", Locale.ENGLISH)
+        dateFormat.isLenient = false
 
-            val month = parts[1]
-            val day = parts[2]
-            val year = Calendar.getInstance().get(Calendar.YEAR)
+        return try {
+            val inputDate = dateFormat.parse(input)
+            val currentDate = Date()
 
-            // Create a new date string with year: e.g., "Jun 17 2025"
-            val dateString = "$month $day $year"
+            // Calculate the difference in milliseconds
+            val diff = currentDate.time - inputDate.time
 
-            val formatter = SimpleDateFormat("MMM dd yyyy", Locale.ENGLISH)
-            formatter.isLenient = false
-            val parsedDate = formatter.parse(dateString) ?: return false
+            // Convert 7 days to milliseconds
+            val sevenDaysInMillis = 7 * 24 * 60 * 60 * 1000L
 
-            // Set both dates to midnight (ignore time)
-            val parsedCalendar = Calendar.getInstance().apply {
-                time = parsedDate
-                set(Calendar.HOUR_OF_DAY, 0)
-                set(Calendar.MINUTE, 0)
-                set(Calendar.SECOND, 0)
-                set(Calendar.MILLISECOND, 0)
-            }
-
-            val today = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, 0)
-                set(Calendar.MINUTE, 0)
-                set(Calendar.SECOND, 0)
-                set(Calendar.MILLISECOND, 0)
-            }
-
-            // If parsed date is in future (e.g., Dec 31 and today is Jan 1), assume previous year
-            if (parsedCalendar.after(today)) {
-                parsedCalendar.add(Calendar.YEAR, -1)
-            }
-
-            // Check difference in days
-            val diffMillis = today.timeInMillis - parsedCalendar.timeInMillis
-            val diffDays = diffMillis / (1000 * 60 * 60 * 24)
-
-            return diffDays >= 7
-
+            // Return true if more than 7 days ago
+            diff > sevenDaysInMillis
         } catch (e: Exception) {
             e.printStackTrace()
-            return false
+            false // If parsing fails, treat as not more than 7 days ago
         }
+
     }
 
     private fun settingDataToUi(data: ChatAppotmentDetails?) {
+
         data?.let {
 
             binding.doctorName.setText(data.doctor_name.toString())
@@ -256,13 +278,14 @@ class DoctorChatFragment : Fragment() {
                 chatAdapter.senderImageUrl = AppConstant.Base_URL+it
                 Log.d("PROFILE_IAMGE",AppConstant.Base_URL+ it)
             }
+
             binding.chatRecyclerView.adapter =chatAdapter
         }
     }
 
     fun groupMessagesByDate(messages: List<ChatMessage>): List<ChatItem> {
-        val grouped = messages.sortedBy { it.timestamp }
-            .groupBy {
+
+        val grouped = messages.sortedBy { it.timestamp }.groupBy {
                 val msgDate = Calendar.getInstance().apply { timeInMillis = it.timestamp }
                 val today = Calendar.getInstance()
                 val yesterday = Calendar.getInstance().apply { add(Calendar.DATE, -1) }
@@ -283,6 +306,7 @@ class DoctorChatFragment : Fragment() {
             }
 
         val chatItems = mutableListOf<ChatItem>()
+
         for ((date, items) in grouped) {
             chatItems.add(ChatItem.DateHeader(date))
             chatItems.addAll(items.map { ChatItem.MessageItem(it) })
@@ -343,7 +367,6 @@ class DoctorChatFragment : Fragment() {
                 }
 
                 chatViewModel.sendTextMessage(messageEditText.text.toString())
-                messageEditText.setText("")
                 if(firstTime){
                     firstTime = false
                     viewLifecycleOwner.lifecycleScope.launch {
@@ -363,6 +386,7 @@ class DoctorChatFragment : Fragment() {
                             }
                     }
                 }
+                messageEditText.setText("")
             }
         }
 
@@ -374,6 +398,26 @@ class DoctorChatFragment : Fragment() {
             requireContext(), type, onFileSelected = { selectedFiles ->
                 selectedFiles.forEach {
                     chatViewModel.sendImage(it)
+
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        chattingViewModel.saveChat(appoitnmentId,"image" )
+                            .collect {
+                                when (it) {
+                                    is NetworkResult.Success -> {
+
+                                    }
+
+                                    is NetworkResult.Error -> {
+
+                                    }
+
+                                    else -> {
+
+                                    }
+                                }
+                            }
+                    }
+
                 //addMediaItem(it, type)
                 }
             }, onBrowseClicked = {

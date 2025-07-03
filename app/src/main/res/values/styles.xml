@@ -25,6 +25,14 @@
     </style>
 
 
+    <style name="Widget.SearchView.NoUnderline" parent="Widget.AppCompat.SearchView">
+        <item name="queryBackground">@android:color/transparent</item>
+        <item name="submitBackground">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+
+
     <!-- Calendar Week Day (S M T W T F S): small, gray, all caps -->
     <style name="CalendarWeekDay" parent="TextAppearance.AppCompat.Medium">
         <item name="android:textColor">#363636</item> <!-- Light Gray -->
