@@ -235,7 +235,7 @@
     <string name="reason_for_cancellation">रद्दीकरण का कारण।</string>
     <string name="give_the_reason">कारण बताएं।</string>
     <string name="submit">जमा करें</string>
-    <string name="ds_code_xxxx">DS कोड: xxxx</string>
+    <string name="ds_code_xxxx">डीएस कोड: xxxx</string>
     <string name="user_name">उपयोगकर्ता नाम</string>
     <string name="email">ईमेल</string>
     <string name="username_gmail_com">Username@gmail.com</string>
@@ -362,6 +362,17 @@
     <string name="health_journey_title_1">एक नि:शुल्क परामर्श के साथ\nअपने स्वास्थ्य यात्रा की शुरुआत करें!</string>
     <string name="health_journey_title_2">डॉक्टरों को आपके दरवाजे तक\nलाना – वर्चुअली।</string>
     <string name="health_journey_title_3">छोटे मुद्दों और बड़ी चिंताओं के लिए\nलक्षण अपलोड करें</string>
+
+    <string name="incomplete_appointment">छूटी हुई अपॉइंटमेंट</string>
+    <string name="you_have_nt_any_incomplete_appointments">आपकी कोई\nछूटी हुई अपॉइंटमेंट नहीं है</string>
+
+    <string name="scheduled_call">निर्धारित कॉल</string>
+    <string name="symptom_upload">लक्षण अपलोड</string>
+    <string name="filters_">फ़िल्टर्स</string>
+    <string name="no_presecrption_found">कोई प्रिस्क्रिप्शन नहीं मिला</string>
+
+
+
 
     <string name="term_condition_1">
     प्रभावी तिथि: [तिथि डालें]
