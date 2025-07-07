@@ -6,12 +6,12 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("kotlin-parcelize")
     id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
     namespace = "com.bussiness.awpl"
     compileSdk = 35
-
     defaultConfig {
         applicationId = "com.bussiness.awpl"
         minSdk = 24
@@ -23,9 +23,7 @@ android {
 //        ndk {
 //            abiFilters += listOf("armeabi-v7a", "arm64-v8a")
 //        }
-
     }
-
     splits {
         abi {
             isEnable = true
@@ -34,7 +32,6 @@ android {
             isUniversalApk = false
         }
     }
-
     buildTypes {
         debug {
             val BASE_URL = project.property("BASE_URL")
@@ -64,11 +61,13 @@ android {
 }
 
 dependencies {
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+
     //sdp and ssp
     implementation(libs.ssp.android)
     implementation(libs.sdp.android)
@@ -76,7 +75,6 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.ui.android)
     implementation(libs.play.services.cast.framework)
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -93,12 +91,11 @@ dependencies {
     //glide
     implementation (libs.glide)
     implementation (libs.annotations)
-//    ksp (libs.ksp)
+     //ksp (libs.ksp)
     //shapeAble image
     implementation (libs.material.v1120)
 
     // hilt
-
     implementation("com.google.dagger:hilt-android:2.52")
     kapt("com.google.dagger:hilt-android-compiler:2.52")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
@@ -126,4 +123,6 @@ dependencies {
     implementation("com.google.firebase:firebase-storage-ktx")
     implementation (platform("com.google.firebase:firebase-bom:33.14.0"))
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("com.google.firebase:firebase-crashlytics:18.6.0")
+    implementation("com.google.firebase:firebase-analytics:21.5.0")
 }

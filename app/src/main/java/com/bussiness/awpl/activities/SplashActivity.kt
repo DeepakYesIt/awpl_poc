@@ -59,6 +59,8 @@ class SplashActivity : AppCompatActivity() {
 
         binding = ActivitySplashBinding.inflate(layoutInflater)
 
+
+
         intent?.let {
 
             if(it.hasExtra("original_doctor_name") &&it.hasExtra("when") && it.hasExtra("new_doctor")
@@ -88,7 +90,6 @@ class SplashActivity : AppCompatActivity() {
                 date = intent.getStringExtra("date").toString()
             }
         }
-
         setContentView(binding.root)
 
         // Apply language preferences
@@ -96,6 +97,7 @@ class SplashActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             Log.d("TESTING_SESSION"," "+sessionManager.isLoggedIn())
+
             if (sessionManager.isLoggedIn()) {
                 var intent = Intent(this, HomeActivity::class.java)
                 if(fileUrl.isNotEmpty() && date.isNotEmpty()) {

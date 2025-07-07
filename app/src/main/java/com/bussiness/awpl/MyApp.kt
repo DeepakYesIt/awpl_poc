@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import com.bussiness.awpl.utils.SessionManager
 import com.google.firebase.FirebaseApp
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -28,6 +29,9 @@ class MyApp : Application() {
         val sessionManager = SessionManager(applicationContext)
         sessionManager.applySavedLanguage()
         FirebaseApp.initializeApp(this)
+
+        // Optional: Track initialization
+        FirebaseCrashlytics.getInstance().log("App started")
 
         AppContextProvider.initialize(applicationContext)
 

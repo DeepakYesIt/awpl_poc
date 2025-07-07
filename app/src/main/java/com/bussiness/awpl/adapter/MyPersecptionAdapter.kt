@@ -51,10 +51,9 @@ class MyPersecptionAdapter(private var perceptionList: MutableList<PrescriptionM
                     Toast.makeText(binding.root.context,"Download Started",Toast.LENGTH_LONG).show()
                 }
             }
-
         }
-
     }
+
     fun View.disableTemporarily(durationMillis: Long = 2000) {
         isEnabled = false
         postDelayed({ isEnabled = true }, durationMillis)
@@ -68,19 +67,22 @@ class MyPersecptionAdapter(private var perceptionList: MutableList<PrescriptionM
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onBindViewHolder(holder: FAQViewHolder, position: Int) {
         holder.bind(perceptionList[position], position)
-
     }
 
     override fun getItemCount(): Int = perceptionList.size
 
     fun updateAdapter(perceptionList: MutableList<PrescriptionModel>){
-        Log.d("TESTING_AWPL_DATA","Outer Perception"+perceptionList.size.toString())
-        this.perceptionList = perceptionList
-        Log.d("TESTING_AWPL_DATA","Inner Perception"+this.perceptionList.size.toString())
-        this.perceptionList.forEach {
 
+        Log.d("TESTING_AWPL_DATA","Outer Perception"+perceptionList.size.toString())
+
+        this.perceptionList = perceptionList
+
+        Log.d("TESTING_AWPL_DATA","Inner Perception"+this.perceptionList.size.toString())
+
+        this.perceptionList.forEach {
             Log.d("TESTING_pRESEPTION_ID",it.time.toString())
         }
+
         notifyDataSetChanged()
     }
 }
