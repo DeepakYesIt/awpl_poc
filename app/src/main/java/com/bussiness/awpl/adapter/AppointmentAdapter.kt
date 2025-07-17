@@ -2,11 +2,13 @@ package com.bussiness.awpl.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.appsflyer.share.LinkGenerator
@@ -136,54 +138,83 @@ class AppointmentAdapter(
         }
     }
 
-    private fun generateDeepLink(appointmentId:String,doctorName :String,
-                                 time:String,date :String) {
-        val currentCampaign = "videocall"
-        val oneLinkId = "pmck"
-        val brandDomain = "awpluser.onelink.me"
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun generateDeepLink(appointmentId:String, doctorName :String,
+                                 time:String, date :String) {
+//        val currentCampaign = "videocall"
+//        val oneLinkId = "pmck"
+//        val brandDomain = "awpluser.onelink.me"
+//
+//        val deepLinkBase = "awpluser://videocall"
+//        val webFallbackBase = "https://zyvo.tgastaging.com"
+//        val doctorNameSlot = URLEncoder.encode(doctorName, "UTF-8")
+//        val dateSlot = URLEncoder.encode(date,"UTF-8")
+//        val token = SessionManager(context).getAuthToken()
+//
+//        val tokenencode =  Base64.encodeToString(token?.toByteArray(), Base64.URL_SAFE or Base64.NO_WRAP)
+//        Log.d("TEST_TIMING","tOKEN Decoded IS "+tokenencode)
+//
+//        val deepLink = "$deepLinkBase"
+//        val webLink = "$webFallbackBase"
+//        Log.d("TESTING_TIME",time)
+//
+//
+//        val encodedSlot = URLEncoder.encode(time, "UTF-8")
+//
+//        val linkGenerator = ShareInviteHelper.generateInviteUrl(context)
+//            .setBaseDeeplink("https://$brandDomain/$oneLinkId")
+//            .setCampaign(currentCampaign)
+//            .addParameter("af_dp", deepLink)
+//            .addParameter("af_web_dp", webLink)
+//            // Optional: extra params for analytics or display
+//            .addParameter("appointmentId", appointmentId)
+//            .addParameter("token", tokenencode)
+//            .addParameter("doctor",doctorNameSlot)
+//            .addParameter("time",encodedSlot)
+//            .addParameter("date",dateSlot)
+//
+//        linkGenerator.generateLink(context, object : LinkGenerator.ResponseListener {
+//            override fun onResponse(s: String) {
+//                Log.d("AppsFlyer", "Generated Link: $s")
+//                val message = "Join Call at: $s"
+//                shareLink(message) // or shareLinkWithImage(...)
+//            }
+//
+//            override fun onResponseError(s: String) {
+//                Log.e("AppsFlyer", "Link generation failed: $s")
+//            }
+//        })
 
+
+        val oneLinkBase = "https://awpluser.onelink.me/pmck"
         val deepLinkBase = "awpluser://videocall"
-        val webFallbackBase = "https://zyvo.tgastaging.com"
-        val doctorNameSlot = URLEncoder.encode(doctorName, "UTF-8")
-        val dateSlot = URLEncoder.encode(date,"UTF-8")
+        val webFallback = "https://zyvo.tgastaging.com"
         val token = SessionManager(context).getAuthToken()
+        try {
+            val doctorNameEncoded = URLEncoder.encode(doctorName, "UTF-8")
+            val dateEncoded = URLEncoder.encode(date, "UTF-8")
+            val timeEncoded = URLEncoder.encode(time, "UTF-8")
 
-        val tokenencode =  Base64.encodeToString(token?.toByteArray(), Base64.URL_SAFE or Base64.NO_WRAP)
-        Log.d("TEST_TIMING","tOKEN Decoded IS "+tokenencode)
-
-        val deepLink = "$deepLinkBase"
-        val webLink = "$webFallbackBase"
-        Log.d("TESTING_TIME",time)
-
-
-        val encodedSlot = URLEncoder.encode(time, "UTF-8")
-
-        val linkGenerator = ShareInviteHelper.generateInviteUrl(context)
-            .setBaseDeeplink("https://$brandDomain/$oneLinkId")
-            .setCampaign(currentCampaign)
-            .addParameter("af_dp", deepLink)
-            .addParameter("af_web_dp", webLink)
-            // Optional: extra params for analytics or display
-            .addParameter("appointmentId", appointmentId)
-            .addParameter("token", tokenencode)
-            .addParameter("doctor",doctorNameSlot)
-            .addParameter("time",encodedSlot)
-            .addParameter("date",dateSlot)
-
-        linkGenerator.generateLink(context, object : LinkGenerator.ResponseListener {
-            override fun onResponse(s: String) {
-                Log.d("AppsFlyer", "Generated Link: $s")
-                val message = "Join Call at: $s"
-                shareLink(message) // or shareLinkWithImage(...)
+            val tokenencode =  Base64.encodeToString(token?.toByteArray(), Base64.URL_SAFE or Base64.NO_WRAP)
+            if (token.isNullOrEmpty()) {
+                println("Token is empty")
+                return
             }
 
-            override fun onResponseError(s: String) {
-                Log.e("AppsFlyer", "Link generation failed: $s")
-            }
-        })
 
 
+
+            val customDeepLink = "$deepLinkBase?appointmentId=$appointmentId&token=$tokenencode&doctor=$doctorNameEncoded&time=$timeEncoded&date=$dateEncoded"
+
+            val finalUrl = "$oneLinkBase?af_dp=$customDeepLink&af_web_dp=$webFallback"
+            shareLink("Join Call At : "+finalUrl)
+
+        } catch (e: Exception) {
+            println("Encoding failed: ${e.localizedMessage}")
+        }
     }
+
+
 
     private fun shareLink(message: String) {
         val sendIntent = Intent().apply {
