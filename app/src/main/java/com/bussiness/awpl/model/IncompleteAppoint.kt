@@ -8,5 +8,6 @@ data class IncompleteAppoint(
     val id: Int,
     val patient_id: Int,
     val time: String,
-    val can_reschedule :Boolean = true
+    val can_reschedule :Boolean = true,
+    val is_free_call : Boolean = false,
 )

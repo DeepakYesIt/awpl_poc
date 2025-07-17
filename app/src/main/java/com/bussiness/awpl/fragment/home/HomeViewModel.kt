@@ -22,6 +22,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -40,12 +41,24 @@ class HomeViewModel @Inject constructor(private var repository: AwplRepository):
     var upcomingDate :String =""
     var upcomingTime :String =""
     var startAppoitmentTime :String =""
+    var date :String =""
 
     private val _homeData = MutableLiveData<HomeModel?>()
     val homeData: LiveData<HomeModel?> = _homeData
 
     private var timerJob: Job? = null
     val notificationStatus = MutableLiveData<Boolean>()
+
+    suspend fun submitFeedBack(
+        appointmentId: Int,
+        rating: Int,
+        comment: String
+    ): Flow<NetworkResult<String>> {
+        return repository.submitFeedBack(appointmentId, rating, comment).onEach {
+
+        }
+    }
+
 
     fun startPeriodicFetch() {
         timerJob?.cancel()

@@ -39,12 +39,15 @@ import java.io.IOException
 import androidx.core.net.toUri
 import androidx.core.content.edit
 import androidx.core.graphics.toColorInt
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.R
+import com.bussiness.awpl.adapter.StateAdapter
 import com.bussiness.awpl.base.CommonUtils
 import com.bussiness.awpl.databinding.DialogCancelAppointmentBinding
 import com.bussiness.awpl.databinding.DialogConfirmAppointmentBinding
@@ -61,6 +64,7 @@ import com.bussiness.awpl.viewmodel.MyprofileModel
 import com.bussiness.awpl.viewmodel.PrivacyViewModel
 
 import com.github.dhaval2404.imagepicker.ImagePicker
+import com.google.firebase.crashlytics.internal.model.CrashlyticsReport.Session
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -80,6 +84,7 @@ class ProfileFragment : Fragment() {
     private var imageProfileMultiPart :MultipartBody.Part? = null
     private var selectedImageUri: Uri? = null
     private var originalProfileData: MyprofileModel? = null
+    private var selectedState =""
 
     private val viewModel: MyProfileViewModel by lazy {
         ViewModelProvider(this)[MyProfileViewModel::class.java]
@@ -119,6 +124,27 @@ class ProfileFragment : Fragment() {
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         callingProfileApi()
+
+        val recyclerView = binding.stateRecycler
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+
+
+
+        binding.etState.setText(selectedState)
+        recyclerView.adapter = StateAdapter(AppConstant.statesAndUTs) { it ->
+            binding.etState.setText(it)
+            selectedState= it
+            binding.myCard.visibility =View.GONE
+        }
+        binding.etState.setOnClickListener {
+            if(binding.myCard.isVisible){
+                binding.myCard.visibility =View.GONE
+            }else{
+                binding.myCard.visibility = View.VISIBLE
+            }
+        }
+
         return binding.root
     }
 
@@ -126,7 +152,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         loadSavedImage()
         val textViews = listOf(binding.txtMale, binding.txtFemale, binding.txtOthers)
-
+        disableAllEdlitText()
         textViews.forEach { textView ->
             textView.setOnClickListener {
                 if(binding.llEditDelete.visibility == View.GONE) {
@@ -168,6 +194,15 @@ class ProfileFragment : Fragment() {
                  }
             data.ds_code?.let {
                 textView39.text ="DsCode: ${it}"
+            }
+            data.state?.let {
+                AppConstant.statesAndUTs.forEach {
+                    if(it.equals(data.state,ignoreCase = true)){
+                        selectedState = it
+                        binding.etState.text = selectedState
+                        return@forEach
+                    }
+                }
             }
                  data.email?.let {
                      etEmail.text = it
@@ -270,6 +305,8 @@ class ProfileFragment : Fragment() {
             btnDeleteAccount.setOnClickListener { dialogDeleteAccount() }
             binding.rlEditProfile.setOnClickListener {
                 binding.llEditDelete.visibility = View.GONE
+                binding.textView11.setText(R.string.enter_your_height)
+                binding.textView12.setText(R.string.enter_your_weight)
                 binding.llSaveCancel.visibility =View.VISIBLE
                 enableAllEdlitText()
             }
@@ -282,7 +319,6 @@ class ProfileFragment : Fragment() {
                 binding.llEditDelete.visibility = View.VISIBLE
                 binding.llSaveCancel.visibility = View.GONE
                 disableAllEdlitText()
-
                 // Restore original data
                 originalProfileData?.let { data ->
                     settingDataToUi(data)
@@ -328,6 +364,7 @@ class ProfileFragment : Fragment() {
             show()
         }
     }
+
     fun isValidName(name: String): Boolean {
         val namePattern = "^[A-Za-z]+( [A-Za-z]+)*$"
         return name.matches(Regex(namePattern))
@@ -336,13 +373,11 @@ class ProfileFragment : Fragment() {
     private fun validateFields(): Boolean {
         binding.apply {
             var isValid = true
-
             if (etName.text.toString().isEmpty()) {
                 etName.error = ErrorMessages.ERROR_NAME
                 etName.requestFocus()
                 return  false
             }
-
             if(!isValidName(etName.text.toString())){
                 etName.error = "Please enter a valid name. It should only contain letters and spaces — no numbers or special characters"
                 etName.requestFocus()
@@ -385,34 +420,51 @@ class ProfileFragment : Fragment() {
 
     private fun callingProfileSaveApi(){
         lifecycleScope.launch {
-            var fullName = MultipartUtil.stringToRequestBody(binding.etName.text.toString())
-            var height = MultipartUtil.stringToRequestBody(binding.etHeight.text.toString())
-            var weight = MultipartUtil.stringToRequestBody(binding.etweight.text.toString())
-            var age = MultipartUtil.stringToRequestBody(binding.etAge.text.toString())
-            var selectedGender = when {
+            val fullName = MultipartUtil.stringToRequestBody(binding.etName.text.toString())
+            val height = MultipartUtil.stringToRequestBody(binding.etHeight.text.toString())
+            val weight = MultipartUtil.stringToRequestBody(binding.etweight.text.toString())
+            val age = MultipartUtil.stringToRequestBody(binding.etAge.text.toString())
+            val state = MultipartUtil.stringToRequestBody(binding.etState.text.toString())
+            val selectedGender = when {
                 binding.txtMale.currentTextColor == Color.parseColor("#FFFFFF") -> "male"
                 binding.txtFemale.currentTextColor == Color.parseColor("#FFFFFF") -> "female"
                 binding.txtOthers.currentTextColor == Color.parseColor("#FFFFFF") -> "others"
                 else -> "" // or "None"
             }
 
-            var gender = MultipartUtil.stringToRequestBody(selectedGender)
+            val gender = MultipartUtil.stringToRequestBody(selectedGender)
             LoadingUtils.showDialog(requireContext(),false)
 
-            viewModel.updateProfile(fullName,height,weight,age,gender,imageProfileMultiPart).collect{
+            viewModel.updateProfile(
+                fullName,
+                height,
+                weight,age,gender,imageProfileMultiPart,state
+            ).collect{ it ->
                 when(it){
                     is NetworkResult.Success ->{
                         LoadingUtils.hideDialog()
+                        SessionManager(requireContext()).setUserState(selectedState)
                         binding.llEditDelete.visibility =View.VISIBLE
                         binding.llSaveCancel.visibility =View.GONE
+                        binding.textView11.setText(R.string.height)
+                        binding.textView12.setText(R.string.weight)
                         Log.d("testing_profile_name", binding.etName.text.toString() )
                         SessionManager(requireContext()).setUserName(binding.etName.text.toString())
-                        val parts = it.data?.split("-----")
-                        val path = (parts?.get(1) ?: "")
-                        SessionManager(requireContext()).setUserImage(path)
-                        Log.d("TESTING_PROFILE_SAVE",path.toString())
-                        disableAllEdlitText()
-                        dialogACCOUNTSuccess()
+//                        val parts = it.data?.split("-----")
+//                        val path = (parts?.get(1) ?: "")
+                        originalProfileData = it.data
+                        originalProfileData?.let {
+                            SessionManager(requireContext()).setUserImage(AppConstant.Base_URL+it.profile_path)
+                            settingDataToUi(it)
+                            disableAllEdlitText()
+                            dialogACCOUNTSuccess()
+                            binding.etState.isEnabled = false
+                            binding.etState.isClickable = false
+                        }
+//                        SessionManager(requireContext()).setUserImage(path)
+//                        Log.d("TESTING_PROFILE_SAVE",path.toString())
+
+
                     }
                     is NetworkResult.Error ->{
                         LoadingUtils.hideDialog()
@@ -423,6 +475,9 @@ class ProfileFragment : Fragment() {
                     }
                 }
             }
+
+
+
         }
     }
 
@@ -432,6 +487,8 @@ class ProfileFragment : Fragment() {
             etHeight.isEnabled = true
             etweight.isEnabled = true
             etAge.isEnabled = true
+            binding.etState.isEnabled = true
+            binding.etState.isClickable = true
             editIcon.visibility = View.VISIBLE
         }
     }
@@ -442,6 +499,8 @@ class ProfileFragment : Fragment() {
             etHeight.isEnabled = false
             etweight.isEnabled = false
             etAge.isEnabled = false
+            binding.etState.isEnabled = false
+            binding.etState.isClickable = false
             editIcon.visibility = View.GONE
         }
     }
@@ -459,8 +518,29 @@ class ProfileFragment : Fragment() {
             btnClose.setOnClickListener { dialog.dismiss() }
             btnNo.setOnClickListener { dialog.dismiss() }
             btnYes.setOnClickListener {
-                dialog.dismiss()
-                dialogDeleteSuccess()
+                lifecycleScope.launch {
+                    LoadingUtils.showDialog(requireContext(),false)
+                    viewModel.deleteAccount().collect {
+                        when(it){
+                            is NetworkResult.Success ->{
+                                dialog.dismiss()
+                                LoadingUtils.hideDialog()
+                                var sessionManager = SessionManager(requireContext())
+                                sessionManager.clearSession()
+                                dialogDeleteSuccess()
+                            }
+                            is NetworkResult.Error ->{
+                                LoadingUtils.hideDialog()
+                                LoadingUtils.hideDialog()
+
+                            }
+                            else ->{
+
+                            }
+                        }
+                    }
+                }
+
             }
         }
 

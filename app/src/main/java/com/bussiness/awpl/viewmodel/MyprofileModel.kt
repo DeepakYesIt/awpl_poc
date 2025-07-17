@@ -18,5 +18,6 @@ data class MyprofileModel(
     val suspended_at: String?,
     val suspension_reason: String?,
     val updated_at: String?,
-    val weight: String?
+    val weight: String?,
+    var state :String?
 )

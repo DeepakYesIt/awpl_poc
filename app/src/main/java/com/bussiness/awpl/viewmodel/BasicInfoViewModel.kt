@@ -12,8 +12,8 @@ import javax.inject.Inject
 class BasicInfoViewModel @Inject constructor(private var repository: AwplRepository): ViewModel() {
 
      suspend fun basicInfo(
-        name: String, height: String, weight: String, age: String, gender: String): Flow<NetworkResult<String>>{
-        return repository.basicInfo(name, height, weight, age, gender).onEach {
+        name: String, height: String, weight: String, age: String, gender: String,state :String): Flow<NetworkResult<String>>{
+        return repository.basicInfo(name, height, weight, age, gender,state).onEach {
 
         }
     }

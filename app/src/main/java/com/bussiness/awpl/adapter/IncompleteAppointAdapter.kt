@@ -3,6 +3,7 @@ package com.bussiness.awpl.adapter
 import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -40,10 +41,16 @@ class IncompleteAppointAdapter(
                     R.drawable.ic_not_found_img).into(doctorImage)
                 doctorName.text = appointment.doctorName
 
+                if(appointment.is_free_call){
+                    tagFreeText.visibility = View.VISIBLE
+                }else{
+                    tagFreeText.visibility =View.GONE
+                }
                 Log.d("TESTING_WORK",appointment.doctorName)
                 Log.d("TESTING_WORK",appointment.date)
                 dateAndTime.text = appointment.date
                 txtTime.text = appointment.time
+
 
                 rescheduleButton.setOnClickListener {
                     if(appointment.can_reschedule){

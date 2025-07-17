@@ -1,5 +1,7 @@
 package com.bussiness.awpl.utils
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -7,6 +9,9 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 object AppConstant {
+    val FEEDBACK :String ="FEEDBACK"
+    val STATE: String? ="STATE"
+    val BACK: String? ="BACK"
     val PDF: String?="PDF"
     val Chat :String ="chat"
     val DOCTOR: String ="DOCTOR"
@@ -35,38 +40,75 @@ object AppConstant {
     var TIME ="time"
     var APPID ="APPID"
     var EMAIL ="email"
+    val statesAndUTs = mutableListOf(
+        "Andaman And Nicobar Islands",  // UT
+        "Andhra Pradesh",               // State
+        "Arunachal Pradesh",            // State
+        "Assam",                        // State
+        "Bihar",                        // State
+        "Chandigarh",                   // UT
+        "Chhattisgarh",                 // State
+        "Dadra And Nagar Haveli And Daman And Diu",  // UT
+        "Delhi",                        // UT / NCT
+        "Goa",                          // State
+        "Gujarat",                      // State
+        "Haryana",                      // State
+        "Himachal Pradesh",            // State
+        "Jammu And Kashmir",           // UT
+        "Jharkhand",                   // State
+        "Karnataka",                   // State
+        "Kerala",                      // State
+        "Ladakh",                      // UT
+        "Lakshadweep",                 // UT
+        "Madhya Pradesh",              // State
+        "Maharashtra",                 // State
+        "Manipur",                     // State
+        "Meghalaya",                   // State
+        "Mizoram",                     // State
+        "Nagaland",                    // State
+        "Odisha",                      // State
+        "Puducherry",                  // UT
+        "Punjab",                      // State
+        "Rajasthan",                   // State
+        "Sikkim",                      // State
+        "Tamil Nadu",                  // State
+        "Telangana",                   // State
+        "Tripura",                     // State
+        "Uttar Pradesh",              // State
+        "Uttarakhand",                // State
+        "West Bengal"                 // State
+    )
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun isTimeMoreThanTwoHoursAhead(dateStr: String, timeRange: String): Boolean {
         return try {
-            val formatter = DateTimeFormatter.ofPattern("EEE MMM dd yyyy h:mm a", Locale.ENGLISH)
-            val todayYear = LocalDate.now().year
+            val inputFormatter = DateTimeFormatter.ofPattern("dd MMM yy h:mm a", Locale.ENGLISH)
 
-            // Combine start time with date
             val parts = timeRange.split("-")
             if (parts.size != 2) return false
 
-            val startTime = parts[0].trim()       // e.g. 5:15
-            val endTime = parts[1].trim()         // e.g. 5:30 PM
+            val startTimeRaw = parts[0].trim() // "08:00"
+            val endTimeRaw = parts[1].trim()   // "08:15 PM"
 
-            // Append PM/AM from endTime to startTime if needed
-            val amPm = endTime.takeLast(2)        // "PM"
-            val normalizedStart = "$startTime $amPm"  // "5:15 PM"
+            // Get AM/PM from end time
+            val amPm = endTimeRaw.takeLast(2)  // "PM"
 
-            // Combine date and time
-            val fullDateTimeStr = "$dateStr $todayYear $normalizedStart" // "Fri Jun 13 2025 5:15 PM"
+            // Append AM/PM to start time
+            val normalizedStartTime = "$startTimeRaw $amPm" // "08:00 PM"
 
-            val inputDateTime = LocalDateTime.parse(fullDateTimeStr, formatter)
+            // Combine date with time
+            val fullDateTimeStr = "$dateStr $normalizedStartTime" // e.g., "15 Jul 25 08:00 PM"
+
+            val inputDateTime = LocalDateTime.parse(fullDateTimeStr, inputFormatter)
+
             val now = LocalDateTime.now()
 
-            // Return true if it's more than 2 hours ahead
-            Duration.between(now, inputDateTime).toMinutes() > 120
+            return Duration.between(now, inputDateTime).toMinutes() > 120
 
         } catch (e: Exception) {
             e.printStackTrace()
             false
         }
     }
-
-
 }

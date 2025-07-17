@@ -118,6 +118,7 @@ class HomeScheduleCallFragment : Fragment() {
                 val bundle = Bundle().apply {
                     putString("TYPE", "forHome")
                     putInt(AppConstant.DISEASE_ID, diseaseId)
+                    putBoolean(AppConstant.BACK,true)
                 }
                 this@HomeScheduleCallFragment.type =""
                 findNavController().navigate(R.id.basicInfoScreen2, bundle)

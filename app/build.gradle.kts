@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.ui.android)
     implementation(libs.play.services.cast.framework)
+    implementation(libs.firebase.database.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -125,4 +126,8 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.google.firebase:firebase-crashlytics:18.6.0")
     implementation("com.google.firebase:firebase-analytics:21.5.0")
+    implementation ("com.appsflyer:af-android-sdk:6.12.1")
+    implementation("com.google.android.material:material:1.12.0")
+
+
 }

@@ -1,6 +1,7 @@
 package com.bussiness.awpl.base
 
 import android.animation.ObjectAnimator
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -85,7 +86,12 @@ object CommonUtils {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     putExtra("LOAD_FRAGMENT", "login")
                 }
+
+                if (context is Activity) {
+                    context.finish()
+                }
                 context.startActivity(intent)
+
             }
         }
 

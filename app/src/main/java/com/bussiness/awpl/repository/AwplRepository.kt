@@ -11,6 +11,7 @@ import com.bussiness.awpl.model.CompletedScheduleCallModel
 import com.bussiness.awpl.model.CompletedSymptomsModel
 import com.bussiness.awpl.model.DoctorModel
 import com.bussiness.awpl.model.FAQItem
+import com.bussiness.awpl.model.HolidayModel
 import com.bussiness.awpl.model.HomeModel
 import com.bussiness.awpl.model.IncompleteAppoint
 import com.bussiness.awpl.model.LoginModel
@@ -41,7 +42,8 @@ interface AwplRepository {
                           @Field("height") height :String,
                           @Field("weight")weight :String,
                           @Field("age") age:String,
-                          @Field("gender") gender :String
+                          @Field("gender") gender :String,
+                          state:String
     ) : Flow<NetworkResult<String>>
 
     suspend fun termsCondition() : Flow<NetworkResult<String>>
@@ -63,8 +65,9 @@ interface AwplRepository {
         weight : RequestBody,
         age : RequestBody,
         gender : RequestBody,
-        profileImage: MultipartBody.Part?
-    ) : Flow<NetworkResult<String>>
+        profileImage: MultipartBody.Part?,
+        state : RequestBody
+    ) : Flow<NetworkResult<MyprofileModel>>
 
     suspend fun diseaseList() : Flow<NetworkResult<MutableList<DiseaseModel>>>
 
@@ -183,4 +186,13 @@ interface AwplRepository {
     ) :Flow<NetworkResult<String>>
 
     suspend fun deleteAccount() : Flow<NetworkResult<String>>
+
+
+    suspend fun  submitFeedBack(
+        @Field("appointment_id") appointmentId :Int,
+        @Field("rating") rating :Int,
+        @Field("comment") comment :String
+    )  : Flow<NetworkResult<String>>
+
+    suspend fun holidayList() : Flow<NetworkResult<MutableList<HolidayModel>>>
 }

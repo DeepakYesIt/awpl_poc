@@ -46,7 +46,13 @@ class CancelledAdapter(
                 Log.d("TESTING_WORK",appointment.date)
                 dateAndTime.text = appointment.date
                 txtTime.text = appointment.time
+                if(appointment.is_free_call){
 
+                    tagFreeText.visibility =View.VISIBLE
+                }
+                else{
+                    tagFreeText.visibility =View.GONE
+                }
                 rescheduleButton.setOnClickListener {
                     onRescheduleClick(appointment)
                 }

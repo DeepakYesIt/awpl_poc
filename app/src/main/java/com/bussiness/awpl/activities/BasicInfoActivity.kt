@@ -68,46 +68,46 @@ class BasicInfoActivity : AppCompatActivity() {
         binding.btnNext.setOnClickListener {
             if (validateFields()) {
 
-                    callingBasicInfoApi()
+                   // callingBasicInfoApi()
                 }
             }
 
     }
 
-    private fun callingBasicInfoApi(){
-        lifecycleScope.launch {
-            selectedGender = when {
-                binding.txtMale.currentTextColor == Color.parseColor("#FFFFFF") -> "male"
-                binding.txtFemale.currentTextColor == Color.parseColor("#FFFFFF") -> "female"
-                binding.txtOthers.currentTextColor == Color.parseColor("#FFFFFF") -> "others"
-                else -> "" // or "None"
-            }
-            Log.d("TESTING","Selected Gender "+selectedGender)
-            LoadingUtils.showDialog(this@BasicInfoActivity,false)
-            //  name: String, height: String, weight: String, age: String, gender: String
-            basicInfoViewModel.basicInfo(binding.etName.text.toString(),binding.etHeight.text.toString(),
-                binding.etweight.text.toString(),binding.etAge.text.toString(),selectedGender
-            ).collect{
-                when(it){
-                    is NetworkResult.Success ->{
-                        LoadingUtils.hideDialog()
-                        LoadingUtils.showSuccessDialog(this@BasicInfoActivity,it.data.toString()){
-                            // Default
-                            val intent = Intent(this@BasicInfoActivity, HomeActivity::class.java)
-                            startActivity(intent)
-                        }
-                    }
-                    is NetworkResult.Error ->{
-                        LoadingUtils.showErrorDialog(this@BasicInfoActivity,it.message.toString())
-                    }
-                    else ->{
-
-                    }
-                }
-            }
-
-        }
-    }
+//    private fun callingBasicInfoApi(){
+//        lifecycleScope.launch {
+//            selectedGender = when {
+//                binding.txtMale.currentTextColor == Color.parseColor("#FFFFFF") -> "male"
+//                binding.txtFemale.currentTextColor == Color.parseColor("#FFFFFF") -> "female"
+//                binding.txtOthers.currentTextColor == Color.parseColor("#FFFFFF") -> "others"
+//                else -> "" // or "None"
+//            }
+//            Log.d("TESTING","Selected Gender "+selectedGender)
+//            LoadingUtils.showDialog(this@BasicInfoActivity,false)
+//            //  name: String, height: String, weight: String, age: String, gender: String
+//            basicInfoViewModel.basicInfo(binding.etName.text.toString(),binding.etHeight.text.toString(),
+//                binding.etweight.text.toString(),binding.etAge.text.toString(),selectedGender
+//            ).collect{
+//                when(it){
+//                    is NetworkResult.Success ->{
+//                        LoadingUtils.hideDialog()
+//                        LoadingUtils.showSuccessDialog(this@BasicInfoActivity,it.data.toString()){
+//                            // Default
+//                            val intent = Intent(this@BasicInfoActivity, HomeActivity::class.java)
+//                            startActivity(intent)
+//                        }
+//                    }
+//                    is NetworkResult.Error ->{
+//                        LoadingUtils.showErrorDialog(this@BasicInfoActivity,it.message.toString())
+//                    }
+//                    else ->{
+//
+//                    }
+//                }
+//            }
+//
+//        }
+//    }
 
     private fun showHeightPickerDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_height_picker, null)

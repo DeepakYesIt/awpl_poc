@@ -6,5 +6,6 @@ data class LoginModel(
     val name: String?,
     val token: String?,
     val userId: Int,
-    var profile_path:String?
+    var profile_path:String?,
+    var state :String?
 )

@@ -34,6 +34,7 @@ import javax.inject.Inject
 class MyAppointmentViewModel @Inject constructor(private var repository: AwplRepository): ViewModel() {
 
 
+     var isSelectedUploadSymptoms = false
     var upcomingList = mutableListOf<UpcomingModel>()
     private var cancelList = mutableListOf<CancelledAppointment>()
     private var incompleteAppointmentList = mutableListOf<IncompleteAppoint>()
@@ -42,6 +43,17 @@ class MyAppointmentViewModel @Inject constructor(private var repository: AwplRep
     val homeData: LiveData<MutableList<UpcomingModel>?> = _homeData
 
     private var timerJob: Job? = null
+
+
+    suspend fun submitFeedBack(
+        appointmentId: Int,
+        rating: Int,
+        comment: String
+    ): Flow<NetworkResult<String>> {
+        return repository.submitFeedBack(appointmentId, rating, comment).onEach {
+
+        }
+    }
 
     fun startPeriodicFetch() {
         timerJob?.cancel()

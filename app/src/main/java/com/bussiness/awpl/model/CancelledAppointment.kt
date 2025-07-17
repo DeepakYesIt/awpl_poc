@@ -6,5 +6,6 @@ data class CancelledAppointment(
     val doctorName: String,
     val id: Int,
     val patient_id: Int,
-    val time: String
+    val time: String,
+    val is_free_call :Boolean = false
 )

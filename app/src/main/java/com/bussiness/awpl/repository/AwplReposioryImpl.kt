@@ -14,6 +14,7 @@ import com.bussiness.awpl.model.CompletedSymptomsModel
 import com.bussiness.awpl.model.DoctorModel
 import com.bussiness.awpl.model.ErrorHandler
 import com.bussiness.awpl.model.FAQItem
+import com.bussiness.awpl.model.HolidayModel
 import com.bussiness.awpl.model.HomeModel
 import com.bussiness.awpl.model.IncompleteAppoint
 import com.bussiness.awpl.model.LoginModel
@@ -84,10 +85,16 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
     }
 
     override suspend fun basicInfo(
-        name: String, height: String, weight: String, age: String, gender: String): Flow<NetworkResult<String>> = flow {
+        name: String,
+        height: String,
+        weight: String,
+        age: String,
+        gender: String,
+        state:String
+        ): Flow<NetworkResult<String>> = flow {
 
             try {
-                api.basicInfo(name, height, weight, age, gender).apply {
+                api.basicInfo(name, height, weight, age, gender,state).apply {
                 if (isSuccessful) {
                     body()?.let { resp ->
                         if (resp.has("status") && resp.get("status").asBoolean) {
@@ -863,28 +870,39 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
         weight : RequestBody,
         age : RequestBody,
         gender : RequestBody,
-        profileImage: MultipartBody.Part?
-    ): Flow<NetworkResult<String>> =flow{
+        profileImage: MultipartBody.Part?,
+        state :RequestBody
+    ): Flow<NetworkResult<MyprofileModel>> =flow{
         try {
-            api.updateProfile(name, height, weight, age, gender, profileImage).apply {
+            api.updateProfile(name, height, weight, age, gender, profileImage,state).apply {
                 if (isSuccessful) {
+//                    body()?.let { resp ->
+//                        if (resp.has("status") && resp.get("status").asBoolean) {
+//                            val obj = resp.get("message").asString
+//                            var mainObj = resp.get("data").asJsonObject
+//                            var obj1 = mainObj.get("patient").asJsonObject
+//                            var img = ""
+//                            if(obj1.has("profile_path") && obj1.get("profile_path").isJsonNull == false){
+//                                 img = AppConstant.Base_URL + obj1.get("profile_path").asString
+//                            }
+//                            emit(NetworkResult.Success(obj + "-----"+img))
+//                        }
+//                        else {
+//                            emit(NetworkResult.Error(resp.get("message").asString))
+//                        }
+//                    } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
+
                     body()?.let { resp ->
                         if (resp.has("status") && resp.get("status").asBoolean) {
-                            val obj = resp.get("message").asString
-                            var mainObj = resp.get("data").asJsonObject
-                            var obj1 = mainObj.get("patient").asJsonObject
-                            var img = ""
-                            if(obj1.has("profile_path") && obj1.get("profile_path").isJsonNull == false){
-                                 img = AppConstant.Base_URL + obj1.get("profile_path").asString
-                            }
-
-
-                            emit(NetworkResult.Success(obj + "-----"+img))
-                        }
-                        else {
+                            val mainObj = resp.get("data").asJsonObject
+                            val obj1 = mainObj.get("patient").asJsonObject
+                            val model: MyprofileModel = Gson().fromJson(obj1.toString(), MyprofileModel::class.java)
+                            emit(NetworkResult.Success(model))
+                        } else {
                             emit(NetworkResult.Error(resp.get("message").asString))
                         }
                     } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
+
                 } else {
                     try {
                         val jsonObj = this.errorBody()?.string()?.let { JSONObject(it) }
@@ -1386,6 +1404,79 @@ class AwplReposioryImpl  @Inject constructor(private val api: ZyvoApi) : AwplRep
         } catch (e: Exception) {
             emit(NetworkResult.Error(ErrorHandler.emitError(e)))
         }
+    }
+
+    override suspend fun submitFeedBack(
+        appointmentId: Int,
+        rating: Int,
+        comment: String
+    ): Flow<NetworkResult<String>> =flow{
+        try {
+            api.submitFeedBack(appointmentId, rating, comment).apply {
+                if (isSuccessful) {
+                    body()?.let { resp ->
+                        if (resp.has("status") && resp.get("status").asBoolean) {
+                            val obj = resp.get("message").asString
+
+                            emit(NetworkResult.Success(obj))
+                        }
+                        else {
+                            emit(NetworkResult.Error(resp.get("message").asString))
+                        }
+                    } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
+                } else {
+                    try {
+                        val jsonObj = this.errorBody()?.string()?.let { JSONObject(it) }
+                        emit(NetworkResult.Error(jsonObj?.getString("message") ?: AppConstant.unKnownError))
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        emit(NetworkResult.Error(AppConstant.unKnownError))
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            emit(NetworkResult.Error(ErrorHandler.emitError(e)))
+        }
+    }
+
+    override suspend fun holidayList() :  Flow<NetworkResult<MutableList<HolidayModel>>> = flow {
+        try {
+
+            api.holidayList().apply {
+                if (isSuccessful) {
+                    body()?.let { resp ->
+                        if (resp.has("status") && resp.get("status").asBoolean) {
+                            val arr = resp.get("data").asJsonArray
+
+                            var list = mutableListOf<HolidayModel>()
+
+                            arr.forEach {
+                                val model: HolidayModel =
+                                    Gson().fromJson(it.toString(), HolidayModel::class.java)
+                                list.add(model)
+                            }
+
+                            Log.d("Testing_date","LIST SIZE IN API"+list.size)
+                            emit(NetworkResult.Success(list))
+                        }
+                        else {
+                            emit(NetworkResult.Error(resp.get("message").asString))
+                        }
+                    } ?: emit(NetworkResult.Error(AppConstant.unKnownError))
+                } else {
+                    try {
+                        val jsonObj = this.errorBody()?.string()?.let { JSONObject(it) }
+                        emit(NetworkResult.Error(jsonObj?.getString("message") ?: AppConstant.unKnownError))
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        emit(NetworkResult.Error(AppConstant.unKnownError))
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            emit(NetworkResult.Error(ErrorHandler.emitError(e)))
+        }
+
     }
 
 }

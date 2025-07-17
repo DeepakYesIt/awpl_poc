@@ -23,7 +23,8 @@
             android:paddingStart="@dimen/_5sdp"
             android:paddingEnd="@dimen/_4sdp"
             android:layout_toStartOf="@+id/button_next"
-            android:src="@drawable/arrow_left"
+            android:src="@drawable/arrow_right"
+            android:rotation="180"
             tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
         <LinearLayout

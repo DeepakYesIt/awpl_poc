@@ -1,5 +1,6 @@
 package com.bussiness.awpl.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,10 @@ class TimeSlotAdapter(
 
     override fun onBindViewHolder(holder: TimeSlotViewHolder, position: Int) {
         val timeSlot = timeSlots[position]
+        Log.d("TESTING_TIME",timeSlot)
+        if(timeSlot.trim() == "11:45 AM"){
+            holder.textTimeSlot.visibility =View.GONE
+        }
         holder.textTimeSlot.text = timeSlot
 
         // Apply selection state

@@ -45,8 +45,8 @@ class DoctorConsultationFragment : Fragment() {
 
             proceedBtn.setOnClickListener {
                 val bundle = Bundle().apply {
-                    putInt(AppConstant.DISEASE_ID,diseaseId)
-                    putString(AppConstant.TYPE,type)
+                    putInt(AppConstant.DISEASE_ID , diseaseId)
+                    putString(AppConstant.TYPE , type)
                 }
                 findNavController().navigate(R.id.homeScheduleCallFragment,bundle)
             }

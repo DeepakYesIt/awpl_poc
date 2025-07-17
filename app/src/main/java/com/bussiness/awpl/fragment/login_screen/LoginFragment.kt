@@ -122,21 +122,24 @@ class LoginFragment : Fragment() {
                         data?.userId?.let { it1-> sessionManager.setUserId(it1)}
                         data?.name?.let { it1-> sessionManager.setUserName(it1) }
                         data?.email?.let { it1->sessionManager.setUserEmail(it1) }
+                        data?.state?.let { it1-> sessionManager.setUserState(it1) }
+
                         data?.profile_path?.let {
                             it1-> sessionManager.setUserImage(AppConstant.Base_URL+ MultipartUtil.ensureStartsWithSlash(it1))
                         }
+
                         Log.d("TESTING_NAME",sessionManager.getUserName().toString())
                         LoadingUtils.hideDialog()
+
                         sessionManager.saveLoginState(true)
+
                         if(data?.basic_information ==0) {
                             findNavController().navigate(R.id.basicInfoScreen)
                             sessionManager.saveLoginState(true)
-
                         }
                         else{
                             val intent = Intent(requireContext(),HomeActivity::class.java)
                             startActivity(intent)
-
                         }
 
                     }

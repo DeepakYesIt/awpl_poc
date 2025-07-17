@@ -24,10 +24,12 @@ import com.bussiness.awpl.adapter.TimeSlotAdapter
 import com.bussiness.awpl.databinding.FragmentApointmentBookingBinding
 import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.LoadingUtils
+import com.bussiness.awpl.utils.SessionManager
 import com.bussiness.awpl.viewmodel.BookingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.YearMonth
@@ -43,6 +45,8 @@ class AppointmentBooking : Fragment() {
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var bookingViewModel :BookingViewModel
     private  var callId =0
+
+    var disabledDates = mutableListOf<LocalDate>()
 
     private var selectTime =""
     private var currentMonth: YearMonth = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -69,6 +73,9 @@ class AppointmentBooking : Fragment() {
             }
         }
 
+
+
+
         bookingViewModel.selectedCallId = callId
 
         return binding.root
@@ -84,6 +91,21 @@ class AppointmentBooking : Fragment() {
         val formattedDate = today.format(formatter)
         selectedDateStr = formattedDate
         bookingViewModel.selectedDateStr = selectedDateStr
+
+        val formatter1 = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+         disabledDates = SessionManager(requireContext()).getHolidayList()
+            .mapNotNull {
+                try {
+                    LocalDate.parse(it.date, formatter1)
+                } catch (e: Exception) {
+                    null
+                }
+            }.toMutableList()
+
+        Log.d("Testing_date",""+SessionManager(requireContext()).getHolidayList().size)
+        disabledDates.forEach {
+            Log.d("Testing_date",""+it)
+        }
         callingMakeTimeSlot(formattedDate)
         clickListener()
         updateCalendar()
@@ -91,6 +113,7 @@ class AppointmentBooking : Fragment() {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun callingMakeTimeSlot(date:String){
 
 //        for (hour in 0..23) {
@@ -110,14 +133,23 @@ class AppointmentBooking : Fragment() {
             bookingViewModel.getScheduleTime(date).collect{
                when(it){
                    is NetworkResult.Success ->{
-                       LoadingUtils.hideDialog()
+
                        timeSlots.clear()
+
+
+
                        it.data?.let { it1 -> timeSlots.addAll(it1.timeSlotList)
                           binding.edtEmail.setText(it.data.email)
                            binding.edtPhoneNo.setText(it.data.phone)
                            Log.d("TESTING_SIZE",timeSlots.size.toString()+" from local")
                            timeSlotAdapter.updateAdapter(timeSlots)
                        }
+                     if(SessionManager(requireContext()).getHolidayList().isEmpty()){
+                           callingGetHolidayListApi()
+                       }else{
+                           LoadingUtils.hideDialog()
+                       }
+
                    }
                    is NetworkResult.Error ->{
                        LoadingUtils.hideDialog()
@@ -127,6 +159,45 @@ class AppointmentBooking : Fragment() {
                    }
                }
             }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun callingGetHolidayListApi(){
+        lifecycleScope.launch {
+
+            bookingViewModel.getHolidayList().collect{
+                when(it){
+                    is NetworkResult.Success->{
+                        val formatter1 = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                        LoadingUtils.hideDialog()
+                        Log.d("Testing_date","inside result"+it.data?.size.toString())
+                        it.data?.let {
+                            disabledDates = it.mapNotNull {
+                                try {
+                                    LocalDate.parse(it.date, formatter1)
+                                } catch (e: Exception) {
+                                    null
+                                }
+                            }.toMutableList()
+
+                            SessionManager(requireContext()).saveHolidayList(it)
+
+                            Log.d("Testing_date",""+disabledDates.size)
+
+                            updateCalendar()
+                        }
+                    }
+                    is NetworkResult.Error ->{
+                        Log.d("Testing_date","inside Error")
+                        LoadingUtils.hideDialog()
+                    }
+                    else ->{
+
+                    }
+                }
+            }
+
         }
     }
 
@@ -172,18 +243,24 @@ class AppointmentBooking : Fragment() {
 
     private fun callingBookingSlotApi(){
         lifecycleScope.launch {
+            Log.d("TESTING_TIME","Selected time "+selectTime.toString())
             if(!selectTime.isEmpty()) {
+
                   LoadingUtils.showDialog(requireContext(),false)
-                bookingViewModel.booking(bookingViewModel.selectedDateStr,bookingViewModel.selectTime,bookingViewModel.selectedCallId).collect {
+                bookingViewModel.booking(bookingViewModel.selectedDateStr,
+                    bookingViewModel.selectTime,
+                    bookingViewModel.selectedCallId).collect {
                     when(it){
                         is NetworkResult.Success ->{
+                            selectTime =""
                             LoadingUtils.hideDialog()
                             var model = it.data
                             var bundle = Bundle().apply {
                                 putParcelable(AppConstant.BOOK_MODEL,model)
                                 model?.appointment_id?.let { it1 -> putInt(AppConstant.ID, it1) }
-                                putString(AppConstant.DATE,selectedDateStr)
-                                putString(AppConstant.TIME,selectTime)
+                                putString(AppConstant.DATE,bookingViewModel.selectedDateStr)
+                                putString(AppConstant.TIME, bookingViewModel.selectTime
+                                )
                             }
 
                             findNavController().navigate(R.id.summaryScreen,bundle)
@@ -229,6 +306,8 @@ class AppointmentBooking : Fragment() {
         addMonthView(calendarLayout, currentMonth)
     }
 
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     private fun addMonthView(parentLayout: LinearLayout, yearMonth: YearMonth) {
@@ -267,9 +346,12 @@ class AppointmentBooking : Fragment() {
                     dateView.text = date.dayOfMonth.toString().padStart(2, '0')
 
                     // Disable past dates
-                    if (date.isBefore(LocalDate.now())) {
+                    if (date.isBefore(LocalDate.now())
+                        || date.dayOfWeek == DayOfWeek.SUNDAY
+                        || disabledDates.contains(date)  ) {
                         dateView.isEnabled = false
-                        dateView.setTextColor(Color.LTGRAY)
+
+                        dateView.setTextColor(Color.RED)
                     } else {
                         dateView.setOnClickListener {
                             selectedDate = date
@@ -289,6 +371,8 @@ class AppointmentBooking : Fragment() {
                             dateView.setBackgroundResource(R.drawable.date_bg)
                             dateView.setTextColor(
                                 if (date.isBefore(LocalDate.now())) Color.LTGRAY
+                                else if (date.dayOfWeek == DayOfWeek.SUNDAY) Color.LTGRAY
+                                else if(disabledDates.contains(date)) Color.LTGRAY
                                 else if (date.month == yearMonth.month) Color.BLACK
                                 else Color.GRAY
                             )

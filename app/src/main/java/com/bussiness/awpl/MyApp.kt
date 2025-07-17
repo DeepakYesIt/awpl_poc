@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
+import com.appsflyer.AppsFlyerConversionListener
+import com.appsflyer.AppsFlyerLib
 import com.bussiness.awpl.utils.SessionManager
 import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -50,6 +52,22 @@ class MyApp : Application() {
             override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
             override fun onActivityDestroyed(activity: Activity) {}
         })
+
+
+        AppsFlyerLib.getInstance().init("8Go89zeMG4rtX5be4iYUCc", object :
+            AppsFlyerConversionListener {
+            override fun onConversionDataSuccess(data: MutableMap<String, Any>?) {
+                // Handle deep link data here
+            }
+
+            override fun onConversionDataFail(error: String?) {}
+
+            override fun onAppOpenAttribution(data: MutableMap<String, String>?) {}
+
+            override fun onAttributionFailure(error: String?) {}
+        }, this)
+
+        AppsFlyerLib.getInstance().start(this)
 
     }
 

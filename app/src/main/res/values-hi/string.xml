@@ -98,12 +98,18 @@
     <string name="our_doctors_will_review_your_information_and_provide_a_prescription_you_ll_be_notified_when_it_s_ready_to_download">
     हमारे डॉक्टर आपकी जानकारी की समीक्षा करेंगे और एक प्रिस्क्रिप्शन प्रदान करेंगे। आपको इसकी डाउनलोड के लिए तैयार होने पर सूचित किया जाएगा।
     </string>
-    <string name="lorem_1">1.लोरम इप्सम डोलर सिट अमेट, कंसैक्टेटुर</string>
+
+    <string name="weight">वजन</string>
+    <string name="height">"ऊंचाई"</string>
+    <string name="state">राज्य</string>
+
+    <string name="review_consultation">अपनी परामर्श सेवा की समीक्षा करें</string>
+    <string name="lorem_1">1.आपको यह बीमारी कितने समय से है?</string>
     <string name="answer">उत्तर</string>
     <string name="symptom_upload_consultations">लक्षण अपलोड परामर्श</string>
-    <string name="_2_lorem_ipsum_dolor_sit_amet_consectetur">2.लोरम इप्सम डोलर सिट अमेट, कंसैक्टेटुर</string>
-    <string name="_3_lorem_ipsum_dolor_sit_amet_consectetur">3.लोरम इप्सम डोलर सिट अमेट, कंसैक्टेटुर</string>
-    <string name="_4_lorem_ipsum_dolor_sit_amet_consectetur">4.लोरम इप्सम डोलर सिट अमेट, कंसैक्टेटुर</string>
+    <string name="_2_lorem_ipsum_dolor_sit_amet_consectetur">2. क्या आपकी समस्या से जुड़ी कोई और परेशानी है जो आप साझा करना चाहेंगे?</string>
+    <string name="_3_lorem_ipsum_dolor_sit_amet_consectetur">3. क्या आपको इस बीमारी का कोई पूर्व इतिहास है?</string>
+    <string name="_4_lorem_ipsum_dolor_sit_amet_consectetur">4. क्या आप कोई दवा ले रहे हैं? यदि हाँ, तो कृपया दवा का नाम और कब से आप यह दवा ले रहे हैं, बताएं।</string>
     <string name="images">चित्र</string>
     <string name="videos">वीडियो</string>
     <string name="pdf">पीडीएफ</string>
@@ -156,7 +162,7 @@
     </string>
     <string name="home">होम</string>
     <string name="schedule">समय सारणी</string>
-    <string name="your_doctors">आपके डॉक्टर</string>
+    <string name="your_doctors">हमारे डॉक्टर</string>
     <string name="resources">संसाधन</string>
     <string name="notifications">सूचनाएँ</string>
     <string name="schedule_your_call">अपना कॉल शेड्यूल करें</string>

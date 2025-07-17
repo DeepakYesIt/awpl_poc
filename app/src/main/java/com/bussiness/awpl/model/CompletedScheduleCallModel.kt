@@ -8,5 +8,6 @@ data class CompletedScheduleCallModel(
     val id: Int,
     val patient_id: Int,
     val referred_name: String?,
-    val time: String?
+    val time: String?,
+    var is_free_call :Boolean = false
 )

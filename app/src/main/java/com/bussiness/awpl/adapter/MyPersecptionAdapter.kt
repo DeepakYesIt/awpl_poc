@@ -18,14 +18,15 @@ import com.bussiness.awpl.model.PrescriptionModel
 import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.DownloadWorker
 
-class MyPersecptionAdapter(private var perceptionList: MutableList<PrescriptionModel>,
-                           private val onScheduleCallClick: (PrescriptionModel) -> Unit,
+class MyPersecptionAdapter( private var perceptionList: MutableList<PrescriptionModel>,
+                            private val onScheduleCallClick: (PrescriptionModel) -> Unit,
                             private val onViewPdf :(pdfLink:String) ->Unit
-    ) : RecyclerView.Adapter<MyPersecptionAdapter.FAQViewHolder>() {
+                          ) : RecyclerView.Adapter<MyPersecptionAdapter.FAQViewHolder>() {
 
     inner class FAQViewHolder(private val binding: ItemUpcomingLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         @RequiresApi(Build.VERSION_CODES.Q)
         fun bind(presItem: PrescriptionModel, position: Int) {
+
            binding.root5.setOnClickListener {
                onScheduleCallClick(presItem)
            }
@@ -34,7 +35,8 @@ class MyPersecptionAdapter(private var perceptionList: MutableList<PrescriptionM
             }
             if(presItem.referred_name != null){
              binding.tvRefer.setText(presItem.referred_name)
-            }else{
+            }
+            else{
                 binding.tvRefer.visibility= View.GONE
             }
             binding.llView.setOnClickListener {
@@ -72,13 +74,9 @@ class MyPersecptionAdapter(private var perceptionList: MutableList<PrescriptionM
     override fun getItemCount(): Int = perceptionList.size
 
     fun updateAdapter(perceptionList: MutableList<PrescriptionModel>){
-
         Log.d("TESTING_AWPL_DATA","Outer Perception"+perceptionList.size.toString())
-
         this.perceptionList = perceptionList
-
         Log.d("TESTING_AWPL_DATA","Inner Perception"+this.perceptionList.size.toString())
-
         this.perceptionList.forEach {
             Log.d("TESTING_pRESEPTION_ID",it.time.toString())
         }

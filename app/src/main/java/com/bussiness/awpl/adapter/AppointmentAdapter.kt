@@ -1,24 +1,34 @@
 package com.bussiness.awpl.adapter
 
+import android.content.Context
+import android.content.Intent
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.appsflyer.share.LinkGenerator
+import com.appsflyer.share.ShareInviteHelper
 import com.bumptech.glide.Glide
 import com.bussiness.awpl.databinding.ItemAppointmentBinding
 import com.bussiness.awpl.model.UpcomingModel
 import com.bussiness.awpl.utils.AppConstant
+import com.bussiness.awpl.utils.SessionManager
+import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+
 
 class AppointmentAdapter(
     private var appointmentList: MutableList<UpcomingModel>,
     private val onCancelClick: (UpcomingModel) -> Unit,
     private val onRescheduleClick: (UpcomingModel) -> Unit,
     private val onInfoClick: (UpcomingModel, View) -> Unit,
-    private val startAppoitmentClick :(UpcomingModel) ->Unit
+    private val startAppoitmentClick :(UpcomingModel) ->Unit,
+    private val context :Context
     ) : RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder>() {
 
     inner class AppointmentViewHolder(private val binding: ItemAppointmentBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -28,6 +38,24 @@ class AppointmentAdapter(
                 doctorName.text = appointment.doctorName
                 dateTxt.text = appointment.date
                 timeTxt.text = appointment.time
+
+                if(appointment.is_referred){
+                    referedPatient.visibility =View.VISIBLE
+                    shareIcon.visibility =View.VISIBLE
+                    referedPatient.setText("Referred: "+""+appointment.patientName)
+                }else{
+                    referedPatient.visibility =View.GONE
+                    shareIcon.visibility =View.GONE
+                }
+
+                 if(appointment.is_free_call){
+
+                     tagFreeText.visibility =View.VISIBLE
+                }
+                else{
+                     tagFreeText.visibility =View.GONE
+                }
+
               //  doctorImage.setImageResource(appointment.doctorImage)
                 if(isCurrentTimeInRange(appointment.time)){
                     twoBtn.visibility=View.GONE
@@ -43,6 +71,9 @@ class AppointmentAdapter(
                 rescheduleButton.setOnClickListener { onRescheduleClick(appointment) }
                 infoIcon.setOnClickListener { onInfoClick(appointment, infoIcon) }
 
+                shareIcon.setOnClickListener { generateDeepLink(appointment.id.toString(),appointment.doctorName,
+                    appointment.time,
+                    appointment.date) }
                 startAppointmentBtn.setOnClickListener { startAppoitmentClick(appointment) }
                 // Hide buttons if cancelled
 //                if (appointment.isCancelled) {
@@ -104,4 +135,67 @@ class AppointmentAdapter(
             return false
         }
     }
+
+    private fun generateDeepLink(appointmentId:String,doctorName :String,
+                                 time:String,date :String) {
+        val currentCampaign = "videocall"
+        val oneLinkId = "pmck"
+        val brandDomain = "awpluser.onelink.me"
+
+        val deepLinkBase = "awpluser://videocall"
+        val webFallbackBase = "https://zyvo.tgastaging.com"
+        val doctorNameSlot = URLEncoder.encode(doctorName, "UTF-8")
+        val dateSlot = URLEncoder.encode(date,"UTF-8")
+        val token = SessionManager(context).getAuthToken()
+
+        val tokenencode =  Base64.encodeToString(token?.toByteArray(), Base64.URL_SAFE or Base64.NO_WRAP)
+        Log.d("TEST_TIMING","tOKEN Decoded IS "+tokenencode)
+
+        val deepLink = "$deepLinkBase"
+        val webLink = "$webFallbackBase"
+        Log.d("TESTING_TIME",time)
+
+
+        val encodedSlot = URLEncoder.encode(time, "UTF-8")
+
+        val linkGenerator = ShareInviteHelper.generateInviteUrl(context)
+            .setBaseDeeplink("https://$brandDomain/$oneLinkId")
+            .setCampaign(currentCampaign)
+            .addParameter("af_dp", deepLink)
+            .addParameter("af_web_dp", webLink)
+            // Optional: extra params for analytics or display
+            .addParameter("appointmentId", appointmentId)
+            .addParameter("token", tokenencode)
+            .addParameter("doctor",doctorNameSlot)
+            .addParameter("time",encodedSlot)
+            .addParameter("date",dateSlot)
+
+        linkGenerator.generateLink(context, object : LinkGenerator.ResponseListener {
+            override fun onResponse(s: String) {
+                Log.d("AppsFlyer", "Generated Link: $s")
+                val message = "Join Call at: $s"
+                shareLink(message) // or shareLinkWithImage(...)
+            }
+
+            override fun onResponseError(s: String) {
+                Log.e("AppsFlyer", "Link generation failed: $s")
+            }
+        })
+
+
+    }
+
+    private fun shareLink(message: String) {
+        val sendIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, message)
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, "Share via")
+        context.startActivity(shareIntent)
+    }
+
+
+
+
 }

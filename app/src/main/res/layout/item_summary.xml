@@ -29,11 +29,11 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/doctorImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_90sdp"
                 android:src="@drawable/doctor_image"
-                android:scaleType="fitCenter"
-                app:shapeAppearanceOverlay="@style/doctorImgBg"
+                android:scaleType="fitXY"
+                app:shapeAppearanceOverlay="@style/RoundedImageStyle"
                 android:layout_marginEnd="12dp"/>
 
             <LinearLayout
@@ -49,9 +49,10 @@
                     android:id="@+id/doctorName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:textColor="@color/darkGreyColor"
                     android:maxLines="3"
+
                     android:ellipsize="end"
                     android:text="@string/doctor_s_name" />
 
@@ -65,7 +66,7 @@
                     android:id="@+id/doctorExperience"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
+                    android:textSize="16sp"
                     android:textColor="@color/darkGreyColor"
                     android:maxLines="2"
                     android:ellipsize="end"

@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.PathUtils
 import androidx.fragment.app.Fragment
@@ -21,13 +22,17 @@ import androidx.navigation.fragment.findNavController
 import com.bussiness.awpl.R
 import com.bussiness.awpl.databinding.FragmentBasicInfoScreenBinding
 import androidx.core.graphics.toColorInt
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.activities.HomeActivity
+import com.bussiness.awpl.adapter.StateAdapter
 import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.ErrorMessages
 import com.bussiness.awpl.utils.LoadingUtils
+import com.bussiness.awpl.utils.SessionManager
 
 import com.bussiness.awpl.viewmodel.BasicInfoViewModel
 import com.bussiness.awpl.viewmodel.LoginViewModel
@@ -42,9 +47,12 @@ class BasicInfoScreen : Fragment() {
     private var type: String? = null
     private var selectedGender :String =""
     private var diseaseId :Int =0
+    private var back :Boolean = false
+    private var selectedState :String =""
 
     private val basicInfoViewModel: BasicInfoViewModel by lazy {
         ViewModelProvider(this)[BasicInfoViewModel::class.java]
+
     }
 
 
@@ -58,21 +66,39 @@ class BasicInfoScreen : Fragment() {
             if(it.containsKey(AppConstant.DISEASE_ID)){
                 diseaseId = it.getInt(AppConstant.DISEASE_ID)
             }
+            if(it.containsKey(AppConstant.BACK)){
+                back = true
+            }
         }
 
         if(type != null && type == "forHome"){
+
             binding.backIcon.visibility = View.VISIBLE
+
             binding.backIcon.setOnClickListener {
-                findNavController().navigateUp()
+                if(back){
+                 findNavController().navigate(R.id.homeFragment)
+                }
+                else {
+                    findNavController().navigateUp()
+                }
             }
             binding.textView11.text ="Enter Height"
             binding.textView12.text ="Enter Weight (Kg)"
             binding.textView9.text ="Please enter their basic information below"
-
         }
         else{
             binding.backIcon.visibility = View.GONE
         }
+
+        val recyclerView = binding.stateRecycler
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = StateAdapter(AppConstant.statesAndUTs) { it ->
+              binding.etState.setText(it)
+              selectedState= it
+              binding.myCard.visibility =View.GONE
+        }
+
         clickListener()
 
         return binding.root
@@ -83,14 +109,28 @@ class BasicInfoScreen : Fragment() {
 
         val textViews = listOf(binding.txtMale, binding.txtFemale, binding.txtOthers)
 
-        textViews.forEach { textView ->
-            textView.setOnClickListener {
+        textViews.forEach {
+            textView -> textView.setOnClickListener {
                 updateSelection(textView, textViews)
             }
         }
+
         binding.etHeight.setOnClickListener {
             showHeightPickerDialog()
         }
+
+        selectedState = SessionManager(requireContext()).getUserState()
+
+        AppConstant.statesAndUTs.forEach {
+            if(it.equals(selectedState,ignoreCase = true)){
+                selectedState = it
+                return@forEach
+            }
+        }
+
+
+        binding.etState.setText(selectedState)
+
     }
 
     override fun onResume() {
@@ -101,6 +141,30 @@ class BasicInfoScreen : Fragment() {
     }
 
     private fun clickListener() {
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Handle back press here
+                    // Example: navigate up or show a dialog
+                    if (back) {
+                      findNavController().navigate(R.id.homeFragment)
+                    } else {
+                        findNavController().navigateUp()
+                    }
+                }
+            }
+        )
+
+        binding.etState.setOnClickListener {
+            if(binding.myCard.isVisible){
+                binding.myCard.visibility =View.GONE
+            }else{
+                binding.myCard.visibility = View.VISIBLE
+            }
+        }
+
         binding.btnNext.setOnClickListener {
             if (validateFields()) {
                 if (type == "forHome") {
@@ -139,7 +203,7 @@ class BasicInfoScreen : Fragment() {
                LoadingUtils.showDialog(requireContext(),false)
           //  name: String, height: String, weight: String, age: String, gender: String
             basicInfoViewModel.basicInfo(binding.etName.text.toString(),binding.etHeight.text.toString(),
-                binding.etweight.text.toString(),binding.etAge.text.toString(),selectedGender
+                binding.etweight.text.toString(),binding.etAge.text.toString(),selectedGender,selectedState
                 ).collect{
                     when(it){
                         is NetworkResult.Success ->{
@@ -277,10 +341,6 @@ class BasicInfoScreen : Fragment() {
 
         }
     }
-
-
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()

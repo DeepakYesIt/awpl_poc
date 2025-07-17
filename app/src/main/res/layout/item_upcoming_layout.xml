@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/_2sdp"
     android:layout_marginBottom="@dimen/_10sdp">
+
     <LinearLayout
         android:id="@+id/ll_dwnld"
         android:layout_width="match_parent"
@@ -55,14 +56,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/_10sdp"
-                        android:text="Disease:"/>
+                        android:text="Disease: "
+                        />
                     <TextView
                         android:id="@+id/tv_diagonosis"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="#199FD9"
                         android:textSize="@dimen/_10sdp"
-                        android:text=" Influenza"/>
+                        android:text=" Influenza"
+                        />
+
                 </LinearLayout>
                 <TextView
                     android:id="@+id/tv_date"
@@ -110,6 +114,8 @@
                 android:background="@drawable/download_minimalistic_svgrepo_com"/>
         </LinearLayout>
     </LinearLayout>
+
+
     <ImageView
         android:id="@+id/imgBack"
         android:layout_width="wrap_content"
@@ -118,4 +124,5 @@
         android:layout_marginEnd="@dimen/_7sdp"
         android:layout_centerInParent="true"
         android:background="@drawable/upcoming_back"/>
+
 </RelativeLayout>

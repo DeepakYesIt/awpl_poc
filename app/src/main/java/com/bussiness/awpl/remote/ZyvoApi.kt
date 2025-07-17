@@ -32,11 +32,13 @@ interface ZyvoApi {
 
     @POST("basicInfo")
     @FormUrlEncoded
-    suspend fun basicInfo(@Field("name") name :String,
+    suspend fun basicInfo(
+                          @Field("name") name :String,
                           @Field("height") height :String,
                           @Field("weight")weight :String,
                           @Field("age") age:String,
-                          @Field("gender") gender :String
+                          @Field("gender") gender :String,
+                          @Field("state") state:String
                           ) : Response<JsonObject>
 
     @POST("termsCondition")
@@ -68,7 +70,9 @@ interface ZyvoApi {
         @Part ("weight") weight : RequestBody,
         @Part ("age") age : RequestBody,
         @Part ("gender") gender : RequestBody,
-        @Part profileImage: MultipartBody.Part?
+
+        @Part profileImage: MultipartBody.Part?,
+        @Part("state") state :RequestBody
         ) : Response<JsonObject>
 
 
@@ -224,9 +228,18 @@ interface ZyvoApi {
 
 
     @POST("deleteAccount")
-    @FormUrlEncoded
     suspend fun deleteAccount() :Response<JsonObject>
 
 
+    @POST("submitFeedback")
+    @FormUrlEncoded
+    suspend fun  submitFeedBack(
+        @Field("appointment_id") appointmentId :Int,
+        @Field("rating") rating :Int,
+        @Field("comment") comment :String
+    ) : Response<JsonObject>
 
-}
+    @GET("holidayList")
+    suspend fun holidayList() : Response<JsonObject>
+
+  }

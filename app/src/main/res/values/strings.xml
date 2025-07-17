@@ -119,7 +119,7 @@
     <string name="your_appointment_is_confirmed_for_may_n_14_2024_at_10_00_am">Your appointment is confirmed for May\n 14, 2024 at 10:00 AM.</string>
     <string name="home">Home</string>
     <string name="schedule">Schedule</string>
-    <string name="your_doctors">Your Doctors</string>
+    <string name="your_doctors">Our Doctors</string>
     <string name="resources">Resources</string>
     <string name="notifications">Notifications</string>
     <string name="schedule_your_call">Schedule Your Call</string>
@@ -439,5 +439,9 @@
     <string name="symptom_upload">Symptom Upload</string>
     <string name="filters_">Filters</string>
     <string name="no_presecrption_found">No Presecrption Found</string>
+    <string name="review_consultation">Review Your Consultation</string>
+    <string name="weight">Weight</string>
+    <string name="height">"Height"</string>
+    <string name="state">State</string>
 
 </resources>

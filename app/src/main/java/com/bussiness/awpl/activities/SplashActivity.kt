@@ -51,6 +51,8 @@ class SplashActivity : AppCompatActivity() {
     var new_date = ""
     var new_time =""
 
+    //8Go89zeMG4rtX5be4iYUCc
+
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -98,7 +100,34 @@ class SplashActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             Log.d("TESTING_SESSION"," "+sessionManager.isLoggedIn())
 
-            if (sessionManager.isLoggedIn()) {
+
+            // Check if the intent contains a URI (deep link)
+            if (intent?.action == Intent.ACTION_VIEW) {
+                Log.d("TEST_TIMING",    "Inside 1")
+                val data: Uri? = intent.data
+                if (data != null && data.scheme == "awpluser" && data.host == "videocall") {
+                    val appointmentId = data.getQueryParameter("appointmentId")
+                    val token = data.getQueryParameter("token")
+                    val doctor = data.getQueryParameter("doctor")
+                    val time = data.getQueryParameter("time")
+                    val date = data.getQueryParameter("date")
+                    // Now you can use the propertyId in your activity
+
+                    // Fetch property details using the propertyId
+                    val intent = Intent(this, VideoCallStartActivity::class.java)
+                    intent.putExtra("appointmentId",appointmentId)
+                    intent.putExtra("token",token)
+                    intent.putExtra("doctor",doctor)
+                    intent.putExtra("time",time)
+                    intent.putExtra("date",date)
+                    startActivity(intent)
+                    finish()
+                }
+            }
+
+            else if (sessionManager.isLoggedIn()) {
+                Log.d("TEST_TIMING",    "Inside 2")
+
                 var intent = Intent(this, HomeActivity::class.java)
                 if(fileUrl.isNotEmpty() && date.isNotEmpty()) {
                   intent.putExtra("fileUrl", fileUrl)
@@ -122,6 +151,9 @@ class SplashActivity : AppCompatActivity() {
 
             }
             else {
+                Log.d("TEST_TIMING",    "Inside 3")
+
+
                 startActivity(Intent(this, OnBoardActivity::class.java))
             }
             finish()

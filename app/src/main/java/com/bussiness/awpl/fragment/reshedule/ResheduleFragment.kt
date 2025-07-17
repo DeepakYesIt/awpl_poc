@@ -29,6 +29,7 @@ import com.bussiness.awpl.viewmodel.BookingViewModel
 import com.bussiness.awpl.viewmodel.RescheduleViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -43,6 +44,7 @@ class ResheduleFragment : Fragment() {
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var bookingViewModel : BookingViewModel
     private  var callId =0
+    var disabledDates = mutableListOf<LocalDate>()
     private lateinit var rescheduleViewModel : RescheduleViewModel
     private var selectTime =""
     private var currentMonth: YearMonth = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -85,7 +87,53 @@ class ResheduleFragment : Fragment() {
         clickListener()
         updateCalendar()
 
+        val formatter1 = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+        disabledDates = SessionManager(requireContext()).getHolidayList()
+            .mapNotNull {
+                try {
+                    LocalDate.parse(it.date, formatter1)
+                } catch (e: Exception) {
+                    null
+                }
+            }.toMutableList()
+
+        if(SessionManager(requireContext()).getHolidayList().isEmpty()){
+            callingGetHolidayListApi()
+        }
+
         return binding?.root
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun callingGetHolidayListApi(){
+        lifecycleScope.launch {
+
+            bookingViewModel.getHolidayList().collect(){
+                when(it){
+                    is NetworkResult.Success->{
+                        val formatter1 = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                        LoadingUtils.hideDialog()
+                        it.data?.let {
+                            disabledDates = it.mapNotNull {
+                                try {
+                                    LocalDate.parse(it.date, formatter1)
+                                } catch (e: Exception) {
+                                    null
+                                }
+                            }.toMutableList()
+                            updateCalendar()
+                        }
+                    }
+                    is NetworkResult.Error ->{
+                        LoadingUtils.hideDialog()
+                    }
+                    else ->{
+
+                    }
+                }
+            }
+
+        }
     }
 
 
@@ -197,6 +245,7 @@ class ResheduleFragment : Fragment() {
         }
     }
 
+
     private fun updateCalendar() {
         // Updates the calendar layout with the current and next month views.
         val calendarLayout = binding?.calendarLayout
@@ -223,6 +272,8 @@ class ResheduleFragment : Fragment() {
             addMonthView(calendarLayout, currentMonth)
         }
     }
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
@@ -259,16 +310,23 @@ class ResheduleFragment : Fragment() {
             week.forEach { date ->
                 val dateView = layoutInflater.inflate(R.layout.calendar_day, weekLayout, false) as TextView
                 if (date != null) {
-                    // dateView.text = date.dayOfMonth.toString()
                     dateView.text = date.dayOfMonth.toString().padStart(2, '0')
 
-                    dateView.setOnClickListener {
-                        selectedDate = date
-                        Log.d("TESTING_DATE",selectedDate.toString())
-                        selectedDateStr= selectedDate.toString()
-                        bookingViewModel.selectedDateStr = selectedDateStr
-                        updateCalendar()
-                        callingMakeTimeSlot(selectedDate.toString())
+                    // Disable past dates
+                    if (date.isBefore(LocalDate.now())
+                        || date.dayOfWeek == DayOfWeek.SUNDAY
+                        || disabledDates.contains(date)  ) {
+                        dateView.isEnabled = false
+
+                        dateView.setTextColor(Color.RED)
+                    } else {
+                        dateView.setOnClickListener {
+                            selectedDate = date
+                            selectedDateStr = selectedDate.toString()
+                            bookingViewModel.selectedDateStr = selectedDateStr
+                            updateCalendar()
+                            callingMakeTimeSlot(selectedDate.toString())
+                        }
                     }
 
                     when (date) {
@@ -279,17 +337,16 @@ class ResheduleFragment : Fragment() {
                         else -> {
                             dateView.setBackgroundResource(R.drawable.date_bg)
                             dateView.setTextColor(
-                                if (date.month == yearMonth.month) Color.BLACK else Color.GRAY
+                                if (date.isBefore(LocalDate.now())) Color.LTGRAY
+                                else if (date.dayOfWeek == DayOfWeek.SUNDAY) Color.LTGRAY
+                                else if(disabledDates.contains(date)) Color.LTGRAY
+                                else if (date.month == yearMonth.month) Color.BLACK
+                                else Color.GRAY
                             )
                         }
                     }
-
-
-//                    dateView.setTextColor(
-//                        if (date.month == yearMonth.month) Color.BLACK
-//                        else Color.GRAY
-//                    )
                 }
+
                 weekLayout.addView(dateView)
             }
             weeksLayout.addView(weekLayout)

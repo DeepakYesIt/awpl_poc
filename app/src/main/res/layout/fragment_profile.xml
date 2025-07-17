@@ -208,7 +208,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_regular"
-                android:text="@string/enter_your_height"
+                android:text="@string/height"
                 android:textColor="@color/darkGreyColor"
                 android:textSize="16sp"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -236,7 +236,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_regular"
-                android:text="@string/enter_your_weight"
+                android:text="@string/weight"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:textColor="@color/darkGreyColor"
                 android:textSize="16sp"
@@ -247,7 +247,7 @@
                 android:id="@+id/etweight"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:background="#DAEFF9"
                 android:hint="50"
                 android:maxLength="3"
@@ -355,6 +355,66 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+            <TextView
+                android:id="@+id/tv_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/state"
+                android:fontFamily="@font/lato_regular"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:textColor="@color/darkGreyColor"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etAge"
+                />
+
+            <TextView
+                android:id="@+id/et_state"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="#DAEFF9"
+                android:hint=""
+                android:inputType="text"
+                android:text="Himachal Pradesh"
+                android:padding="@dimen/_10sdp"
+                android:textSize="@dimen/_13ssp"
+                android:textColor="@color/darkGreyColor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_state" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/myCard"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_150sdp"
+                android:elevation="4dp"
+
+                android:visibility="gone"
+                android:backgroundTint="@android:color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                android:padding="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_state"
+                app:strokeWidth="0dp"
+                app:cardUseCompatPadding="true"
+                >
+
+                <!-- Inside Content -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/state_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:orientation="vertical"
+                    >
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </com.google.android.material.card.MaterialCardView>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -35,6 +35,14 @@ class CompletedAdapter(
                    if(obj.referred_name == null){
                        doctorNameRef.visibility=View.GONE
                    }
+
+                   if(appointment.is_free_call){
+                       tagFreeText.visibility =View.VISIBLE
+                   }
+                   else{
+                       tagFreeText.visibility =View.GONE
+                   }
+
                      timeTxt.text = obj.time
                      doctorName.text = obj.doctorName
                      Glide.with(binding.root.context).load(AppConstant.Base_URL+obj.doctorImage).into(binding.doctorImage)

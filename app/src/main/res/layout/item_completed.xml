@@ -28,15 +28,39 @@
                 android:visibility="visible"
                 android:layout_marginBottom="20dp">
 
-                <TextView
-                    android:id="@+id/consultationTxt"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/appointment_date"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/_12ssp"
-                    android:fontFamily="@font/lato_regular"
-                    android:textColor="#356598" />
+                    >
+
+                    <TextView
+                        android:id="@+id/tagFreeText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Free"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
+                        android:paddingTop="4dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="4dp"
+                        android:visibility="gone"
+                        android:background="@drawable/bg_tag_green"
+                        android:layout_alignParentEnd="true"
+                        />
+
+                    <TextView
+                        android:id="@+id/consultationTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/appointment_date"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/_12ssp"
+                        android:fontFamily="@font/lato_regular"
+                        android:textColor="#356598" />
+
+                </RelativeLayout>
+
 
                 <LinearLayout
                     android:id="@+id/llAppointmentDetail"

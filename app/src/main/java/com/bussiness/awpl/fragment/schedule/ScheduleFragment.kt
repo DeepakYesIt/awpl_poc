@@ -1,6 +1,8 @@
 package com.bussiness.awpl.fragment.schedule
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.os.Build
@@ -10,12 +12,15 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import android.widget.PopupWindow
+import android.widget.RatingBar
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.appcompat.widget.AppCompatButton
-import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -31,7 +36,6 @@ import com.bussiness.awpl.adapter.CompletedAdapter
 import com.bussiness.awpl.adapter.SymptomsUploadCompleteAdapter
 import com.bussiness.awpl.databinding.DialogCancelAppointmentBinding
 import com.bussiness.awpl.databinding.FragmentScheduleBinding
-import com.bussiness.awpl.model.AppointmentModel
 import com.bussiness.awpl.model.UpcomingModel
 import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.DownloadWorker
@@ -39,9 +43,12 @@ import com.bussiness.awpl.utils.LoadingUtils
 import com.bussiness.awpl.viewmodel.MyAppointmentViewModel
 import com.google.android.material.checkbox.MaterialCheckBox
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.core.graphics.toColorInt
+import com.bussiness.awpl.utils.SessionManager
+import com.bussiness.awpl.utils.VideoCallCheck
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 @AndroidEntryPoint
 class ScheduleFragment : Fragment() {
@@ -56,6 +63,83 @@ class ScheduleFragment : Fragment() {
     private var selectedTab = 0
     private var isSelected = false
     private var filter ="all"
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
+    private fun showRatingDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_rating_review, null)
+        val ratingBar = dialogView.findViewById<RatingBar>(R.id.ratingBarSmall)
+        val etReview = dialogView.findViewById<EditText>(R.id.et_review)
+        val btnCancel = dialogView.findViewById<Button>(R.id.btn_cancel)
+        val btnSubmit = dialogView.findViewById<Button>(R.id.btn_submit)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnSubmit.setOnClickListener {
+            val rating = ratingBar.rating
+            val reviewText = etReview.text.toString().trim()
+
+            if (rating == 0f) {
+                Toast.makeText(requireContext(), "Please select a rating", Toast.LENGTH_SHORT).show()
+            } else {
+
+                lifecycleScope.launch {
+                    LoadingUtils.showDialog(requireContext(),false)
+                    viewModel.submitFeedBack(
+                        SessionManager(requireContext()).getAppointment(),
+                        rating.toInt(),
+                        reviewText
+                    ).collect {
+                        when(it){
+                            is NetworkResult.Success ->{
+                                LoadingUtils.hideDialog()
+
+
+                                var oldList = SessionManager(requireContext()).getStringList(AppConstant.FEEDBACK)
+
+                                Log.d(
+                                    "TESTING_list",
+                                    "old list " + oldList.size.toString() + " " + SessionManager(
+                                        requireContext()
+                                    ).getAppointment().toString()
+                                )
+                                oldList.add( SessionManager(requireContext()).getAppointment().toString())
+                                SessionManager(requireContext()).saveStringList(AppConstant.FEEDBACK, oldList)
+                                dialog.dismiss()
+
+                                LoadingUtils.showSuccessDialog(requireContext(),it.data.toString()){
+                                }
+
+                            }
+                            is NetworkResult.Error ->{
+                                LoadingUtils.hideDialog()
+
+                                dialog.dismiss()
+                            }
+                            else ->{
+
+                            }
+                        }
+
+                    }
+
+                }
+
+
+                // submitReview(rating, reviewText)
+            }
+        }
+
+        dialog.show()
+    }
+
+
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreateView(
@@ -63,6 +147,36 @@ class ScheduleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentScheduleBinding.inflate(inflater, container, false)
+        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                var timeStr = SessionManager(requireContext()).getTime()
+                var dateStr = SessionManager(requireContext()).getDate()
+                Log.d("TESTING_AWPL","dateStr "+ dateStr+" timeStr"+timeStr)
+
+                SessionManager(requireContext()).getStringList(AppConstant.FEEDBACK).forEach {
+                    Log.d("TESTING_list",it)
+                }
+
+                if(SessionManager(requireContext()).shouldShow(dateStr,timeStr)){
+                    Log.d(
+                        "TESTING_list",
+                        "old list " + SessionManager(requireContext()).isListPresent(
+                            SessionManager(requireContext()).getAppointment().toString()
+                        ) + " " + SessionManager(requireContext()).getAppointment().toString()
+                    )
+
+
+                    if(SessionManager(requireContext()).shouldShow(dateStr,timeStr)){
+                        if(!SessionManager(requireContext()).isListPresent(SessionManager(requireContext()).getAppointment().toString())) {
+                            showRatingDialog()
+                        }
+                    }
+
+                }
+
+            }
+        }
 
         return binding.root
     }
@@ -96,25 +210,27 @@ class ScheduleFragment : Fragment() {
 
     private fun callingHomeDataBackWork(){
         viewModel.homeData.observe(viewLifecycleOwner) { data ->
-            if (data != null) {
-                if (data != null && data.size> 0 && selectedTab ==0) {
-                    Log.d("TESTING_SIZE", "Size of the list is " + data.size.toString())
-                    if (data.size > 0) {
-                        binding.noDataView.visibility = View.GONE
-                        binding.recyclerView.visibility = View.VISIBLE
-                        viewModel.upcomingList = data
-                        appointmentAdapter.updateAdapter(viewModel.upcomingList)
+            if(selectedTab ==0){
+                if (data != null) {
+
+                    if (data != null && data.size > 0) {
+                        Log.d("TESTING_SIZE", "Size of the list is " + data.size.toString())
+                        if (data.size > 0 && selectedTab == 0) {
+                            binding.noDataView.visibility = View.GONE
+                            binding.recyclerView.visibility = View.VISIBLE
+                            viewModel.upcomingList = data
+                            appointmentAdapter.updateAdapter(viewModel.upcomingList)
+                        } else {
+                            binding.apply {
+                                noDataView.visibility = View.VISIBLE
+                                recyclerView.visibility = View.GONE
+                            }
+                        }
                     } else {
                         binding.apply {
                             noDataView.visibility = View.VISIBLE
                             recyclerView.visibility = View.GONE
                         }
-                    }
-                }
-                else {
-                    binding.apply {
-                        noDataView.visibility = View.VISIBLE
-                        recyclerView.visibility = View.GONE
                     }
                 }
             }
@@ -166,7 +282,19 @@ class ScheduleFragment : Fragment() {
                     view.visibility = View.VISIBLE
                     upperLay.visibility = View.VISIBLE
                     binding.recyclerView.adapter = completedAdapter
-                    callingCompletedApi("all")
+                    if(viewModel.isSelectedUploadSymptoms){
+                        binding.scheduleCall2.setBackgroundResource(R.drawable.bg_four_side_corner_inner_white)
+                        binding.tV1.setTextColor(android.graphics.Color.parseColor("#858484"))
+                        binding.scheduleCall1.background = null
+                        binding.filterBtn.visibility =View.GONE
+                        binding.recyclerView.adapter  = completedSymptomsAdapter
+                        binding.tv2.setTextColor(android.graphics.Color.parseColor("#356598"))
+                        completedAdapter.update(false, mutableListOf())
+                        viewModel.isSelectedUploadSymptoms = true
+                        completedSymptomsUpload()
+                    }else {
+                        callingCompletedApi("all")
+                    }
                 }
                 2 -> {
                     txtCanceled.setTextColor(ContextCompat.getColor(requireContext(), R.color.darkGreyColor))
@@ -246,18 +374,13 @@ class ScheduleFragment : Fragment() {
                                   binding.recyclerView.visibility = View.VISIBLE
                                   viewModel.upcomingList = data
                                   appointmentAdapter.updateAdapter(viewModel.upcomingList)
-                              } else {
-                                  binding.apply {
-                                      noDataView.visibility = View.VISIBLE
-                                      textView48.setText(getString(R.string.you_haven_t_booked_any_n_appointments_yet))
-                                      recyclerView.visibility = View.GONE
-                                  }
                               }
                           }
                           else {
                               binding.apply {
                                   noDataView.visibility = View.VISIBLE
                                   recyclerView.visibility = View.GONE
+                                  textView48.setText(getString(R.string.you_haven_t_booked_any_n_appointments_yet))
                               }
                           }
                       }
@@ -315,8 +438,8 @@ class ScheduleFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setUpRecyclerView() {
-
         completedAdapter = CompletedAdapter(
             mutableListOf(),
             onCheckDetailsClick = { appointment ->
@@ -351,7 +474,8 @@ class ScheduleFragment : Fragment() {
 
           },
             onInfoClick = { _, infoIcon -> showInfoPopup(infoIcon) },
-            startAppoitmentClick={ apoitnment -> openVideoCall(apoitnment)}
+            startAppoitmentClick={ apoitnment -> openVideoCall(apoitnment)},
+            requireContext()
         )
 
         cancelledAdapter = CancelledAdapter(mutableListOf()) { appointment ->
@@ -370,7 +494,12 @@ class ScheduleFragment : Fragment() {
 
     }
 
-    private fun callingCallJoinedApi(startAppointment: Int, intent: Intent) {
+    private fun callingCallJoinedApi(
+        startAppointment: Int,
+        intent: Intent,
+        time: String,
+        date: String
+    ) {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.callJoined(startAppointment).collect{
@@ -378,7 +507,15 @@ class ScheduleFragment : Fragment() {
                     is NetworkResult.Success ->{
                         LoadingUtils.hideDialog()
                         Log.d("TESTING_CALL_JOINED","Calling joined call")
-                        startActivity(intent)
+                        SessionManager(requireContext()).setAppointmentId(startAppointment)
+                        SessionManager(requireContext()).setTime(time)
+                        SessionManager(requireContext()).setDate(date)
+
+                        VideoCallCheck.checkAndJoinAppointmentCall(requireContext(),startAppointment.toString()){
+                            LoadingUtils.hideDialog()
+                                      resultLauncher.launch(intent)
+                        }
+
                     }
                     is NetworkResult.Error ->{
                         Log.d("TESTING_CALL_JOINED","Calling joined cancel")
@@ -406,7 +543,7 @@ class ScheduleFragment : Fragment() {
                             intent.putExtra(AppConstant.DOCTOR,model.doctorName)
                             intent.putExtra(AppConstant.TIME,model.time)
                             //  startActivity(intent)
-                          callingCallJoinedApi(model.id,intent)
+                          callingCallJoinedApi(model.id,intent,model.time,model.date)
                         }
 
                     }
@@ -433,6 +570,7 @@ class ScheduleFragment : Fragment() {
             binding.filterBtn.visibility =View.VISIBLE
             completedAdapter.update(true, mutableListOf())
             binding.recyclerView.adapter = completedAdapter
+            viewModel.isSelectedUploadSymptoms = false
             callingCompletedApi(filter)
         }
 
@@ -444,6 +582,7 @@ class ScheduleFragment : Fragment() {
             binding.recyclerView.adapter  = completedSymptomsAdapter
             binding.tv2.setTextColor(android.graphics.Color.parseColor("#356598"))
             completedAdapter.update(false, mutableListOf())
+            viewModel.isSelectedUploadSymptoms = true
             completedSymptomsUpload()
         }
 

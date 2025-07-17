@@ -25,10 +25,10 @@ class MyProfileViewModel @Inject constructor(private var repository: AwplReposit
         weight : RequestBody,
         age : RequestBody,
         gender : RequestBody,
-        profileImage: MultipartBody.Part?
-    ): Flow<NetworkResult<String>>{
-        return repository.updateProfile(name, height, weight, age, gender, profileImage).onEach {
-
+        profileImage: MultipartBody.Part?,
+        state :RequestBody
+    ): Flow<NetworkResult<MyprofileModel>>{
+        return repository.updateProfile(name, height, weight, age, gender, profileImage,state).onEach {
         }
     }
 

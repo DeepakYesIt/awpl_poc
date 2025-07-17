@@ -49,7 +49,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         data.let {
             var fileUrl:String? = null
             var date :String? =null
-            var type = it.get("type")
+            val type = it["type"]
 
             if (type != null) {
                 Log.d("testing_notification",type)
@@ -237,7 +237,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                         dialog.show()
                     }
                 }
-                showDownloadNotification(title, message, fileUrl, date)
+
             }
             else {
                 Log.d("testing_notification","I am inside the download notification")
@@ -308,11 +308,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         return false
     }
 
-    private fun showNotificationReschedule(originalDoctor: String,
-                                           oldDateTime: String,
-                                           newDoctor: String,
-                                           newDate: String,
-                                           newTime: String) {
+    private fun showNotificationReschedule( originalDoctor: String,
+                                            oldDateTime: String,
+                                            newDoctor: String,
+                                            newDate: String,
+                                            newTime: String) {
+
         val intent = Intent(this, RescheduleDialogActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("open_reschedule", true)

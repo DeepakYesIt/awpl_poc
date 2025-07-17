@@ -1,5 +1,6 @@
 package com.bussiness.awpl.activities
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -21,6 +22,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
@@ -30,6 +32,9 @@ import com.bussiness.awpl.PermissionsHelper
 import com.bussiness.awpl.R
 import com.bussiness.awpl.utils.AppConstant
 import com.bussiness.awpl.utils.LoadingUtils
+import com.bussiness.awpl.utils.SessionManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
@@ -76,7 +81,9 @@ class VideoCallActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        onBackPressedDispatcher.addCallback(this) {
 
+        }
 
         window.addFlags(
               WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
@@ -160,8 +167,7 @@ class VideoCallActivity : AppCompatActivity() {
                     if (minutes == 15L && seconds == 0L && !toastShown) {
                         toastShown = true
                         if(!otherUserJoined){
-                            agoraEngine.leaveChannel()
-                            finish()
+                          leaveCall(SessionManager(this@VideoCallActivity).getAppointment().toString())
                         }else {
 //                            LoadingUtils.showErrorDialog(
 //                                this@VideoCallActivity,
@@ -171,8 +177,7 @@ class VideoCallActivity : AppCompatActivity() {
                     }
 
                     if(minutes == 20L){
-                        agoraEngine.leaveChannel()
-                        finish()
+                        leaveCall(SessionManager(this@VideoCallActivity).getAppointment().toString())
                     }
 
                     Log.d("TESTING_USER_TIME",timeString)
@@ -211,6 +216,28 @@ class VideoCallActivity : AppCompatActivity() {
         }
     }
 
+    fun leaveCall(channelName: String) {
+
+        val callRef = FirebaseDatabase.getInstance()
+            .getReference("calls")
+            .child(channelName)
+
+        callRef.child("joined").setValue(false)
+        callRef.child("by").removeValue()
+        callRef.child("joinedAt").removeValue()
+
+
+        agoraEngine.leaveChannel()
+        // Finish the call screen
+        val resultIntent = Intent()
+        resultIntent.putExtra(AppConstant.AppoitmentId, "SucessFullResult")
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
+
+        // ✅ Optionally finish your UI or activity
+        // activity?.finish() or finish() in an Activity
+    }
+
     private fun initAgora() {
         try {
             agoraEngine = RtcEngine.create(baseContext, appId, object : IRtcEngineEventHandler() {
@@ -227,6 +254,8 @@ class VideoCallActivity : AppCompatActivity() {
 
                         otherUserJoined = true
 
+
+
                         startElapsedCountdownFromStartTime(startTimeCall)
                     }
                 }
@@ -236,9 +265,8 @@ class VideoCallActivity : AppCompatActivity() {
                         Log.d("TESTING_NIKUNJ", "offline $uid")
                         removeRemoteVideo()
 
-                        agoraEngine.leaveChannel()
-                        // Finish the call screen
-                        finish()
+                        leaveCall(SessionManager(this@VideoCallActivity).getAppointment().toString())
+
                     }
                 }
 
@@ -321,6 +349,8 @@ class VideoCallActivity : AppCompatActivity() {
     }
 
 
+
+
     private fun joinChannel() {
 
         agoraEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION)
@@ -381,8 +411,12 @@ class VideoCallActivity : AppCompatActivity() {
         }
 
         findViewById<ImageView>(R.id.btn_end_call).setOnClickListener {
-            agoraEngine.leaveChannel()
-            finish()
+            leaveCall(SessionManager(this@VideoCallActivity).getAppointment().toString())
+
+//            val resultIntent = Intent()
+//            resultIntent.putExtra(AppConstant.AppoitmentId, "SucessFullResult")
+//            setResult(Activity.RESULT_OK, resultIntent)
+//            finish()
         }
         switchCameraToBackFront.setOnClickListener {
             frontOpen = !frontOpen

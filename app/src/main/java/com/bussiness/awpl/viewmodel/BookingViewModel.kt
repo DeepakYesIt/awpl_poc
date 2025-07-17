@@ -3,6 +3,7 @@ package com.bussiness.awpl.viewmodel
 import androidx.lifecycle.ViewModel
 import com.bussiness.awpl.NetworkResult
 import com.bussiness.awpl.model.BookingResponseModel
+import com.bussiness.awpl.model.HolidayModel
 import com.bussiness.awpl.model.PromoCodeModel
 import com.bussiness.awpl.model.ScheduleTimeModel
 import com.bussiness.awpl.repository.AwplRepository
@@ -38,6 +39,12 @@ class BookingViewModel @Inject constructor(private var repository: AwplRepositor
         appointmentId: Int
     ) : Flow<NetworkResult<PromoCodeModel>>{
         return repository.applyPromoCode(promoCode, appointmentId).onEach {
+
+        }
+    }
+
+    suspend fun getHolidayList() : Flow<NetworkResult<MutableList<HolidayModel>>>{
+        return repository.holidayList().onEach {
 
         }
     }
