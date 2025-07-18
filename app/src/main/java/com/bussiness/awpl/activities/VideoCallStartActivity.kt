@@ -102,6 +102,9 @@ class VideoCallStartActivity : AppCompatActivity() {
                                ) {
                                showRatingDialog()
                            }
+                            else{
+                                finish()
+                           }
                         } else {
                             finish()
                         }

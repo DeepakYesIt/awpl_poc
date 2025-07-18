@@ -29,11 +29,12 @@ class AppointmentAdapter(
     private val onCancelClick: (UpcomingModel) -> Unit,
     private val onRescheduleClick: (UpcomingModel) -> Unit,
     private val onInfoClick: (UpcomingModel, View) -> Unit,
-    private val startAppoitmentClick :(UpcomingModel) ->Unit,
-    private val context :Context
-    ) : RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder>() {
+    private val startAppoitmentClick: (UpcomingModel) -> Unit,
+    private val context: Context
+) : RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder>() {
 
-    inner class AppointmentViewHolder(private val binding: ItemAppointmentBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class AppointmentViewHolder(private val binding: ItemAppointmentBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(appointment: UpcomingModel) {
             binding.apply {
@@ -41,41 +42,48 @@ class AppointmentAdapter(
                 dateTxt.text = appointment.date
                 timeTxt.text = appointment.time
 
-                if(appointment.is_referred){
-                    referedPatient.visibility =View.VISIBLE
-                    shareIcon.visibility =View.VISIBLE
-                    referedPatient.setText("Referred: "+""+appointment.patientName)
-                }else{
-                    referedPatient.visibility =View.GONE
-                    shareIcon.visibility =View.GONE
+                if (appointment.is_referred) {
+                    referedPatient.visibility = View.VISIBLE
+                    shareIcon.visibility = View.VISIBLE
+                    referedPatient.setText("Referred: " + "" + appointment.patientName)
+                } else {
+                    referedPatient.visibility = View.GONE
+                    shareIcon.visibility = View.GONE
                 }
 
-                 if(appointment.is_free_call){
+                if (appointment.is_free_call) {
 
-                     tagFreeText.visibility =View.VISIBLE
-                }
-                else{
-                     tagFreeText.visibility =View.GONE
+                    tagFreeText.visibility = View.VISIBLE
+                } else {
+                    tagFreeText.visibility = View.GONE
                 }
 
-              //  doctorImage.setImageResource(appointment.doctorImage)
-                if(isCurrentTimeInRange(appointment.time)){
-                    twoBtn.visibility=View.GONE
-                    startAppointmentBtn.visibility =View.VISIBLE
-                }else{
-                    twoBtn.visibility =View.VISIBLE
-                    startAppointmentBtn.visibility =View.GONE
+                //  doctorImage.setImageResource(appointment.doctorImage)
+                if (isCurrentTimeInRange(appointment.time)) {
+                    twoBtn.visibility = View.GONE
+                    startAppointmentBtn.visibility = View.VISIBLE
+                } else {
+                    twoBtn.visibility = View.VISIBLE
+                    startAppointmentBtn.visibility = View.GONE
                 }
-                Log.d("TESTING_UPCOMING","name :- "+ appointment.doctorName+" Date:- "+ appointment.date+" Time:- "+appointment.time)
-                Glide.with(binding.root.context).load(AppConstant.Base_URL+appointment.doctorImage).into(doctorImage)
+                Log.d(
+                    "TESTING_UPCOMING",
+                    "name :- " + appointment.doctorName + " Date:- " + appointment.date + " Time:- " + appointment.time
+                )
+                Glide.with(binding.root.context)
+                    .load(AppConstant.Base_URL + appointment.doctorImage).into(doctorImage)
 
                 cancelButton.setOnClickListener { onCancelClick(appointment) }
                 rescheduleButton.setOnClickListener { onRescheduleClick(appointment) }
                 infoIcon.setOnClickListener { onInfoClick(appointment, infoIcon) }
 
-                shareIcon.setOnClickListener { generateDeepLink(appointment.id.toString(),appointment.doctorName,
-                    appointment.time,
-                    appointment.date) }
+                shareIcon.setOnClickListener {
+                    generateDeepLink(
+                        appointment.id.toString(), appointment.doctorName,
+                        appointment.time,
+                        appointment.date
+                    )
+                }
                 startAppointmentBtn.setOnClickListener { startAppoitmentClick(appointment) }
                 // Hide buttons if cancelled
 //                if (appointment.isCancelled) {
@@ -102,10 +110,10 @@ class AppointmentAdapter(
 
     override fun getItemCount(): Int = appointmentList.size
 
-     fun updateAdapter(appointmentList: MutableList<UpcomingModel>){
-         this.appointmentList =appointmentList
-         notifyDataSetChanged()
-     }
+    fun updateAdapter(appointmentList: MutableList<UpcomingModel>) {
+        this.appointmentList = appointmentList
+        notifyDataSetChanged()
+    }
 
     fun isCurrentTimeInRange(timeRange: String): Boolean {
         try {
@@ -139,8 +147,10 @@ class AppointmentAdapter(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun generateDeepLink(appointmentId:String, doctorName :String,
-                                 time:String, date :String) {
+    private fun generateDeepLink(
+        appointmentId: String, doctorName: String,
+        time: String, date: String
+    ) {
 //        val currentCampaign = "videocall"
 //        val oneLinkId = "pmck"
 //        val brandDomain = "awpluser.onelink.me"
@@ -191,29 +201,22 @@ class AppointmentAdapter(
         val webFallback = "https://zyvo.tgastaging.com"
         val token = SessionManager(context).getAuthToken()
         try {
-            val doctorNameEncoded = URLEncoder.encode(doctorName, "UTF-8")
-            val dateEncoded = URLEncoder.encode(date, "UTF-8")
-            val timeEncoded = URLEncoder.encode(time, "UTF-8")
-
-            val tokenencode =  Base64.encodeToString(token?.toByteArray(), Base64.URL_SAFE or Base64.NO_WRAP)
+            val doctorNameEncoded =  URLEncoder.encode(doctorName, "UTF-8")
+            val dateEncoded =        URLEncoder.encode(date, "UTF-8")
+            val timeEncoded =        URLEncoder.encode(time, "UTF-8")
+            val tokenencode =        Base64.encodeToString(token?.toByteArray(), Base64.URL_SAFE or Base64.NO_WRAP)
             if (token.isNullOrEmpty()) {
                 println("Token is empty")
                 return
             }
-
-
-
-
             val customDeepLink = "$deepLinkBase?appointmentId=$appointmentId&token=$tokenencode&doctor=$doctorNameEncoded&time=$timeEncoded&date=$dateEncoded"
-
             val finalUrl = "$oneLinkBase?af_dp=$customDeepLink&af_web_dp=$webFallback"
-            shareLink("Join Call At : "+finalUrl)
+            shareLink("Join Call At : " + finalUrl)
 
         } catch (e: Exception) {
             println("Encoding failed: ${e.localizedMessage}")
         }
     }
-
 
 
     private fun shareLink(message: String) {
@@ -225,8 +228,5 @@ class AppointmentAdapter(
         val shareIntent = Intent.createChooser(sendIntent, "Share via")
         context.startActivity(shareIntent)
     }
-
-
-
 
 }
