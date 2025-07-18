@@ -268,11 +268,28 @@ class SessionManager(private val context: Context) {
             putString(AppConstant.NAME, name)
         }
     }
+
+    fun getLocalName(name:String){
+        preferences.edit {
+            putString(AppConstant.LOCAL_NAME, name)
+        }
+    }
+
+
+    fun setLocalName(name:String){
+        preferences.edit {
+            putString(AppConstant.LOCAL_NAME, name)
+        }
+    }
+
+
     fun setUserImage(url :String){
         preferences.edit {
             putString(AppConstant.IMAGE, url)
         }
     }
+
+
 
     fun getUserImage():String{
         return preferences.getString(AppConstant.IMAGE,"")?:""
@@ -281,6 +298,8 @@ class SessionManager(private val context: Context) {
     fun getUserName():String?{
         return preferences.getString(AppConstant.NAME,"")
     }
+
+
 
     fun getUserId() :Int{
         return preferences.getInt(AppConstant.UserId,-1)
@@ -345,7 +364,6 @@ class SessionManager(private val context: Context) {
     fun isListPresent(key: String): Boolean {
         val list = getStringList(AppConstant.FEEDBACK)
         return list.contains(key)
-
     }
 
 

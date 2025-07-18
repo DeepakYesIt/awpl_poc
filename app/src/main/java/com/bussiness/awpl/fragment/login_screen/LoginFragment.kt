@@ -133,6 +133,9 @@ class LoginFragment : Fragment() {
 
                         sessionManager.saveLoginState(true)
 
+
+
+
                         if(data?.basic_information ==0) {
                             findNavController().navigate(R.id.basicInfoScreen)
                             sessionManager.saveLoginState(true)

@@ -65,11 +65,19 @@ class BasicInfoScreen : Fragment() {
         arguments?.let {
             if(it.containsKey(AppConstant.DISEASE_ID)){
                 diseaseId = it.getInt(AppConstant.DISEASE_ID)
+                binding.tvState.visibility =View.GONE
+                binding.etState.visibility =View.GONE
+
             }
             if(it.containsKey(AppConstant.BACK)){
                 back = true
             }
         }
+        SessionManager(requireContext()).getUserName()?.let { Log.d("TESTING_NAME", "iNSIDE "+it) }
+
+
+
+
 
         if(type != null && type == "forHome"){
 
@@ -80,6 +88,7 @@ class BasicInfoScreen : Fragment() {
                  findNavController().navigate(R.id.homeFragment)
                 }
                 else {
+
                     findNavController().navigateUp()
                 }
             }
@@ -89,6 +98,9 @@ class BasicInfoScreen : Fragment() {
         }
         else{
             binding.backIcon.visibility = View.GONE
+            if(!back){
+                binding.etName.setText(SessionManager(requireContext()).getUserName())
+            }
         }
 
         val recyclerView = binding.stateRecycler
@@ -138,6 +150,9 @@ class BasicInfoScreen : Fragment() {
         binding.etName.setText("")
         binding.etweight.setText("")
         binding.etAge.setText("")
+        if(type != "forHome"){
+            binding.etName.setText(SessionManager(requireContext()).getUserName())
+        }
     }
 
     private fun clickListener() {
@@ -180,6 +195,7 @@ class BasicInfoScreen : Fragment() {
                         putString(AppConstant.Weight,binding.etweight.text.toString())
                         putInt(AppConstant.DISEASE_ID,diseaseId)
                         putString(AppConstant.NAME,binding.etName.text.toString())
+
                         putString(AppConstant.Gender, selectedGender)
                     }
 
@@ -208,20 +224,16 @@ class BasicInfoScreen : Fragment() {
                     when(it){
                         is NetworkResult.Success ->{
                             LoadingUtils.hideDialog()
+                            SessionManager(requireContext()).setUserName(binding.etName.text.toString())
                               LoadingUtils.showSuccessDialog(requireContext(),it.data.toString()){
-
-                                      // Default
-                                      val intent = Intent(requireContext(), HomeActivity::class.java)
-                                      startActivity(intent)
-
+                                  val intent = Intent(requireContext(), HomeActivity::class.java)
+                                  startActivity(intent)
                               }
-
                         }
                         is NetworkResult.Error ->{
                                 LoadingUtils.showErrorDialog(requireContext(),it.message.toString())
                         }
                         else ->{
-
                         }
                     }
             }

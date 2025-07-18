@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 object AppConstant {
+    val LOCAL_NAME: String? ="LOCAL"
     val FEEDBACK :String ="FEEDBACK"
     val STATE: String? ="STATE"
     val BACK: String? ="BACK"

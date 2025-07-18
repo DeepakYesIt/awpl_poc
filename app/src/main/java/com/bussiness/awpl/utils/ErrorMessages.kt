@@ -10,4 +10,5 @@ object ErrorMessages {
     const val ERROR_MANDATORY = "Mandatory field"
     const val ERROR_PASSWORD = "Please enter password"
     const val ERROR_DSCODE = "Please enter DSCode"
+
 }

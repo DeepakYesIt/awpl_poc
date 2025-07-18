@@ -188,8 +188,11 @@ class ProfileFragment : Fragment() {
     private fun settingDataToUi(data: MyprofileModel) {
         originalProfileData = data
         binding.apply {
+
+            etFullName.text =SessionManager(requireContext()).getUserName()
+
                  data.name?.let {
-                     etFullName.text =data.name.toString()
+
                      etName.setText(data.name)
                  }
             data.ds_code?.let {
@@ -436,13 +439,13 @@ class ProfileFragment : Fragment() {
             LoadingUtils.showDialog(requireContext(),false)
 
             viewModel.updateProfile(
-                fullName,
-                height,
-                weight,age,gender,imageProfileMultiPart,state
+                fullName, height, weight,age,gender,imageProfileMultiPart,state
             ).collect{ it ->
                 when(it){
                     is NetworkResult.Success ->{
                         LoadingUtils.hideDialog()
+                        SessionManager(requireContext()).setUserName(binding.etName.text.toString())
+                        binding.etFullName.setText(binding.etName.text.toString())
                         SessionManager(requireContext()).setUserState(selectedState)
                         binding.llEditDelete.visibility =View.VISIBLE
                         binding.llSaveCancel.visibility =View.GONE
